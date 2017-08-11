@@ -73,10 +73,20 @@
 
 <script>
 import dateformat from 'dateformat'
+import { Row, Button, Table, TableColumn, Popover, Dialog, Input } from 'element-ui'
 import { httpGet, httpPost, httpPut, httpDelete } from '../store/api'
 
 export default {
   name: 'users-view',
+  components: {
+    'el-row': Row,
+    'el-button': Button,
+    'el-table': Table,
+    'el-table-column': TableColumn,
+    'el-popover': Popover,
+    'el-dialog': Dialog,
+    'el-input': Input,
+  },
   data() {
     return {
       loading: false,
