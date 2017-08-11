@@ -32,18 +32,25 @@
 
 
 <script>
+import {
+  Menu, MenuItem, MenuItemGroup,
+} from 'element-ui'
 import { mapActions } from 'vuex'
 import { USER_LOGOUT } from '../store/mutation-types'
 
+
 export default {
   name: 'leftbar',
-
+  components: {
+    'el-menu': Menu,
+    'el-menu-item': MenuItem,
+    'el-menu-item-group': MenuItemGroup,
+  },
   computed: {
     user() {
       return this.$store.state.user
     },
   },
-
   methods: {
     ...mapActions([USER_LOGOUT]),
     logout() {
@@ -82,7 +89,7 @@ export default {
   margin-right: 10px;
 }
 .leftbar .el-submenu .el-menu-item {
-  padding-left: 50px !important;  
+  padding-left: 50px !important;
 }
 .leftbar .el-menu-item.is-active,
 .leftbar .el-menu-item:hover {
@@ -113,11 +120,11 @@ export default {
   padding-left: 20px;
 }
 .leftbar .bar-footer img {
-  width: 18px;  
+  width: 18px;
   vertical-align: top;
   margin-top: 21px;
 }
 .leftbar .bar-footer a {
-  padding-left: 10px;  
+  padding-left: 10px;
 }
 </style>
