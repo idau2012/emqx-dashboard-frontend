@@ -84,6 +84,12 @@
 
 
 <script>
+import {
+  Tabs, TabPane,
+  TableColumn, Table,
+  Button, Tag, Popover,
+  Breadcrumb, BreadcrumbItem, Row, Input,
+} from 'element-ui'
 import { httpGet } from '../store/api'
 
 export default {
@@ -109,6 +115,19 @@ export default {
   },
   created() {
     this.loadData()
+  },
+  components: {
+    'el-tabs': Tabs,
+    'el-tab-pane': TabPane,
+    'el-table': Table,
+    'el-table-column': TableColumn,
+    'el-button': Button,
+    'el-tag': Tag,
+    'el-popover': Popover,
+    'el-breadcrumb': Breadcrumb,
+    'el-breadcrumb-item': BreadcrumbItem,
+    'el-row': Row,
+    'el-input': Input,
   },
   methods: {
     loadData(searchValue = '') {
@@ -186,7 +205,7 @@ export default {
 .datas-view .el-input__inner:focus {
   border-color: #a7a7a7;
 }
-.datas-view .el-input__inner::-webkit-input-placeholder { 
+.datas-view .el-input__inner::-webkit-input-placeholder {
   color: #a7a7a7;
 }
 .datas-view .el-input__inner::-moz-placeholder {

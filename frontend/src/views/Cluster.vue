@@ -47,6 +47,11 @@
 
 
 <script>
+import {
+  Tabs, TabPane,
+  TableColumn, Table,
+  Button, Tag, Popover,
+} from 'element-ui'
 import { httpGet } from '../store/api'
 
 export default {
@@ -60,6 +65,15 @@ export default {
   },
   beforeMount() {
     this.loadData()
+  },
+  components: {
+    'el-tabs': Tabs,
+    'el-tab-pane': TabPane,
+    'el-table': Table,
+    'el-table-column': TableColumn,
+    'el-button': Button,
+    'el-tag': Tag,
+    'el-popover': Popover,
   },
   methods: {
     loadData() {
@@ -110,6 +124,6 @@ export default {
   background-color: #777777;
 }
 .cluster-view .running {
-  color: #7cb342;  
+  color: #7cb342;
 }
 </style>
