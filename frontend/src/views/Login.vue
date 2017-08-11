@@ -41,12 +41,24 @@
 
 
 <script>
+import { Col, Row, Card, Form, FormItem, Input, Checkbox, Button } from 'element-ui'
 import { mapActions } from 'vuex'
 import { httpPost } from '../store/api'
 import { USER_LOGIN } from '../store/mutation-types'
 
+
 export default {
   name: 'login-view',
+  components: {
+    'el-col': Col,
+    'el-row': Row,
+    'el-card': Card,
+    'el-form': Form,
+    'el-form-item': FormItem,
+    'el-input': Input,
+    'el-checkbox': Checkbox,
+    'el-button': Button,
+  },
   data() {
     return {
       username: '',
