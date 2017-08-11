@@ -38,7 +38,6 @@ import {
 import { mapActions } from 'vuex'
 import { USER_LOGOUT } from '../store/mutation-types'
 
-
 export default {
   name: 'leftbar',
   components: {

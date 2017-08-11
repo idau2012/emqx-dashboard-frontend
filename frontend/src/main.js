@@ -3,6 +3,8 @@ import { sync } from 'vuex-router-sync'
 
 import lang from 'element-ui/lib/locale/lang/en'
 import locale from 'element-ui/lib/locale'
+import { Loading } from 'element-ui'
+
 
 import App from './App'
 import router from './router'
@@ -13,7 +15,7 @@ import * as filters from './filters'
 locale.use(lang)
 
 Vue.config.productionTip = false
-
+Vue.use(Loading)
 
 // register global utility filters.
 Object.keys(filters).forEach((key) => {

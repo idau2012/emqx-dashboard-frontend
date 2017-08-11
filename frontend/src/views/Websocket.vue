@@ -146,9 +146,22 @@
 import NProgress from 'nprogress'
 import mqtt from 'mqtt'
 import dateformat from 'dateformat'
+import { Card, Row, Col, Input, Checkbox, Button, Select, Option, Table, TableColumn } from 'element-ui'
 
 export default {
   name: 'websocket-view',
+  components: {
+    'el-card': Card,
+    'el-row': Row,
+    'el-col': Col,
+    'el-input': Input,
+    'el-checkbox': Checkbox,
+    'el-button': Button,
+    'el-select': Select,
+    'el-option': Option,
+    'el-table': Table,
+    'el-table-column': TableColumn,
+  },
   data() {
     return {
       loading: false,
