@@ -28,10 +28,16 @@
 
 
 <script>
+import { Table, TableColumn, Button } from 'element-ui'
 import { httpGet } from '../store/api'
 
 export default {
   name: 'nodes-view',
+  components: {
+    'el-table': Table,
+    'el-table-column': TableColumn,
+    'el-button': Button,
+  },
   data() {
     return {
       loading: false,
@@ -81,6 +87,6 @@ export default {
   background-color: #777777;
 }
 .nodes-view .running {
-  color: #7cb342;  
+  color: #7cb342;
 }
 </style>

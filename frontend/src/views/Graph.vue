@@ -18,10 +18,15 @@
 
 
 <script>
+import { Breadcrumb, BreadcrumbItem } from 'element-ui'
 import NProgress from 'nprogress'
 
 export default {
   name: 'overview-view',
+  components: {
+    'el-breadcrumb': Breadcrumb,
+    'el-breadcrumb-item': BreadcrumbItem,
+  },
   data() {
     return {
       loading: false,
