@@ -46,11 +46,21 @@
 <script>
 import axios from 'axios'
 import { mapActions } from 'vuex'
+import { Col, Row, Card, Form, FormItem, Input, Button } from 'element-ui'
 import { baseURL } from '../store/api'
 import { USER_LOGIN } from '../store/mutation-types'
 
 export default {
   name: 'signup-view',
+  components: {
+    'el-col': Col,
+    'el-row': Row,
+    'el-card': Card,
+    'el-form': Form,
+    'el-form-item': FormItem,
+    'el-input': Input,
+    'el-button': Button,
+  },
   data() {
     return {
       username: '',
@@ -127,6 +137,6 @@ export default {
   border-width: 2px;
 }
 .signup-view .el-button {
-  padding: 9px 25px;  
+  padding: 9px 25px;
 }
 </style>
