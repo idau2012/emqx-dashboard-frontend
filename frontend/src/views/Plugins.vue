@@ -43,10 +43,19 @@
 
 
 <script>
+import { Breadcrumb, BreadcrumbItem, Table, TableColumn, Button, Popover } from 'element-ui'
 import { httpGet, httpPut } from '../store/api'
 
 export default{
   name: 'plugins-view',
+  components: {
+    'el-breadcrumb': Breadcrumb,
+    'el-breadcrumb-item': BreadcrumbItem,
+    'el-table': Table,
+    'el-table-column': TableColumn,
+    'el-button': Button,
+    'el-popover': Popover,
+  },
   data() {
     return {
       loading: false,
@@ -120,6 +129,6 @@ export default{
   background-color: #777777;
 }
 .plugins-view .running {
-  color: #7cb342;  
+  color: #7cb342;
 }
 </style>
