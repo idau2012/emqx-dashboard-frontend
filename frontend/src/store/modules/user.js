@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { USER_LOGIN, USER_LOGOUT } from '../mutation-types'
 
 
-const userState = JSON.parse(sessionStorage.getItem('user')) ||
+const state = JSON.parse(sessionStorage.getItem('user')) ||
   JSON.parse(localStorage.getItem('user')) || {}
 
 const actions = {
@@ -22,16 +22,16 @@ const actions = {
 }
 
 const mutations = {
-  [USER_LOGIN](state, user) {
-    Object.assign(state, user)
+  [USER_LOGIN](moduleState, user) {
+    Object.assign(moduleState, user)
   },
-  [USER_LOGOUT](state) {
-    Object.keys(state).forEach(k => Vue.delete(state, k))
+  [USER_LOGOUT](moduleState) {
+    Object.keys(moduleState).forEach(key => Vue.delete(moduleState, key))
   },
 }
 
 export default {
-  userState,
+  state,
   actions,
   mutations,
 }
