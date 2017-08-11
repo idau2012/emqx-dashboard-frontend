@@ -61,6 +61,12 @@
 
 <script>
 // import { httpGet } from '../store/api'
+import {
+  Tabs, TabPane,
+  TableColumn, Table,
+  Button, Tag, Popover,
+
+} from 'element-ui'
 import axios from 'axios'
 
 export default {
@@ -93,6 +99,15 @@ export default {
         },
       ],
     }
+  },
+  components: {
+    'el-tabs': Tabs,
+    'el-tab-pane': TabPane,
+    'el-table': Table,
+    'el-table-column': TableColumn,
+    'el-button': Button,
+    'el-tag': Tag,
+    'el-popover': Popover,
   },
   created() {
     this.loadData()
