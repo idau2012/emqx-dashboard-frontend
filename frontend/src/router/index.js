@@ -41,7 +41,7 @@ const routes = [
       },
       {
         path: '/api',
-        component: () => import('@/views/HttpClient.vue'),
+        component: () => import('@/views/Http_Api.vue'),
       },
       {
         path: '/users',
