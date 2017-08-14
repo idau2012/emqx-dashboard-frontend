@@ -17,7 +17,7 @@
       </el-menu-item-group>
       <el-menu-item-group title="ADMIN">
         <el-menu-item index="/setting/users"><i class="fa fa-user-o"></i>Users</el-menu-item>
-        <el-menu-item index="/setting/api"><i class="fa fa-code"></i>API</el-menu-item>
+        <el-menu-item index="/setting/http_api"><i class="fa fa-code"></i>API</el-menu-item>
       </el-menu-item-group>
     </el-menu>
 

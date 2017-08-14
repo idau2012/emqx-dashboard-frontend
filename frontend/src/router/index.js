@@ -59,6 +59,10 @@ const routes = [
         path: 'setting/users',
         component: () => import('@/views/Users.vue'),
       },
+      {
+        path: 'setting/http_api',
+        component: () => import('@/views/Http_Api.vue'),
+      },
     ],
   },
   {
