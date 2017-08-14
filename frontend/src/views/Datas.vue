@@ -4,7 +4,6 @@
     <el-row type="flex" justify="end" align="center">
       <el-select v-model="nodeName" placeholder="Select Node" size="small" @change="loadChild(true)">
         <el-option
-          size="small"
           v-for="item in nodes"
           :key="item.name"
           :label="item.name"
