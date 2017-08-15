@@ -63,6 +63,10 @@ const routes = [
         path: '/subscriptions',
         component: () => import('@/views/Datas.vue'),
       },
+      {
+        path: 'setting/http_api',
+        component: () => import('@/views/Http_Api.vue'),
+      },
     ],
   },
   {
