@@ -1,11 +1,21 @@
 <template>
   <div class="plugins-view">
-    <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: '/nodes' }">Nodes</el-breadcrumb-item>
-      <el-breadcrumb-item>{{ nodeName }}</el-breadcrumb-item>
-    </el-breadcrumb>
     <div class="page-title">Plugins</div>
 
+    <el-row type="flex" justify="end" align="center">
+      <el-select v-model="nodeName" placeholder="Select Node" size="small" @change="loadPlugins">
+        <el-option
+          v-for="item in nodes"
+          :key="item.name"
+          :label="item.name"
+          :value="item.name">
+        </el-option>
+      </el-select>
+      <el-input v-model="searchValue" placeholder="Plugin" size="small"></el-input>
+      <el-button :plain="true" type="success" icon="search" size="small"
+                 @click="searchPlugins">Search
+      </el-button>
+    </el-row>
     <el-table :data="tableData" v-loading="loading" border>
       <el-table-column prop="name" width="240" label="Name"></el-table-column>
       <el-table-column prop="version" width="100" label="Version"></el-table-column>
@@ -43,12 +53,19 @@
 
 
 <script>
-import { Breadcrumb, BreadcrumbItem, Table, TableColumn, Button, Popover } from 'element-ui'
+import { Breadcrumb, BreadcrumbItem, Table,
+  TableColumn, Select, Option, Row, Input,
+  Button, Message,
+  Popover } from 'element-ui'
 import { httpGet, httpPut } from '../store/api'
 
 export default{
   name: 'plugins-view',
   components: {
+    'el-select': Select,
+    'el-row': Row,
+    'el-option': Option,
+    'el-input': Input,
     'el-breadcrumb': Breadcrumb,
     'el-breadcrumb-item': BreadcrumbItem,
     'el-table': Table,
@@ -59,9 +76,11 @@ export default{
   data() {
     return {
       loading: false,
-      nodeName: '',
+      nodeName: 'no data',
       popoverVisible: false,
       tableData: [],
+      nodes: [],
+      searchValue: '',
     }
   },
   created() {
@@ -82,19 +101,52 @@ export default{
       this.loading = true
       const data = { active: !row.active }
       httpPut(`/nodes/${this.nodeName}/plugins/${row.name}`, data).then((response) => {
+        this.loading = false
         if (response.data.status === 'success') {
-          this.$message.success(`${row.active ? 'Stop' : 'Start'} success`)
-          this.loadData()
+          Message.success(`${row.active ? 'Stop' : 'Start'} success`)
+          this.loadPlugins()
         } else {
-          this.$message.success(`${row.active ? 'Stop' : 'Start'} failure`)
+          Message.error(`${row.active ? 'Stop' : 'Start'} failure`)
         }
       })
     },
     loadData() {
       this.loading = true
-      this.nodeName = atob(this.$route.params.node)
+      httpGet('/monitoring/nodes').then((response) => {
+        this.nodes = {}
+        // set default of select
+        this.nodeName = response.data[0].name || ''
+        this.nodes = response.data
+        this.loading = false
+        this.loadPlugins()
+      })
+    },
+    loadPlugins() {
+      if (!this.nodeName) {
+        return
+      }
+      this.loading = true
+      this.searchValue = ''
       httpGet(`/nodes/${this.nodeName}/plugins`).then((response) => {
         this.tableData = response.data
+        this.loading = false
+      })
+    },
+    searchPlugins() {
+      if (!this.nodeName) {
+        Message.error('Node requires')
+        return
+      }
+      if (!this.searchValue) {
+        Message.error('Plugin required')
+        return
+      }
+      httpGet(`/nodes/${this.nodeName}/plugins/${this.searchValue}`).then((response) => {
+        if (!response.data) {
+          Message.error('This plugin is not exist')
+        } else {
+          this.tableData = response.data
+        }
         this.loading = false
       })
     },
@@ -113,6 +165,30 @@ export default{
 }
 .plugins-view .page-title {
   padding: 10px 0;
+}
+.plugins-view .el-row {
+  margin-top: 20px;
+}
+.plugins-view .el-input {
+  width: 240px;
+  margin-right: 8px;
+}
+.plugins-view .el-input__inner {
+  background-color: transparent;
+  border-color: #5d5d60;
+  color: #fff;
+}
+.plugins-view .el-input__inner:focus {
+  border-color: #a7a7a7;
+}
+.plugins-view .el-input__inner::-webkit-input-placeholder {
+  color: #a7a7a7;
+}
+.plugins-view .el-input__inner::-moz-placeholder {
+  color: #a7a7a7;
+}
+.plugins-view .el-input__inner:-ms-input-placeholder {
+  color: #a7a7a7;
 }
 .plugins-view .status:before {
   content: "";
