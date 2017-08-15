@@ -7,17 +7,20 @@
     <el-menu :default-active="'/' + $route.path.split('/')[1]" mode="vertical" theme="dark" unique-opened router>
       <el-menu-item-group title="MONITORING">
         <el-menu-item index="/"><i class="fa fa-bar-chart"></i>Overview</el-menu-item>
-        <el-menu-item index="/cluster"><i class="fa fa-random"></i>Cluster</el-menu-item>
       </el-menu-item-group>
-      <el-menu-item-group title="ALERTS">
-        <el-menu-item index="/alerts"><i class="fa fa-warning"></i>Alerts</el-menu-item>
-      </el-menu-item-group>
+        <el-menu-item index="/clients"><i class="fa fa-circle"></i>Clients</el-menu-item>
+        <el-menu-item index="/sessions"><i class="fa fa-commenting"></i>Sessions</el-menu-item>
+        <el-menu-item index="/routers"><i class="fa fa-plug"></i>Routers</el-menu-item>
+        <el-menu-item index="/subscriptions"><i class="fa fa-rss-square"></i>Subscriptions</el-menu-item>
       <el-menu-item-group title="MANAGEMENT">
-        <el-menu-item index="/nodes"><i class="fa fa-cubes"></i>Nodes</el-menu-item>
+        <el-menu-item index="/plugins"><i class="fa fa-cubes"></i>Plugins</el-menu-item>
+      </el-menu-item-group>
+      <el-menu-item-group title="TOOLS">
+        <el-menu-item index="/websocket"><i class="fa fa-rss"></i>Websocket</el-menu-item>
+        <el-menu-item index="/api"><i class="fa fa-code"></i>API</el-menu-item>
       </el-menu-item-group>
       <el-menu-item-group title="ADMIN">
-        <el-menu-item index="/setting/users"><i class="fa fa-user-o"></i>Users</el-menu-item>
-        <el-menu-item index="/setting/http_api"><i class="fa fa-code"></i>API</el-menu-item>
+        <el-menu-item index="/users"><i class="fa fa-user-o"></i>Users</el-menu-item>
       </el-menu-item-group>
     </el-menu>
 
@@ -32,9 +35,7 @@
 
 
 <script>
-import {
-  Menu, MenuItem, MenuItemGroup,
-} from 'element-ui'
+import { Menu, MenuItem, MenuItemGroup } from 'element-ui'
 import { mapActions } from 'vuex'
 import { USER_LOGOUT } from '../store/mutation-types'
 

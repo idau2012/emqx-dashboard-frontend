@@ -1,29 +1,23 @@
 <template>
   <div class="datas-view">
-    <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: '/cluster' }">Cluster</el-breadcrumb-item>
-      <el-breadcrumb-item>{{ nodeName }}</el-breadcrumb-item>
-    </el-breadcrumb>
     <div class="page-title">{{ activeTab }}</div>
-
-    <el-tabs @tab-click="handleTabClick" v-model="activeTab">
-      <el-tab-pane label="Clients" name="clients"></el-tab-pane>
-      <el-tab-pane label="Sessions" name="sessions"></el-tab-pane>
-      <!--<el-tab-pane label="Topics" name="topics"></el-tab-pane>-->
-      <el-tab-pane label="Routers" name="routers"></el-tab-pane>
-      <el-tab-pane label="Subscriptions" name="subscriptions"></el-tab-pane>
-    </el-tabs>
-
-    <el-row type="flex" justify="end" align="middle">
+    <el-row type="flex" justify="end" align="center">
+      <el-select v-model="nodeName" placeholder="Select Node" size="small" @change="loadChild(true)">
+        <el-option
+          v-for="item in nodes"
+          :key="item.name"
+          :label="item.name"
+          :value="item.name">
+        </el-option>
+      </el-select>
       <el-input v-model="searchValue" :placeholder="searchPlaceholder" size="small"></el-input>
       <el-button :plain="true" type="success" icon="search" size="small"
-        @click="search">Search
+                     @click="searchChild">Search
       </el-button>
     </el-row>
-
     <el-table :data="clients" v-loading="loading" v-show="activeTab==='clients'" border>
       <el-table-column prop="client_id" label="ClientId" min-width="100"></el-table-column>
-      <el-table-column prop="username" label="Username"></el-table-column>
+      <el-table-column prop="username" label="Username" width="150"></el-table-column>
       <el-table-column prop="ipaddress" label="IPAddr" width="150"></el-table-column>
       <el-table-column prop="port" label="Port" width="80"></el-table-column>
       <el-table-column prop="clean_sess" label="CleanSess" width="110">
@@ -31,7 +25,6 @@
           <span>{{ scope.row.clean_sess ? 'true' : 'false' }}</span>
         </template>
       </el-table-column>
-
       <el-table-column prop="proto_ver" label="ProtoVer" width="100"></el-table-column>
       <el-table-column prop="keepalive" label="Keepalive(s)" width="120"></el-table-column>
       <el-table-column prop="connected_at" label="ConnectedAt" width="180"></el-table-column>
@@ -78,7 +71,6 @@
       :total="total"
       v-if="total>1">
     </el-pagination>
-
   </div>
 </template>
 
@@ -89,18 +81,37 @@ import {
   TableColumn, Table,
   Button, Tag, Popover,
   Breadcrumb, BreadcrumbItem, Row, Input,
+  Select, Pagination, Option, Message,
 } from 'element-ui'
 import { httpGet } from '../store/api'
 
+
 export default {
   name: 'datas-view',
+  components: {
+    'el-select': Select,
+    'el-tabs': Tabs,
+    'el-tab-pane': TabPane,
+    'el-table': Table,
+    'el-table-column': TableColumn,
+    'el-button': Button,
+    'el-tag': Tag,
+    'el-popover': Popover,
+    'el-breadcrumb': Breadcrumb,
+    'el-breadcrumb-item': BreadcrumbItem,
+    'el-row': Row,
+    'el-input': Input,
+    'el-pagination': Pagination,
+    'el-option': Option,
+  },
   data() {
     return {
       loading: false,
       nodeName: '',
+      nodes: {},
       activeTab: 'clients',
       popoverVisible: false,
-      searchKey: 'clientId_like',
+      searchKey: '',
       searchValue: '',
       searchPlaceholder: 'ClientId',
       clients: [],
@@ -114,41 +125,16 @@ export default {
     }
   },
   created() {
-    this.loadData()
+    this.init()
   },
-  components: {
-    'el-tabs': Tabs,
-    'el-tab-pane': TabPane,
-    'el-table': Table,
-    'el-table-column': TableColumn,
-    'el-button': Button,
-    'el-tag': Tag,
-    'el-popover': Popover,
-    'el-breadcrumb': Breadcrumb,
-    'el-breadcrumb-item': BreadcrumbItem,
-    'el-row': Row,
-    'el-input': Input,
+  watch: {
+    $route: 'init',
   },
   methods: {
-    loadData(searchValue = '') {
-      this.loading = true
-      this.nodeName = atob(this.$route.params.node)
-      let requestURL = `/nodes/${this.nodeName}/${this.activeTab}?curr_page=${this.currentPage}&page_size=${this.pageSize}`
-      if (searchValue !== '') {
-        requestURL = `/nodes/${this.nodeName}/${this.activeTab}/${searchValue}`
-      }
-      httpGet(requestURL).then((response) => {
-        this[this.activeTab] = response.data.objects
-        this.total = response.data.total_num || 0
-        // this.total = parseInt(response.headers['x-total-count'], 10) || 0
-        this.loading = false
-      })
-    },
-    handleTabClick(tab) {
-      this.activeTab = tab.name
-      this.currentPage = 1
-      this.searchValue = ''
-      switch (tab.name) {
+    init() {
+      // get path
+      this.activeTab = this.$route.path.split('/')[1]
+      switch (this.activeTab) {
         case 'clients':
         case 'sessions':
         case 'subscriptions':
@@ -167,12 +153,59 @@ export default {
       }
       this.loadData()
     },
-    currentPageChanged(val) {
-      this.currentPage = val
-      this.loadData(this.searchValue)
+    loadData() {
+      this.loading = true
+      this.currentPage = 1
+      this.searchValue = ''
+      // load nodes
+      const requestNode = '/monitoring/nodes'
+      httpGet(requestNode).then((response) => {
+        this.nodes = {}
+        // set default of select
+        this.nodeName = response.data[0].name || ''
+        this.nodes = response.data
+        // load child with sync
+        this.loadChild()
+      })
     },
-    search() {
-      this.loadData(this.searchValue)
+    currentPageChanged(target) {
+      this.currentPage = target
+      // load child with pagination
+      this.loadChild()
+    },
+    loadChild(reload = false) {
+      if (!this.nodeName) {
+        return
+      }
+      // load child with the currentPage asc
+      if (reload) {
+        this.currentPage = 1
+      }
+      this.loading = true
+      const requestURL = `/nodes/${this.nodeName}/${this.activeTab}?curr_page=${this.currentPage}&page_size=${this.pageSize}`
+      httpGet(requestURL).then((response) => {
+        this[this.activeTab] = response.data
+        this.total = response.data.total_num || 0
+        this.loading = false
+      })
+    },
+    searchChild() {
+      if (!this.searchValue) {
+        Message.error(`${this.searchPlaceholder} required`)
+        return
+      }
+      const requestURL = `/nodes/${this.nodeName}/${this.activeTab}/${this.searchValue}`
+      console.log(requestURL)
+      httpGet(requestURL).then((response) => {
+        if (!response.data) {
+          Message({
+            message: 'no data',
+            type: 'waring',
+          })
+        } else {
+          this[this.activeTab] = response.data
+        }
+      })
     },
   },
 }

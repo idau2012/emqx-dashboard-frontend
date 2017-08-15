@@ -28,36 +28,40 @@ const routes = [
         component: () => import('@/views/Overview.vue'),
       },
       {
-        path: '/cluster',
-        component: () => import('@/views/Cluster.vue'),
-      },
-      {
-        path: '/cluster/:node/graph/:graph_type',
-        component: () => import('@/views/Graph.vue'),
-      },
-      {
-        path: '/cluster/:node/emqdatas',
-        component: () => import('@/views/Datas.vue'),
-      },
-      {
         path: '/alerts',
         component: () => import('@/views/Alerts.vue'),
       },
       {
-        path: '/nodes',
-        component: () => import('@/views/Nodes.vue'),
-      },
-      {
-        path: '/nodes/:node/plugins',
+        path: '/plugins',
         component: () => import('@/views/Plugins.vue'),
       },
-      // {
-      //   path: 'emq/websocket',
-      //   component: () => import('@/views/Websocket.vue'),
-      // },
       {
-        path: 'setting/users',
+        path: '/websocket',
+        component: () => import('@/views/Websocket.vue'),
+      },
+      {
+        path: '/api',
+        component: () => import('@/views/Http_Api.vue'),
+      },
+      {
+        path: '/users',
         component: () => import('@/views/Users.vue'),
+      },
+      {
+        path: '/clients',
+        component: () => import('@/views/Datas.vue'),
+      },
+      {
+        path: '/sessions',
+        component: () => import('@/views/Datas.vue'),
+      },
+      {
+        path: '/routers',
+        component: () => import('@/views/Datas.vue'),
+      },
+      {
+        path: '/subscriptions',
+        component: () => import('@/views/Datas.vue'),
       },
       {
         path: 'setting/http_api',
