@@ -1,8 +1,10 @@
 <template>
   <div class="websocket-view">
-    <el-card class="box-card">
+    <div class="page-title">Websocket</div>
+
+    <el-card class="box-card blank-top" v-show="!client.connected">
       <div slot="header">
-        <span>连接</span>
+        <span>Connect</span>
       </div>
       <el-row :gutter="20">
         <el-col :span="8">
@@ -20,11 +22,11 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <label>用户名:</label>
+          <label>Username:</label>
           <el-input v-model="username"></el-input>
         </el-col>
         <el-col :span="8">
-          <label>密码:</label>
+          <label>Password:</label>
           <el-input v-model="password"></el-input>
         </el-col>
         <el-col :span="8">
@@ -38,57 +40,50 @@
       <el-row :gutter="20" type="flex" align="middle">
         <el-col :span="8">
           <el-button type="success" icon="check" size="small"
-            :disabled="client.connected"
-            @click="mqttConnect"
-          >连接</el-button>
-          <el-button icon="close" size="small"
-            :disabled="!client.connected"
-            @click="mqttDisconnect"
-          >断开</el-button>
-        </el-col>
-        <el-col :span="8">
-          <span>连接状态：</span>
-          <strong :style="{ color: client.connected ? '#13CE66' : '#FF4949' }">
-            {{ client.connected ? '连接成功' : '未连接' }}
-          </strong>
+                     :loading="loading" @click="mqttConnect">
+            Connect</el-button>
         </el-col>
       </el-row>
     </el-card>
-    <el-card class="box-card">
+    <el-card class="box-card blank-top" style="max-height: 450px" v-show="client.connected">
       <div slot="header">
-        <span>订阅</span>
+        <span>Subscribe</span>
       </div>
       <el-row :gutter="20">
-        <el-col :span="12" style="border-right: 1px solid #D3DCE6;">
-          <label>Topic:</label>
-          <el-input v-model="subTopic"></el-input>
-          <label>QoS:</label>
-          <div>
-            <el-select v-model="subQos" style="display: block;">
-              <el-option
-                v-for="item in [0, 1, 2]"
-                :value="item">
-              </el-option>
-            </el-select>
-          </div>
-          <el-button type="success" icon="check" size="small"
-            :disabled="!client.connected"
-            @click="mqttSubscribe"
-          >订阅</el-button>
-        </el-col>
         <el-col :span="12">
-          <label>订阅记录:</label>
-          <el-table :data="subscriptions" border>
+          <label>Subscribes:</label>
+          <el-table :data="subscriptions" :max-height="320">
             <el-table-column prop="topic" label="Topic"></el-table-column>
             <el-table-column prop="qos" width="70" label="QoS"></el-table-column>
-            <el-table-column prop="time" width="180" label="日期"></el-table-column>
+            <el-table-column prop="time" width="180" label="Date"></el-table-column>
           </el-table>
         </el-col>
+
+        <el-col :span="12" style="border-right: 1px solid #D3DCE6;">
+            <label>Topic:</label>
+            <el-input v-model="subTopic"></el-input>
+            <label>QoS:</label>
+            <div>
+              <el-select v-model="subQos" style="display: block;">
+                <el-option value="0"></el-option>
+                <el-option value="1"></el-option>
+                <el-option value="2"></el-option>
+              </el-select>
+            </div>
+            <el-button type="success" icon="check" size="small"
+                       :disabled="!client.connected"
+                       @click="mqttSubscribe"
+            >Subscribe</el-button>
+          <el-button style="float: right" title="Close the connect" icon="close" size="small"
+                     @click="mqttDisconnect"
+          >Disconnect</el-button>
+        </el-col>
+
       </el-row>
     </el-card>
-    <el-card class="box-card">
+    <el-card class="box-card blank-middle" style="max-height: 800px;padding-bottom: 20px" v-show="client.connected">
       <div slot="header">
-        <span>消息</span>
+        <span>Messages</span>
       </div>
       <el-row :gutter="20">
         <el-col :span="6">
@@ -102,10 +97,9 @@
         <el-col :span="6">
           <label>QoS:</label>
           <el-select v-model="publishQos" style="display: block;">
-            <el-option
-              v-for="item in [0, 1, 2]"
-              :value="item">
-            </el-option>
+            <el-option value="0"></el-option>
+            <el-option value="1"></el-option>
+            <el-option value="2"></el-option>
           </el-select>
         </el-col>
         <el-col :span="6" style="padding-top: 25px;">
@@ -113,26 +107,26 @@
           <el-button type="success" icon="check" size="small"
             :disabled="!client.connected"
             @click="mqttPublish"
-          >发送</el-button>
+          >Send</el-button>
         </el-col>
       </el-row>
       <el-row :gutter="20" style="margin-top: 20px;">
         <el-col :span="12" style="border-right: 1px solid #D3DCE6;">
-          <label>发送的消息:</label>
-          <el-table :data="publishedMessages" border>
+          <label>Messages already sent:</label>
+          <el-table :data="publishedMessages" border :max-height="600">
             <el-table-column prop="message" label="Message"></el-table-column>
             <el-table-column prop="topic" label="Topic"></el-table-column>
             <el-table-column prop="qos" label="QoS" width="70"></el-table-column>
-            <el-table-column prop="time" label="日期" width="180"></el-table-column>
+            <el-table-column prop="time" label="Date" width="180"></el-table-column>
           </el-table>
         </el-col>
         <el-col :span="12">
-          <label>收到的消息:</label>
-          <el-table :data="receivedMessages" border>
+          <label>Messages received:</label>
+          <el-table :data="receivedMessages" border :max-height="600">
             <el-table-column prop="message" label="Message"></el-table-column>
             <el-table-column prop="topic" label="Topic"></el-table-column>
             <el-table-column prop="qos" label="QoS" width="70"></el-table-column>
-            <el-table-column prop="time" label="日期" width="180"></el-table-column>
+            <el-table-column prop="time" label="Date" width="180"></el-table-column>
           </el-table>
         </el-col>
       </el-row>
@@ -146,7 +140,7 @@
 import NProgress from 'nprogress'
 import mqtt from 'mqtt'
 import dateformat from 'dateformat'
-import { Card, Row, Col, Input, Checkbox, Button, Select, Option, Table, TableColumn } from 'element-ui'
+import { Card, Row, Col, Input, Checkbox, Button, Select, Option, Table, TableColumn, Message } from 'element-ui'
 
 export default {
   name: 'websocket-view',
@@ -196,24 +190,36 @@ export default {
     },
     mqttConnect() {
       NProgress.start()
+      this.loading = true
+      let retryTimes = 0
       const options = {
         keepalive: this.keepalive,
         username: this.username,
         password: this.password,
         clientId: this.clientId,
         clean: this.clean,
+        connectTimeout: 4000,
       }
       this.client = mqtt.connect(`ws://${this.host}:${this.port}/mqtt`, options)
       this.client.on('connect', () => {
-        this.$message.success('连接成功!')
+        Message.success('Connect success')
         NProgress.done()
       })
+      this.client.on('reconnect', () => {
+        if (retryTimes > 2) {
+          Message.error(`Connect failure with ${this.host}:${this.port}`)
+          retryTimes = 0
+          this.loading = false
+          this.client.end()
+        }
+        retryTimes += 1
+      })
       this.client.on('error', (error) => {
-        this.$message.error(error)
+        Message.error(error)
         NProgress.done()
       })
       this.client.on('message', (topic, message, packet) => {
-        this.receivedMessages.push({
+        this.receivedMessages.unshift({
           topic,
           message: message.toString(),
           qos: packet.qos,
@@ -226,32 +232,46 @@ export default {
         NProgress.start()
         this.client.end()
         this.client.on('close', () => {
-          this.$message.success('断开连接成功!')
+          this.subscriptions = []
+          this.receivedMessages = []
+          this.publishedMessages = []
+          Message.success('Disconncet success')
+          this.loading = false
           NProgress.done()
         })
       } else {
-        this.$message.error('未连接状态，不需要断开连接!')
+        Message.error('Please connect!')
       }
     },
     mqttSubscribe() {
       if (this.client.connected) {
+        let isSubscribe = false
+        this.subscriptions.forEach((x) => {
+          if (x.topic === this.subTopic) {
+            isSubscribe = true
+          }
+        })
+        if (isSubscribe) {
+          Message.error(`Topic '${this.subTopic}' is subscribed`)
+          return
+        }
         NProgress.start()
         this.client.subscribe(this.subTopic, { qos: this.subQos }, (error) => {
           if (error) {
             NProgress.done()
-            this.$message.error(error)
+            Message.error(error)
           } else {
-            this.subscriptions.push({
+            this.subscriptions.unshift({
               topic: this.subTopic,
               qos: this.subQos,
               time: this.now(),
             })
-            this.$message.success('订阅成功!')
+            Message.success('Subscribe success!')
             NProgress.done()
           }
         })
       } else {
-        this.$message.error('连接成功后才能订阅!')
+        Message.error('Could not subscribe before connect!')
       }
     },
     mqttPublish() {
@@ -261,20 +281,20 @@ export default {
         this.client.publish(this.publishTopic, this.publishMessage, options, (error) => {
           if (error) {
             NProgress.done()
-            this.$message.error(error)
+            Message.error(error)
           } else {
-            this.publishedMessages.push({
+            this.publishedMessages.unshift({
               message: this.publishMessage,
               topic: this.publishTopic,
               qos: this.publishQos,
               time: this.now(),
             })
-            this.$message.success('消息发送成功!')
+            Message.success('Send success!')
             NProgress.done()
           }
         })
       } else {
-        this.$message.error('连接成功后才能发布消息!')
+        Message.error('Could not send message before connect!')
       }
     },
 
@@ -284,8 +304,20 @@ export default {
 
 
 <style>
+.websocket-view {
+  padding-top: 20px;
+}
+.websocket-view .page-title {
+  padding: 10px 0 ;
+}
 .websocket-view .el-table {
   margin-top: 5px;
+}
+.websocket-view .blank-top {
+  margin-top: 70px;
+}
+.websocket-view .blank-middle {
+  margin-top: 20px;
 }
 .websocket-view .el-input,
 .websocket-view .el-checkbox {
