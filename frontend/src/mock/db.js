@@ -31,6 +31,8 @@ for (let i = 1; i < 5 ; i++) {
   })
 }
 
+const stats = [JSON.parse('{"clients/count":0,"clients/max":1,"retained/count":3,"retained/max":3,"routes/count":2,"routes/max":3,"sessions/count":0,"sessions/max":1,"subscribers/count":9,"subscribers/max":10,"subscriptions/count":9,"subscriptions/max":10,"topics/count":0,"topics/max":0}')]
+
 const plugins = []
 const pluginNames = [
   'emqx_auth_http',
@@ -94,6 +96,12 @@ for (let i = 1; i < 15 ; i++) {
   })
 }
 
+const nodes = []
+for (let i =1; i< 8; i++) {
+  const jsonData = `{"name":"emqx@127.0.0.1","otp_release":"R19/8.1","total_memory":"62.76M","used_memory":"51.72M","process_available":262144,"process_used":405,"max_fds":1024,"cluster_status":"${faker.random.arrayElement(['Running', 'Stoped'])}","load1":"0.00","load5":"0.00","load15":"0.00"}`
+  nodes.push(JSON.parse(jsonData))
+}
+
 const clients = []
 for (let i = 1; i < 8; i++) {
   clients.push({
@@ -122,6 +130,15 @@ for (let i = 1; i < 8; i++) {
     'awaiting_comp': 0,
     'created_at': dateformat(faker.date.between('2017-01-02', '2017-02-20'), 'yyyy-mm-dd hh:MM:ss'),
   })
+}
+
+const brokers = []
+for (let i = 1; i < 7; i++) {
+  const jsonData = '{"sysdescr":"EMQ X","version":"2.2","uptime":"53 days,18 hours, 27 minutes, 0 seconds","datetime":"2017-08-16 11:31:09"}'
+  let objectData = JSON.parse(jsonData)
+  objectData.uptime = `${faker.random.number({min:50, max:100})} days,1${i} hours, ${i}7 minutes, 0 seconds`
+  objectData.datetime = dateformat(new Date(), 'yyyy-mm-dd hh:MM:ss')
+  brokers.push(objectData)
 }
 
 const topics = []
@@ -224,4 +241,7 @@ module.exports = {
   routers,
   subscriptions,
   alerts,
+  brokers,
+  nodes,
+  stats,
 }

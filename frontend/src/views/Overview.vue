@@ -5,26 +5,42 @@
       <div slot="header">
         <span>Broker</span>
       </div>
-      <el-table :data="tableData" border>
-          <el-table-column label="System Name" prop="system_name" min-width="100"></el-table-column>
+      <el-table :data="brokers" border>
+          <el-table-column label="System Name" prop="sysdescr" min-width="100"></el-table-column>
           <el-table-column label="Version" prop="version" min-width="100"></el-table-column>
           <el-table-column label="Uptime" prop="uptime" min-width="100"></el-table-column>
-          <el-table-column label="System Time" prop="system_time" min-width="100"></el-table-column>
+          <el-table-column label="System Time" prop="datetime" min-width="100"></el-table-column>
       </el-table>
     </el-card>
 
     <el-card class="box-card">
       <div slot="header">
-        <span>Nodes ()</span>
+        <span>Nodes ({{ nodes.length }})</span>
       </div>
-      <el-table :data="tableData" border>
-        <el-table-column label="Name" prop="name" min-width="200"></el-table-column>
-        <el-table-column label="Erlang/OTP Release" prop="otp_release" min-width="200"></el-table-column>
-        <el-table-column label="Erlang Processes(used/avaliable)" prop="process_used" min-width="200"></el-table-column>
-        <el-table-column label="CPU Info(1load/5load/15load)" prop="load1" min-width="200"></el-table-column>
-        <el-table-column label="Memory" prop="used_memory" min-width="200"></el-table-column>
-        <el-table-column label="MaxFds" prop="max_fds" min-width="200"></el-table-column>
-        <el-table-column label="ClusterStatus" prop="cluster_status" min-width="200"></el-table-column>
+      <el-table :data="nodes" border>
+        <el-table-column label="Name" prop="name" min-width="140"></el-table-column>
+        <el-table-column label="Erlang/OTP Release" prop="otp_release" min-width="100"></el-table-column>
+        <el-table-column label="Erlang Processes (used/avaliable)" min-width="250">
+          <template scope="scope">
+            {{ scope.row.process_used + ' / ' + scope.row.process_available }}
+          </template>
+        </el-table-column>
+        <el-table-column label="CPU Info (1load/5load/15load)" min-width="240">
+          <template scope="scope">
+            {{ scope.row.load1 + ' / ' + scope.row.load5 + ' / ' + scope.row.load15 }}
+          </template>
+        </el-table-column>
+        <el-table-column label="Memory" min-width="140">
+          <template scope="scope">
+            {{ scope.row.used_memory + ' / ' + scope.row.total_memory }}
+          </template>
+        </el-table-column>
+        <el-table-column label="MaxFds" prop="max_fds" min-width="140"></el-table-column>
+        <el-table-column label="ClusterStatus" min-width="140">
+          <template scope="scope">
+            <el-tag :type="scope.row.cluster_status === 'Running' ? 'success' : 'danger'">{{ scope.row.cluster_status }}</el-tag>
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
 
@@ -32,17 +48,17 @@
       <div slot="header">
         <span>Stats</span>
       </div>
-      <el-table :data="tableData" border>
-        <el-table-column label="Clients/Count" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="Clients/Max" prop="otp_release" min-width="150"></el-table-column>
-        <el-table-column label="Retained/Count" prop="process_used" min-width="150"></el-table-column>
-        <el-table-column label="Retained/Max	" prop="load1" min-width="150"></el-table-column>
-        <el-table-column label="Routes/Count" prop="used_memory" min-width="150"></el-table-column>
-        <el-table-column label="Routes/Max" prop="max_fds" min-width="150"></el-table-column>
-        <el-table-column label="Sessions/Count" prop="cluster_status" min-width="150"></el-table-column>
-        <el-table-column label="Subscribers/Count" prop="cluster_status" min-width="150"></el-table-column>
-        <el-table-column label="Topics/Count" prop="process_used" min-width="150"></el-table-column>
-        <el-table-column label="Topics/Max" prop="load1" min-width="150"></el-table-column>
+      <el-table :data="stats" border>
+        <el-table-column label="Clients/Count" prop="clients/count" min-width="70"></el-table-column>
+        <el-table-column label="Clients/Max" prop="clients/max" min-width="70"></el-table-column>
+        <el-table-column label="Retained/Count" prop="retained/count" min-width="70"></el-table-column>
+        <el-table-column label="Retained/Max	" prop="retained/max" min-width="70"></el-table-column>
+        <el-table-column label="Routes/Count" prop="routes/count" min-width="70"></el-table-column>
+        <el-table-column label="Routes/Max" prop="routes/max" min-width="70"></el-table-column>
+        <el-table-column label="Sessions/Count" prop="sessions/count" min-width="70"></el-table-column>
+        <el-table-column label="Subscribers/Count" prop="subscriptions/count" min-width="70"></el-table-column>
+        <el-table-column label="Topics/Count" prop="topics/count" min-width="70"></el-table-column>
+        <el-table-column label="Topics/Max" prop="topics/max" min-width="70"></el-table-column>
       </el-table>
     </el-card>
   </div>
@@ -53,8 +69,10 @@
 import {
   Tabs, TabPane, Row, Col,
   TableColumn, Table,
-  Button, Popover, Card,
+  Button, Popover, Card, Tag,
 } from 'element-ui'
+
+import { httpGet } from '../store/api'
 
 
 export default {
@@ -62,9 +80,14 @@ export default {
   data() {
     return {
       loading: false,
+      nodes: [],
+      stats: [],
+      brokers: [],
+      flag: 0,
     }
   },
   components: {
+    'el-tag': Tag,
     'el-tabs': Tabs,
     'el-tab-pane': TabPane,
     'el-table': Table,
@@ -75,13 +98,32 @@ export default {
     'el-row': Row,
     'el-col': Col,
   },
-  beforeCreate() {
+  mounted() {
+    this.getDatas()
   },
   created() {
-  },
-  mounted() {
+    this.refDatas()
   },
   methods: {
+    refDatas() {
+      window.clearInterval(this.flag)
+      this.flag = window.setInterval(this.getDatas, 1000 * 10)
+    },
+    getDatas() {
+      if (this.$route.path !== '/') {
+        window.clearInterval(this.flag)
+      }
+      httpGet('/nodes').then((response) => {
+        console.log(response.data)
+        this.nodes = response.data
+      })
+      httpGet('/stats').then((response) => {
+        this.stats = response.data
+      })
+      httpGet('/brokers').then((response) => {
+        this.brokers = response.data
+      })
+    },
   },
 }
 </script>
@@ -96,11 +138,11 @@ span {
   margin-top: 30px;
 }
 .el-row {
-    margin-bottom: 10px;
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
+  margin-bottom: 10px;
+}
+.el-row:last-child {
+  margin-bottom: 0;
+}
 .el-col {
   border-radius: 4px;
 }
