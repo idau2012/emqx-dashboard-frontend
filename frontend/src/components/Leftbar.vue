@@ -17,7 +17,7 @@
       </el-menu-item-group>
       <el-menu-item-group title="TOOLS">
         <el-menu-item index="/websocket"><i class="fa fa-rss"></i>Websocket</el-menu-item>
-        <el-menu-item index="/api"><i class="fa fa-code"></i>API</el-menu-item>
+        <el-menu-item index="/http_api"><i class="fa fa-code"></i>API</el-menu-item>
       </el-menu-item-group>
       <el-menu-item-group title="ADMIN">
         <el-menu-item index="/users"><i class="fa fa-user-o"></i>Users</el-menu-item>

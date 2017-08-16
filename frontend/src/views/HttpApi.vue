@@ -24,7 +24,7 @@
         <el-table-column label="POST" prop="post" min-width="20"></el-table-column>
         <el-table-column label="Path" min-width="50">
           <template scope="props">
-            <a v-bind:href="''+props.row.path+''" style="color: #337ab7;">{{ props.row.path }}</a>
+            <a v-bind:href="''+props.row.path+''" target="_blank" style="color: #337ab7;">{{ props.row.path }}</a>
           </template>
         </el-table-column>
         <el-table-column label="Description" min-width="200">
@@ -32,7 +32,6 @@
             <div v-html="props.row.description"></div>
           </template>
         </el-table-column>
-      </el-table-column>
     </el-table>
   </el-card>
 </div>

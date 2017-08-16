@@ -95,7 +95,7 @@ for (let i = 1; i < 15 ; i++) {
 }
 
 const clients = []
-for (let i = 1; i < 1001; i++) {
+for (let i = 1; i < 8; i++) {
   clients.push({
     'client_id': `emqttd_${faker.random.number({min:10000000, max:20000000})}`,
     'username': faker.internet.userName(),
@@ -109,7 +109,7 @@ for (let i = 1; i < 1001; i++) {
 }
 
 const sessions = []
-for (let i = 1; i < 1001; i++) {
+for (let i = 1; i < 8; i++) {
   sessions.push({
     'client_id': `emqttd_${faker.random.number({min:10000000, max:20000000})}`,
     'clean_sess': faker.random.arrayElement(['true', 'false']),
@@ -132,9 +132,9 @@ for (let i = 1; i < 1001; i++) {
   })
 }
 
-const routes = []
+const routers = []
 for (let i = 1; i < 1001; i++) {
-  routes.push({
+  routers.push({
     'topic': `/test${i}`,
     'node': faker.random.arrayElement(['node1', 'node2', 'node3', 'node4']),
   })
@@ -221,7 +221,7 @@ module.exports = {
   clients,
   sessions,
   topics,
-  routes,
+  routers,
   subscriptions,
   alerts,
 }

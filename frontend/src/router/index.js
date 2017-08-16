@@ -40,8 +40,8 @@ const routes = [
         component: () => import('@/views/Websocket.vue'),
       },
       {
-        path: '/api',
-        component: () => import('@/views/Http_Api.vue'),
+        path: '/http_api',
+        component: () => import('@/views/HttpApi.vue'),
       },
       {
         path: '/users',
@@ -62,10 +62,6 @@ const routes = [
       {
         path: '/subscriptions',
         component: () => import('@/views/Datas.vue'),
-      },
-      {
-        path: 'setting/http_api',
-        component: () => import('@/views/Http_Api.vue'),
       },
     ],
   },
