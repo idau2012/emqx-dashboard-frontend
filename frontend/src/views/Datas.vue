@@ -2,7 +2,7 @@
   <div class="datas-view">
     <div class="page-title">{{ activeTab }}</div>
     <el-row type="flex" justify="end" align="center">
-      <el-select v-model="nodeName" placeholder="Select Node" size="small" @change="loadChild(true)">
+      <el-select v-model="nodeName" :disabled="loading" placeholder="Select Node" size="small" @change="loadChild(true)">
         <el-option
           v-for="item in nodes"
           :key="item.name"
@@ -10,7 +10,7 @@
           :value="item.name">
         </el-option>
       </el-select>
-      <el-input v-model="searchValue" :placeholder="searchPlaceholder" size="small"></el-input>
+      <el-input :disabled="loading" v-model="searchValue" :placeholder="searchPlaceholder" size="small"></el-input>
       <el-button :plain="true" type="success" icon="search" size="small"
                      @click="searchChild">Search
       </el-button>
@@ -69,7 +69,7 @@
       :current-page="currentPage"
       :page-size="pageSize"
       :total="total"
-      v-if="total>1">
+      v-if="total>0">
     </el-pagination>
   </div>
 </template>
@@ -139,16 +139,13 @@ export default {
         case 'sessions':
         case 'subscriptions':
           this.searchPlaceholder = 'ClientId'
-          this.searchKey = 'clientId_like'
           break
         case 'topics':
         case 'routers':
           this.searchPlaceholder = 'Topic'
-          this.searchKey = 'topic_like'
           break
         default:
           this.searchPlaceholder = 'ClientId'
-          this.searchKey = 'clientId_like'
           break
       }
       this.loadData()
@@ -184,8 +181,9 @@ export default {
       this.loading = true
       const requestURL = `/nodes/${this.nodeName}/${this.activeTab}?curr_page=${this.currentPage}&page_size=${this.pageSize}`
       httpGet(requestURL).then((response) => {
-        this[this.activeTab] = response.data
+        this[this.activeTab] = response.data.object
         this.total = response.data.total_num || 0
+        this.currentPage = response.data.current_page
         this.loading = false
       })
     },
@@ -195,16 +193,14 @@ export default {
         return
       }
       const requestURL = `/nodes/${this.nodeName}/${this.activeTab}/${this.searchValue}`
-      console.log(requestURL)
+      this.loading = true
       httpGet(requestURL).then((response) => {
-        if (!response.data) {
-          Message({
-            message: 'no data',
-            type: 'waring',
-          })
+        if (response.data.objects.length === 0) {
+          Message.error('No Data')
         } else {
-          this[this.activeTab] = response.data
+          this[this.activeTab] = response.data.objects
         }
+        this.loading = false
       })
     },
   },
@@ -246,5 +242,16 @@ export default {
 }
 .datas-view .el-input__inner:-ms-input-placeholder {
   color: #a7a7a7;
+}
+.datas-view .el-input.is-disabled .el-input__inner {
+  background-color: #292929;
+  border-color: #ababab;
+}
+.datas-view .el-button.is-disabled.is-plain,
+.el-button.is-disabled.is-plain:focus,
+.el-button.is-disabled.is-plain:hover,
+.el-button.is-disabled {
+  background-color: #292929;
+  border-color: #ababab;
 }
 </style>
