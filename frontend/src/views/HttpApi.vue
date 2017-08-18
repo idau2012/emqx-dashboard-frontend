@@ -1,9 +1,9 @@
 <template>
 <div class="http_api">
-  <div class="page-title">Http Api</div>
+  <div class="page-title">HTTP API</div>
   <el-card class="box-card">
     <div slot="header">
-      <span style="line-height: 10px;color: #161616;">Introduction</span>
+      <span>Introduction</span>
     </div>
     <div>
       <p>Apart from this help page, all URIs
@@ -17,14 +17,14 @@
 
   <el-card class="box-card" style="margin-top: 30px;">
     <div slot="header">
-      <span style="line-height: 10px;color: #161616;">Introduction</span>
+      <span>Reference</span>
     </div>
     <el-table :data="tableData" border>
         <el-table-column label="GET" prop="get" min-width="20"></el-table-column>
-        <el-table-column label="POST" prop="post" min-width="20"></el-table-column>
+        <el-table-column label="POST" prop="post" min-width="34"></el-table-column>
         <el-table-column label="Path" min-width="50">
           <template scope="props">
-            <a v-bind:href="''+props.row.path+''" target="_blank" style="color: #337ab7;">{{ props.row.path }}</a>
+            <a v-bind:href="''+props.row.path+''" style="color: #227D51" target="_blank">{{ props.row.path }}</a>
           </template>
         </el-table-column>
         <el-table-column label="Description" min-width="200">
@@ -130,6 +130,9 @@ export default {
 <style>
 .http_api .el-table th {
   height: 30px;
+}
+.http_api .el-table {
+  border-color: #1f1d1d;
 }
 .http_api .box-card {
   margin-top: 30px;

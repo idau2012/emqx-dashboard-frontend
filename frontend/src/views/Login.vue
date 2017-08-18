@@ -119,9 +119,11 @@ export default {
 }
 .login-view .el-card {
   border: none;
+  background-color: #fff;
 }
 .login-view .el-card__header {
   border-color: #EFF2F7;
+  background-color: #fff;
 }
 .login-view .el-input.error input {
   border-color: #E0B4B4;

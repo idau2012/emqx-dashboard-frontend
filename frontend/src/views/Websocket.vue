@@ -9,29 +9,29 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <label>Host:</label>
-          <el-input v-model="host"></el-input>
+          <el-input v-model="host" size="small"></el-input>
         </el-col>
         <el-col :span="8">
           <label>Port:</label>
-          <el-input v-model="port"></el-input>
+          <el-input v-model="port" size="small"></el-input>
         </el-col>
         <el-col :span="8">
           <label>Client ID:</label>
-          <el-input v-model="clientId"></el-input>
+          <el-input v-model="clientId" size="small"></el-input>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
           <label>Username:</label>
-          <el-input v-model="username"></el-input>
+          <el-input v-model="username" size="small"></el-input>
         </el-col>
         <el-col :span="8">
           <label>Password:</label>
-          <el-input v-model="password"></el-input>
+          <el-input v-model="password" size="small"></el-input>
         </el-col>
         <el-col :span="8">
           <label>Keep Alive:</label>
-          <el-input v-model="keepalive"></el-input>
+          <el-input v-model="keepalive" size="small"></el-input>
         </el-col>
       </el-row>
       <el-row>
@@ -51,32 +51,32 @@
       </div>
       <el-row :gutter="20">
         <el-col :span="12">
+          <label>Topic:</label>
+          <el-input v-model="subTopic" size="small"></el-input>
+          <label>QoS:</label>
+          <el-select v-model="subQos" size="small" style="display: block;">
+            <el-option value="0"></el-option>
+            <el-option value="1"></el-option>
+            <el-option value="2"></el-option>
+          </el-select>
+          <div class="between">
+            <el-button type="success" icon="check" size="small"
+                       :disabled="!client.connected"
+                       @click="mqttSubscribe"
+            >Subscribe</el-button>
+            <el-button type="success" class="btn-close" title="Close the connect" icon="close" size="small"
+                       @click="mqttDisconnect"
+            >Disconnect</el-button>
+          </div>
+        </el-col>
+
+        <el-col :span="12">
           <label>Subscribes:</label>
           <el-table :data="subscriptions" :max-height="320">
             <el-table-column prop="topic" label="Topic"></el-table-column>
             <el-table-column prop="qos" width="70" label="QoS"></el-table-column>
             <el-table-column prop="time" width="180" label="Date"></el-table-column>
           </el-table>
-        </el-col>
-
-        <el-col :span="12" style="border-right: 1px solid #D3DCE6;">
-            <label>Topic:</label>
-            <el-input v-model="subTopic"></el-input>
-            <label>QoS:</label>
-            <div>
-              <el-select v-model="subQos" style="display: block;">
-                <el-option value="0"></el-option>
-                <el-option value="1"></el-option>
-                <el-option value="2"></el-option>
-              </el-select>
-            </div>
-            <el-button type="success" icon="check" size="small"
-                       :disabled="!client.connected"
-                       @click="mqttSubscribe"
-            >Subscribe</el-button>
-          <el-button style="float: right" title="Close the connect" icon="close" size="small"
-                     @click="mqttDisconnect"
-          >Disconnect</el-button>
         </el-col>
 
       </el-row>
@@ -88,21 +88,21 @@
       <el-row :gutter="20">
         <el-col :span="6">
           <label>Topic:</label>
-          <el-input v-model="publishTopic"></el-input>
+          <el-input v-model="publishTopic" size="small"></el-input>
         </el-col>
         <el-col :span="6">
           <label>Message:</label>
-          <el-input v-model="publishMessage"></el-input>
+          <el-input v-model="publishMessage" size="small"></el-input>
         </el-col>
         <el-col :span="6">
           <label>QoS:</label>
-          <el-select v-model="publishQos" style="display: block;">
+          <el-select v-model="publishQos" size="small" style="display: block;">
             <el-option value="0"></el-option>
             <el-option value="1"></el-option>
             <el-option value="2"></el-option>
           </el-select>
         </el-col>
-        <el-col :span="6" style="padding-top: 25px;">
+        <el-col :span="6" style="margin-top: 21px">
           <el-checkbox v-model="publishRetain" style="margin-right: 15px;">Retained</el-checkbox>
           <el-button type="success" icon="check" size="small"
             :disabled="!client.connected"
@@ -111,7 +111,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20" style="margin-top: 20px;">
-        <el-col :span="12" style="border-right: 1px solid #D3DCE6;">
+        <el-col :span="12">
           <label>Messages already sent:</label>
           <el-table :data="publishedMessages" border :max-height="600">
             <el-table-column prop="message" label="Message"></el-table-column>
@@ -316,6 +316,11 @@ export default {
 .websocket-view .blank-top {
   margin-top: 70px;
 }
+.websocket-view .btn-close:hover {
+  background-color: #ff6d6d !important;
+  color: #ffffff !important;
+  border-color: #ff6d6d !important;
+}
 .websocket-view .blank-middle {
   margin-top: 20px;
 }
@@ -323,5 +328,44 @@ export default {
 .websocket-view .el-checkbox {
   margin: 5px 0 20px;
 }
-
+.websocket-view .el-checkbox__label {
+  color: #ddd;
+}
+.websocket-view .el-checkbox__inner:hover {
+  border-color: #227D51;
+}
+.websocket-view .el-checkbox__input.is-checked .el-checkbox__inner {
+  background-color: #37363b;
+  border-color: #ddd;
+}
+.websocket-view .el-checkbox__input.is-focus .el-checkbox__inner {
+  border-color: #ddd;
+}
+.websocket-view .el-checkbox.is-focus {
+  border-color: #37363b;
+}
+.websocket-view .between {
+  display: flex;
+  justify-content: space-between;
+}
+.websocket-view .el-button--small.el-button--success {
+  background-color: transparent;
+  border-color: #5d5d60;
+  color: #fff;
+  padding: 8px 14px;
+}
+.websocket-view .el-input__inner {
+  background-color: transparent;
+  color: #fff;
+  border-color: #5d5d60
+}
+.websocket-view .el-input__inner:focus {
+  border-color: #a7a7a7;
+}
+.websocket-view .el-button--small.el-button--success:hover {
+  border-color: #a7a7a7;
+}
+.websocket-view .el-select .el-input__inner:focus {
+  border-color: #a7a7a7;
+}
 </style>

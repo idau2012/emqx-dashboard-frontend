@@ -205,4 +205,14 @@ export default {
   border-color: #E0B4B4;
   border-width: 2px;
 }
+.users-view .el-button--danger.el-button--mini:hover {
+  background-color: #ff6d6d !important;
+  color: #ffffff !important;
+  border-color: #ff6d6d !important;
+}
+.users-view .el-button--warning .el-button--mini:hover {
+  background-color: #f9c855;
+  border-color: #f9c855;
+  color: #fff;
+}
 </style>

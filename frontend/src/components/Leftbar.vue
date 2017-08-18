@@ -9,7 +9,7 @@
         <el-menu-item index="/"><i class="fa fa-bar-chart"></i>Overview</el-menu-item>
       </el-menu-item-group>
         <el-menu-item index="/clients"><i class="fa fa-circle"></i>Clients</el-menu-item>
-        <el-menu-item index="/sessions"><i class="fa fa-commenting"></i>Sessions</el-menu-item>
+        <el-menu-item index="/sessions"><i class="fa fa-exchange"></i>Sessions</el-menu-item>
         <el-menu-item index="/routers"><i class="fa fa-plug"></i>Routers</el-menu-item>
         <el-menu-item index="/subscriptions"><i class="fa fa-rss-square"></i>Subscriptions</el-menu-item>
       <el-menu-item-group title="MANAGEMENT">

@@ -16,8 +16,8 @@
       </el-button>
     </el-row>
     <el-table :data="clients" v-loading="loading" v-show="activeTab==='clients'" border>
-      <el-table-column prop="client_id" label="ClientId" min-width="100"></el-table-column>
-      <el-table-column prop="username" label="Username" width="150"></el-table-column>
+      <el-table-column prop="client_id" label="ClientId" min-width="150"></el-table-column>
+      <el-table-column prop="username" label="Username" width="130"></el-table-column>
       <el-table-column prop="ipaddress" label="IPAddr" width="150"></el-table-column>
       <el-table-column prop="port" label="Port" width="80"></el-table-column>
       <el-table-column prop="clean_sess" label="CleanSess" width="110">
@@ -25,7 +25,7 @@
           <span>{{ scope.row.clean_sess ? 'true' : 'false' }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="proto_ver" label="ProtoVer" width="100"></el-table-column>
+      <el-table-column prop="proto_ver" label="ProtoVer" width="90"></el-table-column>
       <el-table-column prop="keepalive" label="Keepalive(s)" width="120"></el-table-column>
       <el-table-column prop="connected_at" label="ConnectedAt" width="180"></el-table-column>
     </el-table>

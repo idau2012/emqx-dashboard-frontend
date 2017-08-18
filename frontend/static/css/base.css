@@ -1,32 +1,7 @@
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 300;
-  src: local('Roboto Light'), local('Roboto-Light'), url(../fonts/Roboto-Light.woff) format('woff'), url(../fonts/Roboto-Light.ttf) format('truetype');
-}
-html, body, #app {
-  height: 100%;
-  margin: 0;
-}
-body {
-  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Work sans", Arial, sans-serif;
-  -webkit-font-smoothing: subpixel-antialiased;
-  color: #a7a7a7;
-  font-size: 14px;
-  font-weight: 400;
-}
-.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
-  color: #a7a7a7;
-  font-weight: 400;
-}
-a {
-  color: #00ab6b;
-  text-decoration: none;
-}
+
 .el-button {
   font-family: "Roboto", "Helvetica Neue", "Helvetica", "Work sans", Arial, sans-serif;
 }
-
 /* button */
 .el-button i {
   margin-right: 5px;
@@ -39,22 +14,23 @@ a {
   border-color: #5d5d60;
   color: #fff;
 }
-.home-view .el-button--success:focus,
-.home-view .el-button--success:hover {
+.over-view .el-button--success:focus,
+.over-view .el-button--success:hover {
   background: #13ce66;
   border-color: #13ce66;
 }
-.home-view .el-button--warning:focus,
-.home-view .el-button--warning:hover {
+.over-view .el-button--warning:focus,
+.over-view .el-button--warning:hover {
   background: #f9c855;
   border-color: #f9c855;
 }
-.home-view .el-button--danger:focus,
-.home-view .el-button--danger:hover {
+.over-view .el-button--danger:focus,
+.over-view .el-button--danger:hover {
   background: #ff6d6d;
   border-color: #ff6d6d;
 }
 .users-view .el-button--small.is-plain,
+.plugins-view .el-button--small.is-plain,
 .datas-view .el-button--small.is-plain {
   background-color: transparent;
   border-color: #5d5d60;
@@ -62,6 +38,7 @@ a {
   padding: 8px 14px;
 }
 .users-view .el-button--small.is-plain:hover,
+.plugins-view .el-button--small.is-plain:hover,
 .datas-view .el-button--small.is-plain:hover {
   border-color: #a7a7a7;
 }
@@ -167,4 +144,40 @@ body #nprogress .peg {
 .el-pager li:hover:not(.active),
 .el-pagination button:hover {
   color: #227D51;
+}
+.el-select-dropdown {
+  background-color: #1f1d1d;
+  border-color: #a7a7a7;
+}
+.el-select-dropdown .el-select-dropdown__item {
+  background-color: #1f1d1d;
+  color: #ddd;
+}
+.el-select-dropdown .el-select-dropdown__item.hover.selected {
+  background-color: #292929;
+  color: #fff;
+}
+.el-select-dropdown .selected {
+  background-color: #292929;
+  color: #fff;
+}
+.el-select-dropdown .hover {
+  background-color: #292929;
+  color: #fff;
+}
+.el-card__header {
+  padding: 12px 20px;
+  border-bottom: 1px solid #292929;
+  color: #ddd;
+  font-size: 16px;
+}
+.el-card {
+  border: 1px solid #292929;
+  background-color: #1f1d1d;
+  color: #ddd;
+  border-radius: 0;
+}
+.el-table--enable-row-hover .el-table__body tr:hover>td {
+  background-color: #37363b;
+  background-clip: padding-box;
 }

@@ -19,7 +19,7 @@
     <el-table :data="tableData" v-loading="loading" border>
       <el-table-column prop="name" width="240" label="Name"></el-table-column>
       <el-table-column prop="version" width="100" label="Version"></el-table-column>
-      <el-table-column prop="description" label="Description"></el-table-column>
+      <el-table-column prop="description" label="Description" min-width="340"></el-table-column>
       <el-table-column
         prop="active"
         label="Status"
@@ -199,12 +199,22 @@ export default{
   border-radius: 4px;
 }
 .plugins-view .running:before {
-  background-color: #7cb342;
+  background-color: #227D51;
 }
 .plugins-view .stopped:before {
   background-color: #777777;
 }
 .plugins-view .running {
-  color: #7cb342;
+  color: #227D51;
+}
+.plugins-view .el-button--mini.el-button--success:focus, .el-button--mini.el-button--success:hover {
+  background: #42d885 !important;
+  border-color: #42d885 !important;;
+  color: #fff !important;;
+}
+.plugins-view .el-button--mini.el-button--warning:focus, .el-button--mini.el-button--warning:hover {
+  background: #f9c855 !important;;
+  border-color: #f9c855 !important;;
+  color: #fff !important;;
 }
 </style>

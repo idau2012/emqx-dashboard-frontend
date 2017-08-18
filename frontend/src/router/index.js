@@ -28,10 +28,6 @@ const routes = [
         component: () => import('@/views/Overview.vue'),
       },
       {
-        path: '/alerts',
-        component: () => import('@/views/Alerts.vue'),
-      },
-      {
         path: '/plugins',
         component: () => import('@/views/Plugins.vue'),
       },
@@ -89,6 +85,8 @@ router.beforeEach((to, from, next) => {
         query: { redirect: to.fullPath },
       })
     } else {
+      document.body.scrollTop = 0
+      document.documentElement.scrollTop = 0
       next()
     }
   } else {
