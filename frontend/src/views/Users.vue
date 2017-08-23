@@ -73,7 +73,7 @@
 
 <script>
 import dateformat from 'dateformat'
-import { Row, Button, Table, TableColumn, Popover, Dialog, Input } from 'element-ui'
+import { Row, Button, Table, TableColumn, Popover, Dialog, Input, Message } from 'element-ui'
 import { httpGet, httpPost, httpPut, httpDelete } from '../store/api'
 
 export default {
@@ -134,37 +134,43 @@ export default {
       })
     },
     save() {
+      // Needen't password with edit
       if (!this.user.username) {
         this.formError.username = 'Username required'
         return false
       } else if (!this.user.email) {
         this.formError.email = 'Email required'
         return false
-      } else if (!this.user.password) {
-        this.formError.password = 'Password required'
-        return false
       }
-      this.btnLoading = true
       if (this.oper === 'new') {
+        if (!this.user.password) {
+          this.formError.password = 'Password required'
+          return false
+        }
+        this.btnLoading = true
         this.user.created_at = dateformat(new Date(), 'yyyy-mm-dd hh:MM:ss')
         this.user.role = 'viewer'
         httpPost('/users', this.user).then((response) => {
           if (response.data.status === 'success') {
-            this.$message.success('Create user success!')
+            Message.success('Create user success!')
+            this.dialogVisible = false
             this.loadData()
+          } else if (response.data.status === 'failure') {
+            Message.error(response.data.reason)
           } else {
-            this.$message.error(response.data.reason)
+            Message.error(response.data.reason)
+            this.dialogVisible = false
           }
-          this.dialogVisible = false
           this.btnLoading = false
         })
       } else {
+        this.btnLoading = true
         httpPut(`/users/${this.user.username}`, this.user).then((response) => {
           if (response.data.status === 'success') {
-            this.$message.success('Edit success!')
+            Message.success('Edit success!')
             this.loadData()
           } else {
-            this.$message.error('Edit failure!')
+            Message.error('Edit failure!')
           }
           this.dialogVisible = false
           this.btnLoading = false
@@ -175,10 +181,10 @@ export default {
       this.btnLoading = true
       httpDelete(`/users/${username}`).then((response) => {
         if (response.data.status === 'success') {
-          this.$message.success('Delete success!')
+          Message.success('Delete success!')
           this.loadData()
         } else {
-          this.$message.error('Delete failure!')
+          Message.error('Delete failure!')
         }
         this.btnLoading = false
         this.hidePopover()
@@ -206,11 +212,11 @@ export default {
   border-width: 2px;
 }
 .users-view .el-button--danger.el-button--mini:hover {
-  background-color: #ff6d6d !important;
-  color: #ffffff !important;
-  border-color: #ff6d6d !important;
+  background-color: #ff6d6d;
+  border-color: #ff6d6d;
+  color: #ffffff;
 }
-.users-view .el-button--warning .el-button--mini:hover {
+.users-view .el-button--warning.el-button--mini:hover {
   background-color: #f9c855;
   border-color: #f9c855;
   color: #fff;
