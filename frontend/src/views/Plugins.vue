@@ -55,8 +55,7 @@
 <script>
 import { Breadcrumb, BreadcrumbItem, Table,
   TableColumn, Select, Option, Row, Input,
-  Button, Message,
-  Popover } from 'element-ui'
+  Button, Popover } from 'element-ui'
 import { httpGet, httpPut } from '../store/api'
 
 export default{
@@ -103,10 +102,10 @@ export default{
       httpPut(`/nodes/${this.nodeName}/plugins/${row.name}`, data).then((response) => {
         this.loading = false
         if (response.data.status === 'success') {
-          Message.success(`${row.active ? 'Stop' : 'Start'} success`)
+          this.$message.success(`${row.active ? 'Stop' : 'Start'} success`)
           this.loadPlugins()
         } else {
-          Message.error(`${row.active ? 'Stop' : 'Start'} failure`)
+          this.$message.error(`${row.active ? 'Stop' : 'Start'} failure`)
         }
       })
     },
@@ -134,16 +133,16 @@ export default{
     },
     searchPlugins() {
       if (!this.nodeName) {
-        Message.error('Node requires')
+        this.$message.error('Node requires')
         return
       }
       if (!this.searchValue) {
-        Message.error('Plugin required')
+        this.$message.error('Plugin required')
         return
       }
       httpGet(`/nodes/${this.nodeName}/plugins/${this.searchValue}`).then((response) => {
         if (!response.data) {
-          Message.error('This plugin is not exist')
+          this.$message.error('This plugin is not exist')
         } else {
           this.tableData = response.data
         }

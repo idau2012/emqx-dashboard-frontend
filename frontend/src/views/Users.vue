@@ -73,7 +73,7 @@
 
 <script>
 import dateformat from 'dateformat'
-import { Row, Button, Table, TableColumn, Popover, Dialog, Input, Message } from 'element-ui'
+import { Row, Button, Table, TableColumn, Popover, Dialog, Input } from 'element-ui'
 import { httpGet, httpPost, httpPut, httpDelete } from '../store/api'
 
 export default {
@@ -152,13 +152,13 @@ export default {
         this.user.role = 'viewer'
         httpPost('/users', this.user).then((response) => {
           if (response.data.status === 'success') {
-            Message.success('Create user success!')
+            this.$message.success('Create user success!')
             this.dialogVisible = false
             this.loadData()
           } else if (response.data.status === 'failure') {
-            Message.error(response.data.reason)
+            this.$message.error(response.data.reason)
           } else {
-            Message.error(response.data.reason)
+            this.$message.error(response.data.reason)
             this.dialogVisible = false
           }
           this.btnLoading = false
@@ -167,10 +167,10 @@ export default {
         this.btnLoading = true
         httpPut(`/users/${this.user.username}`, this.user).then((response) => {
           if (response.data.status === 'success') {
-            Message.success('Edit success!')
+            this.$message.success('Edit success!')
             this.loadData()
           } else {
-            Message.error('Edit failure!')
+            this.$message.error('Edit failure!')
           }
           this.dialogVisible = false
           this.btnLoading = false
@@ -181,10 +181,10 @@ export default {
       this.btnLoading = true
       httpDelete(`/users/${username}`).then((response) => {
         if (response.data.status === 'success') {
-          Message.success('Delete success!')
+          this.$message.success('Delete success!')
           this.loadData()
         } else {
-          Message.error('Delete failure!')
+          this.$message.error('Delete failure!')
         }
         this.btnLoading = false
         this.hidePopover()

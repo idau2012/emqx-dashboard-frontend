@@ -3,7 +3,7 @@ import { sync } from 'vuex-router-sync'
 
 import lang from 'element-ui/lib/locale/lang/en'
 import locale from 'element-ui/lib/locale'
-import { Loading } from 'element-ui'
+import { Loading, Message } from 'element-ui'
 
 import App from './App'
 import router from './router'
@@ -15,6 +15,8 @@ locale.use(lang)
 
 Vue.config.productionTip = false
 Vue.use(Loading)
+
+Vue.prototype.$message = Message
 
 // register global utility filters.
 Object.keys(filters).forEach((key) => {

@@ -140,7 +140,7 @@
 import NProgress from 'nprogress'
 import mqtt from 'mqtt'
 import dateformat from 'dateformat'
-import { Card, Row, Col, Input, Checkbox, Button, Select, Option, Table, TableColumn, Message } from 'element-ui'
+import { Card, Row, Col, Input, Checkbox, Button, Select, Option, Table, TableColumn } from 'element-ui'
 
 export default {
   name: 'websocket-view',
@@ -202,12 +202,12 @@ export default {
       }
       this.client = mqtt.connect(`ws://${this.host}:${this.port}/mqtt`, options)
       this.client.on('connect', () => {
-        Message.success('Connect success')
+        this.$message.success('Connect success')
         NProgress.done()
       })
       this.client.on('reconnect', () => {
         if (retryTimes > 2) {
-          Message.error(`Connect failure with ${this.host}:${this.port}`)
+          this.$message.error(`Connect failure with ${this.host}:${this.port}`)
           retryTimes = 0
           this.loading = false
           this.client.end()
@@ -215,7 +215,7 @@ export default {
         retryTimes += 1
       })
       this.client.on('error', (error) => {
-        Message.error(error)
+        this.$message.error(error)
         NProgress.done()
       })
       this.client.on('message', (topic, message, packet) => {
@@ -235,12 +235,12 @@ export default {
           this.subscriptions = []
           this.receivedMessages = []
           this.publishedMessages = []
-          Message.success('Disconncet success')
+          this.$message.success('Disconncet success')
           this.loading = false
           NProgress.done()
         })
       } else {
-        Message.error('Please connect!')
+        this.$message.error('Please connect!')
       }
     },
     mqttSubscribe() {
@@ -252,26 +252,26 @@ export default {
           }
         })
         if (isSubscribe) {
-          Message.error(`Topic '${this.subTopic}' is subscribed`)
+          this.$message.error(`Topic '${this.subTopic}' is subscribed`)
           return
         }
         NProgress.start()
         this.client.subscribe(this.subTopic, { qos: this.subQos }, (error) => {
           if (error) {
             NProgress.done()
-            Message.error(error)
+            this.$message.error(error)
           } else {
             this.subscriptions.unshift({
               topic: this.subTopic,
               qos: this.subQos,
               time: this.now(),
             })
-            Message.success('Subscribe success!')
+            this.$message.success('Subscribe success!')
             NProgress.done()
           }
         })
       } else {
-        Message.error('Could not subscribe before connect!')
+        this.$message.error('Could not subscribe before connect!')
       }
     },
     mqttPublish() {
@@ -281,7 +281,7 @@ export default {
         this.client.publish(this.publishTopic, this.publishMessage, options, (error) => {
           if (error) {
             NProgress.done()
-            Message.error(error)
+            this.$message.error(error)
           } else {
             this.publishedMessages.unshift({
               message: this.publishMessage,
@@ -289,12 +289,12 @@ export default {
               qos: this.publishQos,
               time: this.now(),
             })
-            Message.success('Send success!')
+            this.$message.success('Send success!')
             NProgress.done()
           }
         })
       } else {
-        Message.error('Could not send message before connect!')
+        this.$message.error('Could not send message before connect!')
       }
     },
 

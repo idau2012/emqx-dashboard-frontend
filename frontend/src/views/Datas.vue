@@ -81,7 +81,7 @@ import {
   TableColumn, Table,
   Button, Tag, Popover,
   Breadcrumb, BreadcrumbItem, Row, Input,
-  Select, Pagination, Option, Message,
+  Select, Pagination, Option,
 } from 'element-ui'
 import { httpGet } from '../store/api'
 
@@ -189,14 +189,14 @@ export default {
     },
     searchChild() {
       if (!this.searchValue) {
-        Message.error(`${this.searchPlaceholder} required`)
+        this.$message.error(`${this.searchPlaceholder} required`)
         return
       }
       const requestURL = `/nodes/${this.nodeName}/${this.activeTab}/${this.searchValue}`
       this.loading = true
       httpGet(requestURL).then((response) => {
         if (response.data.objects.length === 0) {
-          Message.error('No Data')
+          this.$message.error('No Data')
         } else {
           this[this.activeTab] = response.data.objects
         }
