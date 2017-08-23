@@ -73,9 +73,16 @@
         <el-col :span="12">
           <label>Subscribes:</label>
           <el-table :data="subscriptions" :max-height="320">
-            <el-table-column prop="topic" label="Topic"></el-table-column>
+            <el-table-column prop="topic" label="Topic" min-width="160"></el-table-column>
             <el-table-column prop="qos" width="70" label="QoS"></el-table-column>
-            <el-table-column prop="time" width="180" label="Date"></el-table-column>
+            <el-table-column prop="time" min-width="150" label="Date"></el-table-column>
+            <el-table-column prop="time" width="90" label="Oper">
+              <template scope="props">
+                <el-button size="mini" type="text" icon="close" style="color: #a7a7a7" title="Unsubscribe"
+                           @click="mqttCacheScuscribe(props.row.topic)">
+                </el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </el-col>
 
@@ -297,7 +304,23 @@ export default {
         this.$message.error('Could not send message before connect!')
       }
     },
-
+    mqttCacheScuscribe(topic) {
+      if (!this.client.connected) {
+        this.$message.error('Could not send message before connect!')
+        return
+      }
+      this.client.unsubscribe(topic, (error) => {
+        if (error) {
+          this.$message.error('Unsubscribe failure')
+          return
+        }
+        this.subscriptions.forEach((element, index) => {
+          if (element.topic === topic) {
+            this.subscriptions.splice(index, 1)
+          }
+        })
+      })
+    },
   },
 }
 </script>
