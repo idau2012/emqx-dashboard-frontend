@@ -88,7 +88,7 @@ export default {
         password: this.password,
       }
       httpPost('/auth', auth).then((response) => {
-        if (response.data.status === 'success') {
+        if (response.data.result.status === 'success') {
           const password = btoa(auth.password)
           this.USER_LOGIN({ user: { ...auth, password }, remember: this.remember })
           const path = decodeURIComponent(this.$route.query.redirect || '/')

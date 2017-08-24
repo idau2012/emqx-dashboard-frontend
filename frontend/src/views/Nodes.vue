@@ -58,7 +58,7 @@ export default {
     loadData() {
       this.loading = true
       httpGet('/management/nodes').then((response) => {
-        this.nodes = response.data
+        this.nodes = response.data.result
         this.loading = false
       })
     },

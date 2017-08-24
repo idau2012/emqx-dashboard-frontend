@@ -101,7 +101,7 @@ export default{
       const data = { active: !row.active }
       httpPut(`/nodes/${this.nodeName}/plugins/${row.name}`, data).then((response) => {
         this.loading = false
-        if (response.data.status === 'success') {
+        if (response.data.code === 0) {
           this.$message.success(`${row.active ? 'Stop' : 'Start'} success`)
           this.loadPlugins()
         } else {
@@ -111,11 +111,11 @@ export default{
     },
     loadData() {
       this.loading = true
-      httpGet('/monitoring/nodes').then((response) => {
+      httpGet('/management/nodes').then((response) => {
         this.nodes = {}
         // set default of select
-        this.nodeName = response.data[0].name || ''
-        this.nodes = response.data
+        this.nodeName = response.data.result[0].name || ''
+        this.nodes = response.data.result
         this.loading = false
         this.loadPlugins()
       })
@@ -127,7 +127,7 @@ export default{
       this.loading = true
       this.searchValue = ''
       httpGet(`/nodes/${this.nodeName}/plugins`).then((response) => {
-        this.tableData = response.data
+        this.tableData = response.data.result
         this.loading = false
       })
     },
@@ -141,10 +141,10 @@ export default{
         return
       }
       httpGet(`/nodes/${this.nodeName}/plugins/${this.searchValue}`).then((response) => {
-        if (!response.data) {
+        if (!response.data.result) {
           this.$message.error('This plugin is not exist')
         } else {
-          this.tableData = response.data
+          this.tableData = response.data.result
         }
         this.loading = false
       })
@@ -208,12 +208,12 @@ export default{
 }
 .plugins-view .el-button--mini.el-button--success:focus, .el-button--mini.el-button--success:hover {
   background: #42d885 !important;
-  border-color: #42d885 !important;;
-  color: #fff !important;;
+  border-color: #42d885 !important;
+  color: #fff !important;
 }
 .plugins-view .el-button--mini.el-button--warning:focus, .el-button--mini.el-button--warning:hover {
-  background: #f9c855 !important;;
-  border-color: #f9c855 !important;;
-  color: #fff !important;;
+  background: #f9c855 !important;
+  border-color: #f9c855 !important;
+  color: #fff !important;
 }
 </style>

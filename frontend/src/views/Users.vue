@@ -129,7 +129,7 @@ export default {
     loadData() {
       this.loading = true
       httpGet('/users').then((response) => {
-        this.users = response.data
+        this.users = response.data.result
         this.loading = false
       })
     },
@@ -151,14 +151,14 @@ export default {
         this.user.created_at = dateformat(new Date(), 'yyyy-mm-dd hh:MM:ss')
         this.user.role = 'viewer'
         httpPost('/users', this.user).then((response) => {
-          if (response.data.status === 'success') {
+          if (response.data.result.status === 'success') {
             this.$message.success('Create user success!')
             this.dialogVisible = false
             this.loadData()
-          } else if (response.data.status === 'failure') {
-            this.$message.error(response.data.reason)
+          } else if (response.data.result.status === 'failure') {
+            this.$message.error(response.data.result.reason)
           } else {
-            this.$message.error(response.data.reason)
+            this.$message.error(response.data.result.reason)
             this.dialogVisible = false
           }
           this.btnLoading = false
@@ -166,7 +166,7 @@ export default {
       } else {
         this.btnLoading = true
         httpPut(`/users/${this.user.username}`, this.user).then((response) => {
-          if (response.data.status === 'success') {
+          if (response.data.result.status === 'success') {
             this.$message.success('Edit success!')
             this.loadData()
           } else {
@@ -180,7 +180,7 @@ export default {
     deleteUser(username) {
       this.btnLoading = true
       httpDelete(`/users/${username}`).then((response) => {
-        if (response.data.status === 'success') {
+        if (response.data.result.status === 'success') {
           this.$message.success('Delete success!')
           this.loadData()
         } else {

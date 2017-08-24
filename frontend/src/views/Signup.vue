@@ -102,11 +102,11 @@ export default {
         baseURL,
         headers,
       }).then((response) => {
-        this.USER_LOGIN({ user: response.data, remember: false })
+        this.USER_LOGIN({ user: response.data.result, remember: false })
         this.$router.push({ path: '/' })
       }).catch((error) => {
         if (error.response.status === 400) {
-          const formError = error.response.data.error_form
+          const formError = error.response.data.result.error_form
           Object.keys(formError).forEach((key) => {
             this.signupError = formError[key][0]
           })

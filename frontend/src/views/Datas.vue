@@ -2,7 +2,7 @@
   <div class="datas-view">
     <div class="page-title">{{ activeTab }}</div>
     <el-row type="flex" justify="end" align="center">
-      <el-select v-model="nodeName" :disabled="loading" placeholder="Select Node" size="small" @change="loadChild(true)">
+      <el-select v-model="nodeName" v-show="activeTab !== 'routers'" :disabled="loading" placeholder="Select Node" size="small" @change="loadChild(true)">
         <el-option
           v-for="item in nodes"
           :key="item.name"
@@ -154,13 +154,18 @@ export default {
       this.loading = true
       this.currentPage = 1
       this.searchValue = ''
+      // load routers needn't nodes
+      if (this.activeTab === 'routers') {
+        this.loadChild()
+        return
+      }
       // load nodes
-      const requestNode = '/monitoring/nodes'
+      const requestNode = '/management/nodes'
       httpGet(requestNode).then((response) => {
         this.nodes = {}
         // set default of select
-        this.nodeName = response.data[0].name || ''
-        this.nodes = response.data
+        this.nodeName = response.data.result[0].name || ''
+        this.nodes = response.data.result
         // load child with sync
         this.loadChild()
       })
@@ -171,7 +176,7 @@ export default {
       this.loadChild()
     },
     loadChild(reload = false) {
-      if (!this.nodeName) {
+      if (!this.nodeName && this.activeTab !== 'routers') {
         return
       }
       // load child with the currentPage asc
@@ -179,11 +184,14 @@ export default {
         this.currentPage = 1
       }
       this.loading = true
-      const requestURL = `/nodes/${this.nodeName}/${this.activeTab}?curr_page=${this.currentPage}&page_size=${this.pageSize}`
+      let requestURL = `/nodes/${this.nodeName}/${this.activeTab}?curr_page=${this.currentPage}&page_size=${this.pageSize}`
+      if (this.activeTab === 'routers') {
+        requestURL = `/routes?curr_page=${this.currentPage}&page_size=${this.pageSize}`
+      }
       httpGet(requestURL).then((response) => {
-        this[this.activeTab] = response.data.object
-        this.total = response.data.total_num || 0
-        this.currentPage = response.data.current_page
+        this[this.activeTab] = response.data.result.objects
+        this.total = response.data.result.total_num || 0
+        this.currentPage = response.data.result.current_page
         this.loading = false
       })
     },
@@ -192,13 +200,19 @@ export default {
         this.$message.error(`${this.searchPlaceholder} required`)
         return
       }
-      const requestURL = `/nodes/${this.nodeName}/${this.activeTab}/${this.searchValue}`
+      let requestURL = `/nodes/${this.nodeName}/${this.activeTab}/${this.searchValue}`
+      if (this.activeTab === 'routers') {
+        requestURL = `/routes/${this.searchValue}`
+      }
       this.loading = true
       httpGet(requestURL).then((response) => {
-        if (response.data.objects.length === 0) {
+        if (response.data.result.objects.length === 0) {
           this.$message.error('No Data')
         } else {
-          this[this.activeTab] = response.data.objects
+          this[this.activeTab] = response.data.result.objects
+          // reset page
+          this.total = 0
+          this.currentPage = 0
         }
         this.loading = false
       })

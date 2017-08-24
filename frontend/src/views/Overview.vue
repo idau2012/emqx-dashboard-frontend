@@ -119,14 +119,14 @@ export default {
         window.clearInterval(this.flag)
       }
       httpGet('/nodes').then((response) => {
-        console.log(response.data)
-        this.nodes = response.data
+        console.log(response.data.result)
+        this.nodes = response.data.result
       })
       httpGet('/stats').then((response) => {
-        this.stats = response.data
+        this.stats = response.data.result
       })
       httpGet('/brokers').then((response) => {
-        this.brokers = response.data
+        this.brokers = response.data.result
       })
     },
   },
