@@ -34,7 +34,7 @@ function httpRequest() {
   if (user && user.password) {
     config.auth = {
       username: user.username,
-      password: atob(user.password),
+      password: user.password,
     }
   }
 

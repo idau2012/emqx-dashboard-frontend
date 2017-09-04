@@ -39,7 +39,7 @@
       </el-row>
       <el-row :gutter="20" type="flex" align="middle">
         <el-col :span="8">
-          <el-button type="success" icon="check" size="small"
+          <el-button type="success" class="connect-btn" icon="check" size="small"
                      :loading="loading" @click="mqttConnect">
             Connect</el-button>
         </el-col>
@@ -339,10 +339,20 @@ export default {
 .websocket-view .blank-top {
   margin-top: 70px;
 }
-.websocket-view .btn-close:hover {
+.websocket-view .connect-btn.el-button--small.el-button--success {
+  color: #227D51;
+  border-color: #227D51;
+}
+.websocket-view .btn-close:hover,
+.btn-close.is-loaing
+{
   background-color: #ff6d6d !important;
   color: #ffffff !important;
   border-color: #ff6d6d !important;
+}
+.websocket-view .btn-close {
+  border-color: #ff6d6d !important;
+  color: #ff6d6d !important;
 }
 .websocket-view .blank-middle {
   margin-top: 20px;
@@ -373,8 +383,8 @@ export default {
 }
 .websocket-view .el-button--small.el-button--success {
   background-color: transparent;
-  border-color: #5d5d60;
-  color: #fff;
+  border-color: #227D51;
+  color: #227D51;
   padding: 8px 14px;
 }
 .websocket-view .el-input__inner {
@@ -385,10 +395,14 @@ export default {
 .websocket-view .el-input__inner:focus {
   border-color: #a7a7a7;
 }
-.websocket-view .el-button--small.el-button--success:hover {
-  border-color: #a7a7a7;
+.websocket-view .el-button--small.el-button--success:hover,
+.websocket-view .el-button--small.el-button--success.is-loading
+{
+  border-color: #42d885;
+  background-color: #42d885;
+  color: #fff;
 }
-.websocket-view .el-select .el-input__inner:focus {
-  border-color: #a7a7a7;
-}
+/*.websocket-view .el-select .el-input__inner:focus {*/
+  /*border-color: #42d885;*/
+/*}*/
 </style>

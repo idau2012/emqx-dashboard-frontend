@@ -9,10 +9,7 @@
 
     <el-table :data="users" v-loading="loading" border>
       <el-table-column prop="username" label="Username"></el-table-column>
-      <el-table-column prop="email" label="Email"></el-table-column>
-      <el-table-column prop="role" label="Role"></el-table-column>
-      <el-table-column prop="remark" label="Remark"></el-table-column>
-      <el-table-column prop="created_at" label="Created Time"></el-table-column>
+      <el-table-column prop="tags" label="Remark"></el-table-column>
       <el-table-column width="140" label="Oper">
         <template scope="props">
           <el-button size="mini" type="warning"
@@ -43,21 +40,41 @@
         :placeholder="formError.username"
         @focus="formError.username=''"
       ></el-input>
-      <label>Email:</label>
-      <el-input v-model="user.email"
-        :disabled="oper==='edit'"
-        :class="{ error: formError.email }"
-        :placeholder="formError.email"
-        @focus="formError.email=''"
-      ></el-input>
-      <label>Password:</label>
-      <el-input v-model="user.password" v-if="oper==='new'" type="password"
-        :class="{ error: formError.password }"
-        :placeholder="formError.password"
-        @focus="formError.password=''"
-      ></el-input>
+
       <label>Remark:</label>
-      <el-input v-model="user.remark"></el-input>
+      <el-input v-model="user.tag"
+                :class="{ error: formError.tag }"
+                :placeholder="formError.tag"
+                @focus="formError.tag=''"
+      ></el-input>
+
+      <div v-show="oper === 'new' || changePassword">
+        <!--add password & edit.Oldpassword-->
+        <label>{{ changePassword && oper === 'edit' ? 'Old Password:' : 'Password:' }}</label>
+        <el-input v-model="user.password" type="password"
+                  :class="{ error: formError.password }"
+                  :placeholder="formError.password"
+                  @focus="formError.password=''"
+        ></el-input>
+        <!--edit new password-->
+        <label v-show="oper === 'edit'">New Password:</label>
+        <el-input v-show="oper === 'edit'" v-model="user.newPassword" type="password"
+                  :class="{ error: formError.newPassword }"
+                  :placeholder="formError.newPassword"
+                  @focus="formError.newPassword=''"
+        ></el-input>
+
+        <!--add confirm password & edit.OldPassword-->
+        <label>{{ oper === 'edit' && changePassword ? 'Confirm New Password:' : 'Confirm Password:' }}</label>
+        <el-input v-model="user.repeatPassword" type="password"
+                  :class="{ error: formError.repeatPassword }"
+                  :placeholder="formError.repeatPassword"
+                  @focus="formError.repeatPassword=''"
+        ></el-input>
+      </div>
+
+      <el-button v-if="oper === 'edit'" type="text" @click="changePassword = !changePassword">{{ changePassword ? 'Don\'t Change Password' : 'Change Password ?'}}</el-button>
+
       <span slot="footer" class="dialog-footer">
         <el-button icon="close" size="small" @click="dialogVisible=false">Cancel</el-button>
         <el-button type="success" icon="check" size="small"
@@ -72,7 +89,6 @@
 
 
 <script>
-import dateformat from 'dateformat'
 import { Row, Button, Table, TableColumn, Popover, Dialog, Input } from 'element-ui'
 import { httpGet, httpPost, httpPut, httpDelete } from '../store/api'
 
@@ -91,19 +107,22 @@ export default {
     return {
       loading: false,
       btnLoading: false,
+      changePassword: false,
       users: [],
       user: {
         username: '',
         password: '',
-        email: '',
-        remark: '',
+        repeatPassword: '',
+        newPassword: '',
+        tag: '',
       },
       formError: {
         username: '',
         password: '',
-        email: '',
+        repeatPassword: '',
+        newPassword: '',
+        tag: '',
       },
-      search_username: '',
       popoverVisible: false,
       dialogVisible: false,
       oper: '', // 'new' or 'edit'
@@ -120,7 +139,22 @@ export default {
       }, 0)
     },
     showDialog(oper, row) {
+      this.formError = {
+        username: '',
+        password: '',
+        repeatPassword: '',
+        newPassword: '',
+        tag: '',
+      }
+      this.user = {
+        username: '',
+        password: '',
+        repeatPassword: '',
+        newPassword: '',
+        tag: 'viewer',
+      }
       this.oper = oper
+      this.changePassword = false
       if (oper === 'edit') {
         this.user = { ...row }
       }
@@ -134,53 +168,82 @@ export default {
       })
     },
     save() {
-      // Needen't password with edit
       if (!this.user.username) {
         this.formError.username = 'Username required'
         return false
-      } else if (!this.user.email) {
-        this.formError.email = 'Email required'
+      }
+      if (!this.user.tag) {
+        this.formError.tag = 'Remark required'
         return false
       }
+      // add new user
       if (this.oper === 'new') {
         if (!this.user.password) {
           this.formError.password = 'Password required'
           return false
         }
+        if (this.user.password !== this.user.repeatPassword) {
+          this.user.repeatPassword = ''
+          this.user.password = ''
+          this.formError.repeatPassword = 'Password is inconsistent'
+          this.formError.password = 'Password is inconsistent'
+          return false
+        }
         this.btnLoading = true
-        this.user.created_at = dateformat(new Date(), 'yyyy-mm-dd hh:MM:ss')
-        this.user.role = 'viewer'
+        this.user.tags = 'viewer'
         httpPost('/users', this.user).then((response) => {
-          if (response.data.result.status === 'success') {
+          if (response.data.code === 0) {
             this.$message.success('Create user success!')
             this.dialogVisible = false
             this.loadData()
-          } else if (response.data.result.status === 'failure') {
-            this.$message.error(response.data.result.reason)
           } else {
-            this.$message.error(response.data.result.reason)
-            this.dialogVisible = false
+            this.$message.error(response.data.message)
           }
           this.btnLoading = false
         })
       } else {
-        this.btnLoading = true
-        httpPut(`/users/${this.user.username}`, this.user).then((response) => {
-          if (response.data.result.status === 'success') {
-            this.$message.success('Edit success!')
-            this.loadData()
-          } else {
-            this.$message.error('Edit failure!')
+        // edit
+        // edit pwd
+        if (this.changePassword) {
+          if (!this.user.password) {
+            this.formError.password = 'Old password required'
+            return false
           }
-          this.dialogVisible = false
-          this.btnLoading = false
-        })
+          if (!this.user.newPassword) {
+            this.formError.newPassword = 'New password required'
+            return false
+          }
+          if (this.user.newPassword !== this.user.repeatPassword) {
+            this.user.repeatPassword = ''
+            this.user.newPassword = ''
+            this.formError.repeatPassword = 'Password is inconsistent'
+            this.formError.newPassword = 'Password is inconsistent'
+            return false
+          }
+          // change password
+          const chageUser = {
+            old_pwd: this.user.password,
+            new_pwd: this.user.newPassword,
+          }
+          this.btnLoading = true
+          httpPut(`/change_pwd/${this.user.username}/`, chageUser).then((response) => {
+            if (response.data.code === 0) {
+              this.updateUser()
+            } else {
+              this.$message.error(response.data.message)
+            }
+            this.btnLoading = false
+          })
+        } else {
+          this.updateUser()
+        }
+        this.btnLoading = true
       }
     },
     deleteUser(username) {
       this.btnLoading = true
       httpDelete(`/users/${username}`).then((response) => {
-        if (response.data.result.status === 'success') {
+        if (response.data.code === 0) {
           this.$message.success('Delete success!')
           this.loadData()
         } else {
@@ -188,6 +251,19 @@ export default {
         }
         this.btnLoading = false
         this.hidePopover()
+      })
+    },
+    updateUser() {
+      this.btnLoading = true
+      httpPut(`/users/${this.user.username}`, this.user).then((response) => {
+        if (response.data.code === 0) {
+          this.$message.success('Edit success!')
+          this.dialogVisible = false
+          this.loadData()
+        } else {
+          this.$message.error('Edit failure!')
+        }
+        this.btnLoading = false
       })
     },
   },

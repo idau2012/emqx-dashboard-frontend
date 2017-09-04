@@ -32,6 +32,10 @@ const routes = [
         component: () => import('@/views/Plugins.vue'),
       },
       {
+        path: '/plugins/:nodeName/:pluginName',
+        component: () => import('@/views/Plugins.vue'),
+      },
+      {
         path: '/websocket',
         component: () => import('@/views/Websocket.vue'),
       },

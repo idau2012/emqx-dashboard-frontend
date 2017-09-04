@@ -15,14 +15,6 @@
                 @focus="signupError.username=''"
               ></el-input>
             </el-form-item>
-            <el-form-item label="Email">
-              <el-input
-                v-model="email"
-                v-bind:class="{ error: signupError.email }"
-                v-bind:placeholder="signupError.email"
-                @focus="signupError.email=''"
-              ></el-input>
-            </el-form-item>
             <el-form-item label="Password">
               <el-input type="password"
                 v-model="password"
@@ -44,10 +36,9 @@
 
 
 <script>
-import axios from 'axios'
 import { mapActions } from 'vuex'
 import { Col, Row, Card, Form, FormItem, Input, Button } from 'element-ui'
-import { baseURL } from '../store/api'
+import { httpPost } from '../store/api'
 import { USER_LOGIN } from '../store/mutation-types'
 
 export default {
@@ -64,11 +55,9 @@ export default {
   data() {
     return {
       username: '',
-      email: '',
       password: '',
       signupError: {
         username: '',
-        email: '',
         password: '',
       },
     }
@@ -80,38 +69,20 @@ export default {
       if (this.username === '') {
         this.signupError.username = 'Username Required'
         return false
-      } else if (this.email === '') {
-        this.signupError.email = 'Email Required'
-        return false
       } else if (this.password === '') {
         this.signupError.password = 'Password Required'
         return false
       }
-      const headers = {
-        'Content-Type': 'application/json',
-      }
       const data = {
         username: this.username,
-        email: this.email,
         password: this.password,
+        tag: 'viewer',
       }
-      axios({
-        method: 'post',
-        url: '/users',
-        data: JSON.stringify(data),
-        baseURL,
-        headers,
-      }).then((response) => {
-        this.USER_LOGIN({ user: response.data.result, remember: false })
-        this.$router.push({ path: '/' })
-      }).catch((error) => {
-        if (error.response.status === 400) {
-          const formError = error.response.data.result.error_form
-          Object.keys(formError).forEach((key) => {
-            this.signupError = formError[key][0]
-          })
+      httpPost('/users', data).then((response) => {
+        if (response.data.code === 0) {
+          this.$router.push({ path: '/login' })
         } else {
-          console.log('Server Error')
+          this.$message.error(response.data.message)
         }
       })
     },

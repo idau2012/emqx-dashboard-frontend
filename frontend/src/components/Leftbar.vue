@@ -8,12 +8,12 @@
       <el-menu-item-group title="MONITORING">
         <el-menu-item index="/"><i class="fa fa-bar-chart"></i>Overview</el-menu-item>
       </el-menu-item-group>
-        <el-menu-item index="/clients"><i class="fa fa-circle"></i>Clients</el-menu-item>
+        <el-menu-item index="/clients"><i class="fa fa-microchip"></i>Clients</el-menu-item>
         <el-menu-item index="/sessions"><i class="fa fa-exchange"></i>Sessions</el-menu-item>
-        <el-menu-item index="/routers"><i class="fa fa-plug"></i>Routers</el-menu-item>
+        <el-menu-item index="/routers"><i class="fa fa-random"></i>Routers</el-menu-item>
         <el-menu-item index="/subscriptions"><i class="fa fa-rss-square"></i>Subscriptions</el-menu-item>
       <el-menu-item-group title="MANAGEMENT">
-        <el-menu-item index="/plugins"><i class="fa fa-cubes"></i>Plugins</el-menu-item>
+        <el-menu-item index="/plugins"><i class="fa fa-plug"></i>Plugins</el-menu-item>
       </el-menu-item-group>
       <el-menu-item-group title="TOOLS">
         <el-menu-item index="/websocket"><i class="fa fa-rss"></i>Websocket</el-menu-item>
