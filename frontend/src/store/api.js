@@ -5,7 +5,7 @@ import 'nprogress/nprogress.css'
 NProgress.configure({ showSpinner: false });
 
 
-const baseURL = '/api'
+const baseURL = '/api/v2'
 
 function httpRequest() {
   NProgress.start()

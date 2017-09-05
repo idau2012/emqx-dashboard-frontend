@@ -18,10 +18,6 @@
           :value="item.name">
         </el-option>
       </el-select>
-      <el-input v-model="searchValue" placeholder="Plugin" size="small"></el-input>
-      <el-button :plain="true" type="success" icon="search" size="small"
-                 @click="searchPlugins">Search
-      </el-button>
     </el-row>
     <el-table :data="tableData" v-loading="loading" border v-show="!plugin.nodeName">
       <el-table-column prop="name" width="240" label="Name"></el-table-column>
@@ -65,10 +61,10 @@
       <el-form label-position="top" v-loading="loading" :model="record" ref="record">
         <el-row :gutter="20">
           <el-col :lg="8" :md="12" :sm="12" v-for="item in plugin.option" :key="item.key">
-            <el-form-item :label="item.key">
+            <el-form-item :label="item.key" v-if="item.required">
 
               <el-input size="small" v-model="record[item.key]" style="width: 100%" :placeholder="item.desc"
-                        v-if="item.default.length === 1 && item.default[0].length < 36">
+                        v-if="item.value.length < 36 && item.required">
               </el-input>
 
               <el-input
@@ -77,25 +73,15 @@
                 :rows="2"
                 :placeholder="item.desc"
                 v-model="record[item.key]"
-                v-if="item.default.length === 1 && item.default[0].length > 35">
+                v-if="item.value.length > 35 && item.required">
               </el-input>
-
-              <el-select size="small" :placeholder="item.desc" v-model="record[item.key]" v-if="item.default.length > 1">
-                <el-option
-                  v-for="option in item.default"
-                  :key="option"
-                  :label="option"
-                  :value="option">
-                </el-option>
-              </el-select>
 
             </el-form-item>
           </el-col>
-
           <el-col :span="24" class="oper-block" style="margin-top: 20px">
             <el-button :plain="true" type="success" @click="putConfig(false)" size="small">Confirm</el-button>
             <el-button :plain="true" @click="cencelOper(false)" class="cancel-btn" size="small">Cancel</el-button>
-            <el-button :plain="true" @click="resetDefault(false)" size="small">Reset</el-button>
+            <el-button :plain="true" v-if="false" @click="resetDefault(false)" size="small">Reset</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -107,9 +93,9 @@
       size="tiny">
       <span>{{ notic }}</span>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="handleOper(false, false)" size="small">Cancel</el-button>
-    <el-button type="success" @click="handleOper(true, false)" size="small">Confirm</el-button>
-  </span>
+        <el-button @click="handleOper(false, false)" size="small">Cancel</el-button>
+        <el-button type="success" @click="handleOper(true, false)" size="small">Confirm</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -160,71 +146,6 @@ export default{
         desc: '',
         option: [],
       },
-      demoDate: `{
-    "code": 0,
-    "result": [
-        {
-            "key": "auth.mysql.server",
-            "value": "127.0.0.1:3306",
-            "desc": "MySQL Server",
-            "default": ["127.0.0.1:3306"]
-        },
-        {
-            "key": "auth.mysql.pool",
-            "value": "8",
-            "desc": "MySQL Pool",
-            "default": ["8"]
-        },
-        {
-            "key": "auth.mysql.username",
-            "value": "root",
-            "desc": "MySQL Username",
-            "default": ["root"]
-        },
-        {
-            "key": "auth.mysql.password",
-            "value": "public",
-            "desc": "MySQL Password",
-            "default": ["public"]
-        },
-        {
-            "key": "auth.mysql.database",
-            "value": "mqtt",
-            "desc": "MySQL Database",
-            "default": ["mqtt"]
-        },
-        {
-            "key": "auth.mysql.auth_query",
-            "value": "select password from mqtt_user where username = '%u' limit 1",
-            "desc": "MySQL Auth Query",
-            "default": ["select password from mqtt_user where username = '%u' limit 1"]
-        },
-        {
-            "key": "auth.mysql.password_hash",
-            "value": "sha512",
-            "desc": "MySQL Password Hash",
-            "default": ["RSA", "MD5", "Sha1", "sha512"]
-        },
-        {
-            "key": "auth.mysql.super_query",
-            "value": "select * from users",
-            "desc": "MySQL Super Query",
-            "default": ["select is_superuser from mqtt_user where username = '%u' limit 1"]
-        },
-        {
-            "key": "auth.mysql.acl_query",
-            "value": "select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'",
-            "desc": "MySQL ACL Query",
-            "default": ["select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'"]
-        },
-        {
-            "key": "test_option",
-            "value": "on",
-            "desc": "for_test_option",
-            "default": ["on", "off"]
-        }
-    ]
-}`,
     }
   },
   created() {
@@ -259,10 +180,10 @@ export default{
     },
     sortObject() {
       return (objFir, objSec) => {
-        if (objFir.default.length < objSec.default.length) {
-          return 3
+        if (objFir.value.length > objSec.value.length) {
+          return 1
         }
-        return objFir.default[0].length > objSec.default[0].length ? 2 : -1
+        return 0
       }
     },
     loadData() {
@@ -272,19 +193,19 @@ export default{
         this.plugin.nodeName = atob(nodeName)
         this.plugin.name = this.$route.params.pluginName
         this.clockStatus = true
-        // for_test
-        this.plugin.option = JSON.parse(this.demoDate).result
-        // sort & define
-        this.plugin.option.sort(this.sortObject())
-        this.plugin.option.forEach((item) => {
-          this.$set(this.record, item.key, item.value)
-        })
-        // hashCode
-        this.hashCode = JSON.stringify(this.record)
         // load pluginOption
-        // httpGet('/').then((response) => {
-        //  console.log(response)
-        // })
+        httpGet(`nodes/${this.plugin.nodeName}/plugin_configs/${this.plugin.name}`).then((response) => {
+          this.plugin.option = response.data.result
+          // sort & define
+          this.plugin.option.sort(this.sortObject())
+          this.plugin.option.forEach((item) => {
+            if (item.required) {
+              this.$set(this.record, item.key, item.value)
+            }
+          })
+          // hashCode
+          this.hashCode = JSON.stringify(this.record)
+        })
       } else {
         this.nodeName = this.plugin.nodeName
         this.plugin.nodeName = ''
@@ -338,7 +259,16 @@ export default{
     putConfig(confirm = false) {
       if (confirm) {
         // update the config
-        console.log('update')
+        // load pluginOption
+        httpPut(`nodes/${this.plugin.nodeName}/plugin_configs/${this.plugin.name}`).then((response) => {
+          if (response.data.code === 0) {
+            this.$message.success('Config Success !')
+            this.hashCode = JSON.stringify(this.record)
+            this.$router.push({ path: '/plugins' })
+          } else {
+            this.$message.error('Config failure')
+          }
+        })
       } else {
         // waiting the confirm
         this.notic = 'Are you sure you want to submit changes and apply them ?'
@@ -391,9 +321,6 @@ export default{
       } else {
         this.$router.push({ path: '/plugins' })
       }
-    },
-    test() {
-      console.log(1)
     },
   },
   // to modify protection

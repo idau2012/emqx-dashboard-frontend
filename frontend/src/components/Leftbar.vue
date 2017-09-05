@@ -16,7 +16,7 @@
         <el-menu-item index="/plugins"><i class="fa fa-plug"></i>Plugins</el-menu-item>
       </el-menu-item-group>
       <el-menu-item-group title="TOOLS">
-        <el-menu-item index="/websocket"><i class="fa fa-rss"></i>Websocket</el-menu-item>
+        <el-menu-item index="/websocket"><i class="fa fa-html5"></i>Websocket</el-menu-item>
         <el-menu-item index="/http_api"><i class="fa fa-code"></i>API</el-menu-item>
       </el-menu-item-group>
       <el-menu-item-group title="ADMIN">

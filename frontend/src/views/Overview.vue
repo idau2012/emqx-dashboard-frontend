@@ -35,14 +35,14 @@
         </el-table-column>
         <el-table-column label="Memory" min-width="200">
           <template scope="scope">
-            {{ scope.row.used_memory + ' / ' + scope.row.total_memory }}
+            {{ scope.row.memory_used + ' / ' + scope.row.memory_total }}
           </template>
         </el-table-column>
         <el-table-column label="MaxFds" prop="max_fds" min-width="120"></el-table-column>
         <el-table-column label="Status" min-width="120">
           <template scope="props">
-            <span v-bind:class="[props.row.cluster_status === 'Running' ? 'running' : 'stopped', 'status']">
-              {{ props.row.cluster_status }}
+            <span v-bind:class="[props.row.node_status === 'Running' ? 'running' : 'stopped', 'status']">
+              {{ props.row.node_status }}
             </span>
           </template>
         </el-table-column>
@@ -54,6 +54,7 @@
         <span>Stats</span>
       </div>
       <el-table :data="stats" border>
+        <el-table-column label="Name" prop="name" min-width="150"></el-table-column>
         <el-table-column label="Clients/Count" prop="clients/count" min-width="150"></el-table-column>
         <el-table-column label="Clients/Max" prop="clients/max" min-width="150"></el-table-column>
         <el-table-column label="Retained/Count" prop="retained/count" min-width="150"></el-table-column>
@@ -117,15 +118,26 @@ export default {
     getDatas() {
       if (this.$route.path !== '/') {
         window.clearInterval(this.flag)
+        return
       }
-      httpGet('/nodes').then((response) => {
-        console.log(response.data.result)
+      httpGet('/monitoring/nodes').then((response) => {
         this.nodes = response.data.result
       })
-      httpGet('/stats').then((response) => {
-        this.stats = response.data.result
+      httpGet('/monitoring/stats').then((response) => {
+        // the backend is so bad
+        const data = response.data.result
+        const stats = []
+        let datas = {}
+        data.forEach((item) => {
+          Object.keys(item).forEach((x) => {
+            datas = item[x]
+            datas.name = x
+            stats.push(datas)
+          })
+        })
+        this.stats = stats
       })
-      httpGet('/brokers').then((response) => {
+      httpGet('/management/nodes').then((response) => {
         this.brokers = response.data.result
       })
     },

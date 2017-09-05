@@ -165,6 +165,7 @@ export default {
   },
   data() {
     return {
+      retryTimes: 0,
       loading: false,
       host: '127.0.0.1',
       port: '8083',
@@ -198,7 +199,7 @@ export default {
     mqttConnect() {
       NProgress.start()
       this.loading = true
-      let retryTimes = 0
+      this.retryTimes = 0
       const options = {
         keepalive: this.keepalive,
         username: this.username,
@@ -213,16 +214,17 @@ export default {
         NProgress.done()
       })
       this.client.on('reconnect', () => {
-        if (retryTimes > 2) {
+        if (this.retryTimes > 2) {
           this.$message.error(`Connect failure with ${this.host}:${this.port}`)
-          retryTimes = 0
+          this.retryTimes = 0
           this.loading = false
           this.client.end()
         }
-        retryTimes += 1
+        this.retryTimes += 1
       })
       this.client.on('error', (error) => {
         this.$message.error(error)
+        this.retryTimes = 0
         NProgress.done()
       })
       this.client.on('message', (topic, message, packet) => {

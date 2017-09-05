@@ -27,6 +27,9 @@
           <div style="text-align: right;">
             <el-button type="success" @click="signup">Sign Up</el-button>
           </div>
+          <div>
+            Is a member?<a href="javascript:;" @click="login"> Login now</a>
+          </div>
         </el-card>
       </el-col>
     </el-row>
@@ -62,9 +65,11 @@ export default {
       },
     }
   },
-
   methods: {
     ...mapActions([USER_LOGIN]),
+    login() {
+      this.$router.push({ path: '/login' })
+    },
     signup() {
       if (this.username === '') {
         this.signupError.username = 'Username Required'
