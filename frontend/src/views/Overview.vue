@@ -67,11 +67,65 @@
         <el-table-column label="Topics/Max" prop="topics/max" min-width="150"></el-table-column>
       </el-table>
     </el-card>
+
+
+    <el-card class="box-card">
+      <div slot="header">
+        <span>Metrics</span>
+      </div>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-table :data="metrics.packaets">
+            <el-table-column
+              prop="key"
+              label="The packets data">
+            </el-table-column>
+            <el-table-column
+              prop="value"
+              label="">
+            </el-table-column>
+          </el-table>
+        </el-col>
+
+        <el-col :span="8">
+          <el-table :data="metrics.messages">
+            <el-table-column
+              prop="key"
+              label="The messages data">
+            </el-table-column>
+            <el-table-column
+              prop="value"
+              label="">
+            </el-table-column>
+          </el-table>
+        </el-col>
+
+        <el-col :span="8">
+          <el-table :data="metrics.bytes">
+            <el-table-column
+              prop="key"
+              label="The bytes data">
+            </el-table-column>
+            <el-table-column
+              prop="value"
+              label="">
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
+      <!--<el-table :data="metrics" border>-->
+      <!--<el-table-column label="The packets data" prop="name" min-width="150"></el-table-column>-->
+      <!--<el-table-column label="Topics/Count" prop="topics/count" min-width="150"></el-table-column>-->
+      <!--<el-table-column label="Topics/Max" prop="topics/max" min-width="150"></el-table-column>-->
+      <!--</el-table>-->
+
+    </el-card>
   </div>
 </template>
 
 
 <script>
+import { mapActions } from 'vuex'
 import {
   Tabs, TabPane, Row, Col,
   TableColumn, Table,
@@ -79,6 +133,7 @@ import {
 } from 'element-ui'
 
 import { httpGet } from '../store/api'
+import { CURRENT_NODE } from '../store/mutation-types'
 
 
 export default {
@@ -86,10 +141,19 @@ export default {
   data() {
     return {
       loading: false,
+      select: {
+        nodeName: '',
+        nodes: {},
+      },
+      brokers: [],
       nodes: [],
       stats: [],
-      brokers: [],
       flag: 0,
+      metrics: {
+        packaets: [],
+        messages: [],
+        bytes: [],
+      },
     }
   },
   components: {
@@ -105,40 +169,74 @@ export default {
     'el-col': Col,
   },
   mounted() {
-    this.getDatas()
+    // this.getDatas()
   },
   created() {
-    this.refDatas()
+    this.loadNode()
   },
   methods: {
+    ...mapActions([CURRENT_NODE]),
+    // set global nodeName
+    setStore() {
+      this.CURRENT_NODE({ nodeName: { current: this.nodeName } })
+    },
+    // load nodes form store or server then load data
+    loadNode() {
+      const currentNode = this.$store.state.nodeName.current
+      httpGet('/management/nodes').then((response) => {
+        // set default of select
+        this.nodeName = currentNode || response.data.result[0].name || ''
+        this.setStore()
+        // could select
+        this.select.nodes = response.data.result
+        this.getDatas()
+      })
+    },
+    // setInterval to refresh the data
     refDatas() {
       window.clearInterval(this.flag)
       this.flag = window.setInterval(this.getDatas, 1000 * 10)
     },
+    // load data index by nodeName
     getDatas() {
       if (this.$route.path !== '/') {
         window.clearInterval(this.flag)
         return
       }
-      httpGet('/monitoring/nodes').then((response) => {
-        this.nodes = response.data.result
+      if (!this.nodeName) {
+        console.log('no nodeName, can not load data')
+        return
+      }
+      // nodes[]
+      httpGet(`monitoring/nodes/${this.nodeName}`).then((response) => {
+        // result is a Object
+        this.nodes[0] = response.data.result
+        console.log(response.data)
       })
-      httpGet('/monitoring/stats').then((response) => {
+      // stats[]
+      httpGet(`/monitoring/stats/${this.nodeName}`).then((response) => {
         // the backend is so bad
-        const data = response.data.result
-        const stats = []
-        let datas = {}
-        data.forEach((item) => {
-          Object.keys(item).forEach((x) => {
-            datas = item[x]
-            datas.name = x
-            stats.push(datas)
-          })
-        })
-        this.stats = stats
+        this.stats[0] = response.data.result
+        this.stats[0].name = this.nodeName
       })
-      httpGet('/management/nodes').then((response) => {
-        this.brokers = response.data.result
+      // brokers[]
+      httpGet(`/management/nodes/${this.nodeName}`).then((response) => {
+        this.brokers[0] = response.data.result
+      })
+      // metrics[{}, {}, {}]
+      httpGet(`/monitoring/metrics/${this.nodeName}`).then((response) => {
+        const data = response.data.result
+        Object.keys(data).forEach((item) => {
+          switch (item.split('/')[0]) {
+            case 'packets': this.metrics.packaets.push({ key: item, value: data[item] })
+              break
+            case 'messages': this.metrics.messages.push({ key: item, value: data[item] })
+              break
+            case 'bytes': this.metrics.bytes.push({ key: item, value: data[item] })
+              break
+            default: break
+          }
+        })
       })
     },
   },

@@ -63,6 +63,10 @@ const routes = [
         path: '/subscriptions',
         component: () => import('@/views/Datas.vue'),
       },
+      {
+        path: '/metrics',
+        component: () => import('@/views/Metrics.vue'),
+      },
     ],
   },
   {

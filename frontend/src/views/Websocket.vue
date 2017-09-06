@@ -2,7 +2,7 @@
   <div class="websocket-view">
     <div class="page-title">Websocket</div>
 
-    <el-card class="box-card blank-top" v-show="!client.connected">
+    <el-card class="box-card blank-top">
       <div slot="header">
         <span>Connect</span>
       </div>
@@ -45,7 +45,7 @@
         </el-col>
       </el-row>
     </el-card>
-    <el-card class="box-card blank-top" style="max-height: 450px" v-show="client.connected">
+    <el-card class="box-card blank-top" style="max-height: 450px">
       <div slot="header">
         <span>Subscribe</span>
       </div>
@@ -88,7 +88,7 @@
 
       </el-row>
     </el-card>
-    <el-card class="box-card blank-middle" style="max-height: 800px;padding-bottom: 20px" v-show="client.connected">
+    <el-card class="box-card blank-middle" style="max-height: 800px;padding-bottom: 20px">
       <div slot="header">
         <span>Messages</span>
       </div>
@@ -210,7 +210,8 @@ export default {
       }
       this.client = mqtt.connect(`ws://${this.host}:${this.port}/mqtt`, options)
       this.client.on('connect', () => {
-        this.$message.success('Connect success')
+        // this.$message.success('Connect success')
+        this.loading = false
         NProgress.done()
       })
       this.client.on('reconnect', () => {

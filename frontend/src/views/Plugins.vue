@@ -260,7 +260,7 @@ export default{
       if (confirm) {
         // update the config
         // load pluginOption
-        httpPut(`nodes/${this.plugin.nodeName}/plugin_configs/${this.plugin.name}`).then((response) => {
+        httpPut(`nodes/${this.plugin.nodeName}/plugin_configs/${this.plugin.name}`, this.record).then((response) => {
           if (response.data.code === 0) {
             this.$message.success('Config Success !')
             this.hashCode = JSON.stringify(this.record)
