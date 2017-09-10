@@ -25,12 +25,12 @@
       </el-menu-item-group>
     </el-menu>
 
-    <!--<div class="bar-footer">-->
-      <!--<span>{{ user.username }} </span>-->
-      <!--<a @click="logout" href="javascript:;">-->
-        <!--<img src="../assets/exit.png">-->
-      <!--</a>-->
-    <!--</div>-->
+    <div class="bar-footer">
+      <span>{{ user.username }} </span>
+      <a @click="logout" href="javascript:;">
+        <img src="../assets/exit.png">
+      </a>
+    </div>
   </div>
 </template>
 
@@ -70,9 +70,14 @@ export default {
   bottom: 0;
   width: 200px;
   z-index: 1000;
+  overflow-y: auto;
 }
 .leftbar .el-menu {
-  overflow: auto;
+  position: relative;
+  left: 0;
+  top: 51px;
+  width: 200px;
+  padding-bottom: 51px;
 }
 .leftbar,
 .leftbar .el-menu--dark {
@@ -108,6 +113,12 @@ export default {
 }
 .leftbar .bar-title {
   display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200px;
+  z-index: 1001;
+  background-color: #242327;
   align-items: center;
   border-bottom: 1px solid #161616;
   font-size: 24px;
@@ -119,12 +130,15 @@ export default {
   float: left;
 }
 .leftbar .bar-footer {
-  position: absolute;
+  position: fixed;
   left: 0;
-  right: 0;
   bottom: 0;
-  border-top: 1px solid #161616;
+  z-index: 1001;
   padding-left: 20px;
+  box-sizing: border-box;
+  width: 200px;
+  border-top: 1px solid #161616;
+  background-color: #242327;
 }
 .leftbar .bar-footer img {
   width: 18px;
