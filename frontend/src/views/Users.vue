@@ -32,8 +32,10 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog :title="oper === 'new' ? 'New user' : 'Edit user'" v-model="dialogVisible">
-      <label>Username:</label>
+    <el-dialog :title="oper === 'new' ? 'New user' : 'Edit user'"
+               @keyup.enter.native="save"
+               v-model="dialogVisible">
+      <label>Username</label>
       <el-input v-model="user.username"
         :disabled="oper==='edit'"
         :class="{ error: formError.username }"
@@ -41,23 +43,23 @@
         @focus="formError.username=''"
       ></el-input>
 
-      <label>Remark:</label>
-      <el-input v-model="user.tag"
-                :class="{ error: formError.tag }"
-                :placeholder="formError.tag"
-                @focus="formError.tag=''"
+      <label>Remark</label>
+      <el-input v-model="user.tags"
+                :class="{ error: formError.tags }"
+                :placeholder="formError.tags"
+                @focus="formError.tags=''"
       ></el-input>
 
       <div v-show="oper === 'new' || changePassword">
         <!--add password & edit.Oldpassword-->
-        <label>{{ changePassword && oper === 'edit' ? 'Old Password:' : 'Password:' }}</label>
+        <label>{{ changePassword && oper === 'edit' ? 'Old Password' : 'Password' }}</label>
         <el-input v-model="user.password" type="password"
                   :class="{ error: formError.password }"
                   :placeholder="formError.password"
                   @focus="formError.password=''"
         ></el-input>
         <!--edit new password-->
-        <label v-show="oper === 'edit'">New Password:</label>
+        <label v-show="oper === 'edit'">New Password</label>
         <el-input v-show="oper === 'edit'" v-model="user.newPassword" type="password"
                   :class="{ error: formError.newPassword }"
                   :placeholder="formError.newPassword"
@@ -65,7 +67,7 @@
         ></el-input>
 
         <!--add confirm password & edit.OldPassword-->
-        <label>{{ oper === 'edit' && changePassword ? 'Confirm New Password:' : 'Confirm Password:' }}</label>
+        <label>{{ oper === 'edit' && changePassword ? 'Confirm New Password' : 'Confirm Password' }}</label>
         <el-input v-model="user.repeatPassword" type="password"
                   :class="{ error: formError.repeatPassword }"
                   :placeholder="formError.repeatPassword"
@@ -73,7 +75,7 @@
         ></el-input>
       </div>
 
-      <el-button v-if="oper === 'edit'" type="text" @click="changePassword = !changePassword">{{ changePassword ? 'Don\'t Change Password' : 'Change Password ?'}}</el-button>
+      <el-button v-if="oper === 'edit'" class="toggle-btn" type="text" @click="changePassword = !changePassword">{{ changePassword ? 'Don\'t Change Password' : 'Change Password ?'}}</el-button>
 
       <span slot="footer" class="dialog-footer">
         <el-button icon="close" size="small" @click="dialogVisible=false">Cancel</el-button>
@@ -90,6 +92,9 @@
 
 <script>
 import { Row, Button, Table, TableColumn, Popover, Dialog, Input } from 'element-ui'
+import { mapActions } from 'vuex'
+
+import { USER_LOGOUT } from '../store/mutation-types'
 import { httpGet, httpPost, httpPut, httpDelete } from '../store/api'
 
 export default {
@@ -114,14 +119,14 @@ export default {
         password: '',
         repeatPassword: '',
         newPassword: '',
-        tag: '',
+        tags: '',
       },
       formError: {
         username: '',
         password: '',
         repeatPassword: '',
         newPassword: '',
-        tag: '',
+        tags: '',
       },
       popoverVisible: false,
       dialogVisible: false,
@@ -132,6 +137,11 @@ export default {
     this.loadData()
   },
   methods: {
+    ...mapActions([USER_LOGOUT]),
+    logout() {
+      this.USER_LOGOUT()
+      this.$router.push({ path: '/login' })
+    },
     hidePopover() {
       this.popoverVisible = true
       setTimeout(() => {
@@ -144,14 +154,14 @@ export default {
         password: '',
         repeatPassword: '',
         newPassword: '',
-        tag: '',
+        tags: '',
       }
       this.user = {
         username: '',
         password: '',
         repeatPassword: '',
         newPassword: '',
-        tag: 'viewer',
+        tags: 'viewer',
       }
       this.oper = oper
       this.changePassword = false
@@ -172,8 +182,8 @@ export default {
         this.formError.username = 'Username required'
         return false
       }
-      if (!this.user.tag) {
-        this.formError.tag = 'Remark required'
+      if (!this.user.tags) {
+        this.formError.tags = 'Remark required'
         return false
       }
       // add new user
@@ -190,7 +200,7 @@ export default {
           return false
         }
         this.btnLoading = true
-        this.user.tags = 'viewer'
+        this.user.tag = this.user.tags
         httpPost('/users', this.user).then((response) => {
           if (response.data.code === 0) {
             this.$message.success('Create user success!')
@@ -203,7 +213,7 @@ export default {
         })
       } else {
         // edit
-        // edit pwd
+        // edit password
         if (this.changePassword) {
           if (!this.user.password) {
             this.formError.password = 'Old password required'
@@ -220,6 +230,7 @@ export default {
             this.formError.newPassword = 'Password is inconsistent'
             return false
           }
+          // this.updateUser()
           // change password
           const chageUser = {
             old_pwd: this.user.password,
@@ -228,7 +239,14 @@ export default {
           this.btnLoading = true
           httpPut(`/change_pwd/${this.user.username}/`, chageUser).then((response) => {
             if (response.data.code === 0) {
-              this.updateUser()
+              // old = now
+              if (this.$store.state.user.username === this.user.username &&
+              this.user.password !== this.user.newPassword) {
+                this.$message.error('You have changed your password. Please login again')
+                this.logout()
+              } else {
+                this.updateUser()
+              }
             } else {
               this.$message.error(response.data.message)
             }
@@ -253,14 +271,16 @@ export default {
         this.hidePopover()
       })
     },
-    updateUser() {
+    updateUser(changePassword = false) {
       this.btnLoading = true
       httpPut(`/users/${this.user.username}`, this.user).then((response) => {
         if (response.data.code === 0) {
-          this.$message.success('Edit success!')
+          if (!changePassword) {
+            this.$message.success('Edit success!')
+          }
           this.dialogVisible = false
           this.loadData()
-        } else {
+        } else if (!changePassword) {
           this.$message.error('Edit failure!')
         }
         this.btnLoading = false
@@ -271,7 +291,7 @@ export default {
 </script>
 
 
-<style>
+<style lang="scss">
 .users-view .el-dialog__header {
   border-bottom: 1px solid #EFF2F7;
   padding: 15px 20px;
@@ -283,9 +303,18 @@ export default {
 .users-view .el-input {
   margin: 5px 0 20px;
 }
+.users-view .el-input__inner:focus {
+  border-color: #8391a5;
+}
 .users-view .el-input.error input {
   border-color: #E0B4B4;
   border-width: 2px;
+}
+.users-view .toggle-btn {
+  color: #48576a;
+  &:hover {
+    color: #1f2d3d;
+   }
 }
 .users-view .el-button--danger.el-button--mini:hover {
   background-color: #ff6d6d;

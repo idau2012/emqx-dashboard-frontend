@@ -1,6 +1,6 @@
 <template>
   <div class="not-found text-center">
-    <p>我是404页面</p>
+    <p>404 Not Found</p>
   </div>
 </template>
 
@@ -20,7 +20,7 @@ export default{
 
 <style>
 .not-found p {
-  margin-top: 30px;    
+  margin-top: 30px;
   font-size: 20px;
 }
 </style>

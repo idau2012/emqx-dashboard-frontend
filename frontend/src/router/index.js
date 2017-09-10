@@ -13,11 +13,11 @@ const routes = [
     component: () => import('@/views/Login.vue'),
     meta: { requiresAuth: false },
   },
-  {
-    path: '/signup',
-    component: () => import('@/views/Signup.vue'),
-    meta: { requiresAuth: false },
-  },
+  // {
+  //   path: '/signup',
+  //   component: () => import('@/views/Signup.vue'),
+  //   meta: { requiresAuth: false },
+  // },
   {
     path: '/',
     component: () => import('@/views/Home.vue'),
@@ -34,6 +34,10 @@ const routes = [
       {
         path: '/plugins/:nodeName/:pluginName',
         component: () => import('@/views/Plugins.vue'),
+      },
+      {
+        path: '/listeners',
+        component: () => import('@/views/Listeners'),
       },
       {
         path: '/websocket',
@@ -63,10 +67,6 @@ const routes = [
         path: '/subscriptions',
         component: () => import('@/views/Datas.vue'),
       },
-      {
-        path: '/metrics',
-        component: () => import('@/views/Metrics.vue'),
-      },
     ],
   },
   {
@@ -78,7 +78,7 @@ const routes = [
 
 // Routing logic
 const router = new Router({
-  mode: 'history',
+  // mode: 'history',
   routes,
 })
 

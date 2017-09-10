@@ -2,12 +2,11 @@
   <div class="leftbar">
     <div class="bar-title">
       <img src="../assets/emqlogo.png" class="logo">
-      <span>EMQ X</span>
+      <span>EMQ</span>
     </div>
     <el-menu :default-active="'/' + $route.path.split('/')[1]" mode="vertical" theme="dark" unique-opened router>
       <el-menu-item-group title="MONITORING">
         <el-menu-item index="/"><i class="fa fa-bar-chart"></i>Overview</el-menu-item>
-        <el-menu-item index="/metrics"><i class="fa fa-bar-chart"></i>Metrics</el-menu-item>
       </el-menu-item-group>
         <el-menu-item index="/clients"><i class="fa fa-microchip"></i>Clients</el-menu-item>
         <el-menu-item index="/sessions"><i class="fa fa-exchange"></i>Sessions</el-menu-item>
@@ -15,6 +14,7 @@
         <el-menu-item index="/subscriptions"><i class="fa fa-rss-square"></i>Subscriptions</el-menu-item>
       <el-menu-item-group title="MANAGEMENT">
         <el-menu-item index="/plugins"><i class="fa fa-plug"></i>Plugins</el-menu-item>
+        <el-menu-item index="/listeners"><i class="fa fa-superpowers"></i>Listeners</el-menu-item>
       </el-menu-item-group>
       <el-menu-item-group title="TOOLS">
         <el-menu-item index="/websocket"><i class="fa fa-html5"></i>Websocket</el-menu-item>
@@ -25,12 +25,12 @@
       </el-menu-item-group>
     </el-menu>
 
-    <div class="bar-footer">
-      <span>{{ user.username }} </span>
-      <a @click="logout" href="javascript:;">
-        <img src="../assets/exit.png">
-      </a>
-    </div>
+    <!--<div class="bar-footer">-->
+      <!--<span>{{ user.username }} </span>-->
+      <!--<a @click="logout" href="javascript:;">-->
+        <!--<img src="../assets/exit.png">-->
+      <!--</a>-->
+    <!--</div>-->
   </div>
 </template>
 
@@ -71,6 +71,9 @@ export default {
   width: 200px;
   z-index: 1000;
 }
+.leftbar .el-menu {
+  overflow: auto;
+}
 .leftbar,
 .leftbar .el-menu--dark {
   background-color: #242327;
@@ -100,16 +103,19 @@ export default {
 .leftbar .bar-title,
 .leftbar .bar-footer {
   height: 60px;
-  line-height: 60px;
+  line-height: 66px;
   color: #fff;
 }
 .leftbar .bar-title {
+  display: flex;
+  align-items: center;
   border-bottom: 1px solid #161616;
   font-size: 24px;
 }
 .leftbar .bar-title img {
   width: 48px;
-  margin: 5px 10px 6px 20px;
+  margin-left: 20px;
+  margin-right: 10px;
   float: left;
 }
 .leftbar .bar-footer {

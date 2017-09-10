@@ -18,18 +18,18 @@ function httpRequest() {
     },
   }
 
-  // const user = JSON.parse(sessionStorage.getItem('user')) ||
-  //  JSON.parse(localStorage.getItem('user'))
-
-  // if (user && user.token) {
-  //  config.auth = {
-  //    username: user.token,
-  //    password: '',
-  //  }
-  // }
-
   const user = JSON.parse(sessionStorage.getItem('user')) ||
-    JSON.parse(localStorage.getItem('user'))
+   JSON.parse(localStorage.getItem('user'))
+
+  if (user && user.token) {
+    config.auth = {
+      username: user.token,
+      password: '',
+    }
+  }
+
+  // const user = JSON.parse(sessionStorage.getItem('user')) ||
+  //   JSON.parse(localStorage.getItem('user'))
 
   if (user && user.password) {
     config.auth = {
@@ -47,7 +47,7 @@ function handleError(error) {
     // token 无效的情况
     window.location.href = '/login'
   } else {
-    console.log('网络错误！')
+    console.log('Net work error ')
   }
   return Promise.reject(error)
 }

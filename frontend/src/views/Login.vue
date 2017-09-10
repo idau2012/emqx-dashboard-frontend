@@ -6,7 +6,7 @@
           <div slot="header">
             <span style="font-size: 16px">LOG IN</span>
           </div>
-          <el-form label-position="top">
+          <el-form label-position="top"  @keyup.enter.native="login">
             <el-form-item label="Username">
               <el-input
                 v-model="username"
@@ -30,9 +30,10 @@
             </div>
             <el-button type="success" @click="login">Log In</el-button>
           </div>
-          <div>
-            Not a member?<a href="javascript:;" @click="signup"> Sign up now</a>
-          </div>
+          <!--<div>-->
+            <!--Not a member?-->
+            <!--&lt;!&ndash;<a href="javascript:;" @click="signup"> Sign up now</a>&ndash;&gt;-->
+          <!--</div>-->
         </el-card>
       </el-col>
     </el-row>
@@ -41,9 +42,9 @@
 
 
 <script>
+import axios from 'axios'
 import { Col, Row, Card, Form, FormItem, Input, Checkbox, Button } from 'element-ui'
 import { mapActions } from 'vuex'
-import { httpPost } from '../store/api'
 import { USER_LOGIN } from '../store/mutation-types'
 
 
@@ -83,14 +84,22 @@ export default {
         this.loginError.password = 'Password Required'
         return false
       }
-      const auth = {
+      const user = {
         username: this.username,
         password: this.password,
       }
-      httpPost('/auth', auth).then((response) => {
+      const config = {
+        baseURL: '/api/v2',
+        timeout: 10000,
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      }
+      axios.create(config).post('/auth', user).then((response) => {
         if (response.data.code === 0) {
-          const password = auth.password
-          this.USER_LOGIN({ user: { ...auth, password }, remember: this.remember })
+          const password = user.password
+          this.USER_LOGIN({ user: { ...user, password }, remember: this.remember })
           const path = decodeURIComponent(this.$route.query.redirect || '/')
           this.$router.push({ path })
         } else {
@@ -106,7 +115,7 @@ export default {
 </script>
 
 
-<style>
+<style lang="scss">
 .login-view {
   background-color: #181818;
   height: 100%;
@@ -142,5 +151,14 @@ export default {
   float: left;
   display: inline-block;
   margin: 6.5px 0 0;
+}
+.login-view .el-checkbox {
+  .el-checkbox__inner:hover {
+    border-color: #42d885;
+  }
+  .el-checkbox__input.is-checked .el-checkbox__inner{
+    background-color: #42d885 !important;
+    border-color: #42d885 !important;
+  }
 }
 </style>

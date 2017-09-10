@@ -1,7 +1,7 @@
 <template>
   <div class="datas-view">
     <div class="page-title">{{ activeTab }}</div>
-    <el-row type="flex" justify="end" align="center">
+    <el-row type="flex" justify="end" align="center" @keyup.enter.native="searchChild">
       <el-select v-model="nodeName" v-show="activeTab !== 'routers'" :disabled="loading" placeholder="Select Node" size="small" @change="loadChild(true)">
         <el-option
           v-for="item in nodes"
@@ -10,17 +10,18 @@
           :value="item.name">
         </el-option>
       </el-select>
-      <el-input :disabled="loading" v-model="searchValue" :placeholder="searchPlaceholder" size="small"></el-input>
+      <el-input style="margin-left: 8px" :disabled="loading" v-model="searchValue" :placeholder="searchPlaceholder" size="small"></el-input>
       <el-button :plain="true" type="success" icon="search" size="small"
-                     @click="searchChild">Search
+                 style="margin-left: 8px"
+                 @click="searchChild">Search
       </el-button>
     </el-row>
     <el-table :data="clients" v-loading="loading" v-show="activeTab==='clients'" border>
-      <el-table-column prop="client_id" label="ClientId" min-width="150"></el-table-column>
-      <el-table-column prop="username" label="Username" width="130"></el-table-column>
-      <el-table-column prop="ipaddress" label="IPAddr" width="150"></el-table-column>
-      <el-table-column prop="port" label="Port" width="80"></el-table-column>
-      <el-table-column prop="clean_sess" label="CleanSess" width="110">
+      <el-table-column prop="client_id" label="ClientId" min-width="160"></el-table-column>
+      <el-table-column prop="username" label="Username" min-width="130"></el-table-column>
+      <el-table-column prop="ipaddress" label="IPAddr" min-width="150"></el-table-column>
+      <el-table-column prop="port" label="Port" min-width="80"></el-table-column>
+      <el-table-column prop="clean_sess" label="CleanSess" min-width="110">
         <template scope="scope">
           <span>{{ scope.row.clean_sess ? 'true' : 'false' }}</span>
         </template>
@@ -31,7 +32,7 @@
     </el-table>
 
     <el-table :data="sessions" v-loading="loading" v-show="activeTab==='sessions'" border>
-      <el-table-column prop="client_id" label="ClientId" min-width="150"></el-table-column>
+      <el-table-column prop="client_id" label="ClientId" min-width="160"></el-table-column>
       <el-table-column prop="clean_sess" label="CleanSess" min-width="150">
         <template scope="scope">
           <span>{{ scope.row.clean_sess ? 'true' : 'false' }}</span>
@@ -63,6 +64,12 @@
       <el-table-column prop="qos" label="QoS"></el-table-column>
     </el-table>
 
+    <el-row type="flex" justify="end" v-show="searchView">
+      <el-col :span="24">
+        <el-button size="mini" type="text" icon="arrow-left" style="float: right" @click="loadChild">Back</el-button>
+      </el-col>
+    </el-row>
+
     <el-pagination
       @current-change="currentPageChanged"
       layout="prev, pager, next"
@@ -76,19 +83,22 @@
 
 
 <script>
+import { mapActions } from 'vuex'
 import {
   Tabs, TabPane,
   TableColumn, Table,
   Button, Tag, Popover,
   Breadcrumb, BreadcrumbItem, Row, Input,
-  Select, Pagination, Option,
+  Select, Pagination, Option, Col,
 } from 'element-ui'
-import { httpGet } from '../store/api'
 
+import { httpGet } from '../store/api'
+import { CURRENT_NODE } from '../store/mutation-types'
 
 export default {
   name: 'datas-view',
   components: {
+    'el-col': Col,
     'el-select': Select,
     'el-tabs': Tabs,
     'el-tab-pane': TabPane,
@@ -106,6 +116,7 @@ export default {
   },
   data() {
     return {
+      searchView: false,
       loading: false,
       nodeName: '',
       nodes: {},
@@ -131,6 +142,11 @@ export default {
     $route: 'init',
   },
   methods: {
+    ...mapActions([CURRENT_NODE]),
+    // set global nodeName
+    setStore() {
+      this.CURRENT_NODE({ nodeName: { current: this.nodeName } })
+    },
     init() {
       // get path
       this.activeTab = this.$route.path.split('/')[1]
@@ -164,7 +180,8 @@ export default {
       httpGet(requestNode).then((response) => {
         this.nodes = {}
         // set default of select
-        this.nodeName = response.data.result[0].name || ''
+        const currentNode = this.$store.state.nodeName.current
+        this.nodeName = currentNode || response.data.result[0].name || ''
         this.nodes = response.data.result
         // load child with sync
         this.loadChild()
@@ -176,6 +193,8 @@ export default {
       this.loadChild()
     },
     loadChild(reload = false) {
+      this.searchView = false
+      this.searchValue = ''
       if (!this.nodeName && this.activeTab !== 'routers') {
         return
       }
@@ -184,6 +203,7 @@ export default {
         this.currentPage = 1
       }
       this.loading = true
+      this.setStore()
       let requestURL = `/nodes/${this.nodeName}/${this.activeTab}?curr_page=${this.currentPage}&page_size=${this.pageSize}`
       if (this.activeTab === 'routers') {
         requestURL = `/routes?curr_page=${this.currentPage}&page_size=${this.pageSize}`
@@ -207,9 +227,15 @@ export default {
       this.loading = true
       httpGet(requestURL).then((response) => {
         if (response.data.result.objects.length === 0) {
+          this.searchView = false
+          this[this.activeTab] = []
           this.$message.error('No Data')
+          // reset page
+          this.total = 0
+          this.currentPage = 0
         } else {
           this[this.activeTab] = response.data.result.objects
+          this.searchView = true
           // reset page
           this.total = 0
           this.currentPage = 0
@@ -238,7 +264,6 @@ export default {
 }
 .datas-view .el-input {
   width: 240px;
-  margin-right: 8px;
 }
 .datas-view .el-input__inner {
   background-color: transparent;

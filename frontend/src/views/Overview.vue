@@ -1,6 +1,21 @@
 <template>
   <div class="overview-view">
-    <div class="page-title">Overview</div>
+    <div class="page-title">
+      Overview
+      <el-select style="float: right" v-model="nodeName" :disabled="loading" placeholder="Select Node" size="small" @change="changeSelect">
+        <el-option
+          v-for="item in select.nodes"
+          :key="item.name"
+          :label="item.name"
+          :value="item.name">
+        </el-option>
+      </el-select>
+    </div>
+
+    <!--<el-row type="flex" justify="end" align="center">-->
+      <!---->
+    <!--</el-row>-->
+
     <el-card class="box-card">
       <div slot="header">
         <span>Broker</span>
@@ -18,7 +33,7 @@
         <span>Nodes ({{ nodes.length }})</span>
       </div>
       <el-table :data="nodes" border>
-        <el-table-column label="Name" prop="name" min-width="140"></el-table-column>
+        <el-table-column label="Name" prop="name" min-width="150"></el-table-column>
         <el-table-column label="Erlang Processes">
           <el-table-column label="used/avaliable" min-width="150" prop="process">
             <template scope="scope">
@@ -77,6 +92,7 @@
         <el-col :span="8">
           <el-table :data="metrics.packaets">
             <el-table-column
+              min-width="200"
               prop="key"
               label="The packets data">
             </el-table-column>
@@ -90,6 +106,7 @@
         <el-col :span="8">
           <el-table :data="metrics.messages">
             <el-table-column
+              min-width="200"
               prop="key"
               label="The messages data">
             </el-table-column>
@@ -103,6 +120,7 @@
         <el-col :span="8">
           <el-table :data="metrics.bytes">
             <el-table-column
+              min-width="160"
               prop="key"
               label="The bytes data">
             </el-table-column>
@@ -127,8 +145,8 @@
 <script>
 import { mapActions } from 'vuex'
 import {
-  Tabs, TabPane, Row, Col,
-  TableColumn, Table,
+  Tabs, TabPane, Row, Col, Option,
+  TableColumn, Table, Select,
   Button, Popover, Card, Tag,
 } from 'element-ui'
 
@@ -145,6 +163,7 @@ export default {
         nodeName: '',
         nodes: {},
       },
+      nodeName: '',
       brokers: [],
       nodes: [],
       stats: [],
@@ -157,6 +176,8 @@ export default {
     }
   },
   components: {
+    'el-option': Option,
+    'el-select': Select,
     'el-tag': Tag,
     'el-tabs': Tabs,
     'el-tab-pane': TabPane,
@@ -169,7 +190,7 @@ export default {
     'el-col': Col,
   },
   mounted() {
-    // this.getDatas()
+    this.refDatas()
   },
   created() {
     this.loadNode()
@@ -179,6 +200,10 @@ export default {
     // set global nodeName
     setStore() {
       this.CURRENT_NODE({ nodeName: { current: this.nodeName } })
+    },
+    // Object2Array, to adaptation the backend
+    parseToArray(obj) {
+      return new Array(obj)
     },
     // load nodes form store or server then load data
     loadNode() {
@@ -191,6 +216,21 @@ export default {
         this.select.nodes = response.data.result
         this.getDatas()
       })
+    },
+    // sort
+    sortByNodeName(data) {
+      console.log(data)
+      let tem = []
+      let tempIndex = 0
+      data.forEach((item, index) => {
+        if (item.name === this.nodeName) {
+          tem = item
+          tempIndex = index
+        }
+      })
+      data.splice(tempIndex, 1)
+      data.unshift(tem)
+      return data
     },
     // setInterval to refresh the data
     refDatas() {
@@ -208,24 +248,27 @@ export default {
         return
       }
       // nodes[]
-      httpGet(`monitoring/nodes/${this.nodeName}`).then((response) => {
-        // result is a Object
-        this.nodes[0] = response.data.result
-        console.log(response.data)
+      httpGet('monitoring/nodes').then((response) => {
+        this.nodes = this.sortByNodeName(response.data.result)
       })
       // stats[]
       httpGet(`/monitoring/stats/${this.nodeName}`).then((response) => {
         // the backend is so bad
-        this.stats[0] = response.data.result
-        this.stats[0].name = this.nodeName
+        response.data.result.name = this.nodeName
+        this.stats = this.parseToArray(response.data.result)
       })
       // brokers[]
       httpGet(`/management/nodes/${this.nodeName}`).then((response) => {
-        this.brokers[0] = response.data.result
+        this.brokers = this.parseToArray(response.data.result)
       })
       // metrics[{}, {}, {}]
       httpGet(`/monitoring/metrics/${this.nodeName}`).then((response) => {
         const data = response.data.result
+        this.metrics = {
+          packaets: [],
+          messages: [],
+          bytes: [],
+        }
         Object.keys(data).forEach((item) => {
           switch (item.split('/')[0]) {
             case 'packets': this.metrics.packaets.push({ key: item, value: data[item] })
@@ -238,6 +281,11 @@ export default {
           }
         })
       })
+    },
+    // select change
+    changeSelect() {
+      this.setStore()
+      this.getDatas()
     },
   },
 }
@@ -281,6 +329,12 @@ span {
   margin-right: 3px;
   border-radius: 4px;
 }
+.overview-view .el-row {
+  margin-top: 20px;
+}
+.overview-view .el-input {
+  width: 240px;
+}
 .overview-view .running:before {
   background-color: #227D51;
 }
@@ -289,5 +343,33 @@ span {
 }
 .overview-view .running {
   color: #227D51;
+}
+.overview-view .el-input__inner {
+  background-color: transparent;
+  border-color: #5d5d60;
+  color: #fff;
+}
+.overview-view .el-input__inner:focus {
+  border-color: #a7a7a7 !important;
+}
+.overview-view .el-input__inner::-webkit-input-placeholder {
+  color: #a7a7a7;
+}
+.overview-view .el-input__inner::-moz-placeholder {
+  color: #a7a7a7;
+}
+.overview-view .el-input__inner:-ms-input-placeholder {
+  color: #a7a7a7;
+}
+.overview-view .el-input.is-disabled .el-input__inner {
+  background-color: #292929;
+  border-color: #ababab;
+}
+.overview-view .el-button.is-disabled.is-plain,
+.el-button.is-disabled.is-plain:focus,
+.el-button.is-disabled.is-plain:hover,
+.el-button.is-disabled {
+  background-color: #292929;
+  border-color: #ababab;
 }
 </style>
