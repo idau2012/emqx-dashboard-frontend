@@ -1,18 +1,18 @@
 <template>
   <div class="listeners-view">
-    <div class="page-title">Listeners</div>
-
-
-    <el-row type="flex" justify="end" align="center">
-      <el-select v-model="nodeName" placeholder="Select Node" size="small" @change="loadListeners">
-        <el-option
-          v-for="item in nodes"
-          :key="item.name"
-          :label="item.name"
-          :value="item.name">
-        </el-option>
-      </el-select>
-    </el-row>
+    <div class="page-title">
+      Listeners
+      <div style="float: right">
+        <el-select v-model="nodeName" placeholder="Select Node" size="small" @change="loadListeners">
+          <el-option
+            v-for="item in nodes"
+            :key="item.name"
+            :label="item.name"
+            :value="item.name">
+          </el-option>
+        </el-select>
+      </div>
+    </div>
 
     <el-table :data="listeners" v-loading="loading" border>
       <el-table-column prop="protocol" width="240" label="Protocol"></el-table-column>

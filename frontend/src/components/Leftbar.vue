@@ -2,7 +2,7 @@
   <div class="leftbar">
     <div class="bar-title">
       <img src="../assets/emqlogo.png" class="logo">
-      <span>EMQ</span>
+      <span>Dashboard</span>
     </div>
     <el-menu :default-active="'/' + $route.path.split('/')[1]" mode="vertical" theme="dark" unique-opened router>
       <el-menu-item-group title="MONITORING">
@@ -121,11 +121,12 @@ export default {
   background-color: #242327;
   align-items: center;
   border-bottom: 1px solid #161616;
-  font-size: 24px;
+  font-size: 20px;
+  font-weight: bold;
 }
 .leftbar .bar-title img {
   width: 48px;
-  margin-left: 20px;
+  margin-left: 10px;
   margin-right: 10px;
   float: left;
 }

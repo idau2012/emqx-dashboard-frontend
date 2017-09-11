@@ -1,21 +1,25 @@
 <template>
   <div class="datas-view">
-    <div class="page-title">{{ activeTab }}</div>
-    <el-row type="flex" justify="end" align="center" @keyup.enter.native="searchChild">
-      <el-select v-model="nodeName" v-show="activeTab !== 'routers'" :disabled="loading" placeholder="Select Node" size="small" @change="loadChild(true)">
-        <el-option
-          v-for="item in nodes"
-          :key="item.name"
-          :label="item.name"
-          :value="item.name">
-        </el-option>
-      </el-select>
-      <el-input style="margin-left: 8px" :disabled="loading" v-model="searchValue" :placeholder="searchPlaceholder" size="small"></el-input>
-      <el-button :plain="true" type="success" icon="search" size="small"
-                 style="margin-left: 8px"
-                 @click="searchChild">Search
-      </el-button>
-    </el-row>
+    <div class="page-title">
+      {{ activeTab }}
+      <div style="float: right" @keyup.enter.native="searchChild">
+        <el-select v-model="nodeName" v-show="activeTab !== 'routers'" :disabled="loading" placeholder="Select Node" size="small" @change="loadChild(true)">
+          <el-option
+            v-for="item in nodes"
+            :key="item.name"
+            :label="item.name"
+            :value="item.name">
+          </el-option>
+        </el-select>
+        <el-input style="margin-left: 8px" :disabled="loading" @keyup.enter.native="searchChild"
+                  v-model="searchValue" :placeholder="searchPlaceholder" size="small"></el-input>
+        <el-button :plain="true" type="success" icon="search" size="small"
+                   style="margin-left: 8px"
+                   @keyup.enter.native="searchChild"
+                   @click="searchChild">Search
+        </el-button>
+      </div>
+    </div>
     <el-table :data="clients" v-loading="loading" v-show="activeTab==='clients'" border>
       <el-table-column prop="client_id" label="ClientId" min-width="160"></el-table-column>
       <el-table-column prop="username" label="Username" min-width="130"></el-table-column>
@@ -230,6 +234,7 @@ export default {
           this.searchView = false
           this[this.activeTab] = []
           this.$message.error('No Data')
+          this.searchView = true
           // reset page
           this.total = 0
           this.currentPage = 0

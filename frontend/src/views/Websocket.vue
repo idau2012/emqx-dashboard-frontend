@@ -235,12 +235,15 @@ export default {
         NProgress.done()
       })
       this.client.on('reconnect', () => {
+        console.log('reconnect')
         if (this.retryTimes > 2) {
           this.$message.error(`Connect failure on ${this.clientOption.host}:${this.clientOption.port}`)
           this.retryTimes = 0
+          console.log('give up')
           this.loading = false
           NProgress.done()
-          this.mqttDisconnect()
+          this.client.end()
+          this.client = {}
         }
         this.retryTimes += 1
       })
@@ -301,23 +304,16 @@ export default {
     },
     mqttPublish() {
       if (this.client.connected) {
-        /*
-        if (this.clientOption.publishTopic.indexOf('#') !== -1
-          || this.clientOption.publishTopic.indexOf('+') !== -1) {
-          this.$message.error('The topic is valid, connection disconnect!')
-          NProgress.start()
-          this.mqttDisconnect()
-          return
-        } */
         NProgress.start()
         const options = { qos: Number(this.clientOption.publishQos),
           retain: this.clientOption.publishRetain }
         this.client.publish(this.clientOption.publishTopic,
         this.clientOption.publishMessage, options, (error) => {
           if (error) {
+            console.log('error')
             NProgress.done()
-            this.mqttDisconnect()
-            this.$message.error(error.toString())
+//            this.mqttDisconnect()
+//            this.$message.error(error.toString())
           } else {
             this.clientOption.publishedMessages.unshift({
               message: this.clientOption.publishMessage,

@@ -1,6 +1,18 @@
 <template>
   <div class="plugins-view">
-    <div class="page-title" v-show="!plugin.nodeName">Plugins</div>
+    <div class="page-title" v-show="!plugin.nodeName">
+      Plugins
+      <div style="float: right">
+        <el-select v-model="nodeName" placeholder="Select Node" size="small" @change="loadPlugins">
+          <el-option
+            v-for="item in nodes"
+            :key="item.name"
+            :label="item.name"
+            :value="item.name">
+          </el-option>
+        </el-select>
+      </div>
+    </div>
 
     <div class="page-title" v-show="plugin.nodeName">
       <el-breadcrumb separator="/" style="text-transform: none">
@@ -9,16 +21,6 @@
       </el-breadcrumb>
     </div>
 
-    <el-row type="flex" justify="end" align="center" v-if="!plugin.nodeName">
-      <el-select v-model="nodeName" placeholder="Select Node" size="small" @change="loadPlugins">
-        <el-option
-          v-for="item in nodes"
-          :key="item.name"
-          :label="item.name"
-          :value="item.name">
-        </el-option>
-      </el-select>
-    </el-row>
     <el-table :data="tableData" v-loading="loading" border v-show="!plugin.nodeName">
       <el-table-column prop="name" width="240" label="Name"></el-table-column>
       <el-table-column prop="version" width="100" label="Version"></el-table-column>
@@ -119,6 +121,7 @@
 
     <el-dialog
       title="Advanced Config"
+      :visible.sync="isAdvancedConfig"
       @keyup.enter.native="setAdvancedConfig(true)"
       size="tiny">
      <el-row :gutter="20" type="flex" justify="left" class="advanced-key">
@@ -281,10 +284,10 @@ export default{
               } else {
                 recordList.push(item)
               }
-              console.log(item.value.length)
             } else {
               this.advancedConfig.push(item)
             }
+            console.log(this.advancedConfig.length)
           })
           recordList.forEach((item) => {
             this.$set(this.record, item.key, item.value)
@@ -397,6 +400,7 @@ export default{
     setAdvancedConfig(set = true) {
       if (set) {
         // remove
+        console.log(set)
         this.plugin.option.forEach((item) => {
           if (!item.required) {
             this.$delete(this.record, item.key)

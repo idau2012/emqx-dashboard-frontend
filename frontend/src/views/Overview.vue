@@ -33,25 +33,27 @@
         <span>Nodes ({{ nodes.length }})</span>
       </div>
       <el-table :data="nodes" border>
-        <el-table-column label="Name" prop="name" min-width="150"></el-table-column>
+        <el-table-column label="Name" prop="name" min-width="200"></el-table-column>
         <el-table-column label="Erlang Processes">
-          <el-table-column label="used/avaliable" min-width="150" prop="process">
+          <el-table-column label="(used/avaliable)" min-width="150" prop="process">
             <template scope="scope">
               {{ scope.row.process_used + ' / ' + scope.row.process_available }}
             </template>
           </el-table-column>
         </el-table-column>
         <el-table-column label="CPU Info">
-          <el-table-column label=" 1load/5load/15load" min-width="180">
+          <el-table-column label=" (1load/5load/15load)" min-width="180">
             <template scope="scope">
               {{ scope.row.load1 + ' / ' + scope.row.load5 + ' / ' + scope.row.load15 }}
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column label="Memory" min-width="200">
-          <template scope="scope">
-            {{ scope.row.memory_used + ' / ' + scope.row.memory_total }}
-          </template>
+        <el-table-column label="Memory Info" min-width="200">
+          <el-table-column label=" (used/total)" min-width="180">
+            <template scope="scope">
+              {{ scope.row.memory_used + ' / ' + scope.row.memory_total }}
+            </template>
+          </el-table-column>
         </el-table-column>
         <el-table-column label="MaxFds" prop="max_fds" min-width="120"></el-table-column>
         <el-table-column label="Status" min-width="120">

@@ -1,11 +1,13 @@
 <template>
   <div class="users-view">
-    <div class="page-title">Users</div>
-    <el-row type="flex" justify="end" align="middle">
-      <el-button :plain="true" type="success" icon="plus" size="small"
-        @click="showDialog('new', {})">New user
-      </el-button>
-    </el-row>
+    <div class="page-title">
+      Users
+      <div style="float: right">
+        <el-button :plain="true" type="success" icon="plus" size="small"
+                   @click="showDialog('new', {})">New user
+        </el-button>
+      </div>
+    </div>
 
     <el-table :data="users" v-loading="loading" border>
       <el-table-column prop="username" label="Username"></el-table-column>
@@ -15,7 +17,7 @@
           <el-button size="mini" type="warning"
             @click="showDialog('edit', props.row)">Edit
           </el-button>
-          <el-popover placement="right" :value="popoverVisible">
+          <el-popover placement="right" :value="popoverVisible" ref="popoverDeleted">
             <p>Confirm delete？</p>
             <div style="text-align: right">
               <el-button size="mini" type="text" @click="hidePopover">Cancel</el-button>
@@ -24,10 +26,11 @@
                 v-on:click="deleteUser(props.row.username)"
               >Confirm</el-button>
             </div>
-            <el-button slot="reference" size="mini" type="danger"
-              v-if="props.row.username!=='admin'">Delete
-            </el-button>
           </el-popover>
+          <el-button size="mini" type="danger"
+                     v-popover:popoverDeleted
+                     v-if="props.row.username!=='admin'">Delete
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
