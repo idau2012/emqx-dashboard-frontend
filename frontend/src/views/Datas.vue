@@ -1,9 +1,10 @@
 <template>
   <div class="datas-view">
+
     <div class="page-title">
       {{ activeTab }}
       <div style="float: right" @keyup.enter.native="searchChild">
-        <el-select v-model="nodeName" v-show="activeTab !== 'routers'" :disabled="loading" placeholder="Select Node" size="small" @change="loadChild(true)">
+        <el-select v-model="nodeName" v-show="activeTab !== 'routes'" :disabled="loading" placeholder="Select Node" size="small" @change="loadChild(true)">
           <el-option
             v-for="item in nodes"
             :key="item.name"
@@ -20,6 +21,8 @@
         </el-button>
       </div>
     </div>
+
+    <!-- clients -->
     <el-table :data="clients" v-loading="loading" v-show="activeTab==='clients'" border>
       <el-table-column prop="client_id" label="ClientId" min-width="160"></el-table-column>
       <el-table-column prop="username" label="Username" min-width="130"></el-table-column>
@@ -35,6 +38,7 @@
       <el-table-column prop="connected_at" label="ConnectedAt" width="180"></el-table-column>
     </el-table>
 
+    <!-- sessions -->
     <el-table :data="sessions" v-loading="loading" v-show="activeTab==='sessions'" border>
       <el-table-column prop="client_id" label="ClientId" min-width="160"></el-table-column>
       <el-table-column prop="clean_sess" label="CleanSess" min-width="150">
@@ -52,28 +56,33 @@
       <el-table-column prop="created_at" label="CreatedAt" min-width="180"></el-table-column>
     </el-table>
 
+    <!-- topics -->
     <el-table :data="topics" v-loading="loading" v-show="activeTab==='topics'" border>
       <el-table-column prop="topic" label="Topic"></el-table-column>
       <el-table-column prop="subTopicCount" label="SubTopicCount"></el-table-column>
     </el-table>
 
-    <el-table :data="routers" v-loading="loading" v-show="activeTab==='routers'" border>
+     <!-- routes -->
+    <el-table :data="routes" v-loading="loading" v-show="activeTab==='routes'" border>
       <el-table-column prop="topic" label="Topic"></el-table-column>
       <el-table-column prop="node" label="Node"></el-table-column>
     </el-table>
 
+    <!-- subscriptions -->
     <el-table :data="subscriptions" v-loading="loading" v-show="activeTab==='subscriptions'" border>
       <el-table-column prop="client_id" label="ClientId"></el-table-column>
       <el-table-column prop="topic" label="Topic"></el-table-column>
       <el-table-column prop="qos" label="QoS"></el-table-column>
     </el-table>
 
+    <!-- refresh button -->
     <el-row type="flex" justify="end" v-show="searchView">
       <el-col :span="24">
         <el-button size="mini" type="text" icon="arrow-left" style="float: right" @click="loadChild">Back</el-button>
       </el-col>
     </el-row>
 
+    <!-- pagination -->
     <el-pagination
       @current-change="currentPageChanged"
       layout="prev, pager, next"
@@ -132,7 +141,7 @@ export default {
       clients: [],
       sessions: [],
       topics: [],
-      routers: [],
+      routes: [],
       subscriptions: [],
       pageSize: 10,
       currentPage: 1,
@@ -151,8 +160,8 @@ export default {
     setStore() {
       this.CURRENT_NODE({ nodeName: { current: this.nodeName } })
     },
+    // get path
     init() {
-      // get path
       this.activeTab = this.$route.path.split('/')[1]
       switch (this.activeTab) {
         case 'clients':
@@ -161,7 +170,7 @@ export default {
           this.searchPlaceholder = 'ClientId'
           break
         case 'topics':
-        case 'routers':
+        case 'routes':
           this.searchPlaceholder = 'Topic'
           break
         default:
@@ -174,8 +183,8 @@ export default {
       this.loading = true
       this.currentPage = 1
       this.searchValue = ''
-      // load routers needn't nodes
-      if (this.activeTab === 'routers') {
+      // load routes needn't nodes
+      if (this.activeTab === 'routes') {
         this.loadChild()
         return
       }
@@ -191,15 +200,15 @@ export default {
         this.loadChild()
       })
     },
+    // load child with pagination
     currentPageChanged(target) {
       this.currentPage = target
-      // load child with pagination
       this.loadChild()
     },
     loadChild(reload = false) {
       this.searchView = false
       this.searchValue = ''
-      if (!this.nodeName && this.activeTab !== 'routers') {
+      if (!this.nodeName && this.activeTab !== 'routes') {
         return
       }
       // load child with the currentPage asc
@@ -209,7 +218,7 @@ export default {
       this.loading = true
       this.setStore()
       let requestURL = `/nodes/${this.nodeName}/${this.activeTab}?curr_page=${this.currentPage}&page_size=${this.pageSize}`
-      if (this.activeTab === 'routers') {
+      if (this.activeTab === 'routes') {
         requestURL = `/routes?curr_page=${this.currentPage}&page_size=${this.pageSize}`
       }
       httpGet(requestURL).then((response) => {
@@ -221,11 +230,11 @@ export default {
     },
     searchChild() {
       if (!this.searchValue) {
-        this.$message.error(`${this.searchPlaceholder} required`)
+        this.$message.error(`${this.searchPlaceholder} required!`)
         return
       }
       let requestURL = `/nodes/${this.nodeName}/${this.activeTab}/${this.searchValue}`
-      if (this.activeTab === 'routers') {
+      if (this.activeTab === 'routes') {
         requestURL = `/routes/${this.searchValue}`
       }
       this.loading = true
@@ -233,7 +242,7 @@ export default {
         if (response.data.result.objects.length === 0) {
           this.searchView = false
           this[this.activeTab] = []
-          this.$message.error('No Data')
+          this.$message.error('No Data!')
           this.searchView = true
           // reset page
           this.total = 0
@@ -264,6 +273,9 @@ export default {
 .datas-view .page-title {
   padding: 10px 0;
 }
+.datas-view .el-table {
+  margin-top: 60px;
+}
 .datas-view .el-row {
   margin-top: 20px;
 }
@@ -274,28 +286,5 @@ export default {
   background-color: transparent;
   border-color: #5d5d60;
   color: #fff;
-}
-.datas-view .el-input__inner:focus {
-  border-color: #a7a7a7;
-}
-.datas-view .el-input__inner::-webkit-input-placeholder {
-  color: #a7a7a7;
-}
-.datas-view .el-input__inner::-moz-placeholder {
-  color: #a7a7a7;
-}
-.datas-view .el-input__inner:-ms-input-placeholder {
-  color: #a7a7a7;
-}
-.datas-view .el-input.is-disabled .el-input__inner {
-  background-color: #292929;
-  border-color: #ababab;
-}
-.datas-view .el-button.is-disabled.is-plain,
-.el-button.is-disabled.is-plain:focus,
-.el-button.is-disabled.is-plain:hover,
-.el-button.is-disabled {
-  background-color: #292929;
-  border-color: #ababab;
 }
 </style>

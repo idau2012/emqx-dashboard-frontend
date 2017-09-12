@@ -1,5 +1,5 @@
 <template>
-<div class="http_api">
+<div class="http-api">
   <div class="page-title">HTTP API</div>
   <el-card class="box-card">
     <div slot="header">
@@ -51,7 +51,7 @@ import { CURRENT_NODE } from '../store/mutation-types'
 
 
 export default {
-  name: 'http_api',
+  name: 'http-api',
   components: {
     'el-tabs': Tabs,
     'el-tab-pane': TabPane,
@@ -151,14 +151,14 @@ export default {
 </script>
 
 
-<style>
-.http_api .el-table th {
-  height: 30px;
+<style lang="scss">
+.http-api {
+  padding-top: 20px;
 }
-.http_api .el-table {
+.http-api .el-table {
   border-color: #1f1d1d;
 }
-.http_api .box-card {
-  margin-top: 30px;
+.http-api .box-card {
+  margin-top: 60px;
 }
 </style>

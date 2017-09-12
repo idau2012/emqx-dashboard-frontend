@@ -12,11 +12,8 @@
       </el-select>
     </div>
 
-    <!--<el-row type="flex" justify="end" align="center">-->
-      <!---->
-    <!--</el-row>-->
-
-    <el-card class="box-card">
+    <!-- Broker -->
+    <el-card class="box-card" style="margin-top: 60px">
       <div slot="header">
         <span>Broker</span>
       </div>
@@ -66,6 +63,7 @@
       </el-table>
     </el-card>
 
+    <!-- Stats -->
     <el-card class="box-card">
       <div slot="header">
         <span>Stats</span>
@@ -85,14 +83,14 @@
       </el-table>
     </el-card>
 
-
+    <!-- metrics -->
     <el-card class="box-card">
       <div slot="header">
         <span>Metrics</span>
       </div>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-table :data="metrics.packaets">
+          <el-table :data="metrics.packets">
             <el-table-column
               min-width="200"
               prop="key"
@@ -133,12 +131,6 @@
           </el-table>
         </el-col>
       </el-row>
-      <!--<el-table :data="metrics" border>-->
-      <!--<el-table-column label="The packets data" prop="name" min-width="150"></el-table-column>-->
-      <!--<el-table-column label="Topics/Count" prop="topics/count" min-width="150"></el-table-column>-->
-      <!--<el-table-column label="Topics/Max" prop="topics/max" min-width="150"></el-table-column>-->
-      <!--</el-table>-->
-
     </el-card>
   </div>
 </template>
@@ -155,7 +147,6 @@ import {
 import { httpGet } from '../store/api'
 import { CURRENT_NODE } from '../store/mutation-types'
 
-
 export default {
   name: 'overview-view',
   data() {
@@ -171,7 +162,7 @@ export default {
       stats: [],
       flag: 0,
       metrics: {
-        packaets: [],
+        packets: [],
         messages: [],
         bytes: [],
       },
@@ -192,7 +183,7 @@ export default {
     'el-col': Col,
   },
   mounted() {
-    this.refDatas()
+    this.refreshInterval()
   },
   created() {
     this.loadNode()
@@ -216,12 +207,11 @@ export default {
         this.setStore()
         // could select
         this.select.nodes = response.data.result
-        this.getDatas()
+        this.loadData()
       })
     },
     // sort
     sortByNodeName(data) {
-      console.log(data)
       let tem = []
       let tempIndex = 0
       data.forEach((item, index) => {
@@ -235,18 +225,18 @@ export default {
       return data
     },
     // setInterval to refresh the data
-    refDatas() {
+    refreshInterval() {
       window.clearInterval(this.flag)
-      this.flag = window.setInterval(this.getDatas, 1000 * 10)
+      this.flag = window.setInterval(this.loadData, 1000 * 10)
     },
     // load data index by nodeName
-    getDatas() {
+    loadData() {
       if (this.$route.path !== '/') {
         window.clearInterval(this.flag)
         return
       }
       if (!this.nodeName) {
-        console.log('no nodeName, can not load data')
+        // no nodeName, can not load data
         return
       }
       // nodes[]
@@ -267,13 +257,13 @@ export default {
       httpGet(`/monitoring/metrics/${this.nodeName}`).then((response) => {
         const data = response.data.result
         this.metrics = {
-          packaets: [],
+          packets: [],
           messages: [],
           bytes: [],
         }
         Object.keys(data).forEach((item) => {
           switch (item.split('/')[0]) {
-            case 'packets': this.metrics.packaets.push({ key: item, value: data[item] })
+            case 'packets': this.metrics.packets.push({ key: item, value: data[item] })
               break
             case 'messages': this.metrics.messages.push({ key: item, value: data[item] })
               break
@@ -287,41 +277,25 @@ export default {
     // select change
     changeSelect() {
       this.setStore()
-      this.getDatas()
+      this.loadData()
     },
   },
 }
 </script>
 
 
-<style>
-span {
+<style lang="scss">
+.overview-view {
+  span {
   line-height: 10px;
-}
-.overview-view .box-card {
-  margin-top: 30px;
-}
-.el-table--enable-row-hover tr:hover>td {
-  background-color: #37363b;
-}
-.overview-view .el-row {
-  margin-bottom: 10px;
-}
-.overview-view .el-row:last-child {
-  margin-bottom: 0;
-}
-.overview-view .el-col {
-  border-radius: 4px;
-}
-.overview-view .row-bg {
-  padding: 10px 0;
-  background-color: #f9fafc;
-}
-.overview-view .el-table {
-  border-color: #1f1d1d;
-}
-.overview-view .el-table__row:hover {
-  background-color: #37363b;
+  }
+  padding-top: 20px;
+  .box-card {
+    margin-top: 20px;
+  }
+  .el-row {
+   margin-top: 20px;
+  }
 }
 .overview-view .status:before {
   content: "";
@@ -331,12 +305,7 @@ span {
   margin-right: 3px;
   border-radius: 4px;
 }
-.overview-view .el-row {
-  margin-top: 20px;
-}
-.overview-view .el-input {
-  width: 240px;
-}
+.overview-view
 .overview-view .running:before {
   background-color: #227D51;
 }
@@ -345,33 +314,5 @@ span {
 }
 .overview-view .running {
   color: #227D51;
-}
-.overview-view .el-input__inner {
-  background-color: transparent;
-  border-color: #5d5d60;
-  color: #fff;
-}
-.overview-view .el-input__inner:focus {
-  border-color: #a7a7a7 !important;
-}
-.overview-view .el-input__inner::-webkit-input-placeholder {
-  color: #a7a7a7;
-}
-.overview-view .el-input__inner::-moz-placeholder {
-  color: #a7a7a7;
-}
-.overview-view .el-input__inner:-ms-input-placeholder {
-  color: #a7a7a7;
-}
-.overview-view .el-input.is-disabled .el-input__inner {
-  background-color: #292929;
-  border-color: #ababab;
-}
-.overview-view .el-button.is-disabled.is-plain,
-.el-button.is-disabled.is-plain:focus,
-.el-button.is-disabled.is-plain:hover,
-.el-button.is-disabled {
-  background-color: #292929;
-  border-color: #ababab;
 }
 </style>

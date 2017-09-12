@@ -10,7 +10,7 @@
       </el-menu-item-group>
         <el-menu-item index="/clients"><i class="fa fa-microchip"></i>Clients</el-menu-item>
         <el-menu-item index="/sessions"><i class="fa fa-exchange"></i>Sessions</el-menu-item>
-        <el-menu-item index="/routers"><i class="fa fa-random"></i>Routes</el-menu-item>
+        <el-menu-item index="/routes"><i class="fa fa-random"></i>Routes</el-menu-item>
         <el-menu-item index="/subscriptions"><i class="fa fa-rss-square"></i>Subscriptions</el-menu-item>
       <el-menu-item-group title="MANAGEMENT">
         <el-menu-item index="/plugins"><i class="fa fa-plug"></i>Plugins</el-menu-item>
@@ -75,9 +75,9 @@ export default {
 .leftbar .el-menu {
   position: relative;
   left: 0;
-  top: 51px;
+  top: 52px;
   width: 200px;
-  padding-bottom: 51px;
+  padding-bottom: 52px;
 }
 .leftbar,
 .leftbar .el-menu--dark {
@@ -107,8 +107,9 @@ export default {
 }
 .leftbar .bar-title,
 .leftbar .bar-footer {
+  font-size: 16px;
   height: 60px;
-  line-height: 66px;
+  line-height: 60px !important;
   color: #fff;
 }
 .leftbar .bar-title {
@@ -134,8 +135,9 @@ export default {
   position: fixed;
   left: 0;
   bottom: 0;
+  display: flex;
+  justify-content: center;
   z-index: 1001;
-  padding-left: 20px;
   box-sizing: border-box;
   width: 200px;
   border-top: 1px solid #161616;

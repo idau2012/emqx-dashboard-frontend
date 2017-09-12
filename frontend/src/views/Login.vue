@@ -45,8 +45,8 @@
 import axios from 'axios'
 import { Col, Row, Card, Form, FormItem, Input, Checkbox, Button } from 'element-ui'
 import { mapActions } from 'vuex'
-import { USER_LOGIN } from '../store/mutation-types'
 
+import { USER_LOGIN } from '../store/mutation-types'
 
 export default {
   name: 'login-view',
@@ -119,6 +119,17 @@ export default {
 .login-view {
   background-color: #181818;
   height: 100%;
+  .el-input__inner {
+    border: 1px solid #bfcbd9;
+    background-color: transparent;
+    color: #1f2d3d;
+  }
+  .el-input.is-disabled .el-input__inner {
+    background-color: #eef1f6;
+    border-color: #d1dbe5;
+    color: #bbb;
+    cursor: not-allowed;
+  }
 }
 .login-view .login-form {
   position: absolute;

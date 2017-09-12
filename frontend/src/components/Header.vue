@@ -14,6 +14,7 @@
 import { mapActions } from 'vuex'
 import { USER_LOGOUT } from '../store/mutation-types'
 
+
 export default {
   name: 'topbar',
   computed: {
@@ -34,21 +35,21 @@ export default {
 
 <style>
 .topbar {
-  background-color: #fff;  
+  background-color: #fff;
   padding: 0 30px 0 220px;
   height: 60px;
   line-height: 60px;
   text-align: right;
 }
 .topbar .right-part {
-  display: inline-block;  
+  display: inline-block;
 }
 .topbar img {
-  width: 18px;  
+  width: 18px;
   vertical-align: top;
   margin-top: 21px;
 }
 .topbar .right-part a {
-  padding-left: 8px;  
+  padding-left: 8px;
 }
 </style>

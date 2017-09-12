@@ -34,8 +34,8 @@
           <el-input v-model="clientOption.keepalive" size="small"></el-input>
         </el-col>
       </el-row>
-    <el-row>
-        <el-checkbox v-model="clientOption.clean">Clean Session</el-checkbox>
+      <el-row>
+          <el-checkbox v-model="clientOption.clean">Clean Session</el-checkbox>
       </el-row>
 
       <el-row type="flex" justify="start" align="middle" class="connect-area">
@@ -47,14 +47,13 @@
         <el-button type="success" icon="close" size="small"
                    :disabled="!client.connected"
                    @keyup.enter.native="mqttDisconnect"
-                   :loading="loading" @click="mqttDisconnect">Disconnect</el-button>
+                   :loading="loading && client.connected" @click="mqttDisconnect">Disconnect</el-button>
 
         <div class="connect-state">Current State:
           <span :style="client.connected ? 'color: #42d885' : ''">
           {{ client.connected ? 'CONNECTED' : 'DISCONNECTED' }}</span>
         </div>
       </el-row>
-
     </el-card>
 
     <el-card class="box-card blank-top" style="max-height: 450px">
@@ -78,7 +77,6 @@
             >Subscribe</el-button>
           </div>
         </el-col>
-
         <el-col :span="12">
           <label>Subscribes:</label>
           <el-table :data="clientOption.subscriptions" :max-height="320">
@@ -94,10 +92,8 @@
             </el-table-column>
           </el-table>
         </el-col>
-
       </el-row>
     </el-card>
-
 
     <el-card class="box-card blank-middle" style="max-height: 800px;padding-bottom: 20px">
       <div slot="header">
@@ -187,6 +183,7 @@ export default {
     return {
       retryTimes: 0,
       loading: false,
+      sending: false,
       clientOption: {
         host: '127.0.0.1',
         port: '8083',
@@ -235,15 +232,22 @@ export default {
         NProgress.done()
       })
       this.client.on('reconnect', () => {
-        console.log('reconnect')
-        if (this.retryTimes > 2) {
-          this.$message.error(`Connect failure on ${this.clientOption.host}:${this.clientOption.port}`)
+        if (this.retryTimes > 1) {
+          if (this.sending) {
+            this.$message.error('Error: Disconnect due to the illegal topic!')
+          } else {
+            this.$message.error(`Connect failure on ${this.clientOption.host}:${this.clientOption.port}!`)
+          }
           this.retryTimes = 0
-          console.log('give up')
+          this.sending = false
           this.loading = false
           NProgress.done()
           this.client.end()
           this.client = {}
+        }
+        // trigger by sending illegal topic
+        if (this.sending) {
+          this.$message.error('Error: Failure due to a illegal topic!')
         }
         this.retryTimes += 1
       })
@@ -272,7 +276,7 @@ export default {
           NProgress.done()
         })
       } else {
-        this.$message.error('The client does not connect to the broker')
+        this.$message.error('The client does not connect to the broker!')
       }
     },
     mqttSubscribe() {
@@ -294,12 +298,12 @@ export default {
               qos: this.clientOption.subQos,
               time: this.now(),
             })
-            this.$message.success('Subscribe success!')
+            this.$message.success('Subscribe success.')
             NProgress.done()
           }
         })
       } else {
-        this.$message.error('The client does not connect to the broker')
+        this.$message.error('The client does not connect to the broker!')
       }
     },
     mqttPublish() {
@@ -307,13 +311,13 @@ export default {
         NProgress.start()
         const options = { qos: Number(this.clientOption.publishQos),
           retain: this.clientOption.publishRetain }
+        // to mark which trigger the reconnect
+        this.sending = true
         this.client.publish(this.clientOption.publishTopic,
         this.clientOption.publishMessage, options, (error) => {
           if (error) {
-            console.log('error')
             NProgress.done()
-//            this.mqttDisconnect()
-//            this.$message.error(error.toString())
+            this.$message.error(error.toString())
           } else {
             this.clientOption.publishedMessages.unshift({
               message: this.clientOption.publishMessage,
@@ -321,29 +325,28 @@ export default {
               qos: this.clientOption.publishQos,
               time: this.now(),
             })
-            this.$message.success('Send success!')
+            this.$message.success('Message send out.')
             NProgress.done()
           }
         })
       } else {
-        this.$message.error('The client does not connect to the broker')
+        this.$message.error('The client does not connect to the broker!')
       }
     },
     mqttCacheScuscribe(topic) {
       if (!this.client.connected) {
-        this.$message.error('The client does not connect to the broker')
+        this.$message.error('The client does not connect to the broker!')
         return
       }
       this.client.unsubscribe(topic, (error) => {
         if (error) {
-          this.$message.error('Unsubscribe failure')
+          this.$message.error(`Unsubscribe failure: ${error.toString()}!`)
           return
         }
         this.clientOption.subscriptions.forEach((element, index) => {
           if (element.topic === topic) {
             this.clientOption.subscriptions.splice(index, 1)
             // clear message which in this topic
-            console.log(element)
           }
         })
       })
@@ -361,6 +364,7 @@ export default {
         // reset
         this.clientOption.clientId = `mqttjs_${Math.random().toString(16).substr(2, 10)}`
       } else {
+        // reload
         this.client = clientObject.client
         this.clientOption = clientObject.clientOption
       }
@@ -388,69 +392,41 @@ export default {
   margin-top: 5px;
 }
 .websocket-view .blank-top {
-  margin-top: 70px;
+  margin-top: 60px;
 }
 .websocket-view .connect-btn.el-button--small.el-button--success {
   color: #227D51;
   border-color: #227D51;
 }
-.websocket-view .is-disabled {
-  background-color: #bfcbd9 !important;
-  color: #ffffff !important;
-  border-color: #bfcbd9 !important;
-}
 .websocket-view .blank-middle {
   margin-top: 20px;
 }
-.websocket-view .el-input,
-.websocket-view .el-checkbox {
+.websocket-view .el-input,.el-checkbox {
   margin: 5px 0 20px;
 }
 .websocket-view .el-checkbox__label {
   color: #ddd;
-}
-.websocket-view .el-checkbox__inner:hover {
-  border-color: #227D51;
-}
-.websocket-view .el-checkbox {
-  .el-checkbox__inner:hover {
-    border-color: #42d885;
-  }
-  .el-checkbox__input.is-checked .el-checkbox__inner{
-    background-color: #42d885 !important;
-    border-color: #42d885 !important;
-  }
-}
-.websocket-view .el-checkbox__input.is-focus .el-checkbox__inner {
-  border-color: #ddd;
-}
-.websocket-view .el-checkbox.is-focus {
-  border-color: #37363b;
-}
-.websocket-view .between {
-  display: flex;
-  justify-content: space-between;
 }
 .websocket-view .el-button--small.el-button--success {
   background-color: transparent;
   border-color: #227D51;
   color: #227D51;
   padding: 8px 14px;
-}
-.websocket-view .el-input__inner {
-  background-color: transparent;
-  color: #fff;
-  border-color: #5d5d60
-}
-.websocket-view .el-input__inner:focus {
-  border-color: #a7a7a7 !important;
-}
-.websocket-view .el-button--small.el-button--success:hover,
-.websocket-view .el-button--small.el-button--success.is-loading
-{
-  border-color: #42d885;
-  background-color: #42d885;
-  color: #fff;
+  &:hover {
+    background-color: #42d885;
+    border-color: #42d885;
+    color: #fff;
+  }
+  &.is-loading {
+    border-color: transparent;
+    background-color: #ddd;
+  }
+  &.is-disabled {
+    color: #bfcbd9;
+    cursor: not-allowed;
+    background-color: #eef1f6;
+    border-color: #d1dbe5;
+  }
 }
 .websocket-view .refresh-btn {
   font-size: 12px;

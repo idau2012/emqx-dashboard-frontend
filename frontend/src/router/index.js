@@ -60,7 +60,7 @@ const routes = [
         component: () => import('@/views/Datas.vue'),
       },
       {
-        path: '/routers',
+        path: '/routes',
         component: () => import('@/views/Datas.vue'),
       },
       {

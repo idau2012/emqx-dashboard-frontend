@@ -206,7 +206,7 @@ export default {
         this.user.tag = this.user.tags
         httpPost('/users', this.user).then((response) => {
           if (response.data.code === 0) {
-            this.$message.success('Create user success!')
+            this.$message.success('Create user success.')
             this.dialogVisible = false
             this.loadData()
           } else {
@@ -245,7 +245,7 @@ export default {
               // old = now
               if (this.$store.state.user.username === this.user.username &&
               this.user.password !== this.user.newPassword) {
-                this.$message.error('You have changed your password. Please login again')
+                this.$message.error('You have changed your password. Please re authenticate！')
                 this.logout()
               } else {
                 this.updateUser()
@@ -295,38 +295,62 @@ export default {
 
 
 <style lang="scss">
-.users-view .el-dialog__header {
-  border-bottom: 1px solid #EFF2F7;
-  padding: 15px 20px;
+.users-view {
+  padding-top: 20px;
+  .el-table {
+    margin-top: 60px;
+  }
 }
-.users-view .el-dialog__footer {
-  border-top: 1px solid #EFF2F7;
-  padding: 15px 20px;
+.el-popover {
+  .el-button--success {
+    color: #fff;
+    background-color: #13ce66;
+    border-color: #13ce66;
+  }
+  .el-button--text {
+    margin-right: 10px;
+    border: none;
+    color: #20a0ff;
+    background: 0 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
+.users-view .el-dialog {
+  .el-input__inner {
+    border: 1px solid #bfcbd9;
+    background-color: transparent;
+    color: #1f2d3d;
+  }
+  .el-input.is-disabled .el-input__inner {
+    background-color: #eef1f6;
+    border-color: #d1dbe5;
+    color: #bbb;
+    cursor: not-allowed;
+  }
+  .el-button--success.is-plain:focus {
+    border-color: #a7a7a7;
+  }
+  .el-dialog__header {
+    border-bottom: 1px solid #EFF2F7;
+    padding: 15px 20px;
+  }
+  .el-dialog__footer {
+    border-top: 1px solid #EFF2F7;
+    padding: 15px 20px;
+  }
+}
+
 .users-view .el-input {
   margin: 5px 0 20px;
 }
-.users-view .el-input__inner:focus {
-  border-color: #8391a5;
-}
 .users-view .el-input.error input {
-  border-color: #E0B4B4;
-  border-width: 2px;
+  border: 2px solid #e0b4b4;
 }
 .users-view .toggle-btn {
   color: #48576a;
   &:hover {
     color: #1f2d3d;
    }
-}
-.users-view .el-button--danger.el-button--mini:hover {
-  background-color: #ff6d6d;
-  border-color: #ff6d6d;
-  color: #ffffff;
-}
-.users-view .el-button--warning.el-button--mini:hover {
-  background-color: #f9c855;
-  border-color: #f9c855;
-  color: #fff;
 }
 </style>

@@ -115,8 +115,7 @@ export default {
   border-bottom: 1px solid #d1dbe5
 }
 .signup-view .el-input.error input {
-  border-color: #E0B4B4;
-  border-width: 2px;
+  border: 2px solid #e0b4b4;
 }
 .signup-view .el-button {
   padding: 9px 25px;

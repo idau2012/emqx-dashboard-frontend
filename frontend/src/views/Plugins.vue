@@ -1,5 +1,6 @@
 <template>
   <div class="plugins-view">
+    <!-- plugin list -->
     <div class="page-title" v-show="!plugin.nodeName">
       Plugins
       <div style="float: right">
@@ -13,14 +14,6 @@
         </el-select>
       </div>
     </div>
-
-    <div class="page-title" v-show="plugin.nodeName">
-      <el-breadcrumb separator="/" style="text-transform: none">
-        <el-breadcrumb-item :to="{ path: '/plugins' }">{{ plugin.nodeName }}</el-breadcrumb-item>
-        <el-breadcrumb-item class="plugin-name">{{ plugin.name }}</el-breadcrumb-item>
-      </el-breadcrumb>
-    </div>
-
     <el-table :data="tableData" v-loading="loading" border v-show="!plugin.nodeName">
       <el-table-column prop="name" width="240" label="Name"></el-table-column>
       <el-table-column prop="version" width="100" label="Version"></el-table-column>
@@ -58,6 +51,13 @@
       </el-table-column>
     </el-table>
 
+    <!-- plugin config-->
+    <div class="page-title" v-show="plugin.nodeName">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item :to="{ path: '/plugins' }">{{ plugin.nodeName }}</el-breadcrumb-item>
+        <el-breadcrumb-item class="plugin-name">{{ plugin.name }}</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
     <el-card v-show="plugin.nodeName" style="margin-top: 32px" class="plugin-config" v-loading="loading">
       <div slot="header" class="config-dialog">
         <span>{{ plugin.name }}</span>
@@ -69,18 +69,19 @@
       <el-form label-position="top" v-loading="loading" @keyup.enter.native="putConfig(false)" :model="record" ref="record">
         <el-row :gutter="20">
           <el-col :lg="8" :md="12" :sm="12" v-for="item in plugin.option" :key="item.key">
-            <el-form-item :label="item.key" v-if="record.hasOwnProperty(item.key)" :title="item.desc">
-
-              <el-input size="small" v-model="record[item.key]" style="width: 100%" :placeholder="item.desc"
-                        v-if="item.value.length < 36 && record.hasOwnProperty(item.key)">
+            <el-form-item :label="item.key" v-if="record.hasOwnProperty(item.key)">
+              <!--icon="plus" @click="setAdvancedOption(item)"-->
+              <el-input
+                        size="small" v-model="record[item.key]" style="width: 100%" :placeholder="item.desc"
+                        v-if="item.value.length < 36 && record.hasOwnProperty(item.key) && isAutoIncrement(item.key)[0]">
               </el-input>
 
-              <el-input
-                size="small"
-                type="textarea"
-                :rows="2"
-                :placeholder="item.desc"
-                v-model="record[item.key]"
+              <el-input size="small" v-model="record[item.key]" style="width: 100%" :placeholder="item.desc"
+                        v-if="item.value.length < 36 && record.hasOwnProperty(item.key) && !isAutoIncrement(item.key)[0]">
+              </el-input>
+
+              <el-input size="small" type="textarea"
+                :rows="2" :placeholder="item.desc" v-model="record[item.key]"
                 v-if="item.value.length > 35 && record.hasOwnProperty(item.key)">
               </el-input>
             </el-form-item>
@@ -90,10 +91,10 @@
           <el-col :span="24" class="oper-block" style="margin-top: 20px">
             <el-button :plain="true" type="success" @click="putConfig(false)"
                        @keyup.enter.native="putConfig(false)"
-                       size="small" :disabled="!needPutConfig"
+                       size="small" :disabled="!changeListenet"
             >Confirm</el-button>
-            <el-button :plain="true" @click="cencelOper(false)" class="cancel-btn"
-                       @keyup.enter.native="cencelOper(false)"
+            <el-button :plain="true" @click="abortOperation(false)" class="cancel-btn"
+                       @keyup.enter.native="abortOperation(false)"
                        size="small">Cancel</el-button>
             <el-button :plain="true" title="More configuration" class="oper-btn" type="text"
                        v-if="advancedConfig.length !== 0"
@@ -110,11 +111,11 @@
       size="tiny">
       <span>{{ notic }}</span>
       <span slot="footer" class="dialog-footer">
-        <el-button type="success" @click="handleOper(true, false)"
-                   @keyup.enter.native="handleOper(true, false)"
+        <el-button type="success" @click="handleOperation(true, false)"
+                   @keyup.enter.native="handleOperation(true, false)"
                    size="small">Confirm</el-button>
-        <el-button @click="handleOper(false, false)"
-                   @keyup.enter.native="handleOper(false, false)"
+        <el-button @click="handleOperation(false, false)"
+                   @keyup.enter.native="handleOperation(false, false)"
                    size="small">Cancel</el-button>
       </span>
     </el-dialog>
@@ -210,7 +211,7 @@ export default{
       }
       return ''
     },
-    needPutConfig() {
+    changeListenet() {
       return this.hashCode !== JSON.stringify(this.record)
     },
   },
@@ -222,6 +223,13 @@ export default{
     // set global nodeName
     setStore() {
       this.CURRENT_NODE({ nodeName: { current: this.nodeName } })
+    },
+    isAutoIncrement(item = '') {
+      const key = item.split('$')
+      if (key.length === 1) {
+        return [false, null]
+      }
+      return [true]
     },
     filterStatus(value, row) {
       return row.active === value
@@ -239,10 +247,10 @@ export default{
       httpPut(`/nodes/${this.nodeName}/plugins/${row.name}`, data).then((response) => {
         this.loading = false
         if (response.data.code === 0) {
-          this.$message.success(`${row.active ? 'Stop' : 'Start'} success`)
+          this.$message.success(`${row.active ? 'Stop' : 'Start'} success.`)
           this.loadPlugins()
         } else {
-          this.$message.error(`${row.active ? 'Stop' : 'Start'} failure`)
+          this.$message.error(`${row.active ? 'Stop' : 'Start'} failure!`)
         }
       })
     },
@@ -268,7 +276,7 @@ export default{
         this.plugin.name = this.$route.params.pluginName
         this.clockStatus = true
         this.loading = true
-        // load pluginOption
+        // load & render pluginOption
         httpGet(`nodes/${this.plugin.nodeName}/plugin_configs/${this.plugin.name}`).then((response) => {
           this.plugin.option = response.data.result
           // sort & define
@@ -287,12 +295,11 @@ export default{
             } else {
               this.advancedConfig.push(item)
             }
-            console.log(this.advancedConfig.length)
           })
+          console.log(JSON.stringify(this.plugin.option))
           recordList.forEach((item) => {
             this.$set(this.record, item.key, item.value)
           })
-          console.log('advanced:', this.advancedConfig)
           // hashCode
           this.hashCode = JSON.stringify(this.record)
           this.loading = false
@@ -326,6 +333,7 @@ export default{
         this.loading = false
       })
     },
+    // to config view
     config(row) {
       this.plugin.name = row.name
       this.plugin.desc = row.description
@@ -333,25 +341,38 @@ export default{
     },
     putConfig(confirm = false) {
       if (confirm) {
+        // check $
+        /*
+         如果是 value = " config1!#!config2!#!config3!#!config4!#!config5 "这种配置：
+           ===> 使用正则匹配 $ <---> .  用于匹配 web.hook.$id.rule [占位符在中间]
+                使用正则匹配 $ <---> \n 用于匹配 web.hook.rule.$id [占位符在后面]
+          将其替换为 length = value.split('!#!').length 的自增序列 ;
+         如： web.hook.rule.client.unsubscribe.$name 在发送之前将会被分解为
+           web.hook.rule.client.unsubscribe.0 : config[0]
+           web.hook.rule.client.unsubscribe.1 : config[1]
+           web.hook.rule.client.unsubscribe.2 : config[2]
+         但是下一次我查看返回的配置的时候，配置的key已经变成了 web.hook.rule.client.unsubscribe.[index]
+         有好的显示方案？让用户知道这个index占领的占位符是 name 还是 password 或者其他？
+        */
         // update the config
         // load pluginOption
         httpPut(`nodes/${this.plugin.nodeName}/plugin_configs/${this.plugin.name}`, this.record).then((response) => {
           if (response.data.code === 0) {
-            this.$message.success('Config Success !')
+            this.$message.success('Config Success.')
             this.hashCode = JSON.stringify(this.record)
             this.$router.push({ path: '/plugins' })
           } else {
-            this.$message.error('Config failure')
+            this.$message.error('Config failure!')
           }
         })
       } else {
         // waiting the confirm
         this.notic = 'Are you sure you want to submit changes and apply them ?'
         this.oper = 'update'
-        this.handleOper(true)
+        this.handleOperation(true)
       }
     },
-    handleOper(confirm = false, alert = true) {
+    handleOperation(confirm = false, alert = true) {
       // not ok
       if (!confirm) {
         this.dialogVisible = false
@@ -364,7 +385,7 @@ export default{
             break
           case 'default': this.resetDefault(true)
             break
-          case 'cancel': this.cencelOper(true)
+          case 'cancel': this.abortOperation(true)
             break
           default: this.dialogVisible = false
         }
@@ -378,13 +399,13 @@ export default{
       } else {
         this.notic = 'Are you sure the reset configuration is the default?'
         this.oper = 'default'
-        this.handleOper(true)
+        this.handleOperation(true)
       }
     },
-    cencelOper(confirm = false) {
+    abortOperation(confirm = false) {
       if (confirm) {
         this.$message({
-          message: 'Your configure is not update',
+          message: 'You have given up this change',
           type: 'warning',
         })
         this.hashCode = JSON.stringify(this.record)
@@ -392,7 +413,7 @@ export default{
       } else if (this.hashCode !== JSON.stringify(this.record)) {
         this.notic = 'Are you sure you want to give up the change and exit?'
         this.oper = 'cancel'
-        this.handleOper(true)
+        this.handleOperation(true)
       } else {
         this.$router.push({ path: '/plugins' })
       }
@@ -400,7 +421,6 @@ export default{
     setAdvancedConfig(set = true) {
       if (set) {
         // remove
-        console.log(set)
         this.plugin.option.forEach((item) => {
           if (!item.required) {
             this.$delete(this.record, item.key)
@@ -408,7 +428,6 @@ export default{
         })
         // set
         this.selectedAdvancedConfig.forEach((item) => {
-          console.log(item.key)
           this.$set(this.record, item.key, item.value)
         })
         this.isAdvancedConfig = false
@@ -422,7 +441,7 @@ export default{
     const isChange = this.hashCode !== JSON.stringify(this.record)
     if (this.plugin.nodeName && isChange) {
       this.nextPath = to.path
-      this.cencelOper()
+      this.abortOperation()
     } else {
       next()
     }
@@ -434,44 +453,57 @@ export default{
 <style lang="scss">
 .plugins-view {
   padding-top: 20px;
+  .page-title {
+    padding: 10px 0;
+  }
+  .el-row {
+    margin-top: 20px;
+  }
+  .plugin-config {
+    .el-form-item__label {
+      color: #ddd;
+    }
+    .el-input.el-input--small {
+      width: 100%;
+    }
+  }
+  .el-table {
+    margin-top: 60px;
+  }
+  .el-textarea__inner {
+    background-color: transparent;
+    border-color: #5d5d60;
+    color: #ddd;
+  }
 }
-.plugins-view .el-breadcrumb {
-  margin-bottom: 20px;
+.el-popover {
+  .el-button--success {
+    color: #fff;
+    background-color: #13ce66;
+    border-color: #13ce66;
+  }
+  .el-button--text {
+    margin-right: 10px;
+    border: none;
+    color: #20a0ff;
+    background: 0 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
-.plugins-view .page-title {
-  padding: 10px 0;
-}
-.plugins-view .el-row {
-  margin-top: 20px;
-}
-.plugins-view .el-input {
-  width: 240px;
-}
-.plugins-view .plugin-config .el-form-item__label {
-  color: #ddd;
-}
-.plugins-view .el-input__inner, .el-textarea__inner, .el-button.el-button--text.el-button--samll {
+.plugins-view .el-input__inner,
+.el-textarea__inner,
+.el-button.el-button--text.el-button--samll {
   background-color: transparent;
   border-color: #5d5d60;
   color: #fff;
 }
-.plugins-view .plugin-config .el-select {
-  width: 100%;
-}
-.plugins-view .plugin-config .el-input.el-input--small {
-  width: 100%;
-}
-.plugins-view .el-input__inner:focus, .el-textarea__inner:focus {
-  border-color: #a7a7a7;
-}
-.plugins-view .el-input__inner::-webkit-input-placeholder, .el-textarea__inner::-webkit-input-placeholder {
-  color: #a7a7a7;
-}
-.plugins-view .el-input__inner::-moz-placeholder {
-  color: #a7a7a7;
-}
-.plugins-view .el-input__inner:-ms-input-placeholder {
-  color: #a7a7a7;
+.plugins-view .el-button--success {
+  &:hover, &:focus {
+    background: #42d885;
+    border-color: #42d885;
+    color: #fff;
+  }
 }
 .plugins-view .status:before {
   content: "";
@@ -481,71 +513,68 @@ export default{
   margin-right: 3px;
   border-radius: 4px;
 }
-.plugins-view .running:before {
-  background-color: #227D51;
-}
-.plugins-view .el-breadcrumb {
-  font-size: 24px !important;
-}
-.plugins-view .el-breadcrumb .el-breadcrumb__item__inner {
-  color: #777777;
-}
-.plugins-view .plugin-name .el-breadcrumb__item__inner {
-  color: #fff;
-}
-.plugins-view .el-breadcrumb .el-breadcrumb__item__inner:hover {
-  color: #fff;
-}
-.plugins-view .cancel-btn.el-button--small {
-  border: none;
-  color: #ddd !important;
-}
-.plugins-view .cancel-btn.el-button--small:hover,
-.plugins-view .cancel-btn.el-button--small:focus {
-  color: #ff6d6d !important;
-}
 .plugins-view .stopped:before {
   background-color: #777777;
 }
 .plugins-view .running {
   color: #227D51;
 }
-.plugins-view .plugin-config .oper-block .el-button {
-  margin-right: 14px;
+.plugins-view .running:before {
+  background-color: #227D51;
 }
-.oper-block .el-button--text:hover {
-  text-decoration: underline;
-}
-.oper-block .el-button--small.is-plain.el-button--success {
-  /*margin-right: 60px !important;*/
-  border-color: #227D51 !important;
-  color: #227D51 !important;
-}
-.plugins-view .el-button--mini .is-disabled {
-  background-color: red;
-}
-.plugins-view .el-button--mini.el-button--success:focus,
-.el-button--mini.el-button--success:hover,
-.oper-block .el-button--success:hover,
-.oper-block .el-button--small.is-plain.el-button--success:hover
-{
-  background: #42d885 !important;
-  border-color: #42d885 !important;
-  color: #fff !important;
-}
-.plugins-view .el-checkbox {
-  .el-checkbox__inner:hover {
-    border-color: #42d885;
+/* el-breadcrumb */
+.plugins-view .el-breadcrumb {
+  margin-bottom: 20px;
+  .plugin-name {
+    .el-breadcrumb__item__inner {
+      color: #fff;
+    }
   }
-  .el-checkbox__input.is-checked .el-checkbox__inner{
-    background-color: #42d885 !important;
-    border-color: #42d885 !important;
+  font-size: 24px !important;
+  .el-breadcrumb__item__inner {
+    text-transform: none;
+    color: #777777;
+    &:hover {
+      color: #fff;
+    }
   }
 }
+
+/*.cancel-btn*/
+.plugins-view .cancel-btn {
+  &.el-button--small {
+    border: none;
+    color: #ddd !important;
+    &:hover, &:focus {
+      color: #ff6d6d !important;
+    }
+  }
+}
+/* oper-block */
+.plugins-view .plugin-config .oper-block {
+  .el-button--text {
+    color: #ddd;
+    &:hover {
+      text-decoration: underline;
+      color: #fff;
+    }
+  }
+  .el-button {
+    margin-right: 14px;
+  }
+  .el-button--small.is-plain.el-button--success {
+    border-color: #227D51 !important;
+    color: #227D51 !important;
+    background-color: transparent;
+    &:hover, &:focus {
+      background: #42d885 !important;
+      border-color: #42d885 !important;
+      color: #fff !important;
+    }
+  }
+}
+/* Advanced Config DiaLog */
 .plugins-view .advanced-key {
-  .oper-btn:hover {
-    text-decoration: underline;
-  }
   .el-checkbox-group {
     .el-checkbox {
       &:first-child {
@@ -555,10 +584,5 @@ export default{
       margin-top: 10px;
     }
   }
-}
-.plugins-view .el-button--mini.el-button--warning:focus, .el-button--mini.el-button--warning:hover {
-  background: #f9c855 !important;
-  border-color: #f9c855 !important;
-  color: #fff !important;
 }
 </style>
