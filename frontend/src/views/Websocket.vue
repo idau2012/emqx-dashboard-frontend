@@ -39,19 +39,19 @@
       </el-row>
 
       <el-row type="flex" justify="start" align="middle" class="connect-area">
-        <el-button type="success" class="connect-btn" icon="check" size="small"
-                   :disabled="client.connected"
+        <el-button type="success" class="connect-btn" :icon="loading ? 'loading': 'check'" size="small"
+                   :disabled="loading || client.connected"
                    @keyup.enter.native="mqttConnect"
-                   :loading="loading" @click="mqttConnect">Connect</el-button>
+                   @click="mqttConnect">Connect</el-button>
 
         <el-button type="success" icon="close" size="small"
-                   :disabled="!client.connected"
-                   @keyup.enter.native="mqttDisconnect"
-                   :loading="loading && client.connected" @click="mqttDisconnect">Disconnect</el-button>
+                   :disabled="!loading && !client.connected" class="close-btn"
+                   @keyup.enter.native="disconnectSwitch"
+                   :loading="loading && client.connected" @click="disconnectSwitch">Disconnect</el-button>
 
         <div class="connect-state">Current State:
           <span :style="client.connected ? 'color: #42d885' : ''">
-          {{ client.connected ? 'CONNECTED' : 'DISCONNECTED' }}</span>
+          {{ getStatus }}</span>
         </div>
       </el-row>
     </el-card>
@@ -158,6 +158,16 @@
 
 
 <script>
+/*
+* https://www.npmjs.com/package/mqtt
+* MQTT.js 2.13.0版本中
+* 连接中： 网络不可达时 ==> 尝试重连 ==> 触发 reconnect ==> 无限重连
+* 使用IP地址连接时： IP地址格式错误 ==> 未能捕捉到WS库的校验报错 ==> 不会触发任何事件 ==> 连接状态锁死
+*   以上两条 ==> 用户期望可以手动终止，客户端也应该超时终止
+* 发布时： 非法发布(非法主题) ==> 服务器断开连接 ==> 客户端触发 reconnect ==> 回调函数error值为空
+* 其中 Qos, Topic, Message等必须是Number, String/Buffer, String/Buffer ==> 防止因为ElementUI 下拉选择切换
+* 导致Qos变为String ==> 强制类型转换相关值后再发送
+* */
 import NProgress from 'nprogress'
 import mqtt from 'mqtt'
 import dateformat from 'dateformat'
@@ -208,11 +218,37 @@ export default {
   created() {
     this.loadConnect()
   },
+  computed: {
+    getStatus() {
+      if (this.client.connected) {
+        return 'CONNECTED'
+      }
+      if (this.loading) {
+        return 'CONNECTING'
+      }
+      return 'DISCONNECTED'
+    },
+  },
   methods: {
     now() {
       return dateformat(new Date(), 'yyyy-mm-dd hh:MM:ss')
     },
+    disconnectSwitch() {
+      // connecting
+      if (this.loading && !this.client.connected) {
+        this.loading = false
+        NProgress.done()
+        this.client.end()
+        this.client = {}
+      } else {
+        this.mqttDisconnect()
+      }
+    },
     mqttConnect() {
+      // prevent the connect from keyboard event
+      if (this.client.connected || this.loading) {
+        return
+      }
       NProgress.start()
       this.loading = true
       this.retryTimes = 0
@@ -253,6 +289,7 @@ export default {
       })
       this.client.on('error', (error) => {
         this.$message.error(error)
+        // to prevent reconnect
         this.retryTimes = 0
         NProgress.done()
       })
@@ -417,9 +454,18 @@ export default {
     border-color: #42d885;
     color: #fff;
   }
+  &.close-btn:not(.is-disabled){
+    border-color: #ff6d6d;
+    color: #ff6d6d;
+    &:hover {
+      background-color: #ff6d6d;
+      color: #fff;
+    }
+  }
   &.is-loading {
-    border-color: transparent;
-    background-color: #ddd;
+    border-color: #42d885 ;
+    background-color: #42d885;
+    color: #fff !important;
   }
   &.is-disabled {
     color: #bfcbd9;
