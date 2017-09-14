@@ -155,9 +155,6 @@ export default {
 .http-api {
   padding-top: 20px;
 }
-.http-api .el-table {
-  border-color: #1f1d1d;
-}
 .http-api .box-card {
   margin-top: 60px;
 }

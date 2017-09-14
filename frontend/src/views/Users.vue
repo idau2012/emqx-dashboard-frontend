@@ -301,56 +301,7 @@ export default {
     margin-top: 60px;
   }
 }
-.el-popover {
-  .el-button--success {
-    color: #fff;
-    background-color: #13ce66;
-    border-color: #13ce66;
-  }
-  .el-button--text {
-    margin-right: 10px;
-    border: none;
-    color: #20a0ff;
-    background: 0 0;
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
-.users-view .el-dialog {
-  .el-input__inner {
-    border: 1px solid #bfcbd9;
-    background-color: transparent;
-    color: #1f2d3d;
-  }
-  .el-input.is-disabled .el-input__inner {
-    background-color: #eef1f6;
-    border-color: #d1dbe5;
-    color: #bbb;
-    cursor: not-allowed;
-  }
-  .el-button--success.is-plain:focus {
-    border-color: #a7a7a7;
-  }
-  .el-dialog__header {
-    border-bottom: 1px solid #EFF2F7;
-    padding: 15px 20px;
-  }
-  .el-dialog__footer {
-    border-top: 1px solid #EFF2F7;
-    padding: 15px 20px;
-  }
-}
-
 .users-view .el-input {
   margin: 5px 0 20px;
-}
-.users-view .el-input.error input {
-  border: 2px solid #e0b4b4;
-}
-.users-view .toggle-btn {
-  color: #13ce66;
-  &:hover {
-    color: #42d885;
-   }
 }
 </style>

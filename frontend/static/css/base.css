@@ -201,6 +201,21 @@ body #nprogress .peg {
   color: #227D51;
 }
 
+/* popover */
+.el-popover .el-button--success {
+  color: #fff;
+  background-color: #13ce66;
+  border-color: #13ce66;
+}
+.el-popover .el-button--text {
+  margin-right: 10px;
+  border: none;
+  color: #20a0ff;
+  background: 0 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
 /* select */
 .el-select {
   width: 240px;

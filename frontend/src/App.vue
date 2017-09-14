@@ -10,7 +10,9 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+  /* themes-dark */
+  @import "./assets/themes/dark.scss";
   @font-face {
     font-family: 'Roboto';
     font-style: normal;

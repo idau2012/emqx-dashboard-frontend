@@ -282,9 +282,4 @@ export default {
 .datas-view .el-input {
   width: 240px;
 }
-.datas-view .el-input__inner {
-  background-color: transparent;
-  border-color: #5d5d60;
-  color: #fff;
-}
 </style>

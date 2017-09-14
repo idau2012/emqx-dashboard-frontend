@@ -305,14 +305,4 @@ export default {
   margin-right: 3px;
   border-radius: 4px;
 }
-.overview-view
-.overview-view .running:before {
-  background-color: #227D51;
-}
-.overview-view .stopped:before {
-  background-color: #777777;
-}
-.overview-view .running {
-  color: #227D51;
-}
 </style>

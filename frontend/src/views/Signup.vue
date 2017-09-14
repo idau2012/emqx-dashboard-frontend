@@ -108,15 +108,6 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.signup-view .el-card {
-  background-color: #fff;
-}
-.signup-view .el-card__header {
-  border-bottom: 1px solid #d1dbe5
-}
-.signup-view .el-input.error input {
-  border: 2px solid #e0b4b4;
-}
 .signup-view .el-button {
   padding: 9px 25px;
 }

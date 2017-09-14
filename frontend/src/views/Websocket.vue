@@ -435,63 +435,10 @@ export default {
 .websocket-view .blank-top {
   margin-top: 60px;
 }
-.websocket-view .connect-btn.el-button--small.el-button--success {
-  color: #227D51;
-  border-color: #227D51;
-}
 .websocket-view .blank-middle {
   margin-top: 20px;
 }
 .websocket-view .el-input,.el-checkbox {
   margin: 5px 0 20px;
-}
-.websocket-view .el-checkbox__label {
-  color: #ddd;
-}
-.websocket-view .el-button--small.el-button--success {
-  background-color: transparent;
-  border-color: #227D51;
-  color: #227D51;
-  padding: 8px 14px;
-  &:hover {
-    background-color: #42d885;
-    border-color: #42d885;
-    color: #fff;
-  }
-  &.close-btn:not(.is-disabled){
-    border-color: #ff6d6d;
-    color: #ff6d6d;
-    &:hover {
-      background-color: #ff6d6d;
-      color: #fff;
-    }
-  }
-  &.is-loading {
-    border-color: #42d885 ;
-    background-color: #42d885;
-    color: #fff !important;
-  }
-  &.is-disabled {
-    color: #bfcbd9;
-    cursor: not-allowed;
-    background-color: #eef1f6;
-    border-color: #d1dbe5;
-  }
-}
-.websocket-view .refresh-btn {
-  font-size: 12px;
-  margin-left: 8px;
-  cursor: pointer;
-}
-.websocket-view .connect-area {
-  button {
-    margin-right: 20px;
-  }
-  .connect-state {
-    span {
-      margin-left: 12px;
-      color: #ff6d6d;
-    }
-  }
 }
 </style>

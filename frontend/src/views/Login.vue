@@ -116,60 +116,18 @@ export default {
 
 
 <style lang="scss">
-.login-view {
-  background-color: #181818;
-  height: 100%;
-  .el-input__inner {
-    border: 1px solid #bfcbd9;
-    background-color: transparent;
-    color: #1f2d3d;
-  }
-  .el-input.is-disabled .el-input__inner {
-    background-color: #eef1f6;
-    border-color: #d1dbe5;
-    color: #bbb;
-    cursor: not-allowed;
-  }
-}
 .login-view .login-form {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.login-view .el-card {
-  border: none;
-  background-color: #fff;
-}
-.login-view .el-card__header {
-  border-color: #EFF2F7;
-  background-color: #fff;
-}
-.login-view .el-input.error input {
-  border-color: #E0B4B4;
-  border-width: 2px;
-}
 .login-view .el-button {
   padding: 9px 25px;
-}
-.login-view .login-footer {
-  margin: 25px 0;
-  text-align: right;
-  border-bottom: 1px solid #EFF2F7;
-  padding-bottom: 25px;
 }
 .login-view .checkbox {
   float: left;
   display: inline-block;
   margin: 6.5px 0 0;
-}
-.login-view .el-checkbox {
-  .el-checkbox__inner:hover {
-    border-color: #42d885;
-  }
-  .el-checkbox__input.is-checked .el-checkbox__inner{
-    background-color: #42d885 !important;
-    border-color: #42d885 !important;
-  }
 }
 </style>
