@@ -81,7 +81,7 @@
       <el-button v-if="oper === 'edit'" class="toggle-btn" type="text" @click="changePassword = !changePassword">{{ changePassword ? 'Don\'t Change Password' : 'Change Password ?'}}</el-button>
 
       <span slot="footer" class="dialog-footer">
-        <el-button icon="close" size="small" @click="dialogVisible=false">Cancel</el-button>
+        <el-button icon="close" size="small" @click="dialogVisible=false" style="margin-right: 20px">Cancel</el-button>
         <el-button type="success" icon="check" size="small"
           :loading="btnLoading"
           @click="save">Save
@@ -242,7 +242,7 @@ export default {
           this.btnLoading = true
           httpPut(`/change_pwd/${this.user.username}/`, chageUser).then((response) => {
             if (response.data.code === 0) {
-              // old = now
+              // old === now && user.now === edit.user, need't re authentication
               if (this.$store.state.user.username === this.user.username &&
               this.user.password !== this.user.newPassword) {
                 this.$message.error('You have changed your password. Please re authenticate！')
@@ -348,9 +348,9 @@ export default {
   border: 2px solid #e0b4b4;
 }
 .users-view .toggle-btn {
-  color: #48576a;
+  color: #13ce66;
   &:hover {
-    color: #1f2d3d;
+    color: #42d885;
    }
 }
 </style>

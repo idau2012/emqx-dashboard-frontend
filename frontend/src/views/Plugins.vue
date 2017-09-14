@@ -90,12 +90,15 @@
           <!-- Advanced Keys-->
           <el-col :span="24" class="oper-block" style="margin-top: 20px">
             <el-button :plain="true" type="success" @click="putConfig(false)"
+                       v-show="displayConfig !== ''"
                        @keyup.enter.native="putConfig(false)"
-                       size="small" :disabled="!changeListenet"
+                       size="small" :disabled="!changeListener"
             >Confirm</el-button>
             <el-button :plain="true" @click="abortOperation(false)" class="cancel-btn"
                        @keyup.enter.native="abortOperation(false)"
-                       size="small">Cancel</el-button>
+                       size="small">
+              <i class="el-icon-arrow-left" v-if="displayConfig === ''"></i>
+              {{ displayConfig === '' ? 'Back' : 'Cancel' }}</el-button>
             <el-button :plain="true" title="More configuration" class="oper-btn" type="text"
                        v-if="advancedConfig.length !== 0"
                        @click="setAdvancedConfig(false)" size="small">Advanced Config</el-button>
@@ -211,7 +214,7 @@ export default{
       }
       return ''
     },
-    changeListenet() {
+    changeListener() {
       return this.hashCode !== JSON.stringify(this.record)
     },
   },
@@ -255,9 +258,9 @@ export default{
       })
     },
     sortObject() {
-      return (objFir, objSec) => {
-        if (objFir.value.length > objSec.value.length) {
-          return 1
+      return (objFirst, objSecond) => {
+        if (objFirst.value.length > objSecond.value.length) {
+          return objFirst.value.length - objSecond.value.length
         }
         return 0
       }
@@ -280,25 +283,23 @@ export default{
         httpGet(`nodes/${this.plugin.nodeName}/plugin_configs/${this.plugin.name}`).then((response) => {
           this.plugin.option = response.data.result
           // sort & define
-          // this.plugin.option.sort(this.sortObject())
-          const recordList = []
+          this.plugin.option.sort(this.sortObject())
           this.plugin.option.forEach((item) => {
             if (item.key.indexOf('$') !== -1) {
               return
             }
             if (item.required) {
+              /*
               if (item.value.length < 35) {
                 recordList.unshift(item)
               } else {
                 recordList.push(item)
               }
+              */
+              this.$set(this.record, item.key, item.value)
             } else {
               this.advancedConfig.push(item)
             }
-          })
-          console.log(JSON.stringify(this.plugin.option))
-          recordList.forEach((item) => {
-            this.$set(this.record, item.key, item.value)
           })
           // hashCode
           this.hashCode = JSON.stringify(this.record)

@@ -20,14 +20,14 @@
       <span>Reference</span>
     </div>
     <el-table :data="tableData" border>
-        <el-table-column label="GET" prop="get" min-width="34"></el-table-column>
-        <el-table-column label="POST" prop="post" min-width="34"></el-table-column>
-        <el-table-column label="Path" min-width="50">
+        <el-table-column label="GET" prop="get" width="80"></el-table-column>
+        <el-table-column label="POST" prop="post" width="80"></el-table-column>
+        <el-table-column label="Path" min-width="160">
           <template scope="props">
             <a v-bind:href="''+props.row.target+''" style="color: #227D51" target="_blank">{{ props.row.path }}</a>
           </template>
         </el-table-column>
-        <el-table-column label="Description" min-width="200">
+        <el-table-column label="Description" min-width="240">
           <template scope="props">
             <div v-html="props.row.description"></div>
           </template>

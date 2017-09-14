@@ -82,8 +82,8 @@
           <el-table :data="clientOption.subscriptions" :max-height="320">
             <el-table-column prop="topic" label="Topic" min-width="160"></el-table-column>
             <el-table-column prop="qos" width="70" label="QoS"></el-table-column>
-            <el-table-column prop="time" min-width="150" label="Date"></el-table-column>
-            <el-table-column prop="time" width="90" label="Oper">
+            <el-table-column prop="time" min-width="180" label="Date"></el-table-column>
+            <el-table-column prop="time" width="70" label="Oper">
               <template scope="props">
                 <el-button size="mini" type="text" icon="close" style="color: #a7a7a7" title="Unsubscribe"
                            @click="mqttCacheScuscribe(props.row.topic)">
@@ -260,6 +260,7 @@ export default {
         clean: this.clientOption.clean,
         connectTimeout: 4000,
       }
+      console.log(options)
       this.client = mqtt.connect(`ws://${this.clientOption.host}:${this.clientOption.port}/mqtt`, options)
       this.client.on('connect', () => {
         this.loading = false
@@ -421,6 +422,9 @@ export default {
 <style lang="scss">
 .websocket-view {
   padding-top: 20px;
+  .el-select {
+    width: 100%;
+  }
 }
 .websocket-view .page-title {
   padding: 10px 0 ;
