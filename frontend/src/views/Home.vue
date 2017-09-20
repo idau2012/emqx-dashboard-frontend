@@ -18,14 +18,13 @@ export default {
 </script>
 
 
-<style>
+<style lang="scss">
 .home-view {
   min-height: 100%;
   padding-bottom: 50px;
-  background-color: #161616;
-}
-.home-view .home-content {
-  margin: 0 20px 0 220px;  
+  .home-content {
+    margin: 0 20px 0 220px;
+  }
 }
 </style>
 

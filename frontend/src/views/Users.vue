@@ -211,6 +211,7 @@ export default {
             this.loadData()
           } else {
             this.$message.error(response.data.message)
+            this.formError.username = response.data.message
           }
           this.btnLoading = false
         })

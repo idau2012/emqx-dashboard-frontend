@@ -80,12 +80,12 @@
         <el-col :span="12">
           <label>Subscribes:</label>
           <el-table :data="clientOption.subscriptions" :max-height="320">
-            <el-table-column prop="topic" label="Topic" min-width="160"></el-table-column>
+            <el-table-column prop="topic" label="Topic" min-width="150"></el-table-column>
             <el-table-column prop="qos" width="70" label="QoS"></el-table-column>
             <el-table-column prop="time" min-width="180" label="Date"></el-table-column>
             <el-table-column prop="time" width="70" label="Oper">
               <template scope="props">
-                <el-button size="mini" type="text" icon="close" style="color: #a7a7a7" title="Unsubscribe"
+                <el-button size="mini" type="text" class="unsubscribe" icon="close" title="Unsubscribe"
                            @click="mqttCacheScuscribe(props.row.topic)">
                 </el-button>
               </template>
@@ -195,7 +195,7 @@ export default {
       loading: false,
       sending: false,
       clientOption: {
-        host: '127.0.0.1',
+        host: window.location.hostname,
         port: '8083',
         username: '',
         password: '',
@@ -253,7 +253,7 @@ export default {
       this.loading = true
       this.retryTimes = 0
       const options = {
-        keepalive: this.clientOption.keepalive,
+        keepalive: Number(this.clientOption.keepalive),
         username: this.clientOption.username,
         password: this.clientOption.password,
         clientId: this.clientOption.clientId,
@@ -326,7 +326,9 @@ export default {
         })
         NProgress.start()
         this.client.subscribe(this.clientOption.subTopic,
-        { qos: Number(this.clientOption.subQos) }, (error) => {
+        { qos: Number(this.clientOption.subQos) },
+        (error, granted) => {
+          console.log(granted)
           if (error) {
             NProgress.done()
             this.$message.error(error.toString())

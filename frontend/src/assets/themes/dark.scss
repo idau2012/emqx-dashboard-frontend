@@ -1,4 +1,61 @@
+/*  Initialize colors */
+
+$main-background: #292929;
+
+$basic: #227D51;
+$risk: #42d885;
+
+$font-risk: #a7a7a7;
+
+$success-btn-background: $basic;
+$success-btn-border: $basic;
+
+$success-btn-background-hover: $risk;
+$success-btn-border-hover: $risk;
+
+$success-btn-plain-background: transparent;
+
+
+html, body, #app {
+  height: 100%;
+  margin: 0;
+  background-color: #292929;
+}
+body {
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Work sans", Arial, sans-serif;
+  -webkit-font-smoothing: subpixel-antialiased;
+  color: #a7a7a7;
+  font-size: 14px;
+  font-weight: 400;
+}
+/* nprogress */
+body #nprogress .bar {
+  background: #00ab6b;
+}
+body #nprogress .peg {
+  box-shadow: 0 0 10px #00ab6b, 0 0 5px #00ab6b;
+}
+
 .dark-themes {
+  .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    color: #ffffff;
+    font-weight: 400;
+  }
+  a {
+    color: #00ab6b;
+    text-decoration: none;
+  }
+  .cell.highlight {
+    color: #ddd !important;
+  }
+  .el-button {
+    font-family: "Roboto", "Helvetica Neue", "Helvetica", "Work sans", Arial, sans-serif;
+  }
+
+  /* button */
+  .el-button i {
+    margin-right: 5px;
+  }
   .el-button {
     font-family: "Roboto", "Helvetica Neue", "Helvetica", "Work sans", Arial, sans-serif;
   }
@@ -16,8 +73,8 @@
   }
   .el-button--success:focus,
   .el-button--success:hover {
-    background: #42d885;
-    border-color: #42d885;
+    background-color: $success-btn-background-hover;
+    border-color: $success-btn-border-hover;
   }
   .el-button--small.is-plain {
     background-color: transparent;
@@ -96,14 +153,6 @@
   .el-checkbox .el-checkbox__input.is-checked .el-checkbox__inner{
     background-color: #42d885 !important;
     border-color: #42d885 !important;
-  }
-
-  /* nprogress */
-  body #nprogress .bar {
-    background: #00ab6b;
-  }
-  body #nprogress .peg {
-    box-shadow: 0 0 10px #00ab6b, 0 0 5px #00ab6b;
   }
 
   /* loading */
@@ -267,10 +316,8 @@
 
 
   /* ------------------ private style ------------------ */
-  .datas-view .el-input__inner {
-    background-color: transparent;
-    border-color: #5d5d60;
-    color: #fff;
+  .home-view {
+    background-color: #161616;
   }
 
   .overview-view .running:before {
@@ -281,6 +328,14 @@
   }
   .overview-view .running {
     color: #227D51;
+  }
+
+  .datas-view {
+    .el-input__inner {
+      background-color: transparent;
+      border-color: #5d5d60;
+      color: #fff;
+    }
   }
 
   .signup-view .el-card {
@@ -335,6 +390,11 @@
     }
   }
 
+  .http-api {
+    .link {
+      color: #227D51;
+    }
+  }
   .plugins-view {
     padding-top: 20px;
     .page-title {
@@ -462,6 +522,9 @@
     .connect-btn.el-button--small.el-button--success {
       color: #227D51;
       border-color: #227D51;
+    }
+    .unsubscribe {
+      color: #a7a7a7;
     }
     .el-checkbox__label {
       color: #ddd;

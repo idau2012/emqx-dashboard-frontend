@@ -88,7 +88,7 @@
       <div slot="header">
         <span>Metrics</span>
       </div>
-      <el-row :gutter="20">
+      <el-row :gutter="20"  style="margin-top: -2px">
         <el-col :span="8">
           <el-table :data="metrics.packets">
             <el-table-column
@@ -255,19 +255,47 @@ export default {
       })
       // metrics[{}, {}, {}]
       httpGet(`/monitoring/metrics/${this.nodeName}`).then((response) => {
-        const data = response.data.result
-        this.metrics = {
-          packets: [],
-          messages: [],
-          bytes: [],
+        if (response.data.code !== 0) {
+          return
         }
+        // result is an Object
+        const data = response.data.result
+        const excludeKeys = ['packets/received', 'packets/sent', 'messages/received', 'messages/sent']
+        this.metrics = {
+          packets: [{
+            key: 'received',
+            value: data['packets/received'],
+          },
+          {
+            key: 'sent',
+            value: data['packets/sent'],
+          }],
+          messages: [{
+            key: 'received',
+            value: data['messages/received'],
+          },
+          {
+            key: 'sent',
+            value: data['messages/sent'],
+          }],
+          bytes: [{
+            key: 'received',
+            value: data['bytes/received'],
+          },
+          {
+            key: 'sent',
+            value: data['bytes/sent'],
+          }],
+        }
+        // received & sent --> a-z ASC
         Object.keys(data).forEach((item) => {
+          if (excludeKeys.includes(item)) {
+            return
+          }
           switch (item.split('/')[0]) {
-            case 'packets': this.metrics.packets.push({ key: item, value: data[item] })
+            case 'packets': this.metrics.packets.push({ key: item.replace('packets/', ''), value: data[item] })
               break
-            case 'messages': this.metrics.messages.push({ key: item, value: data[item] })
-              break
-            case 'bytes': this.metrics.bytes.push({ key: item, value: data[item] })
+            case 'messages': this.metrics.messages.push({ key: item.replace('messages/', ''), value: data[item] })
               break
             default: break
           }

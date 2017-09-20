@@ -26,7 +26,7 @@
           </el-form>
           <div class="login-footer">
             <div class="checkbox">
-              <el-checkbox v-model="remember" style="color: inherit;">Remember</el-checkbox>
+              <el-checkbox v-model="remember">Remember</el-checkbox>
             </div>
             <el-button type="success" @click="login">Log In</el-button>
           </div>

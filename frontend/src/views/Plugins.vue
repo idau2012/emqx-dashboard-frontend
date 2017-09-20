@@ -32,17 +32,11 @@
       </el-table-column>
       <el-table-column width="180" label="Oper">
         <template scope="props">
-          <el-popover placement="right" :value="popoverVisible">
-            <p>Confirm {{ props.row.active ? 'stop' : 'start' }} this plugin？</p>
-            <div style="text-align: right">
-              <el-button size="mini" type="text" @click="hidePopover">Cancel</el-button>
-              <el-button size="mini" type="success" @click="update(props.row)">Confirm</el-button>
-            </div>
-            <el-button slot="reference" :type="props.row.active ? 'warning' : 'success'"
-                       size="mini" :disabled="props.row.name === 'emq_dashboard'">
-              {{ props.row.active ? 'Stop' : 'Start' }}
-            </el-button>
-          </el-popover>
+          <el-button slot="reference" :type="props.row.active ? 'warning' : 'success'"
+                     @click="update(props.row)"
+                     size="mini" :disabled="props.row.name === 'emq_dashboard'">
+            {{ props.row.active ? 'Stop' : 'Start' }}
+          </el-button>
           <el-button type="success" size="mini" @click="config(props.row)"
                      :disabled="props.row.name === 'emq_dashboard'">
             Config
@@ -181,6 +175,7 @@ export default{
   },
   data() {
     return {
+      filtered: false,
       notic: '',
       oper: '',
       nextPath: '/plugins',
@@ -235,6 +230,7 @@ export default{
       return [true]
     },
     filterStatus(value, row) {
+      this.filtered = true
       return row.active === value
     },
     hidePopover() {
@@ -253,7 +249,7 @@ export default{
           this.$message.success(`${row.active ? 'Stop' : 'Start'} success.`)
           this.loadPlugins()
         } else {
-          this.$message.error(`${row.active ? 'Stop' : 'Start'} failure!`)
+          this.$message.error(`${row.active ? 'Stop' : 'Start'} failure with code ${response.data.code}: ${response.data.message}`)
         }
       })
     },
@@ -273,10 +269,14 @@ export default{
       this.record = {}
       // nodeName in url
       if (nodeName) {
+        if (this.$route.params.pluginName === 'emq_dashboard') {
+          this.$router.push({ path: '/not_found' })
+          return
+        }
         // set nodeName to store
         this.setStore()
         this.plugin.nodeName = atob(nodeName)
-        this.plugin.name = this.$route.params.pluginName
+        this.plugin.name = this.$route.params.pluginName || ''
         this.clockStatus = true
         this.loading = true
         // load & render pluginOption
@@ -315,7 +315,9 @@ export default{
           this.nodeName = currentNode || response.data.result[0].name || ''
           this.nodes = response.data.result
           this.loading = false
-          this.loadPlugins()
+          if (!this.filtered) {
+            this.loadPlugins()
+          }
         })
         this.nodeName = this.plugin.nodeName
         this.plugin.nodeName = ''
@@ -331,6 +333,7 @@ export default{
       this.setStore()
       httpGet(`/nodes/${this.nodeName}/plugins`).then((response) => {
         this.tableData = response.data.result
+        this.filterStatus(response.data.result, true)
         this.loading = false
       })
     },

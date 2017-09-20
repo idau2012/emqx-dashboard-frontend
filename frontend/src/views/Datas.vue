@@ -15,7 +15,7 @@
         <el-input style="margin-left: 8px" :disabled="loading" @keyup.enter.native="searchChild"
                   v-model="searchValue" :placeholder="searchPlaceholder" size="small"></el-input>
         <el-button :plain="true" type="success" icon="search" size="small"
-                   style="margin-left: 8px"
+                   class="search-btn"
                    @keyup.enter.native="searchChild"
                    @click="searchChild">Search
         </el-button>
@@ -224,7 +224,6 @@ export default {
       httpGet(requestURL).then((response) => {
         this[this.activeTab] = response.data.result.objects
         this.total = response.data.result.total_num || 0
-        this.currentPage = response.data.result.current_page
         this.loading = false
       })
     },
@@ -242,7 +241,7 @@ export default {
         if (response.data.result.objects.length === 0) {
           this.searchView = false
           this[this.activeTab] = []
-          this.$message.error('No Data!')
+          // this.$message.error('No Data!')
           this.searchView = true
           // reset page
           this.total = 0
@@ -262,24 +261,27 @@ export default {
 </script>
 
 
-<style>
+<style lang="scss">
 .datas-view {
   padding-top: 20px;
-}
-.datas-view .el-breadcrumb {
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
-.datas-view .page-title {
-  padding: 10px 0;
-}
-.datas-view .el-table {
-  margin-top: 60px;
-}
-.datas-view .el-row {
-  margin-top: 20px;
-}
-.datas-view .el-input {
-  width: 240px;
+  .page-title {
+    padding: 10px 0;
+  }
+  .el-table {
+    margin-top: 60px;
+  }
+  .el-row {
+    margin-top: 20px;
+  }
+  .el-input {
+    width: 240px;
+  }
+  .search-btn {
+    margin-left: 8px
+  }
+  .el-breadcrumb {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
 }
 </style>
