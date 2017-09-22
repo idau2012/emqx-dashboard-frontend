@@ -2,16 +2,6 @@
   <div class="listeners-view">
     <div class="page-title">
       Listeners
-      <div style="float: right">
-        <el-select v-model="nodeName" placeholder="Select Node" size="small" @change="loadListeners">
-          <el-option
-            v-for="item in nodes"
-            :key="item.name"
-            :label="item.name"
-            :value="item.name">
-          </el-option>
-        </el-select>
-      </div>
     </div>
 
     <el-table :data="listeners" v-loading="loading" border>
@@ -64,6 +54,9 @@
     created() {
       this.loadData()
     },
+    watch: {
+      $store: 'loadListeners',
+    },
     methods: {
       ...mapActions([CURRENT_NODE]),
       // set global nodeName
@@ -72,18 +65,22 @@
       },
       loadData() {
         const currentNode = this.$store.state.nodeName.current
-        httpGet('/management/nodes').then((response) => {
-          // set default of select
-          this.nodeName = currentNode || response.data.result[0].name || ''
+        if (!currentNode) {
+          httpGet('/management/nodes').then((response) => {
+            // set default of select
+            this.nodeName = response.data.result[0].name || ''
+            this.setStore()
+            this.loadListeners()
+          })
+        } else {
+          this.nodeName = currentNode
           this.setStore()
-          // could select
-          this.nodes = response.data.result
           this.loadListeners()
-        })
+        }
       },
       // load listener
       loadListeners() {
-        this.setStore()
+        this.nodeName = this.$store.state.nodeName.current
         this.loading = true
         httpGet(`/monitoring/listeners/${this.nodeName}`).then((response) => {
           this.listeners = response.data.result

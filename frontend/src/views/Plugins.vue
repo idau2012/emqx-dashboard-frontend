@@ -3,16 +3,6 @@
     <!-- plugin list -->
     <div class="page-title" v-show="!plugin.nodeName">
       Plugins
-      <div style="float: right">
-        <el-select v-model="nodeName" placeholder="Select Node" size="small" @change="loadPlugins">
-          <el-option
-            v-for="item in nodes"
-            :key="item.name"
-            :label="item.name"
-            :value="item.name">
-          </el-option>
-        </el-select>
-      </div>
     </div>
     <el-table :data="tableData" v-loading="loading" border v-show="!plugin.nodeName">
       <el-table-column prop="name" width="240" label="Name"></el-table-column>
@@ -215,6 +205,7 @@ export default{
   },
   watch: {
     $route: 'loadData',
+    $store: 'loadPlugins',
   },
   methods: {
     ...mapActions([CURRENT_NODE]),
@@ -276,6 +267,7 @@ export default{
         // set nodeName to store
         this.setStore()
         this.plugin.nodeName = atob(nodeName)
+        this.nodeName = this.plugin.nodeName
         this.plugin.name = this.$route.params.pluginName || ''
         this.clockStatus = true
         this.loading = true
@@ -308,32 +300,40 @@ export default{
       } else {
         // load with plugin page
         const currentNode = this.$store.state.nodeName.current
-        this.loading = true
-        httpGet('/management/nodes').then((response) => {
-          this.nodes = []
-          // set default of select
-          this.nodeName = currentNode || response.data.result[0].name || ''
-          this.nodes = response.data.result
-          this.loading = false
-          if (!this.filtered) {
+        if (!currentNode) {
+          httpGet('/management/nodes').then((response) => {
+            console.log('load node from api', 'plugins')
+            this.nodes = []
+            // set default of select
+            this.nodeName = response.data.result[0].name || ''
+            this.setStore()
+            this.nodes = response.data.result
+            this.loading = false
             this.loadPlugins()
-          }
-        })
-        this.nodeName = this.plugin.nodeName
+          })
+        } else if (!this.filtered) {
+          this.nodeName = currentNode
+          this.setStore()
+          this.loadPlugins()
+        } else {
+          this.nodeName = currentNode
+        }
+        // this.nodeName = this.plugin.nodeName
         this.plugin.nodeName = ''
       }
     },
     loadPlugins() {
+      this.nodeName = this.$store.state.nodeName.current
       if (!this.nodeName) {
         return
       }
+      console.log('nodeName is ', this.nodeName)
       this.loading = true
       this.searchValue = ''
       // set nodeName to store
       this.setStore()
       httpGet(`/nodes/${this.nodeName}/plugins`).then((response) => {
         this.tableData = response.data.result
-        this.filterStatus(response.data.result, true)
         this.loading = false
       })
     },

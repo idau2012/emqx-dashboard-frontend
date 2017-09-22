@@ -2,14 +2,6 @@
   <div class="overview-view">
     <div class="page-title">
       Overview
-      <el-select style="float: right" v-model="nodeName" :disabled="loading" placeholder="Select Node" size="small" @change="changeSelect">
-        <el-option
-          v-for="item in select.nodes"
-          :key="item.name"
-          :label="item.name"
-          :value="item.name">
-        </el-option>
-      </el-select>
     </div>
 
     <!-- Broker -->
@@ -176,6 +168,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+
 import {
   Tabs, TabPane, Row, Col, Option,
   TableColumn, Table, Select,
@@ -223,8 +216,11 @@ export default {
   mounted() {
     this.refreshInterval()
   },
+  watch: {
+    $store: 'init',
+  },
   created() {
-    this.loadNode()
+    this.init()
   },
   methods: {
     ...mapActions([CURRENT_NODE]),
@@ -232,21 +228,25 @@ export default {
     setStore() {
       this.CURRENT_NODE({ nodeName: { current: this.nodeName } })
     },
+    init() {
+      const currentNode = this.$store.state.nodeName.current
+      if (!currentNode) {
+        httpGet('/management/nodes').then((response) => {
+          console.log('load node from api', 'overview')
+          // set default of select
+          this.nodeName = response.data.result[0].name || ''
+          this.setStore()
+          this.loadData()
+        })
+      } else {
+        this.nodeName = currentNode
+        this.setStore()
+        this.loadData()
+      }
+    },
     // Object2Array, to adaptation the backend
     parseToArray(obj) {
       return new Array(obj)
-    },
-    // load nodes form store or server then load data
-    loadNode() {
-      const currentNode = this.$store.state.nodeName.current
-      httpGet('/management/nodes').then((response) => {
-        // set default of select
-        this.nodeName = currentNode || response.data.result[0].name || ''
-        this.setStore()
-        // could select
-        this.select.nodes = response.data.result
-        this.loadData()
-      })
     },
     // sort
     sortByNodeName(data) {
@@ -273,8 +273,10 @@ export default {
         window.clearInterval(this.flag)
         return
       }
+      this.nodeName = this.$store.state.nodeName.current
       if (!this.nodeName) {
         // no nodeName, can not load data
+        console.log('overview no nodeName')
         return
       }
       // nodes[]
@@ -313,11 +315,6 @@ export default {
           })
         })
       })
-    },
-    // select change
-    changeSelect() {
-      this.setStore()
-      this.loadData()
     },
   },
 }

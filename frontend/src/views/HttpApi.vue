@@ -69,79 +69,97 @@ export default {
       tableData: [],
     }
   },
+  watch: {
+    $store: 'setApiData',
+  },
   methods: {
     ...mapActions([CURRENT_NODE]),
+    // set global nodeName
+    setStore() {
+      this.CURRENT_NODE({ nodeName: { current: this.nodeName } })
+    },
     init() {
       const currentNodeName = this.$store.state.nodeName.current
-      httpGet('/management/nodes').then((response) => {
-        this.nodeName = currentNodeName || response.data.result[0].name || ''
-        // set api data
-        this.tableData = [{
-          get: 'Y',
-          post: 'Y',
-          path: '/api/v2/monitoring/stats',
-          target: '/api/v2/monitoring/stats',
-          description: 'The Statistics of Clients,Sessions, Topics and Subscriptions',
-        }, {
-          get: 'Y',
-          post: 'Y',
-          path: '/api/v2/monitoring/nodes',
-          target: '/api/v2/monitoring/nodes',
-          description: 'List of clustered nodes',
-        }, {
-          get: 'Y',
-          post: 'Y',
-          path: '/api/v2/monitoring/metrics/',
-          target: '/api/v2/monitoring/metrics/',
-          description: 'The broker metrics',
-        }, {
-          get: 'Y',
-          post: 'Y',
-          path: '/api/v2/monitoring/listeners',
-          target: '/api/v2/monitoring/listeners',
-          description: 'List of all TCP listeners',
-        }, {
-          get: 'Y',
-          post: 'Y',
-          path: '/api/v2/nodes/emq@127.0.0.1/clients',
-          target: `/api/v2/nodes/${this.nodeName}/clients`,
-          description: `List of all connected clients. support GET request like this:<br/>
+      if (!currentNodeName) {
+        httpGet('/management/nodes').then((response) => {
+          this.nodeName = response.data.result[0].name || ''
+          this.setStore()
+          this.setApiData()
+        })
+      } else {
+        this.nodeName = currentNodeName
+        this.setStore()
+        this.setApiData()
+      }
+    },
+    setApiData() {
+      this.nodeName = this.$store.state.nodeName.current
+      // set api data
+      this.tableData = [{
+        get: 'Y',
+        post: 'Y',
+        path: '/api/v2/monitoring/stats',
+        target: '/api/v2/monitoring/stats',
+        description: 'The Statistics of Clients,Sessions, Topics and Subscriptions',
+      }, {
+        get: 'Y',
+        post: 'Y',
+        path: '/api/v2/monitoring/nodes',
+        target: '/api/v2/monitoring/nodes',
+        description: 'List of clustered nodes',
+      }, {
+        get: 'Y',
+        post: 'Y',
+        path: '/api/v2/monitoring/metrics/',
+        target: '/api/v2/monitoring/metrics/',
+        description: 'The broker metrics',
+      }, {
+        get: 'Y',
+        post: 'Y',
+        path: '/api/v2/monitoring/listeners',
+        target: '/api/v2/monitoring/listeners',
+        description: 'List of all TCP listeners',
+      }, {
+        get: 'Y',
+        post: 'Y',
+        path: '/api/v2/nodes/emq@127.0.0.1/clients',
+        target: `/api/v2/nodes/${this.nodeName}/clients`,
+        description: `List of all connected clients. support GET request like this:<br/>
                       http://localhost:18083/api/v2/nodes/emq@127.0.0.1/clients?curr_page=1&page_size=100&client_key=Key`,
-        }, {
-          get: 'Y',
-          post: 'Y',
-          path: '/api/v2/nodes/emq@127.0.0.1/sessions',
-          target: `/api/v2/nodes/${this.nodeName}/sessions`,
-          description: `List of all sessions. support GET request like this:<br/>
+      }, {
+        get: 'Y',
+        post: 'Y',
+        path: '/api/v2/nodes/emq@127.0.0.1/sessions',
+        target: `/api/v2/nodes/${this.nodeName}/sessions`,
+        description: `List of all sessions. support GET request like this:<br/>
                       http://localhost:18083/api/v2/sessions?curr_page=1&page_size=100&client_key=Key`,
-        }, {
-          get: 'Y',
-          post: 'Y',
-          path: '/api/v2/routes',
-          target: '/api/v2/routes',
-          description: `List of all routes. support GET request like this:<br/>
+      }, {
+        get: 'Y',
+        post: 'Y',
+        path: '/api/v2/routes',
+        target: '/api/v2/routes',
+        description: `List of all routes. support GET request like this:<br/>
                       http://localhost:18083/api/v2/routes?curr_page=1&page_size=100&topic=Topic`,
-        }, {
-          get: 'Y',
-          post: 'Y',
-          path: '/api/v2/nodes/emq@127.0.0.1/subscriptions',
-          target: `/api/v2/nodes/${this.nodeName}/subscriptions`,
-          description: `List of all Subscriptions. support GET request like this:<br/>
+      }, {
+        get: 'Y',
+        post: 'Y',
+        path: '/api/v2/nodes/emq@127.0.0.1/subscriptions',
+        target: `/api/v2/nodes/${this.nodeName}/subscriptions`,
+        description: `List of all Subscriptions. support GET request like this:<br/>
                       http://localhost:18083/api/v2/nodes/emq@127.0.0.1/subscriptions?curr_page=1&page_size=100&client_key=Key`,
-        }, {
-          get: 'Y',
-          post: 'Y',
-          path: '/api/v2/nodes/emq@127.0.0.1/plugins',
-          target: `/api/v2/nodes/${this.nodeName}/plugins`,
-          description: 'Show loaded plugins',
-        }, {
-          get: 'Y',
-          post: 'Y',
-          path: '/api/v2/users',
-          target: '/api/v2/users',
-          description: 'List of all admins',
-        }]
-      })
+      }, {
+        get: 'Y',
+        post: 'Y',
+        path: '/api/v2/nodes/emq@127.0.0.1/plugins',
+        target: `/api/v2/nodes/${this.nodeName}/plugins`,
+        description: 'Show loaded plugins',
+      }, {
+        get: 'Y',
+        post: 'Y',
+        path: '/api/v2/users',
+        target: '/api/v2/users',
+        description: 'List of all admins',
+      }]
     },
   },
   created() {

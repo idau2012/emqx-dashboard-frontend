@@ -1,5 +1,6 @@
 <template>
   <div class="home-view">
+    <navbar></navbar>
     <leftbar></leftbar>
     <div class="home-content">
       <router-view></router-view>
@@ -10,10 +11,11 @@
 
 <script>
 import Leftbar from '../components/Leftbar'
+import Navbar from '../components/Navbar'
 
 export default {
   name: 'home-view',
-  components: { Leftbar },
+  components: { Leftbar, Navbar },
 }
 </script>
 
@@ -21,9 +23,11 @@ export default {
 <style lang="scss">
 .home-view {
   min-height: 100%;
-  padding-bottom: 50px;
+  /* top */
+  margin-top: 70px;
+  /* left */
   .home-content {
-    margin: 0 20px 0 220px;
+    margin: 0 20px 10px 220px;
   }
 }
 </style>

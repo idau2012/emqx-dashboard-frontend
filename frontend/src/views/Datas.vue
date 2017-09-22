@@ -4,21 +4,9 @@
     <div class="page-title">
       {{ activeTab }}
       <div style="float: right" @keyup.enter.native="searchChild">
-        <el-select v-model="nodeName" v-show="activeTab !== 'routes'" :disabled="loading" placeholder="Select Node" size="small" @change="loadChild(true)">
-          <el-option
-            v-for="item in nodes"
-            :key="item.name"
-            :label="item.name"
-            :value="item.name">
-          </el-option>
-        </el-select>
-        <el-input style="margin-left: 8px" :disabled="loading" @keyup.enter.native="searchChild"
+        <el-input :disabled="loading" @keyup.enter.native="searchChild"
+                  icon="search" :on-icon-click="searchChild" class="input-radius"
                   v-model="searchValue" :placeholder="searchPlaceholder" size="small"></el-input>
-        <el-button :plain="true" type="success" icon="search" size="small"
-                   class="search-btn"
-                   @keyup.enter.native="searchChild"
-                   @click="searchChild">Search
-        </el-button>
       </div>
     </div>
 
@@ -78,7 +66,7 @@
     <!-- refresh button -->
     <el-row type="flex" justify="end" v-show="searchView">
       <el-col :span="24">
-        <el-button size="small" type="text" icon="arrow-left" style="float: right;color: #ddd;" @click="loadChild">Back</el-button>
+        <el-button size="small" type="text" icon="arrow-left" class="back-btn" style="float: right;" @click="loadChild">Back</el-button>
       </el-col>
     </el-row>
 
@@ -153,6 +141,7 @@ export default {
   },
   watch: {
     $route: 'init',
+    $store: 'loadData',
   },
   methods: {
     ...mapActions([CURRENT_NODE]),
@@ -188,17 +177,22 @@ export default {
         this.loadChild()
         return
       }
-      // load nodes
-      const requestNode = '/management/nodes'
-      httpGet(requestNode).then((response) => {
-        this.nodes = {}
-        // set default of select
-        const currentNode = this.$store.state.nodeName.current
-        this.nodeName = currentNode || response.data.result[0].name || ''
-        this.nodes = response.data.result
-        // load child with sync
+      // set default of select
+      const currentNode = this.$store.state.nodeName.current
+      if (!currentNode) {
+        httpGet('/management/nodes').then((response) => {
+          this.nodeName = response.data.result[0].name || ''
+          this.nodes = response.data.result
+          console.log('load node from api', 'datas')
+          this.setStore()
+          // load child with sync
+          this.loadChild()
+        })
+      } else {
+        this.nodeName = currentNode
+        this.setStore()
         this.loadChild()
-      })
+      }
     },
     // load child with pagination
     currentPageChanged(target) {
@@ -206,6 +200,8 @@ export default {
       this.loadChild()
     },
     loadChild(reload = false) {
+      this.nodeName = this.$store.state.nodeName.current
+      console.log('nodeName ok ', 'datas')
       this.searchView = false
       this.searchValue = ''
       if (!this.nodeName && this.activeTab !== 'routes') {
