@@ -1,6 +1,7 @@
 /*  Initialize colors */
 
 $main-background: #292929;
+$light-background: #1f1d1d;
 
 $basic: #227D51;
 $risk: #42d885;
@@ -14,6 +15,8 @@ $success-btn-background-hover: $risk;
 $success-btn-border-hover: $risk;
 
 $success-btn-plain-background: transparent;
+
+$title-light: #ddd;
 
 
 html, body, #app {
@@ -320,14 +323,30 @@ body #nprogress .peg {
     background-color: #161616;
   }
 
-  .overview-view .running:before {
-    background-color: #227D51;
-  }
-  .overview-view .stopped:before {
-    background-color: #777777;
-  }
-  .overview-view .running {
-    color: #227D51;
+  .overview-view {
+    .card-item {
+      background-color: $light-background !important;
+      border:1px solid $main-background;
+      .icon {
+        color: #227D51;
+        border-color: #42d885;
+      }
+    }
+    .running:before {
+      background-color: #227D51;
+    }
+    .stopped:before {
+      background-color: #777777;
+    }
+    .running {
+      color: #227D51;
+    }
+    /* card-box */
+    .card-box {
+      .card-title {
+        color: $title-light;
+      }
+    }
   }
 
   .datas-view {

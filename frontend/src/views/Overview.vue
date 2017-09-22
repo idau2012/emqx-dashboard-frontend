@@ -13,22 +13,64 @@
     </div>
 
     <!-- Broker -->
-    <el-card class="box-card" style="margin-top: 60px">
-      <div slot="header">
-        <span>Broker</span>
-      </div>
-      <el-table :data="brokers" border>
-          <el-table-column label="System Name" prop="sysdescr" min-width="160"></el-table-column>
-          <el-table-column label="Version" prop="version" min-width="160"></el-table-column>
-          <el-table-column label="Uptime" prop="uptime" min-width="300"></el-table-column>
-          <el-table-column label="System Time" prop="datetime" min-width="200"></el-table-column>
-      </el-table>
-    </el-card>
+     <div class="card-box">
+       <div class="card-title">
+         Broker
+       </div>
+       <el-row :gutter="10" class="broker-card">
+         <el-col :span="6">
+           <div class="card-item">
+             <div class="icon">
+               <i class="iconfont icon-wendang"></i>
+             </div>
+             <div class="desc">
+               <h3>System Name</h3>
+               <p>{{ brokers.sysdescr }}</p>
+             </div>
+           </div>
+         </el-col>
 
-    <el-card class="box-card">
-      <div slot="header">
-        <span>Nodes ({{ nodes.length }})</span>
-      </div>
+         <el-col :span="6">
+           <div class="card-item">
+             <div class="icon">
+               <i class="iconfont icon-banben" style="font-weight: 600"></i>
+             </div>
+             <div class="desc">
+               <h3>Version</h3>
+               <p>{{ brokers.version }}</p>
+             </div>
+           </div>
+         </el-col>
+
+         <el-col :span="6">
+           <div class="card-item">
+             <div class="icon">
+               <i class="iconfont icon-shalou"></i>
+             </div>
+             <div class="desc">
+               <h3>Uptime</h3>
+               <p>{{ brokers.uptime }}</p>
+             </div>
+           </div>
+         </el-col>
+
+         <el-col :span="6">
+           <div class="card-item">
+             <div class="icon" style="line-height: 46px">
+               <i class="iconfont icon-zhongbiao" style="font-size: 36px;margin-left: 2px"></i>
+             </div>
+             <div class="desc">
+               <h3>System Time</h3>
+               <p>{{ brokers.datetime }}</p>
+             </div>
+           </div>
+         </el-col>
+       </el-row>
+     </div>
+
+    <!-- Nodes -->
+    <div class="card-box">
+      <div class="card-title">Nodes({{ nodes.length }})</div>
       <el-table :data="nodes" border>
         <el-table-column label="Name" prop="name" min-width="200"></el-table-column>
         <el-table-column label="Erlang Processes">
@@ -61,13 +103,11 @@
           </template>
         </el-table-column>
       </el-table>
-    </el-card>
+    </div>
 
     <!-- Stats -->
-    <el-card class="box-card">
-      <div slot="header">
-        <span>Stats</span>
-      </div>
+    <div class="card-box">
+      <div class="card-title">Stats</div>
       <el-table :data="stats" border>
         <el-table-column label="Name" prop="name" min-width="150"></el-table-column>
         <el-table-column label="Clients/Count" prop="clients/count" min-width="150"></el-table-column>
@@ -81,14 +121,12 @@
         <el-table-column label="Topics/Count" prop="topics/count" min-width="150"></el-table-column>
         <el-table-column label="Topics/Max" prop="topics/max" min-width="150"></el-table-column>
       </el-table>
-    </el-card>
+    </div>
 
     <!-- metrics -->
-    <el-card class="box-card">
-      <div slot="header">
-        <span>Metrics</span>
-      </div>
-      <el-row :gutter="20"  style="margin-top: -2px">
+    <div class="card-box">
+      <div class="card-title">Metrics</div>
+      <el-row :gutter="20">
         <el-col :span="8">
           <el-table :data="metrics.packets">
             <el-table-column
@@ -131,7 +169,7 @@
           </el-table>
         </el-col>
       </el-row>
-    </el-card>
+    </div>
   </div>
 </template>
 
@@ -157,7 +195,7 @@ export default {
         nodes: {},
       },
       nodeName: '',
-      brokers: [],
+      brokers: {},
       nodes: [],
       stats: [],
       flag: 0,
@@ -251,54 +289,28 @@ export default {
       })
       // brokers[]
       httpGet(`/management/nodes/${this.nodeName}`).then((response) => {
-        this.brokers = this.parseToArray(response.data.result)
+        this.brokers = response.data.result
       })
       // metrics[{}, {}, {}]
       httpGet(`/monitoring/metrics/${this.nodeName}`).then((response) => {
         if (response.data.code !== 0) {
           return
         }
-        // result is an Object
-        const data = response.data.result
-        const excludeKeys = ['packets/received', 'packets/sent', 'messages/received', 'messages/sent']
         this.metrics = {
-          packets: [{
-            key: 'received',
-            value: data['packets/received'],
-          },
-          {
-            key: 'sent',
-            value: data['packets/sent'],
-          }],
-          messages: [{
-            key: 'received',
-            value: data['messages/received'],
-          },
-          {
-            key: 'sent',
-            value: data['messages/sent'],
-          }],
-          bytes: [{
-            key: 'received',
-            value: data['bytes/received'],
-          },
-          {
-            key: 'sent',
-            value: data['bytes/sent'],
-          }],
+          packets: [],
+          messages: [],
+          bytes: [],
         }
-        // received & sent --> a-z ASC
-        Object.keys(data).forEach((item) => {
-          if (excludeKeys.includes(item)) {
-            return
-          }
-          switch (item.split('/')[0]) {
-            case 'packets': this.metrics.packets.push({ key: item.replace('packets/', ''), value: data[item] })
-              break
-            case 'messages': this.metrics.messages.push({ key: item.replace('messages/', ''), value: data[item] })
-              break
-            default: break
-          }
+        const indexTable = {
+          packets: ['received', 'sent', 'connect', 'connack', 'disconnect', 'pingreq', 'pingresp', 'publish/received', 'publish/sent', 'puback/received', 'puback/sent', 'puback/missed', 'pubcomp/received', 'pubcomp/sent', 'pubcomp/missed', 'pubrec/received', 'pubrec/sent', 'pubrec/missed', 'pubrel/received', 'pubrel/sent', 'pubrel/missed', 'subscribe', 'suback', 'unsubscribe', 'unsuback'],
+          messages: ['received', 'sent', 'dropped', 'retained', 'qos0/received', 'qos0/sent', 'qos1/received', 'qos1/sent', 'qos2/received', 'qos2/sent', 'qos2/dropped'],
+          bytes: ['received', 'sent'],
+        }
+        Object.keys(indexTable).forEach((item) => {
+          indexTable[item].forEach((item2) => {
+            const indexKey = `${item}/${item2}`
+            this.metrics[item].push({ key: item2, value: response.data.result[indexKey] })
+          })
         })
       })
     },
@@ -314,8 +326,69 @@ export default {
 
 <style lang="scss">
 .overview-view {
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  .el-select .el-input__inner {
+    padding-left: 10px;
+  }
+  .card-box {
+    position: relative;
+    margin-top: 74px;
+    .card-title {
+      position: absolute;
+      height: 24px;
+      line-height: 24px;
+      width: 100%;
+      top: -34px;
+      left: 0;
+      font-size: 18px;
+    }
+    .el-table {
+      margin-top: 0;
+    }
+    .broker-card {
+      &.el-row {
+        overflow-x: auto;
+      }
+      .el-col {
+        .card-item {
+          height: 90px;
+          display: flex;
+          justify-content: space-between;
+          padding: 0 20px;
+          align-items: center;
+          background-color: #5d5d60;
+          .icon {
+            width: 54px;
+            height: 54px;
+            line-height: 50px;
+            text-align: center;
+            border: 2px solid;
+            border-radius: 50%;
+            i {
+              font-size: 26px;
+            }
+          }
+          .desc {
+            text-align: right;
+            flex: 1;
+            h3 {
+              font-size: 14px;
+              font-weight: bold;
+            }
+            p {
+              margin-top: 12px;
+            }
+          }
+        }
+      }
+    }
+  }
   span {
-  line-height: 10px;
+    line-height: 10px;
   }
   padding-top: 20px;
   .box-card {

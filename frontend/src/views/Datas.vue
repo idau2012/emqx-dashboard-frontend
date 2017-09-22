@@ -78,7 +78,7 @@
     <!-- refresh button -->
     <el-row type="flex" justify="end" v-show="searchView">
       <el-col :span="24">
-        <el-button size="mini" type="text" icon="arrow-left" style="float: right" @click="loadChild">Back</el-button>
+        <el-button size="small" type="text" icon="arrow-left" style="float: right;color: #ddd;" @click="loadChild">Back</el-button>
       </el-col>
     </el-row>
 

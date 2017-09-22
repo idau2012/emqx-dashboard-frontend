@@ -66,8 +66,8 @@
         <el-input v-show="oper === 'edit'" v-model="user.newPassword" type="password"
                   :class="{ error: formError.newPassword }"
                   :placeholder="formError.newPassword"
-                  @focus="formError.newPassword=''"
-        ></el-input>
+                  @focus="formError.newPassword=''">
+        </el-input>
 
         <!--add confirm password & edit.OldPassword-->
         <label>{{ oper === 'edit' && changePassword ? 'Confirm New Password' : 'Confirm Password' }}</label>
@@ -208,6 +208,7 @@ export default {
           if (response.data.code === 0) {
             this.$message.success('Create user success.')
             this.dialogVisible = false
+            this.$router.push({ path: '/users' })
             this.loadData()
           } else {
             this.$message.error(response.data.message)
