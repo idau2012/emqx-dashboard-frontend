@@ -23,11 +23,12 @@
       <el-table-column width="180" label="Oper">
         <template scope="props">
           <el-button slot="reference" :type="props.row.active ? 'warning' : 'success'"
-                     @click="update(props.row)"
+                     @click="update(props.row)" :plain="true"
                      size="mini" :disabled="props.row.name === 'emq_dashboard'">
             {{ props.row.active ? 'Stop' : 'Start' }}
           </el-button>
           <el-button type="success" size="mini" @click="config(props.row)"
+                     :plain="true"
                      :disabled="props.row.name === 'emq_dashboard'">
             Config
           </el-button>
@@ -72,18 +73,20 @@
           </el-col>
 
           <!-- Advanced Keys-->
-          <el-col :span="24" class="oper-block" style="margin-top: 20px">
+          <el-col :span="24" style="margin-top: 20px" class="config-area">
             <el-button :plain="true" type="success" @click="putConfig(false)"
                        v-show="displayConfig !== ''"
                        @keyup.enter.native="putConfig(false)"
                        size="small" :disabled="!changeListener"
             >Confirm</el-button>
+
             <el-button :plain="true" @click="abortOperation(false)" class="cancel-btn"
                        @keyup.enter.native="abortOperation(false)"
                        size="small">
               <i class="el-icon-arrow-left" v-if="displayConfig === ''"></i>
               {{ displayConfig === '' ? 'Back' : 'Cancel' }}</el-button>
-            <el-button :plain="true" title="More configuration" class="oper-btn" type="text"
+
+            <el-button title="More configuration" class="oper-btn" type="text"
                        v-if="advancedConfig.length !== 0"
                        @click="setAdvancedConfig(false)" size="small">Advanced Config</el-button>
           </el-col>
@@ -456,14 +459,26 @@ export default{
 
 <style lang="scss">
 /* Advanced Config DiaLog */
-.plugins-view .advanced-key {
-  .el-checkbox-group {
-    .el-checkbox {
-      &:first-child {
-        margin-left: 15px;
+.plugins-view {
+  .el-table {
+    margin-top: 60px;
+  }
+  padding-top: 20px;
+  .page-title {
+    padding: 10px 0;
+  }
+  .el-row {
+    margin-top: 20px;
+  }
+  .advanced-key {
+    .el-checkbox-group {
+      .el-checkbox {
+        &:first-child {
+          margin-left: 15px;
+        }
+        margin-bottom: 10px;
+        margin-top: 10px;
       }
-      margin-bottom: 10px;
-      margin-top: 10px;
     }
   }
 }

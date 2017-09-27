@@ -12,7 +12,7 @@ export default {
 
 <style lang="scss">
   /* themes-dark */
-  /*@import "./assets/themes/dark.scss";*/
+  @import "./assets/themes/dark.scss";
   @import "./assets/themes/light";
   @font-face {
     font-family: 'Roboto';

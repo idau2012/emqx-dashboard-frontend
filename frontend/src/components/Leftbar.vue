@@ -1,5 +1,9 @@
 <template>
   <div class="leftbar">
+    <div class="bar-title">
+      <img src="../assets/emqlogo.png" class="logo">
+      <span>Dashboard</span>
+    </div>
     <el-menu :default-active="'/' + $route.path.split('/')[1]" mode="vertical" theme="dark" unique-opened router>
       <el-menu-item-group title="MONITORING">
         <el-menu-item index="/"><i class="fa fa-bar-chart"></i>Overview</el-menu-item>
@@ -54,8 +58,9 @@ export default {
 
 <style lang="scss">
 .leftbar {
+  /*box-shadow: 3px 0 10px #c1c1c1;*/
   position: fixed;
-  top: 70px;
+  top: 0;
   bottom: 0;
   width: 200px;
   z-index: 1000;
@@ -63,7 +68,7 @@ export default {
   .el-menu {
     position: relative;
     left: 0;
-    top: 20px;
+    top: 70px;
     width: 200px;
     padding-bottom: 52px;
   }
@@ -75,7 +80,26 @@ export default {
     font-weight: bolder;
     margin-bottom: 10px;
     margin-top: 15px;
-    font-size: 12px;
+    font-size: 14px;
+  }
+  .bar-title {
+    position: fixed;
+    top: 0;
+    z-index: 1003;
+    padding-left: 20px;
+    display: flex;
+    height: 63px;
+    width: 180px;
+    align-items: center;
+    border-bottom: 1px solid #6c7786;
+    span {
+      font-size: 16px;
+      color: #34c388;
+      margin-left: 8px;
+    }
+    img {
+      width: 48px;
+    }
   }
   .fa {
     margin-right: 10px;

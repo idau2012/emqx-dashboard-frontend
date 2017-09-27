@@ -3,7 +3,7 @@
     <div class="page-title">
       Users
       <div style="float: right">
-        <el-button :plain="true" type="success" icon="plus" size="small"
+        <el-button class="add-btn" icon="plus" size="small"
                    @click="showDialog('new', {})">New user
         </el-button>
       </div>
@@ -15,6 +15,7 @@
       <el-table-column width="140" label="Oper">
         <template scope="props">
           <el-button size="mini" type="warning"
+                     :plain="true"
             @click="showDialog('edit', props.row)">Edit
           </el-button>
           <el-popover placement="right" :value="popoverVisible" ref="popoverDeleted">
@@ -28,6 +29,7 @@
             </div>
           </el-popover>
           <el-button size="mini" type="danger"
+                     :plain="true"
                      v-popover:popoverDeleted
                      v-if="props.row.username!=='admin'">Delete
           </el-button>
@@ -254,6 +256,7 @@ export default {
               }
             } else {
               this.$message.error(response.data.message)
+              this.formError.password = response.data.message
             }
             this.btnLoading = false
           })

@@ -39,12 +39,12 @@
       </el-row>
 
       <el-row type="flex" justify="start" align="middle" class="connect-area">
-        <el-button type="success" class="connect-btn" :icon="loading ? 'loading': 'check'" size="small"
-                   :disabled="loading || client.connected"
+        <el-button type="success" :icon="loading ? 'loading': 'check'" size="small"
+                   :disabled="loading || client.connected" :plain="true"
                    @keyup.enter.native="mqttConnect"
                    @click="mqttConnect">Connect</el-button>
 
-        <el-button type="success" icon="close" size="small"
+        <el-button type="danger" icon="close" size="small" :plain="true"
                    :disabled="!loading && !client.connected" class="close-btn"
                    @keyup.enter.native="disconnectSwitch"
                    :loading="loading && client.connected" @click="disconnectSwitch">Disconnect</el-button>
@@ -73,7 +73,7 @@
           <div class="between">
             <el-button type="success" icon="check" size="small"
                        @keyup.enter.native="mqttSubscribe"
-                       @click="mqttSubscribe"
+                       @click="mqttSubscribe" :plain="true"
             >Subscribe</el-button>
           </div>
         </el-col>
@@ -118,7 +118,7 @@
         </el-col>
         <el-col :span="6" style="margin-top: 21px">
           <el-checkbox v-model="clientOption.publishRetain" style="margin-right: 15px;">Retained</el-checkbox>
-          <el-button type="success" icon="check" size="small"
+          <el-button type="success" icon="check" size="small" :plain="true"
             @click="mqttPublish" @keyup.enter.native="mqttPublish"
           >Send</el-button>
         </el-col>
@@ -426,6 +426,11 @@ export default {
   padding-top: 20px;
   .el-select {
     width: 100%;
+  }
+  .refresh-btn {
+    font-size: 12px;
+    margin-left: 8px;
+    cursor: pointer;
   }
 }
 .websocket-view .page-title {

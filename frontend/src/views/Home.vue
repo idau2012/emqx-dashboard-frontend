@@ -24,10 +24,10 @@ export default {
 .home-view {
   min-height: 100%;
   /* top */
-  margin-top: 70px;
+  margin-top: 60px;
   /* left */
   .home-content {
-    margin: 0 20px 10px 220px;
+    margin: 0 20px 0 220px;
   }
 }
 </style>

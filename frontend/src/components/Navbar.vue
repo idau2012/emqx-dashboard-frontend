@@ -1,10 +1,5 @@
 <template>
   <div class="nav-bar">
-    <div class="bar-title">
-      <img src="../assets/emqlogo.png" class="logo">
-      <span>Dashboard</span>
-    </div>
-
     <div class="select-node">
       <el-select class="select-radius" v-model="nodeName" :disabled="loading" placeholder="Select Node" size="small" @change="changeSelect">
         <el-option
@@ -16,6 +11,10 @@
       </el-select>
     </div>
 
+    <div class="themes-toggle">
+      <span title="light themes" @click="themesToggle('light-themes')"></span>
+      <span title="dark themes" @click="themesToggle('dark-themes')"></span>
+    </div>
     <div class="bar-footer">
       <span>admin</span>
       <a href="javascript:;" @click="logout">
@@ -75,8 +74,9 @@ export default {
         this.select.nodes = response.data.result
       })
     },
-    loginout() {
-
+    themesToggle(str) {
+      document.body.removeAttribute('class')
+      document.body.setAttribute('class', str)
     },
     changeSelect() {
       this.setStore()
@@ -90,33 +90,40 @@ export default {
 .nav-bar {
   position: fixed;
   top: 0;
-  left: 0;
+  left: 200px;
   right: 0;
   height: 64px;
   z-index: 1002;
-  background-color: #ffffff;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-
-  .bar-title {
-    margin-left: 20px;
+  justify-content: flex-end;
+  .themes-toggle {
     display: flex;
-    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 180px;
     span {
-      font-size: 20px;
-      font-weight: bold;
-      color: #34c388;
-      margin-left: 10px;
-    }
-    img {
-      width: 54px;
+      width: 12px;
+      padding: 1px;
+      height: 12px;
+      border: 2px solid #999;
+      display: block;
+      margin-right: 6px;
+      cursor: pointer;
+      &:first-child {
+        border-color: #42d885;
+      }
+      &:last-child {
+        border-color: #b0b0b0;
+      }
     }
   }
-
+  .active-themes {
+    background-color: #42d885 !important;
+  }
   .select-node {
     position: absolute;
-    right: 200px;
+    right: 280px;
   }
 
   .bar-footer {
@@ -124,8 +131,12 @@ export default {
     display: flex;
     align-items: center;
     span {
-      font-size: 18px;
-      margin-right: 10px;
+      font-size: 16px;
+      font-weight: bolder;
+      margin-right: 20px;
+      &:hover {
+        color: #333;
+      }
     }
     a {
       font-weight: bold;
