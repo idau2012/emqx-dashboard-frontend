@@ -1,7 +1,7 @@
 <template>
   <div class="listeners-view">
     <div class="page-title">
-      Listeners
+      {{ $t('leftbar.listeners') }}
     </div>
 
     <el-table :data="listeners" v-loading="loading" border>

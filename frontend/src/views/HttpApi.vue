@@ -1,6 +1,6 @@
 <template>
 <div class="http-api">
-  <div class="page-title">HTTP API</div>
+  <div class="page-title">{{ $t('leftbar.api') }}</div>
   <el-card class="box-card">
     <div slot="header">
       <span>Introduction</span>

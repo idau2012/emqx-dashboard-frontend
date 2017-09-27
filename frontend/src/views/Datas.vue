@@ -2,7 +2,7 @@
   <div class="datas-view">
 
     <div class="page-title">
-      {{ activeTab }}
+      {{ $t(`leftbar.${activeTab}`) }}
       <div style="float: right" @keyup.enter.native="searchChild">
         <el-input :disabled="loading" @keyup.enter.native="searchChild"
                   icon="search" :on-icon-click="searchChild" class="input-radius"

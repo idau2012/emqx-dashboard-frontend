@@ -15,6 +15,13 @@
       <span title="light themes" @click="themesToggle('light-themes')"></span>
       <span title="dark themes" @click="themesToggle('dark-themes')"></span>
     </div>
+
+    <div class="select-language">
+      <a @click="switchLanguage('language', 'zh')" href="javascript:;">中文</a>
+      <span> / </span>
+      <a @click="switchLanguage('language', 'en')" href="javascript:;">EN</a>
+    </div>
+
     <div class="bar-footer">
       <span>admin</span>
       <a href="javascript:;" @click="logout">
@@ -31,6 +38,8 @@ import { Select, Option } from 'element-ui'
 
 import { httpGet } from '../store/api'
 import { USER_LOGOUT, CURRENT_NODE } from '../store/mutation-types'
+import { setLocalStorage, getLocalStorage } from '../common/storage'
+
 
 export default {
   name: 'nav-bar',
@@ -80,6 +89,12 @@ export default {
     },
     changeSelect() {
       this.setStore()
+    },
+    switchLanguage(key, value) {
+      if (getLocalStorage(key) !== value) {
+        setLocalStorage(key, value)
+        location.reload();
+      }
     },
   },
 }

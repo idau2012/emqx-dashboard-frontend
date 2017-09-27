@@ -1,7 +1,7 @@
 <template>
   <div class="overview-view">
     <div class="page-title">
-      Overview
+      {{ $t('leftbar.overview') }}
     </div>
 
     <!-- Broker -->

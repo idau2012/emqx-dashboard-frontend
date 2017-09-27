@@ -1,7 +1,7 @@
 <template>
   <div class="users-view">
     <div class="page-title">
-      Users
+      {{ $t('leftbar.users') }}
       <div style="float: right">
         <el-button class="add-btn" icon="plus" size="small"
                    @click="showDialog('new', {})">New user

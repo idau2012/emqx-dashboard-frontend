@@ -2,7 +2,7 @@
   <div class="plugins-view">
     <!-- plugin list -->
     <div class="page-title" v-show="!plugin.nodeName">
-      Plugins
+      {{ $t('leftbar.plugins') }}
     </div>
     <el-table :data="tableData" v-loading="loading" border v-show="!plugin.nodeName">
       <el-table-column prop="name" width="240" label="Name"></el-table-column>
