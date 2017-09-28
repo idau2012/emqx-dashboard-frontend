@@ -58,4 +58,15 @@ export default {
     messagesData: '消息数据',
     bytesData: '字节数据',
   },
+  // Clients
+  clients: {
+    clientId: '客户端ID',
+    username: '用户名',
+    ipAddr: 'IP地址',
+    port: '端口',
+    cleanSess: '清除会话标记',
+    protoVer: '样机版本',
+    keepalive: '连接时间(s)',
+    connectedAt: '连接创建时间',
+  },
 }

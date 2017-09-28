@@ -58,4 +58,15 @@ export default {
     messagesData: 'The messages data',
     bytesData: 'The bytes data',
   },
+  // Clients
+  clients: {
+    clientId: 'ClientId',
+    username: 'Username',
+    ipAddr: 'IPAddr',
+    port: 'Port',
+    cleanSess: 'CleanSess',
+    protoVer: 'ProtoVer',
+    keepalive: 'Keepalive(s)',
+    connectedAt: 'ConnectedAt',
+  },
 }
