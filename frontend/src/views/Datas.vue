@@ -28,20 +28,20 @@
 
     <!-- sessions -->
     <el-table :data="sessions" v-loading="loading" v-show="activeTab==='sessions'" border>
-      <el-table-column prop="client_id" label="ClientId" min-width="160"></el-table-column>
-      <el-table-column prop="clean_sess" label="CleanSess" min-width="150">
+      <el-table-column prop="client_id" :label="$t('sessions.clientId')" min-width="160"></el-table-column>
+      <el-table-column prop="clean_sess" :label="$t('sessions.cleanSess')" min-width="150">
         <template scope="scope">
           <span>{{ scope.row.clean_sess ? 'true' : 'false' }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="max_inflight" label="MaxInflight" min-width="120"></el-table-column>
-      <el-table-column prop="inflight_queue" label="InflightQueue" min-width="150"></el-table-column>
-      <el-table-column prop="message_queue" label="MessageQueue" min-width="150"></el-table-column>
-      <el-table-column prop="message_dropped" label="MessageDropped" min-width="150"></el-table-column>
-      <el-table-column prop="awaiting_rel" label="AwaitingRel" min-width="120"></el-table-column>
-      <el-table-column prop="awaiting_ack" label="AwaitingAck" min-width="120"></el-table-column>
-      <el-table-column prop="awaiting_comp" label="AwaitingComp" min-width="150"></el-table-column>
-      <el-table-column prop="created_at" label="CreatedAt" min-width="180"></el-table-column>
+      <el-table-column prop="max_inflight" :label="$t('sessions.maxInflight')" min-width="120"></el-table-column>
+      <el-table-column prop="inflight_queue" :label="$t('sessions.inflightQueue')" min-width="150"></el-table-column>
+      <el-table-column prop="message_queue" :label="$t('sessions.messageQueue')" min-width="150"></el-table-column>
+      <el-table-column prop="message_dropped" :label="$t('sessions.messageDropped')" min-width="150"></el-table-column>
+      <el-table-column prop="awaiting_rel" :label="$t('sessions.awaitingRel')" min-width="120"></el-table-column>
+      <el-table-column prop="awaiting_ack" :label="$t('sessions.awaitingAck')" min-width="120"></el-table-column>
+      <el-table-column prop="awaiting_comp" :label="$t('sessions.awaitingComp')" min-width="150"></el-table-column>
+      <el-table-column prop="created_at" :label="$t('sessions.createdAt')" min-width="180"></el-table-column>
     </el-table>
 
     <!-- topics -->

@@ -69,4 +69,17 @@ export default {
     keepalive: '连接时间(s)',
     connectedAt: '连接创建时间',
   },
+  // sessions
+  sessions: {
+    clientId: '客户端ID',
+    cleanSess: '清除会话标记',
+    maxInflight: '最大消息数',
+    inflightQueue: '消息队列',
+    messageQueue: '缓存队列',
+    messageDropped: '丢掉消息数',
+    awaitingRel: '等待发送rel消息数',
+    awaitingAck: '等待响应ack消息数',
+    awaitingComp: '等待响应comp消息数',
+    createdAt: '会话创建时间',
+  },
 }

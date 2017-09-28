@@ -69,4 +69,17 @@ export default {
     keepalive: 'Keepalive(s)',
     connectedAt: 'ConnectedAt',
   },
+  // sessions
+  sessions: {
+    clientId: 'ClientId',
+    cleanSess: 'CleanSess',
+    maxInflight: 'MaxInflight',
+    inflightQueue: 'InflightQueue',
+    messageQueue: 'MessageQueue',
+    messageDropped: 'MessageDropped',
+    awaitingRel: 'AwaitingRel',
+    awaitingAck: 'AwaitingAck',
+    awaitingComp: 'AwaitingComp',
+    createdAt: 'CreatedAt',
+  },
 }
