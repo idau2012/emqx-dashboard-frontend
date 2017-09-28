@@ -111,4 +111,11 @@ export default {
     advancedConfig: 'Advanced Config',
     add: 'Add',
   },
+  // listeners
+  listeners: {
+    protocol: 'Protocol',
+    listenOn: 'Listen On',
+    maxClients: 'Max Clients',
+    currentClients: 'Current Clients',
+  },
 }

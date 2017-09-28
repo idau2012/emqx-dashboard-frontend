@@ -111,4 +111,11 @@ export default {
     advancedConfig: '高级配置',
     add: '新增',
   },
+  // listeners
+  listeners: {
+    protocol: '协议',
+    listenOn: '监听端口',
+    maxClients: '最大客户端连接数',
+    currentClients: '当前客户端连接数',
+  },
 }

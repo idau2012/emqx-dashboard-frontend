@@ -5,10 +5,10 @@
     </div>
 
     <el-table :data="listeners" v-loading="loading" border>
-      <el-table-column prop="protocol" width="240" label="Protocol"></el-table-column>
-      <el-table-column prop="listen" min-width="240" label="Listen On"></el-table-column>
-      <el-table-column prop="max_clients" min-width="180" label="Max Clients"></el-table-column>
-      <el-table-column prop="current_clients" label="Current Clients" min-width="120"></el-table-column>
+      <el-table-column prop="protocol" width="240" :label="$t('listeners.protocol')"></el-table-column>
+      <el-table-column prop="listen" min-width="240" :label="$t('listeners.listenOn')"></el-table-column>
+      <el-table-column prop="max_clients" min-width="180" :label="$t('listeners.maxClients')"></el-table-column>
+      <el-table-column prop="current_clients" :label="$t('listeners.currentClients')" min-width="120"></el-table-column>
     </el-table>
 
   </div>
