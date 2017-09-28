@@ -52,15 +52,15 @@
 
      <!-- routes -->
     <el-table :data="routes" v-loading="loading" v-show="activeTab==='routes'" border>
-      <el-table-column prop="topic" label="Topic"></el-table-column>
-      <el-table-column prop="node" label="Node"></el-table-column>
+      <el-table-column prop="topic" :label="$t('routes.topic')"></el-table-column>
+      <el-table-column prop="node" :label="$t('routes.node')"></el-table-column>
     </el-table>
 
     <!-- subscriptions -->
     <el-table :data="subscriptions" v-loading="loading" v-show="activeTab==='subscriptions'" border>
-      <el-table-column prop="client_id" label="ClientId"></el-table-column>
-      <el-table-column prop="topic" label="Topic"></el-table-column>
-      <el-table-column prop="qos" label="QoS"></el-table-column>
+      <el-table-column prop="client_id" :label="$t('subscriptions.clientId')"></el-table-column>
+      <el-table-column prop="topic" :label="$t('subscriptions.topic')"></el-table-column>
+      <el-table-column prop="qos" :label="$t('subscriptions.qoS')"></el-table-column>
     </el-table>
 
     <!-- refresh button -->

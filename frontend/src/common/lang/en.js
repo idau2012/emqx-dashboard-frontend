@@ -82,4 +82,15 @@ export default {
     awaitingComp: 'AwaitingComp',
     createdAt: 'CreatedAt',
   },
+  // routes
+  routes: {
+    topic: 'Topic',
+    node: 'Node',
+  },
+  // subscriptions
+  subscriptions: {
+    clientId: 'ClientId',
+    topic: 'Topic',
+    qoS: 'QoS',
+  },
 }

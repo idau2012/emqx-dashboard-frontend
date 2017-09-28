@@ -82,4 +82,15 @@ export default {
     awaitingComp: '等待响应comp消息数',
     createdAt: '会话创建时间',
   },
+  // routes
+  routes: {
+    topic: '主题',
+    node: '节点',
+  },
+  // subscriptions
+  subscriptions: {
+    clientId: '客户端ID',
+    topic: '主题',
+    qoS: '服务质量',
+  },
 }
