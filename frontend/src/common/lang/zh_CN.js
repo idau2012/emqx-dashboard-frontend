@@ -93,4 +93,22 @@ export default {
     topic: '主题',
     qoS: '服务质量',
   },
+  // plugins
+  plugins: {
+    name: '插件名称',
+    version: '版本',
+    description: '描述',
+    status: '状态',
+    stopped: '已停止',
+    running: '运行中',
+    oper: '操作',
+    start: '开始',
+    stop: '停止',
+    config: '配置',
+    back: '返回',
+    confirm: '确认',
+    cancel: '取消',
+    advancedConfig: '高级配置',
+    add: '新增',
+  },
 }

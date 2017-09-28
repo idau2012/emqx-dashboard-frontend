@@ -93,4 +93,22 @@ export default {
     topic: 'Topic',
     qoS: 'QoS',
   },
+  // plugins
+  plugins: {
+    name: 'Name',
+    version: 'Version',
+    description: 'Description',
+    status: 'Status',
+    stopped: 'Stopped',
+    running: 'Running',
+    oper: 'Oper',
+    start: 'Start',
+    stop: 'Stop',
+    config: 'Config',
+    back: 'Back',
+    confirm: 'Confirm',
+    cancel: 'Cancel',
+    advancedConfig: 'Advanced Config',
+    add: 'Add',
+  },
 }

@@ -5,32 +5,32 @@
       {{ $t('leftbar.plugins') }}
     </div>
     <el-table :data="tableData" v-loading="loading" border v-show="!plugin.nodeName">
-      <el-table-column prop="name" width="240" label="Name"></el-table-column>
-      <el-table-column prop="version" width="100" label="Version"></el-table-column>
-      <el-table-column prop="description" label="Description" min-width="340"></el-table-column>
+      <el-table-column prop="name" width="240" :label="$t('plugins.name')"></el-table-column>
+      <el-table-column prop="version" width="100" :label="$t('plugins.version')"></el-table-column>
+      <el-table-column prop="description" :label="$t('plugins.description')" min-width="340"></el-table-column>
       <el-table-column
         prop="active"
-        label="Status"
         width="120"
-        :filters="[{ text: 'Stopped', value: false }, { text: 'Running', value: true }]"
+        :label="$t('plugins.status')"
+        :filters="[{ text: $t('plugins.stopped'), value: false }, { text: $t('plugins.running'), value: true }]"
         :filter-method="filterStatus">
         <template scope="props">
           <span v-bind:class="[props.row.active ? 'running' : 'stopped', 'status']">
-            {{ props.row.active ? 'Running': 'Stopped'}}
+            {{ props.row.active ? $t('plugins.running'): $t('plugins.stopped')}}
           </span>
         </template>
       </el-table-column>
-      <el-table-column width="180" label="Oper">
+      <el-table-column width="180" :label="$t('plugins.oper')">
         <template scope="props">
           <el-button slot="reference" :type="props.row.active ? 'warning' : 'success'"
                      @click="update(props.row)" :plain="true"
                      size="mini" :disabled="props.row.name === 'emq_dashboard'">
-            {{ props.row.active ? 'Stop' : 'Start' }}
+            {{ props.row.active ? $t('plugins.stop') : $t('plugins.start') }}
           </el-button>
           <el-button type="success" size="mini" @click="config(props.row)"
                      :plain="true"
                      :disabled="props.row.name === 'emq_dashboard'">
-            Config
+            {{ $t('plugins.config') }}
           </el-button>
         </template>
       </el-table-column>
@@ -78,17 +78,15 @@
                        v-show="displayConfig !== ''"
                        @keyup.enter.native="putConfig(false)"
                        size="small" :disabled="!changeListener"
-            >Confirm</el-button>
-
+            >{{ $t('plugins.confirm') }}</el-button>
             <el-button :plain="true" @click="abortOperation(false)" class="cancel-btn"
                        @keyup.enter.native="abortOperation(false)"
                        size="small">
               <i class="el-icon-arrow-left" v-if="displayConfig === ''"></i>
-              {{ displayConfig === '' ? 'Back' : 'Cancel' }}</el-button>
-
-            <el-button title="More configuration" class="oper-btn" type="text"
+              {{ displayConfig === '' ? $t('plugins.back') : $t('plugins.cancel') }}</el-button>
+            <el-button :plain="true" title="More configuration" class="oper-btn" type="text"
                        v-if="advancedConfig.length !== 0"
-                       @click="setAdvancedConfig(false)" size="small">Advanced Config</el-button>
+                       @click="setAdvancedConfig(false)" size="small">{{ $t('plugins.advancedConfig') }}</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -106,12 +104,12 @@
                    size="small">Confirm</el-button>
         <el-button @click="handleOperation(false, false)"
                    @keyup.enter.native="handleOperation(false, false)"
-                   size="small">Cancel</el-button>
+                   size="small">{{ $t('plugins.cancel') }}</el-button>
       </span>
     </el-dialog>
 
     <el-dialog
-      title="Advanced Config"
+      :title="$t('plugins.advancedConfig')"
       :visible.sync="isAdvancedConfig"
       @keyup.enter.native="setAdvancedConfig(true)"
       size="tiny">
@@ -126,10 +124,10 @@
       <span slot="footer" class="dialog-footer">
         <el-button type="success" @click="setAdvancedConfig(true)"
                    @keyup.enter.native="setAdvancedConfig(true)"
-                   size="small">Add</el-button>
+                   size="small">{{ $t('plugins.add') }}</el-button>
         <el-button @click="isAdvancedConfig = false"
                    @keyup.enter.native="isAdvancedConfig = false"
-                   size="small">Cancel</el-button>
+                   size="small">{{ $t('plugins.cancel') }}</el-button>
       </span>
     </el-dialog>
   </div>
