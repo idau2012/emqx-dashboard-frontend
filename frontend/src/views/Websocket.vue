@@ -4,52 +4,52 @@
 
     <el-card class="box-card blank-top"  @keyup.enter.native="mqttConnect">
       <div slot="header">
-        <span>Connect</span>
+        <span>{{ $t('websocket.connect') }}</span>
       </div>
       <el-row :gutter="20">
         <el-col :span="8">
-          <label>Host:</label>
+          <label>{{ $t('websocket.host') }}:</label>
           <el-input v-model="clientOption.host" size="small"></el-input>
         </el-col>
         <el-col :span="8">
-          <label>Port:</label>
+          <label>{{ $t('websocket.port') }}:</label>
           <el-input v-model="clientOption.port" size="small"></el-input>
         </el-col>
         <el-col :span="8">
-          <label>Client ID:</label>
+          <label>{{ $t('websocket.clientID') }}:</label>
           <el-input v-model="clientOption.clientId" size="small"></el-input>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <label>Username:</label>
+          <label>{{ $t('websocket.username') }}:</label>
           <el-input v-model="clientOption.username" size="small"></el-input>
         </el-col>
         <el-col :span="8">
-          <label>Password:</label>
+          <label>{{ $t('websocket.password') }}:</label>
           <el-input v-model="clientOption.password" size="small"></el-input>
         </el-col>
         <el-col :span="8">
-          <label>Keep Alive:</label>
+          <label>{{ $t('websocket.keepAlive') }}:</label>
           <el-input v-model="clientOption.keepalive" size="small"></el-input>
         </el-col>
       </el-row>
       <el-row>
-          <el-checkbox v-model="clientOption.clean">Clean Session</el-checkbox>
+          <el-checkbox v-model="clientOption.clean">{{ $t('websocket.cleanSession') }}</el-checkbox>
       </el-row>
 
       <el-row type="flex" justify="start" align="middle" class="connect-area">
         <el-button type="success" :icon="loading ? 'loading': 'check'" size="small"
                    :disabled="loading || client.connected" :plain="true"
                    @keyup.enter.native="mqttConnect"
-                   @click="mqttConnect">Connect</el-button>
+                   @click="mqttConnect">{{ $t('websocket.connect') }}</el-button>
 
         <el-button type="danger" icon="close" size="small" :plain="true"
                    :disabled="!loading && !client.connected" class="close-btn"
                    @keyup.enter.native="disconnectSwitch"
-                   :loading="loading && client.connected" @click="disconnectSwitch">Disconnect</el-button>
+                   :loading="loading && client.connected" @click="disconnectSwitch">{{ $t('websocket.disconnect') }}</el-button>
 
-        <div class="connect-state">Current State:
+        <div class="connect-state">{{ $t('websocket.currentState') }}:
           <span :style="client.connected ? 'color: #42d885' : ''">
           {{ getStatus }}</span>
         </div>
@@ -58,13 +58,13 @@
 
     <el-card class="box-card blank-top" style="max-height: 450px">
       <div slot="header">
-        <span>Subscribe</span>
+        <span>{{ $t('websocket.subscribe') }}</span>
       </div>
       <el-row :gutter="20" @keyup.enter.native="mqttSubscribe">
         <el-col :span="12">
-          <label>Topic:</label>
+          <label>{{ $t('websocket.topic') }}:</label>
           <el-input v-model="clientOption.subTopic" size="small"></el-input>
-          <label>QoS:</label>
+          <label>{{ $t('websocket.qoS') }}:</label>
           <el-select v-model="clientOption.subQos" size="small" style="display: block;">
             <el-option value="0"></el-option>
             <el-option value="1"></el-option>
@@ -73,17 +73,17 @@
           <div class="between">
             <el-button type="success" icon="check" size="small"
                        @keyup.enter.native="mqttSubscribe"
-                       @click="mqttSubscribe" :plain="true"
-            >Subscribe</el-button>
+                       @click="mqttSubscribe"
+            >{{ $t('websocket.subscribe') }}</el-button>
           </div>
         </el-col>
         <el-col :span="12">
-          <label>Subscribes:</label>
+          <label>{{ $t('websocket.subscribe') }}:</label>
           <el-table :data="clientOption.subscriptions" :max-height="320">
-            <el-table-column prop="topic" label="Topic" min-width="150"></el-table-column>
-            <el-table-column prop="qos" width="70" label="QoS"></el-table-column>
-            <el-table-column prop="time" min-width="180" label="Date"></el-table-column>
-            <el-table-column prop="time" width="70" label="Oper">
+            <el-table-column prop="topic" :label="$t('websocket.topic')" min-width="150"></el-table-column>
+            <el-table-column prop="qos" width="70" :label="$t('websocket.qoS')"></el-table-column>
+            <el-table-column prop="time" min-width="180" :label="$t('websocket.date')"></el-table-column>
+            <el-table-column prop="time" width="70" :label="$t('websocket.oper')">
               <template scope="props">
                 <el-button size="mini" type="text" class="unsubscribe" icon="close" title="Unsubscribe"
                            @click="mqttCacheScuscribe(props.row.topic)">
@@ -97,19 +97,19 @@
 
     <el-card class="box-card blank-middle" style="max-height: 800px;padding-bottom: 20px">
       <div slot="header">
-        <span>Messages</span>
+        <span>{{ $t('websocket.messages') }}</span>
       </div>
       <el-row :gutter="20" @keyup.enter.native="mqttPublish">
         <el-col :span="6">
-          <label>Topic:</label>
+          <label>{{ $t('websocket.topic') }}:</label>
           <el-input v-model="clientOption.publishTopic" size="small"></el-input>
         </el-col>
         <el-col :span="6">
-          <label>Message:</label>
+          <label>{{ $t('websocket.messages') }}:</label>
           <el-input v-model="clientOption.publishMessage" size="small"></el-input>
         </el-col>
         <el-col :span="6">
-          <label>QoS:</label>
+          <label>{{ $t('websocket.qoS') }}:</label>
           <el-select v-model="clientOption.publishQos" size="small" style="display: block;">
             <el-option value="0"></el-option>
             <el-option value="1"></el-option>
@@ -117,37 +117,37 @@
           </el-select>
         </el-col>
         <el-col :span="6" style="margin-top: 21px">
-          <el-checkbox v-model="clientOption.publishRetain" style="margin-right: 15px;">Retained</el-checkbox>
-          <el-button type="success" icon="check" size="small" :plain="true"
+          <el-checkbox v-model="clientOption.publishRetain" style="margin-right: 15px;">{{ $t('websocket.retained') }}</el-checkbox>
+          <el-button type="success" icon="check" size="small"
             @click="mqttPublish" @keyup.enter.native="mqttPublish"
-          >Send</el-button>
+          >{{ $t('websocket.send') }}</el-button>
         </el-col>
       </el-row>
       <el-row :gutter="20" style="margin-top: 20px;">
         <el-col :span="12">
-          <label>Messages already sent:
+          <label>{{ $t('websocket.messagesAlreadySent') }}:
             <i class="fa fa-refresh refresh-btn" aria-hidden="true"
                @click="clearMessage(false)"
                title="clear message"></i>
           </label>
           <el-table :data="clientOption.publishedMessages" border :max-height="600">
-            <el-table-column prop="message" label="Message"></el-table-column>
-            <el-table-column prop="topic" label="Topic"></el-table-column>
-            <el-table-column prop="qos" label="QoS" width="70"></el-table-column>
-            <el-table-column prop="time" label="Date" width="180"></el-table-column>
+            <el-table-column prop="message" :label="$t('websocket.messages')"></el-table-column>
+            <el-table-column prop="topic" :label="$t('websocket.topic')"></el-table-column>
+            <el-table-column prop="qos" :label="$t('websocket.qoS')" width="70"></el-table-column>
+            <el-table-column prop="time" :label="$t('websocket.subscribe')" width="180"></el-table-column>
           </el-table>
         </el-col>
         <el-col :span="12">
-          <label>Messages received:
+          <label>{{ $t('websocket.messagesReceived') }}:
             <i class="fa fa-refresh refresh-btn" aria-hidden="true"
                @click="clearMessage"
                title="clear message"></i>
           </label>
           <el-table :data="clientOption.receivedMessages" border :max-height="600">
-            <el-table-column prop="message" label="Message"></el-table-column>
-            <el-table-column prop="topic" label="Topic"></el-table-column>
-            <el-table-column prop="qos" label="QoS" width="70"></el-table-column>
-            <el-table-column prop="time" label="Date" width="180"></el-table-column>
+            <el-table-column prop="message" :label="$t('websocket.messages')"></el-table-column>
+            <el-table-column prop="topic" :label="$t('websocket.topic')"></el-table-column>
+            <el-table-column prop="qos" :label="$t('websocket.qoS')" width="70"></el-table-column>
+            <el-table-column prop="time" :label="$t('websocket.subscribe')" width="180"></el-table-column>
           </el-table>
         </el-col>
       </el-row>

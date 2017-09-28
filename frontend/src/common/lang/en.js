@@ -118,4 +118,31 @@ export default {
     maxClients: 'Max Clients',
     currentClients: 'Current Clients',
   },
+  // websocket
+  websocket: {
+    // Connect
+    connect: 'Connect',
+    host: 'Host',
+    port: 'Port',
+    clientID: 'Client ID',
+    username: 'Username',
+    password: 'Password',
+    keepAlive: 'Keep Alive',
+    cleanSession: 'Clean Session',
+    disconnect: 'Disconnect',
+    currentState: 'Current State',
+    // Subscribe
+    subscribe: 'Subscribe',
+    topic: 'Topic',
+    qoS: 'QoS',
+    date: 'Date',
+    oper: 'Oper',
+    // Messages
+    messages: 'Messages',
+    retained: 'Retained',
+    send: 'send',
+    messagesAlreadySent: 'Messages already sent',
+    messagesReceived: 'Messages received',
+    time: 'Time',
+  },
 }

@@ -64,7 +64,7 @@ export default {
     username: '用户名',
     ipAddr: 'IP地址',
     port: '端口',
-    cleanSess: '清除会话标记',
+    cleanSess: '清除会话',
     protoVer: '样机版本',
     keepalive: '连接时间(s)',
     connectedAt: '连接创建时间',
@@ -117,5 +117,32 @@ export default {
     listenOn: '监听端口',
     maxClients: '最大客户端连接数',
     currentClients: '当前客户端连接数',
+  },
+  // websocket
+  websocket: {
+    // Connect
+    connect: '连接',
+    host: '主机',
+    port: '端口',
+    clientID: '客户端ID',
+    username: '用户名',
+    password: '密码',
+    keepAlive: '保持连接',
+    cleanSession: '清除会话',
+    disconnect: '断开连接',
+    currentState: '当前状态',
+    // Subscribe
+    subscribe: '订阅',
+    topic: '主题',
+    qoS: '服务质量',
+    date: '日期',
+    oper: '操作',
+    // Messages
+    messages: '消息',
+    retained: '保存',
+    send: '发送',
+    messagesAlreadySent: '已发送消息',
+    messagesReceived: '已保存信息',
+    time: '时间',
   },
 }
