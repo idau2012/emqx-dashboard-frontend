@@ -6,9 +6,7 @@
 
     <!-- Broker -->
      <div class="card-box">
-       <div class="card-title">
-         Broker
-       </div>
+       <div class="card-title">{{ $t('overview.broker') }}</div>
        <el-row :gutter="10" class="broker-card">
          <el-col :span="6">
            <div class="card-item">
@@ -16,7 +14,7 @@
                <i class="iconfont icon-wendang"></i>
              </div>
              <div class="desc">
-               <h3>System Name</h3>
+               <h3>{{ $t('overview.systemName') }}</h3>
                <p>{{ brokers.sysdescr }}</p>
              </div>
            </div>
@@ -28,7 +26,7 @@
                <i class="iconfont icon-banben" style="font-weight: 600"></i>
              </div>
              <div class="desc">
-               <h3>Version</h3>
+               <h3>{{ $t('overview.version') }}</h3>
                <p>{{ brokers.version }}</p>
              </div>
            </div>
@@ -40,7 +38,7 @@
                <i class="iconfont icon-shalou"></i>
              </div>
              <div class="desc">
-               <h3>Uptime</h3>
+               <h3>{{ $t('overview.uptime') }}</h3>
                <p>{{ brokers.uptime }}</p>
              </div>
            </div>
@@ -52,7 +50,7 @@
                <i class="iconfont icon-zhongbiao" style="font-size: 36px;margin-left: 2px"></i>
              </div>
              <div class="desc">
-               <h3>System Time</h3>
+               <h3>{{ $t('overview.systemTime') }}</h3>
                <p>{{ brokers.datetime }}</p>
              </div>
            </div>
@@ -62,32 +60,32 @@
 
     <!-- Nodes -->
     <div class="card-box">
-      <div class="card-title">Nodes({{ nodes.length }})</div>
+      <div class="card-title">{{ $t('overview.nodes') }}({{ nodes.length }})</div>
       <el-table :data="nodes" border>
-        <el-table-column label="Name" prop="name" min-width="200"></el-table-column>
-        <el-table-column label="Erlang Processes">
+        <el-table-column :label="$t('overview.name')" prop="name" min-width="200"></el-table-column>
+        <el-table-column :label="$t('overview.erlangProcesses')">
           <el-table-column label="(used/avaliable)" min-width="150" prop="process">
             <template scope="scope">
               {{ scope.row.process_used + ' / ' + scope.row.process_available }}
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column label="CPU Info">
+        <el-table-column :label="$t('overview.cpuInfo')">
           <el-table-column label=" (1load/5load/15load)" min-width="180">
             <template scope="scope">
               {{ scope.row.load1 + ' / ' + scope.row.load5 + ' / ' + scope.row.load15 }}
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column label="Memory Info" min-width="200">
+        <el-table-column :label="$t('overview.memoryInfo')" min-width="200">
           <el-table-column label=" (used/total)" min-width="180">
             <template scope="scope">
               {{ scope.row.memory_used + ' / ' + scope.row.memory_total }}
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column label="MaxFds" prop="max_fds" min-width="120"></el-table-column>
-        <el-table-column label="Status" min-width="120">
+        <el-table-column :label="$t('overview.maxFds')" prop="max_fds" min-width="120"></el-table-column>
+        <el-table-column :label="$t('overview.status')" min-width="120">
           <template scope="props">
             <span v-bind:class="[props.row.node_status === 'Running' ? 'running' : 'stopped', 'status']">
               {{ props.row.node_status }}
@@ -99,32 +97,32 @@
 
     <!-- Stats -->
     <div class="card-box">
-      <div class="card-title">Stats</div>
+      <div class="card-title">{{ $t('overview.stats') }}</div>
       <el-table :data="stats" border>
-        <el-table-column label="Name" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="Clients/Count" prop="clients/count" min-width="150"></el-table-column>
-        <el-table-column label="Clients/Max" prop="clients/max" min-width="150"></el-table-column>
-        <el-table-column label="Retained/Count" prop="retained/count" min-width="150"></el-table-column>
-        <el-table-column label="Retained/Max	" prop="retained/max" min-width="150"></el-table-column>
-        <el-table-column label="Routes/Count" prop="routes/count" min-width="150"></el-table-column>
-        <el-table-column label="Routes/Max" prop="routes/max" min-width="150"></el-table-column>
-        <el-table-column label="Sessions/Count" prop="sessions/count" min-width="150"></el-table-column>
-        <el-table-column label="Subscribers/Count" prop="subscriptions/count" min-width="160"></el-table-column>
-        <el-table-column label="Topics/Count" prop="topics/count" min-width="150"></el-table-column>
-        <el-table-column label="Topics/Max" prop="topics/max" min-width="150"></el-table-column>
+        <el-table-column :label="$t('overview.name')" prop="name" min-width="150"></el-table-column>
+        <el-table-column :label="$t('overview.clientsCount')" prop="clients/count" min-width="150"></el-table-column>
+        <el-table-column :label="$t('overview.clientsMax')" prop="clients/max" min-width="150"></el-table-column>
+        <el-table-column :label="$t('overview.retainedCount')" prop="retained/count" min-width="150"></el-table-column>
+        <el-table-column :label="$t('overview.retainedMax')" prop="retained/max" min-width="150"></el-table-column>
+        <el-table-column :label="$t('overview.routesCount')" prop="routes/count" min-width="150"></el-table-column>
+        <el-table-column :label="$t('overview.routesMax')" prop="routes/max" min-width="150"></el-table-column>
+        <el-table-column :label="$t('overview.sessionsCount')" prop="sessions/count" min-width="150"></el-table-column>
+        <el-table-column :label="$t('overview.subscribersCount')" prop="subscriptions/count" min-width="160"></el-table-column>
+        <el-table-column :label="$t('overview.topicsCount')" prop="topics/count" min-width="150"></el-table-column>
+        <el-table-column :label="$t('overview.topicsMax')" prop="topics/max" min-width="150"></el-table-column>
       </el-table>
     </div>
 
     <!-- metrics -->
     <div class="card-box">
-      <div class="card-title">Metrics</div>
+      <div class="card-title">{{ $t('overview.metrics') }}</div>
       <el-row :gutter="20">
         <el-col :span="8">
           <el-table :data="metrics.packets">
             <el-table-column
               min-width="200"
               prop="key"
-              label="The packets data">
+              :label="$t('overview.packetsData')">
             </el-table-column>
             <el-table-column
               prop="value"
@@ -138,7 +136,7 @@
             <el-table-column
               min-width="200"
               prop="key"
-              label="The messages data">
+              :label="$t('overview.messagesData')">
             </el-table-column>
             <el-table-column
               prop="value"
@@ -152,7 +150,7 @@
             <el-table-column
               min-width="160"
               prop="key"
-              label="The bytes data">
+              :label="$t('overview.bytesData')">
             </el-table-column>
             <el-table-column
               prop="value"
