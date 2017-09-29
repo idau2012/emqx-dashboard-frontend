@@ -145,4 +145,12 @@ export default {
     messagesReceived: 'Messages received',
     time: 'Time',
   },
+  // http_api
+  httpApi: {
+    introduction: 'Introduction',
+    reference: 'Reference',
+    method: 'Method',
+    path: 'Path',
+    description: 'Description',
+  },
 }

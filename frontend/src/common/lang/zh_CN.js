@@ -145,4 +145,12 @@ export default {
     messagesReceived: '已保存信息',
     time: '时间',
   },
+  // http_api
+  httpApi: {
+    introduction: '说明',
+    reference: '参考',
+    method: '方法',
+    path: '路径',
+    description: '描述',
+  },
 }

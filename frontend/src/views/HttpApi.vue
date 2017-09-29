@@ -3,7 +3,7 @@
   <div class="page-title">{{ $t('leftbar.api') }}</div>
   <el-card class="box-card">
     <div slot="header">
-      <span>Introduction</span>
+      <span>{{ $t('httpApi.introduction') }}</span>
     </div>
     <div>
       <p>Apart from this help page, all URIs
@@ -17,18 +17,18 @@
 
   <el-card class="box-card" style="margin-top: 30px;">
     <div slot="header">
-      <span>Reference</span>
+      <span>{{ $t('httpApi.reference') }}</span>
     </div>
     <el-table :data="tableData" border>
-        <el-table-column label="Method" prop="method" width="120"></el-table-column>
-        <el-table-column label="Path" min-width="160">
+        <el-table-column :label="$t('httpApi.method')" prop="method" width="120"></el-table-column>
+        <el-table-column :label="$t('httpApi.path')" min-width="160">
           <template scope="props">
             <a :href="props.row.target === 'GET' ? props.row.target : 'javascript:;'"
                :class="['link', isLink(props.row) ? 'link-disabled' : '']"
                target="_blank">{{ props.row.path }}</a>
           </template>
         </el-table-column>
-        <el-table-column label="Description" min-width="240">
+        <el-table-column :label="$t('httpApi.description')" min-width="240">
           <template scope="props">
             <div v-html="props.row.description"></div>
           </template>
