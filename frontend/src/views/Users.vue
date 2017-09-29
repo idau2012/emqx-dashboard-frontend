@@ -4,43 +4,43 @@
       {{ $t('leftbar.users') }}
       <div style="float: right">
         <el-button class="add-btn" icon="plus" size="small"
-                   @click="showDialog('new', {})">New user
+                   @click="showDialog('new', {})">{{ $t('users.newUser') }}
         </el-button>
       </div>
     </div>
 
     <el-table :data="users" v-loading="loading" border>
-      <el-table-column prop="username" label="Username"></el-table-column>
-      <el-table-column prop="tags" label="Remark"></el-table-column>
-      <el-table-column width="140" label="Oper">
+      <el-table-column prop="username" :label="$t('users.username')"></el-table-column>
+      <el-table-column prop="tags" :label="$t('users.remark')"></el-table-column>
+      <el-table-column width="140" :label="$t('users.oper')">
         <template scope="props">
           <el-button size="mini" type="warning"
                      :plain="true"
-            @click="showDialog('edit', props.row)">Edit
+            @click="showDialog('edit', props.row)">{{ $t('users.edit') }}
           </el-button>
           <el-popover placement="right" :value="popoverVisible" ref="popoverDeleted">
-            <p>Confirm delete？</p>
+            <p>{{ $t('users.confirmDelete') }}？</p>
             <div style="text-align: right">
-              <el-button size="mini" type="text" @click="hidePopover">Cancel</el-button>
+              <el-button size="mini" type="text" @click="hidePopover">{{ $t('users.cancel') }}</el-button>
               <el-button size="mini" type="success"
                 :loading="btnLoading"
                 v-on:click="deleteUser(props.row.username)"
-              >Confirm</el-button>
+              >{{ $t('users.confirm') }}</el-button>
             </div>
           </el-popover>
           <el-button size="mini" type="danger"
                      :plain="true"
                      v-popover:popoverDeleted
-                     v-if="props.row.username!=='admin'">Delete
+                     v-if="props.row.username!=='admin'">{{ $t('users.delete') }}
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog :title="oper === 'new' ? 'New user' : 'Edit user'"
+    <el-dialog :title="oper === 'new' ? $t('users.newUser') : $t('users.editUser')"
                @keyup.enter.native="save"
                v-model="dialogVisible">
-      <label>Username</label>
+      <label>{{ $t('users.username') }}</label>
       <el-input v-model="user.username"
         :disabled="oper==='edit'"
         :class="{ error: formError.username }"
@@ -48,7 +48,7 @@
         @focus="formError.username=''"
       ></el-input>
 
-      <label>Remark</label>
+      <label>{{ $t('users.remark') }}</label>
       <el-input v-model="user.tags"
                 :class="{ error: formError.tags }"
                 :placeholder="formError.tags"
@@ -57,14 +57,14 @@
 
       <div v-show="oper === 'new' || changePassword">
         <!--add password & edit.Oldpassword-->
-        <label>{{ changePassword && oper === 'edit' ? 'Old Password' : 'Password' }}</label>
+        <label>{{ changePassword && oper === 'edit' ? $t('users.oldPassword') : $t('users.password') }}</label>
         <el-input v-model="user.password" type="password"
                   :class="{ error: formError.password }"
                   :placeholder="formError.password"
                   @focus="formError.password=''"
         ></el-input>
         <!--edit new password-->
-        <label v-show="oper === 'edit'">New Password</label>
+        <label v-show="oper === 'edit'">{{ $t('users.newPassword') }}</label>
         <el-input v-show="oper === 'edit'" v-model="user.newPassword" type="password"
                   :class="{ error: formError.newPassword }"
                   :placeholder="formError.newPassword"
@@ -72,7 +72,7 @@
         </el-input>
 
         <!--add confirm password & edit.OldPassword-->
-        <label>{{ oper === 'edit' && changePassword ? 'Confirm New Password' : 'Confirm Password' }}</label>
+        <label>{{ oper === 'edit' && changePassword ? $t('users.confirmNewPassword') : $t('users.confirmPassword') }}</label>
         <el-input v-model="user.repeatPassword" type="password"
                   :class="{ error: formError.repeatPassword }"
                   :placeholder="formError.repeatPassword"
@@ -80,13 +80,13 @@
         ></el-input>
       </div>
 
-      <el-button v-if="oper === 'edit'" class="toggle-btn" type="text" @click="changePassword = !changePassword">{{ changePassword ? 'Don\'t Change Password' : 'Change Password ?'}}</el-button>
+      <el-button v-if="oper === 'edit'" class="toggle-btn" type="text" @click="changePassword = !changePassword">{{ changePassword ? $t('users.dontChangePassword') : $t('users.changePassword')}}</el-button>
 
       <span slot="footer" class="dialog-footer">
-        <el-button icon="close" size="small" @click="dialogVisible=false" style="margin-right: 20px">Cancel</el-button>
+        <el-button icon="close" size="small" @click="dialogVisible=false" style="margin-right: 20px">{{ $t('users.cancel') }}</el-button>
         <el-button type="success" icon="check" size="small"
           :loading="btnLoading"
-          @click="save">Save
+          @click="save">{{ $t('users.save') }}
         </el-button>
       </span>
     </el-dialog>
