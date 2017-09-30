@@ -18,6 +18,7 @@ $bg-btn-disabled: $bg-disabled;
 
 $border-color: #44444d;
 $border-color-deep: #a7a7a7;
+$border-native-border: #bfcbd9;
 
 $color: #b0b0b0;
 $color-deep: #777c8f;
@@ -487,6 +488,9 @@ body #nprogress .peg {
     height: 36px;
     border-radius: 36px;
   }
+  input[disabled='disabled'] {
+      background-color: $input-disabled-bg !important;
+  }
   .el-input__inner, .el-textarea__inner {
     background-color: transparent;
     border-color: $input-border !important;
@@ -669,7 +673,7 @@ body #nprogress .peg {
     }
   }
 
- 
+
   .http-api {
     .link {
       color: $api-link !important;
@@ -695,35 +699,53 @@ body #nprogress .peg {
 
 
 
-  .users-view .el-dialog {
-    .el-input__inner {
-      border: 1px solid #bfcbd9;
-      background-color: transparent;
-      color: #1f2d3d;
-    }
-    .el-input.is-disabled .el-input__inner {
-      background-color: #eef1f6;
-      border-color: #d1dbe5;
-      color: #bbb;
-      cursor: not-allowed;
-    }
-    .el-dialog__header {
-      border-bottom: 1px solid #EFF2F7;
-      padding: 15px 20px;
-    }
-    .el-dialog__footer {
-      border-top: 1px solid #EFF2F7;
-      padding: 15px 20px;
-    }
-    .el-input.error input {
-      border: 2px solid #e0b4b4 !important;
-    }
-    .toggle-btn {
-      color: #13ce66;
-      &:hover {
-        color: #42d885;
+   .users-view, .login-view {
+    .el-card {
+      color: #1f2d3d !important;
+      background-color: #fff !important;
+      .el-input__inner {
+        border: 1px solid $border-native-border !important;
+        color: #1f2d3d !important;
+        &:hover, &:focus {
+          border-color: $border-color-deep !important;
+        }
       }
     }
+    .el-checkbox__label {
+      color: $color;
+    }
+    .el-dialog {
+      .el-input__inner {
+        border: 1px solid $border-native-border !important;
+        color: #1f2d3d !important;
+        &:hover, &:focus {
+          border-color: $border-color-deep !important;
+        }
+      }
+      .el-input.is-disabled .el-input__inner {
+        background-color: #eef1f6;
+        border-color: #d1dbe5;
+        color: #bbb;
+        cursor: not-allowed;
+      }
+      .el-dialog__header {
+        border-bottom: 1px solid #EFF2F7;
+        padding: 15px 20px;
+      }
+      .el-dialog__footer {
+        border-top: 1px solid #EFF2F7;
+        padding: 15px 20px;
+      }
+      .el-input.error input {
+        border: 2px solid #e0b4b4 !important;
+      }
+      .toggle-btn {
+        color: #13ce66;
+        &:hover {
+          color: #42d885;
+        }
+      }
+      }
   }
 
   .signup-view .el-card {
@@ -795,12 +817,33 @@ body #nprogress .peg {
     }
   }
 
+  .leftbar {
+    .bar-title {
+      background-color: $left-bar-bg !important;
+    }
+  }
   .nav-bar {
     .bar-footer {
       span {
         color: $color !important;
         &:hover {
           color: #e8e9e9 !important;
+        }
+      }
+    }
+    .style-toggle {
+      border-right: 1px solid #313437;
+      border-left: 1px solid #313437;
+      &::before {
+        background-color: #313437;
+      }
+      .btn-box {
+        color: #b0b0b0;
+        span {
+          cursor: pointer;
+          &:hover {
+            color: #aeaeae;
+          }
         }
       }
     }

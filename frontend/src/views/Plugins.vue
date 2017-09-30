@@ -203,16 +203,19 @@ export default{
     changeListener() {
       return this.hashCode !== JSON.stringify(this.record)
     },
+    nodeInfo() {
+      return this.$store.state.node.nodeName
+    },
   },
   watch: {
     $route: 'loadData',
-    $store: 'loadPlugins',
+    nodeInfo: 'reloadOnSelectChange',
   },
   methods: {
     ...mapActions([CURRENT_NODE]),
     // set global nodeName
-    setStore() {
-      this.CURRENT_NODE({ nodeName: { current: this.nodeName } })
+    setNode() {
+      this.CURRENT_NODE({ nodeName: this.nodeName, nodes: this.nodes })
     },
     isAutoIncrement(item = '') {
       const key = item.split('$')
@@ -220,6 +223,21 @@ export default{
         return [false, null]
       }
       return [true]
+    },
+    // reload config page with the nodeName change
+    reloadOnSelectChange() {
+      // is in plugin list ?
+      if (!this.$route.params.nodeName) {
+        this.loadData()
+        return
+      }
+      const currentNode = this.$store.state.node.nodeName || ''
+      const pluginName = this.$route.params.pluginName || ''
+      if (currentNode && pluginName) {
+        // url
+        const url = `/plugins/${btoa(currentNode)}/${pluginName}`
+        this.$router.push({ path: url })
+      }
     },
     filterStatus(value, row) {
       this.filtered = true
@@ -255,6 +273,7 @@ export default{
     },
     loadData() {
       // To config plugins
+      // 修复插件配置页从select动态改变
       const nodeName = this.$route.params.nodeName
       this.selectedAdvancedConfig = []
       this.advancedConfig = []
@@ -266,7 +285,7 @@ export default{
           return
         }
         // set nodeName to store
-        this.setStore()
+        this.setNode()
         this.plugin.nodeName = atob(nodeName)
         this.nodeName = this.plugin.nodeName
         this.plugin.name = this.$route.params.pluginName || ''
@@ -300,39 +319,31 @@ export default{
         })
       } else {
         // load with plugin page
-        const currentNode = this.$store.state.nodeName.current
-        if (!currentNode) {
-          httpGet('/management/nodes').then((response) => {
-            console.log('load node from api', 'plugins')
-            this.nodes = []
-            // set default of select
-            this.nodeName = response.data.result[0].name || ''
-            this.setStore()
-            this.nodes = response.data.result
-            this.loading = false
+        const currentNode = this.$store.state.node.nodeName
+        httpGet('/management/nodes').then((response) => {
+          console.log('load node from api', 'plugins')
+          this.nodes = []
+          // set default of select
+          this.nodeName = currentNode || response.data.result[0].name || ''
+          this.nodes = response.data.result
+          this.setNode()
+          this.loading = false
+          if (!this.filtered) {
             this.loadPlugins()
-          })
-        } else if (!this.filtered) {
-          this.nodeName = currentNode
-          this.setStore()
-          this.loadPlugins()
-        } else {
-          this.nodeName = currentNode
-        }
+          }
+        })
         // this.nodeName = this.plugin.nodeName
         this.plugin.nodeName = ''
       }
     },
     loadPlugins() {
-      this.nodeName = this.$store.state.nodeName.current
       if (!this.nodeName) {
         return
       }
-      console.log('nodeName is ', this.nodeName)
       this.loading = true
       this.searchValue = ''
       // set nodeName to store
-      this.setStore()
+      this.setNode()
       httpGet(`/nodes/${this.nodeName}/plugins`).then((response) => {
         this.tableData = response.data.result
         this.loading = false
@@ -418,6 +429,8 @@ export default{
       } else if (this.hashCode !== JSON.stringify(this.record)) {
         this.notic = 'Are you sure you want to give up the change and exit?'
         this.oper = 'cancel'
+        // reset current node
+        this.setNode()
         this.handleOperation(true)
       } else {
         this.$router.push({ path: '/plugins' })

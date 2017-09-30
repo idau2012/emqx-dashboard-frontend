@@ -54,33 +54,32 @@
     created() {
       this.loadData()
     },
+    computed: {
+      nodeInfo() {
+        return this.$store.state.node.nodeName
+      },
+    },
     watch: {
-      $store: 'loadListeners',
+      nodeInfo: 'loadData',
     },
     methods: {
       ...mapActions([CURRENT_NODE]),
       // set global nodeName
-      setStore() {
-        this.CURRENT_NODE({ nodeName: { current: this.nodeName } })
+      setNode() {
+        this.CURRENT_NODE({ nodeName: this.nodeName, nodes: this.nodes })
       },
       loadData() {
-        const currentNode = this.$store.state.nodeName.current
-        if (!currentNode) {
-          httpGet('/management/nodes').then((response) => {
-            // set default of select
-            this.nodeName = response.data.result[0].name || ''
-            this.setStore()
-            this.loadListeners()
-          })
-        } else {
-          this.nodeName = currentNode
-          this.setStore()
+        const currentNode = this.$store.state.node.nodeName
+        httpGet('/management/nodes').then((response) => {
+          // set default of select
+          this.nodeName = currentNode || response.data.result[0].name || ''
+          this.nodes = response.data.result
+          this.setNode()
           this.loadListeners()
-        }
+        })
       },
       // load listener
       loadListeners() {
-        this.nodeName = this.$store.state.nodeName.current
         this.loading = true
         httpGet(`/monitoring/listeners/${this.nodeName}`).then((response) => {
           this.listeners = response.data.result

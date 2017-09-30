@@ -191,6 +191,10 @@ export default {
         this.formError.tags = 'Remark required'
         return false
       }
+      if (this.user.username.length > 14) {
+        this.formError.username = 'Username too long'
+        return false
+      }
       // add new user
       if (this.oper === 'new') {
         if (!this.user.password) {

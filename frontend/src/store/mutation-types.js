@@ -2,4 +2,5 @@
 export const USER_LOGIN = 'USER_LOGIN'
 export const USER_LOGOUT = 'USER_LOGOUT'
 export const CURRENT_NODE = 'CURRENT_NODE'
-export const MQTT_CONNECT = 'MQTT_CONNECT'
+export const THEMES_SWITCH = 'THEMES_SWITCH'
+export const LANGUAGE_SWITCH = 'LANGUAGE_SWITCH'

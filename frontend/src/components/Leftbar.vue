@@ -60,7 +60,7 @@ export default {
 .leftbar {
   /*box-shadow: 3px 0 10px #c1c1c1;*/
   position: fixed;
-  top: 0;
+  top: 60px;
   bottom: 0;
   width: 200px;
   z-index: 1000;
@@ -68,7 +68,7 @@ export default {
   .el-menu {
     position: relative;
     left: 0;
-    top: 70px;
+    top: 0;
     width: 200px;
     padding-bottom: 52px;
   }
@@ -91,7 +91,7 @@ export default {
     height: 63px;
     width: 180px;
     align-items: center;
-    border-bottom: 1px solid #6c7786;
+    border-bottom: 1px solid #313437;
     span {
       font-size: 16px;
       color: #34c388;

@@ -9,7 +9,7 @@
       <p>Apart from this help page, all URIs
         will serve only resources of type application/json, and will
         require HTTP basic authentication. The default user is admin/admin.</p>
-      <p>The emqx_dashboard plugin provides
+      <p>The emq_dashboard plugin provides
           a web management console. The Dashboard helps monitor broker's running status,
           statistics and metrics of MQTT packets.</p>
     </div>
@@ -23,8 +23,8 @@
         <el-table-column :label="$t('httpApi.method')" prop="method" width="120"></el-table-column>
         <el-table-column :label="$t('httpApi.path')" min-width="160">
           <template scope="props">
-            <a :href="props.row.target === 'GET' ? props.row.target : 'javascript:;'"
-               :class="['link', isLink(props.row) ? 'link-disabled' : '']"
+            <a :href="isLink(props.row) ?  props.row.target : 'javascript:;'"
+               :class="['link', isLink(props.row) ? '' : 'link-disabled']"
                target="_blank">{{ props.row.path }}</a>
           </template>
         </el-table-column>
@@ -68,37 +68,38 @@ export default {
       popoverVisible: false,
       nodeName: 'emq@127.0.0.1',
       tableData: [],
+      nodes: [],
     }
   },
+  computed: {
+    nodeInfo() {
+      return this.$store.state.node.nodeName
+    },
+  },
   watch: {
-    $store: 'setApiData',
+    nodeInfo: 'setApiData',
   },
   methods: {
     ...mapActions([CURRENT_NODE]),
     // set global nodeName
-    setStore() {
-      this.CURRENT_NODE({ nodeName: { current: this.nodeName } })
+    setNode() {
+      this.CURRENT_NODE({ nodeName: this.nodeName, nodes: this.nodes })
     },
     isLink(row = {}) {
-      // can not click
-      return row.target && row.target.indexOf('{') !== -1 && row.methods !== 'GET'
+      // could click
+      return row.target && row.target.indexOf('{') === -1 && row.method === 'GET'
     },
     init() {
-      const currentNodeName = this.$store.state.nodeName.current
-      if (!currentNodeName) {
-        httpGet('/management/nodes').then((response) => {
-          this.nodeName = response.data.result[0].name || ''
-          this.setStore()
-          this.setApiData()
-        })
-      } else {
-        this.nodeName = currentNodeName
-        this.setStore()
+      const currentNodeName = this.$store.state.node.nodeName
+      httpGet('/management/nodes').then((response) => {
+        this.nodeName = currentNodeName || response.data.result[0].name || ''
+        this.nodes = response.data.result
+        this.setNode()
         this.setApiData()
-      }
+      })
     },
     setApiData() {
-      this.nodeName = this.$store.state.nodeName.current
+      this.nodeName = this.$store.state.node.nodeName
       // set api data
       this.tableData = [{
         method: 'GET',

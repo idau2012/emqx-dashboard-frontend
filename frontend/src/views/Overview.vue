@@ -211,9 +211,6 @@ export default {
     'el-row': Row,
     'el-col': Col,
   },
-  mounted() {
-    this.refreshInterval()
-  },
   watch: {
     $store: 'init',
   },
@@ -223,24 +220,20 @@ export default {
   methods: {
     ...mapActions([CURRENT_NODE]),
     // set global nodeName
-    setStore() {
-      this.CURRENT_NODE({ nodeName: { current: this.nodeName } })
+    setNode() {
+      this.CURRENT_NODE({ nodeName: this.nodeName, nodes: this.nodes })
     },
     init() {
-      const currentNode = this.$store.state.nodeName.current
-      if (!currentNode) {
-        httpGet('/management/nodes').then((response) => {
-          console.log('load node from api', 'overview')
-          // set default of select
-          this.nodeName = response.data.result[0].name || ''
-          this.setStore()
-          this.loadData()
-        })
-      } else {
-        this.nodeName = currentNode
-        this.setStore()
+      // load nodes every page
+      const currentNode = this.$store.state.node.nodeName
+      httpGet('/management/nodes').then((response) => {
+        // set default of select
+        this.nodeName = currentNode || response.data.result[0].name || ''
+        this.nodes = response.data.result
+        this.setNode()
         this.loadData()
-      }
+        this.refreshInterval()
+      })
     },
     // Object2Array, to adaptation the backend
     parseToArray(obj) {
@@ -271,10 +264,8 @@ export default {
         window.clearInterval(this.flag)
         return
       }
-      this.nodeName = this.$store.state.nodeName.current
       if (!this.nodeName) {
         // no nodeName, can not load data
-        console.log('overview no nodeName')
         return
       }
       // nodes[]

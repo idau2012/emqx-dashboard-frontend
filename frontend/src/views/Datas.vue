@@ -120,7 +120,7 @@ export default {
       searchView: false,
       loading: false,
       nodeName: '',
-      nodes: {},
+      nodes: [],
       activeTab: 'clients',
       popoverVisible: false,
       searchKey: '',
@@ -141,16 +141,22 @@ export default {
   },
   watch: {
     $route: 'init',
-    $store: 'loadData',
+    nodeInfo: 'init',
+  },
+  computed: {
+    nodeInfo() {
+      return this.$store.state.node.nodeName
+    },
   },
   methods: {
     ...mapActions([CURRENT_NODE]),
     // set global nodeName
-    setStore() {
-      this.CURRENT_NODE({ nodeName: { current: this.nodeName } })
+    setNode() {
+      this.CURRENT_NODE({ nodeName: this.nodeName, nodes: this.nodes })
     },
     // get path
     init() {
+      console.log('init into\n\n')
       this.activeTab = this.$route.path.split('/')[1]
       switch (this.activeTab) {
         case 'clients':
@@ -178,21 +184,14 @@ export default {
         return
       }
       // set default of select
-      const currentNode = this.$store.state.nodeName.current
-      if (!currentNode) {
-        httpGet('/management/nodes').then((response) => {
-          this.nodeName = response.data.result[0].name || ''
-          this.nodes = response.data.result
-          console.log('load node from api', 'datas')
-          this.setStore()
-          // load child with sync
-          this.loadChild()
-        })
-      } else {
-        this.nodeName = currentNode
-        this.setStore()
+      const currentNode = this.$store.state.node.nodeName
+      httpGet('/management/nodes').then((response) => {
+        this.nodeName = currentNode || response.data.result[0].name || ''
+        this.nodes = response.data.result
+        this.setNode()
+        // load child with sync
         this.loadChild()
-      }
+      })
     },
     // load child with pagination
     currentPageChanged(target) {
@@ -200,11 +199,10 @@ export default {
       this.loadChild()
     },
     loadChild(reload = false) {
-      this.nodeName = this.$store.state.nodeName.current
-      console.log('nodeName ok ', 'datas')
       this.searchView = false
       this.searchValue = ''
       if (!this.nodeName && this.activeTab !== 'routes') {
+        console.log('nodeName not ok ', 'datas')
         return
       }
       // load child with the currentPage asc
@@ -212,7 +210,6 @@ export default {
         this.currentPage = 1
       }
       this.loading = true
-      this.setStore()
       let requestURL = `/nodes/${this.nodeName}/${this.activeTab}?curr_page=${this.currentPage}&page_size=${this.pageSize}`
       if (this.activeTab === 'routes') {
         requestURL = `/routes?curr_page=${this.currentPage}&page_size=${this.pageSize}`
