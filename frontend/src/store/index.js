@@ -3,9 +3,7 @@ import Vuex from 'vuex'
 
 import user from './modules/user'
 import node from './modules/node'
-import getters from './getters'
 import themes from './modules/themes'
-import language from './modules/language'
 
 Vue.use(Vuex)
 
@@ -16,7 +14,5 @@ export default new Vuex.Store({
     user,
     node,
     themes,
-    language,
   },
-  getters,
 })

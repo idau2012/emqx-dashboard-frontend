@@ -1,7 +1,7 @@
 <template>
   <div class="nav-bar">
     <div class="select-node">
-      <el-select class="select-radius" v-model="nodeName" :disabled="loading" placeholder="Select Node" size="small" @change="changeSelect">
+      <el-select class="select-radius" v-model="nodeName" :disabled="loading" placeholder="Select Node" size="small" @change="setNode">
         <el-option
           v-for="item in nodes"
           :key="item.name"
@@ -12,18 +12,16 @@
     </div>
     <div class="style-toggle">
       <div class="btn-box">
-        <span>中文</span> / <span style="color: #34c388;">En</span>
+        <a @click="switchLanguage('language', 'zh')"
+           href="javascript:;" :style="language === 'zh' ? 'color: #34c388' : 'color: #b0b0b0'">中文</a>
+        <span> / </span>
+        <a @click="switchLanguage('language', 'en')"
+           href="javascript:;" :style="language === 'en' ? 'color: #34c388' : 'color: #b0b0b0'">EN</a>
       </div>
       <div class="btn-box themes-box">
         <span title="light" :class="{ 'active-light': !themes }"  @click="themesToggle('light-themes')">L</span>
         <span title="dark" :class="{ 'active-dark': themes }" @click="themesToggle('dark-themes')">D</span>
       </div>
-    </div>
-
-    <div class="select-language">
-      <a @click="switchLanguage('language', 'zh')" href="javascript:;">中文</a>
-      <span> / </span>
-      <a @click="switchLanguage('language', 'en')" href="javascript:;">EN</a>
     </div>
 
     <div class="bar-footer">
@@ -54,9 +52,9 @@ export default {
     return {
       loading: false,
       nodeName: '',
-      hello: '',
       nodes: [],
       temp: this.themes,
+      language: '',
     }
   },
   computed: {
@@ -76,10 +74,11 @@ export default {
     },
   },
   watch: {
-    nodeInfo: 'tests',
+    nodeInfo: 'reloadNode',
   },
   mounted() {
     this.loadNode()
+    this.loadLanguage()
   },
   methods: {
     ...mapActions([CURRENT_NODE]),
@@ -87,18 +86,17 @@ export default {
     ...mapActions([THEMES_SWITCH]),
     logout() {
       this.USER_LOGOUT()
-      console.log('login out')
       this.$router.push({ path: '/login' })
     },
     // set global nodeName
     setNode() {
       this.CURRENT_NODE({ node: { nodeName: this.nodeName, nodes: this.nodes } })
     },
+    test() {
+      console.log(this)
+    },
     themesToggle(str) {
       this.THEMES_SWITCH({ themes: str })
-    },
-    tests() {
-      console.log('navbar:', 'node name is ref')
     },
     // load nodes form store or server then load data
     loadNode() {
@@ -116,13 +114,16 @@ export default {
         this.nodeName = currentNode
       }
     },
-    changeSelect() {
-      this.setNode()
-      console.log('selected to ', this.$store.state, '--', this.nodeName)
-      window.ffff = 10 + Math.random()
+    reloadNode() {
+      // reload node from store
+      this.nodes = this.$store.state.node.nodes
+    },
+    loadLanguage() {
+      this.language = getLocalStorage('language') || 'en'
     },
     switchLanguage(key, value) {
       if (getLocalStorage(key) !== value) {
+        this.language = value
         setLocalStorage(key, value)
         location.reload();
       }

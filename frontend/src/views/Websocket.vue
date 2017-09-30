@@ -424,6 +424,9 @@ export default {
 <style lang="scss">
 .websocket-view {
   padding-top: 20px;
+  .page-title {
+    padding: 10px 0 ;
+  }
   .el-select {
     width: 100%;
   }
@@ -432,20 +435,21 @@ export default {
     margin-left: 8px;
     cursor: pointer;
   }
-}
-.websocket-view .page-title {
-  padding: 10px 0 ;
-}
-.websocket-view .el-table {
-  margin-top: 5px;
-}
-.websocket-view .blank-top {
-  margin-top: 60px;
-}
-.websocket-view .blank-middle {
-  margin-top: 20px;
-}
-.websocket-view .el-input,.el-checkbox {
-  margin: 5px 0 20px;
+  .el-table {
+    margin-top: 5px;
+  }
+  .blank-top {
+    margin-top: 60px;
+  }
+  .blank-middle {
+    margin-top: 20px;
+  }
+  .el-input,.el-checkbox {
+    margin: 5px 0 20px;
+  }
+  .el-button {
+    display: inline-block;
+    width: 100px;
+  }
 }
 </style>

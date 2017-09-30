@@ -211,8 +211,13 @@ export default {
     'el-row': Row,
     'el-col': Col,
   },
+  computed: {
+    nodeInfo() {
+      return this.$store.state.node.nodeName
+    },
+  },
   watch: {
-    $store: 'init',
+    nodeInfo: 'init',
   },
   created() {
     this.init()

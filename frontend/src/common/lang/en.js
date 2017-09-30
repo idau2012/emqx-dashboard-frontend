@@ -173,4 +173,10 @@ export default {
     delete: 'Delete',
     confirmDelete: 'Confirm Delete',
   },
+  // api
+  api: {
+    desc: 'Apart from this help page, all URIs will serve only resources of type application/json, and will require HTTP basic authentication. The default user is admin/admin.\n' +
+    '\n' +
+    'The emq_dashboard plugin provides a web management console. The Dashboard helps monitor broker\'s running status, statistics and metrics of MQTT packets.',
+  },
 }

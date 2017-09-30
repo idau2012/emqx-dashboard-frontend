@@ -15,7 +15,7 @@ export default {
     // MANAGEMENT
     management: '管理',
     plugins: '插件',
-    listeners: '监听器',
+    listeners: '端口监听',
     // TOOLS
     tools: '工具',
     websocket: 'Websocket',
@@ -102,7 +102,7 @@ export default {
     stopped: '已停止',
     running: '运行中',
     oper: '操作',
-    start: '开始',
+    start: '启动',
     stop: '停止',
     config: '配置',
     back: '返回',
@@ -149,7 +149,7 @@ export default {
   httpApi: {
     introduction: '说明',
     reference: '参考',
-    method: '方法',
+    method: '请求方法',
     path: '路径',
     description: '描述',
   },
@@ -172,5 +172,10 @@ export default {
     save: '保存',
     delete: '删除',
     confirmDelete: '确认删除',
+  },
+  // api
+  api: {
+    desc: '除了帮助页面，所有URI返回application/json格式的的资源，每个请求都需要HTTP基本认证。默认用户是admin / public。\n' +
+    'emq_dashboard插件提供了一个Web管理控制台, dashboard有助于监控代理的运行状态，数据统计和MQTT包计数监测。',
   },
 }
