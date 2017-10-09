@@ -1,25 +1,26 @@
 <template>
   <div class="listeners-view">
-    <div class="page-title">
-      {{ $t('leftbar.listeners') }}
-    </div>
-
-    <el-table :data="listeners" v-loading="loading" border>
-      <el-table-column prop="protocol" width="240" :label="$t('listeners.protocol')"></el-table-column>
-      <el-table-column prop="listen" min-width="240" :label="$t('listeners.listenOn')"></el-table-column>
-      <el-table-column prop="max_clients" min-width="180" :label="$t('listeners.maxClients')"></el-table-column>
-      <el-table-column prop="current_clients" :label="$t('listeners.currentClients')" min-width="120"></el-table-column>
+    <div class="page-title">{{ $t('leftbar.listeners') }}</div>
+    <el-table v-loading="loading" border :data="listeners">
+      <el-table-column prop="protocol" width="240" :label="$t('listeners.protocol')">
+      </el-table-column>
+      <el-table-column prop="listen" min-width="240" :label="$t('listeners.listenOn')">
+      </el-table-column>
+      <el-table-column prop="max_clients" min-width="180" :label="$t('listeners.maxClients')">
+      </el-table-column>
+      <el-table-column prop="current_clients" min-width="120" :label="$t('listeners.currentClients')">
+      </el-table-column>
     </el-table>
-
   </div>
 </template>
 
 
 <script>
   import { mapActions } from 'vuex'
-  import { Breadcrumb, BreadcrumbItem, Table,
-    TableColumn, Select, Option, Row, Input,
-    Button, Popover, Dialog, Col, Form, FormItem, Card } from 'element-ui'
+  import {
+    Breadcrumb, BreadcrumbItem, Table, TableColumn, Select, Option, Row, Input,
+    Button, Popover, Dialog, Col, Form, FormItem, Card,
+  } from 'element-ui';
 
   import { httpGet } from '../store/api'
   import { CURRENT_NODE } from '../store/mutation-types'
@@ -50,9 +51,6 @@
         nodes: [],
         listeners: [],
       }
-    },
-    created() {
-      this.loadData()
     },
     computed: {
       nodeInfo() {
@@ -87,21 +85,24 @@
         })
       },
     },
+    created() {
+      this.loadData()
+    },
   }
 </script>
 
 
 <style lang="scss">
-  .listeners-view {
-    padding-top: 20px;
-    .page-title {
-      padding: 10px 0;
-    }
-    .el-row {
-      margin-top: 20px;
-    }
-    .el-table {
-      margin-top: 60px;
-    }
+.listeners-view {
+  padding-top: 20px;
+  .page-title {
+    padding: 10px 0;
   }
+  .el-row {
+    margin-top: 20px;
+  }
+  .el-table {
+    margin-top: 60px;
+  }
+}
 </style>

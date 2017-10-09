@@ -1,83 +1,112 @@
 <template>
   <div class="datas-view">
-
     <div class="page-title">
       {{ $t(`leftbar.${activeTab}`) }}
       <div style="float: right" @keyup.enter.native="searchChild">
-        <el-input :disabled="loading" @keyup.enter.native="searchChild"
-                  icon="search" :on-icon-click="searchChild" class="input-radius"
-                  v-model="searchValue" :placeholder="searchPlaceholder" size="small"></el-input>
+        <el-input
+          v-model="searchValue"
+          class="input-radius"
+          size="small"
+          icon="search"
+          :disabled="loading"
+          :on-icon-click="searchChild"
+          :placeholder="searchPlaceholder"
+          @keyup.enter.native="searchChild">
+        </el-input>
       </div>
     </div>
 
     <!-- clients -->
-    <el-table :data="clients" v-loading="loading" v-show="activeTab==='clients'" border>
-      <el-table-column prop="client_id" :label="$t('clients.clientId')" min-width="160"></el-table-column>
-      <el-table-column prop="username" :label="$t('clients.username')" min-width="130"></el-table-column>
-      <el-table-column prop="ipaddress" :label="$t('clients.ipAddr')" min-width="150"></el-table-column>
-      <el-table-column prop="port" :label="$t('clients.port')" min-width="80"></el-table-column>
-      <el-table-column prop="clean_sess" :label="$t('clients.cleanSess')" min-width="110">
+    <el-table v-show="activeTab==='clients'" v-loading="loading" border :data="clients">
+      <el-table-column prop="client_id" min-width="160" :label="$t('clients.clientId')">
+      </el-table-column>
+      <el-table-column prop="username" min-width="130" :label="$t('clients.username')">
+      </el-table-column>
+      <el-table-column prop="ipaddress" min-width="150" :label="$t('clients.ipAddr')">
+      </el-table-column>
+      <el-table-column prop="port" min-width="80" :label="$t('clients.port')">
+      </el-table-column>
+      <el-table-column prop="clean_sess" min-width="110" :label="$t('clients.cleanSess')">
         <template scope="scope">
           <span>{{ scope.row.clean_sess ? 'true' : 'false' }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="proto_ver" :label="$t('clients.protoVer')" width="90"></el-table-column>
-      <el-table-column prop="keepalive" :label="$t('clients.keepalive')" width="120"></el-table-column>
-      <el-table-column prop="connected_at" :label="$t('clients.connectedAt')" width="180"></el-table-column>
+      <el-table-column prop="proto_ver" width="90" :label="$t('clients.protoVer')">
+      </el-table-column>
+      <el-table-column prop="keepalive" width="120" :label="$t('clients.keepalive')">
+      </el-table-column>
+      <el-table-column prop="connected_at" width="180" :label="$t('clients.connectedAt')">
+      </el-table-column>
     </el-table>
 
     <!-- sessions -->
-    <el-table :data="sessions" v-loading="loading" v-show="activeTab==='sessions'" border>
-      <el-table-column prop="client_id" :label="$t('sessions.clientId')" min-width="160"></el-table-column>
-      <el-table-column prop="clean_sess" :label="$t('sessions.cleanSess')" min-width="150">
+    <el-table v-show="activeTab==='sessions'" v-loading="loading" border :data="sessions">
+      <el-table-column prop="client_id" min-width="160" :label="$t('sessions.clientId')">
+      </el-table-column>
+      <el-table-column prop="clean_sess" :label="$t('sessions.cleanSess')">
         <template scope="scope">
           <span>{{ scope.row.clean_sess ? 'true' : 'false' }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="max_inflight" :label="$t('sessions.maxInflight')" min-width="120"></el-table-column>
-      <el-table-column prop="inflight_queue" :label="$t('sessions.inflightQueue')" min-width="150"></el-table-column>
-      <el-table-column prop="message_queue" :label="$t('sessions.messageQueue')" min-width="150"></el-table-column>
-      <el-table-column prop="message_dropped" :label="$t('sessions.messageDropped')" min-width="150"></el-table-column>
-      <el-table-column prop="awaiting_rel" :label="$t('sessions.awaitingRel')" min-width="120"></el-table-column>
-      <el-table-column prop="awaiting_ack" :label="$t('sessions.awaitingAck')" min-width="120"></el-table-column>
-      <el-table-column prop="awaiting_comp" :label="$t('sessions.awaitingComp')" min-width="150"></el-table-column>
-      <el-table-column prop="created_at" :label="$t('sessions.createdAt')" min-width="180"></el-table-column>
+      <el-table-column prop="max_inflight" min-width="120" :label="$t('sessions.maxInflight')">
+      </el-table-column>
+      <el-table-column prop="inflight_queue" min-width="150" :label="$t('sessions.inflightQueue')">
+      </el-table-column>
+      <el-table-column prop="message_queue" min-width="150" :label="$t('sessions.messageQueue')">
+      </el-table-column>
+      <el-table-column prop="message_dropped" min-width="150" :label="$t('sessions.messageDropped')">
+      </el-table-column>
+      <el-table-column prop="awaiting_rel" min-width="120" :label="$t('sessions.awaitingRel')">
+      </el-table-column>
+      <el-table-column prop="awaiting_ack" min-width="120" :label="$t('sessions.awaitingAck')">
+      </el-table-column>
+      <el-table-column prop="awaiting_comp" min-width="150" :label="$t('sessions.awaitingComp')">
+      </el-table-column>
+      <el-table-column prop="created_at" min-width="180" :label="$t('sessions.createdAt')">
+      </el-table-column>
     </el-table>
 
     <!-- topics -->
-    <el-table :data="topics" v-loading="loading" v-show="activeTab==='topics'" border>
+    <el-table v-show="activeTab==='topics'" v-loading="loading" border :data="topics">
       <el-table-column prop="topic" label="Topic"></el-table-column>
       <el-table-column prop="subTopicCount" label="SubTopicCount"></el-table-column>
     </el-table>
 
      <!-- routes -->
-    <el-table :data="routes" v-loading="loading" v-show="activeTab==='routes'" border>
+    <el-table :data="routes" v-show="activeTab==='routes'" v-loading="loading" border>
       <el-table-column prop="topic" :label="$t('routes.topic')"></el-table-column>
       <el-table-column prop="node" :label="$t('routes.node')"></el-table-column>
     </el-table>
 
     <!-- subscriptions -->
-    <el-table :data="subscriptions" v-loading="loading" v-show="activeTab==='subscriptions'" border>
+    <el-table v-loading="loading" v-show="activeTab==='subscriptions'" border :data="subscriptions">
       <el-table-column prop="client_id" :label="$t('subscriptions.clientId')"></el-table-column>
       <el-table-column prop="topic" :label="$t('subscriptions.topic')"></el-table-column>
       <el-table-column prop="qos" :label="$t('subscriptions.qoS')"></el-table-column>
     </el-table>
 
     <!-- refresh button -->
-    <el-row type="flex" justify="end" v-show="searchView">
+    <el-row v-show="searchView" type="flex" justify="end">
       <el-col :span="24">
-        <el-button size="small" type="text" icon="arrow-left" class="back-btn" style="float: right;" @click="loadChild">Back</el-button>
+        <el-button
+          class="back-btn"
+          style="float: right;"
+          size="small"
+          type="text"
+          icon="arrow-left"
+          @click="loadChild">Back
+        </el-button>
       </el-col>
     </el-row>
 
     <!-- pagination -->
     <el-pagination
-      @current-change="currentPageChanged"
+      v-if="total>0"
       layout="prev, pager, next"
       :current-page="currentPage"
       :page-size="pageSize"
       :total="total"
-      v-if="total>0">
+      @current-change="currentPageChanged">
     </el-pagination>
   </div>
 </template>
@@ -86,11 +115,8 @@
 <script>
 import { mapActions } from 'vuex'
 import {
-  Tabs, TabPane,
-  TableColumn, Table,
-  Button, Tag, Popover,
-  Breadcrumb, BreadcrumbItem, Row, Input,
-  Select, Pagination, Option, Col,
+  Tabs, TabPane, TableColumn, Table, Button, Tag, Popover, Breadcrumb, BreadcrumbItem,
+  Row, Input, Select, Pagination, Option, Col,
 } from 'element-ui'
 
 import { httpGet } from '../store/api'
@@ -135,9 +161,6 @@ export default {
       currentPage: 1,
       total: 0,
     }
-  },
-  created() {
-    this.init()
   },
   watch: {
     $route: 'init',
@@ -249,6 +272,9 @@ export default {
         this.loading = false
       })
     },
+  },
+  created() {
+    this.init()
   },
 }
 </script>

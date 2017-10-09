@@ -1,13 +1,16 @@
 <template>
   <div class="plugins-view">
     <!-- plugin list -->
-    <div class="page-title" v-show="!plugin.nodeName">
+    <div v-show="!plugin.nodeName" class="page-title">
       {{ $t('leftbar.plugins') }}
     </div>
-    <el-table :data="tableData" v-loading="loading" border v-show="!plugin.nodeName">
-      <el-table-column prop="name" width="240" :label="$t('plugins.name')"></el-table-column>
-      <el-table-column prop="version" width="100" :label="$t('plugins.version')"></el-table-column>
-      <el-table-column prop="description" :label="$t('plugins.description')" min-width="340"></el-table-column>
+    <el-table v-show="!plugin.nodeName" v-loading="loading" border :data="tableData">
+      <el-table-column prop="name" width="240" :label="$t('plugins.name')">
+      </el-table-column>
+      <el-table-column prop="version" width="100" :label="$t('plugins.version')">
+      </el-table-column>
+      <el-table-column prop="description" min-width="340" :label="$t('plugins.description')">
+      </el-table-column>
       <el-table-column
         prop="active"
         width="120"
@@ -15,21 +18,27 @@
         :filters="[{ text: $t('plugins.stopped'), value: false }, { text: $t('plugins.running'), value: true }]"
         :filter-method="filterStatus">
         <template scope="props">
-          <span v-bind:class="[props.row.active ? 'running' : 'stopped', 'status']">
+          <span :class="[props.row.active ? 'running' : 'stopped', 'status']">
             {{ props.row.active ? $t('plugins.running'): $t('plugins.stopped')}}
           </span>
         </template>
       </el-table-column>
       <el-table-column width="180" :label="$t('plugins.oper')">
         <template scope="props">
-          <el-button slot="reference" :type="props.row.active ? 'warning' : 'success'"
-                     @click="update(props.row)" :plain="true"
-                     size="mini" :disabled="props.row.name === 'emq_dashboard'">
+          <el-button
+            slot="reference"
+            size="mini"
+            :disabled="props.row.name === 'emq_dashboard'"
+            :type="props.row.active ? 'warning' : 'success'"
+            @click="update(props.row)" :plain="true">
             {{ props.row.active ? $t('plugins.stop') : $t('plugins.start') }}
           </el-button>
-          <el-button type="success" size="mini" @click="config(props.row)"
-                     :plain="true"
-                     :disabled="props.row.name === 'emq_dashboard'">
+          <el-button
+            type="success"
+            size="mini"
+            :disabled="props.row.name === 'emq_dashboard'"
+            :plain="true"
+            @click="config(props.row)">
             {{ $t('plugins.config') }}
           </el-button>
         </template>
@@ -37,97 +46,150 @@
     </el-table>
 
     <!-- plugin config-->
-    <div class="page-title" v-show="plugin.nodeName">
+    <div v-show="plugin.nodeName" class="page-title">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/plugins' }">{{ plugin.nodeName }}</el-breadcrumb-item>
         <el-breadcrumb-item class="plugin-name">{{ plugin.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <el-card v-show="plugin.nodeName" style="margin-top: 32px" class="plugin-config" v-loading="loading">
+    <el-card
+      v-show="plugin.nodeName"
+      v-loading="loading"
+      class="plugin-config"
+      style="margin-top: 32px">
       <div slot="header" class="config-dialog">
         <span>{{ plugin.name }}</span>
       </div>
       <el-row type="flex" justify="center">
-        <el-col :span="24" v-if="displayConfig === ''" style="text-align: center; font-size: 16px">No Default Configuration</el-col>
+        <el-col
+          v-if="displayConfig === ''"
+          style="text-align: center; font-size: 16px"
+          :span="24">No Default Configuration
+        </el-col>
       </el-row>
       <!--  Plugin Config -->
-      <el-form label-position="top" v-loading="loading" @keyup.enter.native="putConfig(false)" :model="record" ref="record">
+      <el-form
+        ref="record"
+        v-loading="loading"
+        label-position="top"
+        :model="record"
+        @keyup.enter.native="putConfig(false)">
         <el-row :gutter="20">
-          <el-col :lg="8" :md="12" :sm="12" v-for="item in plugin.option" :key="item.key">
-            <el-form-item :label="item.key" v-if="record.hasOwnProperty(item.key)">
+          <el-col v-for="item in plugin.option" :lg="8" :md="12" :sm="12" :key="item.key">
+            <el-form-item v-if="record.hasOwnProperty(item.key)" :label="item.key">
               <!--icon="plus" @click="setAdvancedOption(item)"-->
               <el-input
-                        size="small" v-model="record[item.key]" style="width: 100%" :placeholder="item.desc"
-                        v-if="item.value.length < 36 && record.hasOwnProperty(item.key) && isAutoIncrement(item.key)[0]">
+                v-if="item.value.length < 36 && record.hasOwnProperty(item.key) && isAutoIncrement(item.key)[0]"
+                v-model="record[item.key]"
+                size="small"
+                style="width: 100%"
+                :placeholder="item.desc">
               </el-input>
-
-              <el-input size="small" v-model="record[item.key]" style="width: 100%" :placeholder="item.desc"
-                        v-if="item.value.length < 36 && record.hasOwnProperty(item.key) && !isAutoIncrement(item.key)[0]">
+              <el-input
+                v-if="item.value.length < 36 && record.hasOwnProperty(item.key) && !isAutoIncrement(item.key)[0]"
+                v-model="record[item.key]"
+                size="small"
+                style="width: 100%"
+                :placeholder="item.desc">
               </el-input>
-
-              <el-input size="small" type="textarea"
-                :rows="2" :placeholder="item.desc" v-model="record[item.key]"
-                v-if="item.value.length > 35 && record.hasOwnProperty(item.key)">
+              <el-input
+                v-if="item.value.length > 35 && record.hasOwnProperty(item.key)"
+                v-model="record[item.key]"
+                type="textarea"
+                size="small"
+                :rows="2"
+                :placeholder="item.desc">
               </el-input>
             </el-form-item>
           </el-col>
 
           <!-- Advanced Keys-->
-          <el-col :span="24" style="margin-top: 20px" class="config-area">
-            <el-button :plain="true" type="success" @click="putConfig(false)"
-                       v-show="displayConfig !== ''"
-                       @keyup.enter.native="putConfig(false)"
-                       size="small" :disabled="!changeListener"
-            >{{ $t('plugins.confirm') }}</el-button>
-            <el-button :plain="true" @click="abortOperation(false)" class="cancel-btn"
-                       @keyup.enter.native="abortOperation(false)"
-                       size="small">
-              <i class="el-icon-arrow-left" v-if="displayConfig === ''"></i>
-              {{ displayConfig === '' ? $t('plugins.back') : $t('plugins.cancel') }}</el-button>
-            <el-button :plain="true" title="More configuration" class="oper-btn" type="text"
-                       v-if="advancedConfig.length !== 0"
-                       @click="setAdvancedConfig(false)" size="small">{{ $t('plugins.advancedConfig') }}</el-button>
+          <el-col
+            class="config-area"
+            style="margin-top: 20px"
+            :span="24">
+            <el-button
+              v-show="displayConfig !== ''"
+              type="success"
+              size="small"
+              :plain="true"
+              :disabled="!changeListener"
+              @click="putConfig(false)"
+              @keyup.enter.native="putConfig(false)">
+              {{ $t('plugins.confirm') }}
+            </el-button>
+            <el-button
+              class="cancel-btn"
+              size="small"
+              :plain="true"
+              @click="abortOperation(false)"
+              @keyup.enter.native="abortOperation(false)">
+              <i v-if="displayConfig === ''" class="el-icon-arrow-left"></i>
+              {{ displayConfig === '' ? $t('plugins.back') : $t('plugins.cancel') }}
+            </el-button>
+            <el-button
+              v-if="advancedConfig.length !== 0"
+              type="text"
+              title="More configuration"
+              class="oper-btn"
+              size="small"
+              :plain="true"
+              @click="setAdvancedConfig(false)">
+              {{ $t('plugins.advancedConfig') }}
+            </el-button>
           </el-col>
         </el-row>
       </el-form>
-      <!-- Advanced Config -->
     </el-card>
 
-    <el-dialog
-      title="Notice"
-      :visible.sync="dialogVisible"
-      size="tiny">
+    <el-dialog title="Notice" size="tiny" :visible.sync="dialogVisible">
       <span>{{ notic }}</span>
       <span slot="footer" class="dialog-footer">
-        <el-button type="success" @click="handleOperation(true, false)"
-                   @keyup.enter.native="handleOperation(true, false)"
-                   size="small">Confirm</el-button>
-        <el-button @click="handleOperation(false, false)"
-                   @keyup.enter.native="handleOperation(false, false)"
-                   size="small">{{ $t('plugins.cancel') }}</el-button>
+        <el-button
+          type="success"
+          size="small"
+          @click="handleOperation(true, false)"
+          @keyup.enter.native="handleOperation(true, false)">
+          {{ $t('plugins.confirm') }}
+        </el-button>
+        <el-button
+          size="small"
+          @click="handleOperation(false, false)"
+          @keyup.enter.native="handleOperation(false, false)">
+          {{ $t('plugins.cancel') }}
+        </el-button>
       </span>
     </el-dialog>
 
     <el-dialog
+      size="tiny"
       :title="$t('plugins.advancedConfig')"
       :visible.sync="isAdvancedConfig"
-      @keyup.enter.native="setAdvancedConfig(true)"
-      size="tiny">
-     <el-row :gutter="20" type="flex" justify="left" class="advanced-key">
+      @keyup.enter.native="setAdvancedConfig(true)">
+     <el-row type="flex" justify="left" class="advanced-key" :gutter="20">
        <el-col :span="24">
          <label v-if="advancedConfig.length === 0">No Advanced Config</label>
          <el-checkbox-group v-model="selectedAdvancedConfig">
-           <el-checkbox v-for="item in advancedConfig" :label="item"  :key="item.key">{{ item.key }}</el-checkbox>
+           <el-checkbox v-for="item in advancedConfig" :label="item" :key="item.key">
+             {{ item.key }}
+           </el-checkbox>
          </el-checkbox-group>
        </el-col>
      </el-row>
       <span slot="footer" class="dialog-footer">
-        <el-button type="success" @click="setAdvancedConfig(true)"
-                   @keyup.enter.native="setAdvancedConfig(true)"
-                   size="small">{{ $t('plugins.add') }}</el-button>
-        <el-button @click="isAdvancedConfig = false"
-                   @keyup.enter.native="isAdvancedConfig = false"
-                   size="small">{{ $t('plugins.cancel') }}</el-button>
+        <el-button
+          type="success"
+          size="small"
+          @click="setAdvancedConfig(true)"
+          @keyup.enter.native="setAdvancedConfig(true)">
+          {{ $t('plugins.add') }}
+        </el-button>
+        <el-button
+          size="small"
+          @click="isAdvancedConfig = false"
+          @keyup.enter.native="isAdvancedConfig = false">
+          {{ $t('plugins.cancel') }}
+        </el-button>
       </span>
     </el-dialog>
   </div>
@@ -136,9 +198,10 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { Breadcrumb, BreadcrumbItem, Table,
-  TableColumn, Select, Option, Row, Input, Checkbox, CheckboxGroup,
-  Button, Popover, Dialog, Col, Form, FormItem, Card } from 'element-ui'
+import {
+  Breadcrumb, BreadcrumbItem, Table, TableColumn, Select, Option, Row, Input, Checkbox,
+  CheckboxGroup, Button, Popover, Dialog, Col, Form, FormItem, Card,
+} from 'element-ui'
 
 import { httpGet, httpPut } from '../store/api'
 import { CURRENT_NODE } from '../store/mutation-types'
@@ -189,9 +252,6 @@ export default{
         option: [],
       },
     }
-  },
-  created() {
-    this.loadData()
   },
   computed: {
     displayConfig() {
@@ -273,7 +333,6 @@ export default{
     },
     loadData() {
       // To config plugins
-      // 修复插件配置页从select动态改变
       const nodeName = this.$route.params.nodeName
       this.selectedAdvancedConfig = []
       this.advancedConfig = []
@@ -453,6 +512,9 @@ export default{
         this.isAdvancedConfig = true
       }
     },
+  },
+  created() {
+    this.loadData()
   },
   // to modify protection
   beforeRouteLeave(to, from, next) {

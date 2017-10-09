@@ -1,7 +1,13 @@
 <template>
   <div class="nav-bar">
     <div class="select-node">
-      <el-select class="select-radius" v-model="nodeName" :disabled="loading" placeholder="Select Node" size="small" @change="setNode">
+      <el-select
+        class="select-radius"
+        v-model="nodeName"
+        placeholder="Select Node"
+        size="small"
+        :disabled="loading"
+        @change="setNode">
         <el-option
           v-for="item in nodes"
           :key="item.name"
@@ -12,15 +18,29 @@
     </div>
     <div class="style-toggle">
       <div class="btn-box">
-        <a @click="switchLanguage('language', 'zh')"
-           href="javascript:;" :style="language === 'zh' ? 'color: #34c388' : 'color: #b0b0b0'">中文</a>
+        <a
+           href="javascript:;"
+           :style="language === 'zh' ? 'color: #34c388' : 'color: #b0b0b0'"
+           @click="switchLanguage('language', 'zh')">中文
+        </a>
         <span> / </span>
-        <a @click="switchLanguage('language', 'en')"
-           href="javascript:;" :style="language === 'en' ? 'color: #34c388' : 'color: #b0b0b0'">EN</a>
+        <a
+           href="javascript:;"
+           :style="language === 'en' ? 'color: #34c388' : 'color: #b0b0b0'"
+           @click="switchLanguage('language', 'en')">EN
+         </a>
       </div>
       <div class="btn-box themes-box">
-        <span title="light" :class="{ 'active-light': !themes }"  @click="themesToggle('light-themes')">L</span>
-        <span title="dark" :class="{ 'active-dark': themes }" @click="themesToggle('dark-themes')">D</span>
+        <span
+          title="light"
+          :class="{ 'active-light': !themes }"
+          @click="themesToggle('light-themes')">L
+        </span>
+        <span
+          title="dark"
+          :class="{ 'active-dark': themes }"
+          @click="themesToggle('dark-themes')">D
+        </span>
       </div>
     </div>
 
@@ -76,14 +96,9 @@ export default {
   watch: {
     nodeInfo: 'reloadNode',
   },
-  mounted() {
-    this.loadNode()
-    this.loadLanguage()
-  },
   methods: {
-    ...mapActions([CURRENT_NODE]),
-    ...mapActions([USER_LOGOUT]),
-    ...mapActions([THEMES_SWITCH]),
+    ...mapActions([CURRENT_NODE, USER_LOGOUT, THEMES_SWITCH]),
+    // logout
     logout() {
       this.USER_LOGOUT()
       this.$router.push({ path: '/login' })
@@ -92,9 +107,7 @@ export default {
     setNode() {
       this.CURRENT_NODE({ node: { nodeName: this.nodeName, nodes: this.nodes } })
     },
-    test() {
-      console.log(this)
-    },
+    // toggle theme
     themesToggle(str) {
       this.THEMES_SWITCH({ themes: str })
     },
@@ -102,9 +115,7 @@ export default {
     loadNode() {
       const currentNode = this.$store.state.node.nodeName
       if (!currentNode) {
-        // load & store
         httpGet('/management/nodes').then((response) => {
-          // set default of select
           this.nodes = response.data.result
           this.nodeName = currentNode || response.data.result[0].name || ''
           this.setNode()
@@ -114,13 +125,15 @@ export default {
         this.nodeName = currentNode
       }
     },
+    // reload node from store
     reloadNode() {
-      // reload node from store
       this.nodes = this.$store.state.node.nodes
     },
+    // default language
     loadLanguage() {
       this.language = getLocalStorage('language') || 'en'
     },
+    // switch language
     switchLanguage(key, value) {
       if (getLocalStorage(key) !== value) {
         this.language = value
@@ -128,6 +141,10 @@ export default {
         location.reload();
       }
     },
+  },
+  mounted() {
+    this.loadNode()
+    this.loadLanguage()
   },
 }
 </script>

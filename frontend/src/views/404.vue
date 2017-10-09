@@ -1,5 +1,5 @@
 <template>
-  <div class="not-found text-center">
+  <div class="not-found">
     <p>404 Not Found</p>
     <a href="javascript:;" @click="back">HomePage</a>
     <a href="javascript:;" @click="back(true)">Back to last page</a>
@@ -10,10 +10,6 @@
 <script>
 export default{
   name: 'NotFound',
-  data() {
-    return {
-    }
-  },
   methods: {
     back(history = false) {
       if (history) {
@@ -23,14 +19,13 @@ export default{
       }
     },
   },
-  components: {
-  },
 }
 </script>
 
 
 <style lang="scss">
 .not-found {
+  text-align: center;
   padding: 50px;
   p {
     margin-top: 30px;

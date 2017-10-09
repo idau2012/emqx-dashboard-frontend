@@ -1,8 +1,8 @@
 <template>
   <div class="topbar">
     <div class="right-part">
-      <span>{{ user.username }} </span>
-      <a @click="logout" href="javascript:;">
+      <span>{{ user.username }}</span>
+      <a href="javascript:;" @click="logout">
         <img src="../assets/exit.png">
       </a>
     </div>
@@ -13,7 +13,6 @@
 <script>
 import { mapActions } from 'vuex'
 import { USER_LOGOUT } from '../store/mutation-types'
-
 
 export default {
   name: 'topbar',
@@ -33,23 +32,23 @@ export default {
 </script>
 
 
-<style>
+<style lang="scss">
 .topbar {
   background-color: #fff;
   padding: 0 30px 0 220px;
   height: 60px;
   line-height: 60px;
   text-align: right;
-}
-.topbar .right-part {
-  display: inline-block;
-}
-.topbar img {
-  width: 18px;
-  vertical-align: top;
-  margin-top: 21px;
-}
-.topbar .right-part a {
-  padding-left: 8px;
+  .right-part {
+    display: inline-block;
+  }
+  img {
+    width: 18px;
+    vertical-align: top;
+    margin-top: 21px;
+  }
+  .right-part a {
+    padding-left: 8px;
+  }
 }
 </style>

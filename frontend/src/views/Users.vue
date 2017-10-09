@@ -3,101 +3,140 @@
     <div class="page-title">
       {{ $t('leftbar.users') }}
       <div style="float: right">
-        <el-button class="add-btn" icon="plus" size="small"
-                   @click="showDialog('new', {})">{{ $t('users.newUser') }}
+        <el-button class="add-btn" icon="plus" size="small" @click="showDialog('new', {})">
+          {{ $t('users.newUser') }}
         </el-button>
       </div>
     </div>
 
-    <el-table :data="users" v-loading="loading" border>
-      <el-table-column prop="username" :label="$t('users.username')"></el-table-column>
-      <el-table-column prop="tags" :label="$t('users.remark')"></el-table-column>
+    <el-table v-loading="loading" border :data="users">
+      <el-table-column prop="username" :label="$t('users.username')">
+      </el-table-column>
+      <el-table-column prop="tags" :label="$t('users.remark')">
+      </el-table-column>
       <el-table-column width="140" :label="$t('users.oper')">
         <template scope="props">
-          <el-button size="mini" type="warning"
-                     :plain="true"
-            @click="showDialog('edit', props.row)">{{ $t('users.edit') }}
+          <el-button
+            size="mini"
+            type="warning"
+            :plain="true"
+            @click="showDialog('edit', props.row)">
+            {{ $t('users.edit') }}
           </el-button>
-          <el-popover placement="right" :value="popoverVisible" ref="popoverDeleted">
+          <el-popover ref="popoverDeleted" placement="right" :value="popoverVisible">
             <p>{{ $t('users.confirmDelete') }}？</p>
             <div style="text-align: right">
-              <el-button size="mini" type="text" @click="hidePopover">{{ $t('users.cancel') }}</el-button>
-              <el-button size="mini" type="success"
+              <el-button
+                size="mini"
+                type="text"
+                @click="hidePopover">
+                {{ $t('users.cancel') }}
+              </el-button>
+              <el-button
+                size="mini"
+                type="success"
                 :loading="btnLoading"
-                v-on:click="deleteUser(props.row.username)"
-              >{{ $t('users.confirm') }}</el-button>
+                @click="deleteUser(props.row.username)">
+                {{ $t('users.confirm') }}
+              </el-button>
             </div>
           </el-popover>
-          <el-button size="mini" type="danger"
-                     :plain="true"
-                     v-popover:popoverDeleted
-                     v-if="props.row.username!=='admin'">{{ $t('users.delete') }}
+          <el-button
+            v-if="props.row.username!=='admin'"
+            size="mini"
+            type="danger"
+            v-popover:popoverDeleted
+            :plain="true">
+            {{ $t('users.delete') }}
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog :title="oper === 'new' ? $t('users.newUser') : $t('users.editUser')"
-               @keyup.enter.native="save"
-               v-model="dialogVisible">
+    <el-dialog
+      v-model="dialogVisible"
+      :title="oper === 'new' ? $t('users.newUser') : $t('users.editUser')"
+      @keyup.enter.native="save">
       <label>{{ $t('users.username') }}</label>
-      <el-input v-model="user.username"
-        :disabled="oper==='edit'"
+      <el-input
+        v-model="user.username"
         :class="{ error: formError.username }"
         :placeholder="formError.username"
-        @focus="formError.username=''"
-      ></el-input>
-
+        :disabled="oper==='edit'"
+        @focus="formError.username=''">
+      </el-input>
       <label>{{ $t('users.remark') }}</label>
-      <el-input v-model="user.tags"
-                :class="{ error: formError.tags }"
-                :placeholder="formError.tags"
-                @focus="formError.tags=''"
-      ></el-input>
+      <el-input
+        v-model="user.tags"
+        :class="{ error: formError.tags }"
+        :placeholder="formError.tags"
+        @focus="formError.tags=''">
+      </el-input>
 
       <div v-show="oper === 'new' || changePassword">
         <!--add password & edit.Oldpassword-->
         <label>{{ changePassword && oper === 'edit' ? $t('users.oldPassword') : $t('users.password') }}</label>
-        <el-input v-model="user.password" type="password"
-                  :class="{ error: formError.password }"
-                  :placeholder="formError.password"
-                  @focus="formError.password=''"
-        ></el-input>
+        <el-input
+          v-model="user.password"
+          type="password"
+          :class="{ error: formError.password }"
+          :placeholder="formError.password"
+          @focus="formError.password=''">
+        </el-input>
         <!--edit new password-->
         <label v-show="oper === 'edit'">{{ $t('users.newPassword') }}</label>
-        <el-input v-show="oper === 'edit'" v-model="user.newPassword" type="password"
-                  :class="{ error: formError.newPassword }"
-                  :placeholder="formError.newPassword"
-                  @focus="formError.newPassword=''">
+        <el-input
+          v-show="oper === 'edit'"
+          v-model="user.newPassword"
+          type="password"
+          :class="{ error: formError.newPassword }"
+          :placeholder="formError.newPassword"
+          @focus="formError.newPassword=''">
         </el-input>
-
         <!--add confirm password & edit.OldPassword-->
         <label>{{ oper === 'edit' && changePassword ? $t('users.confirmNewPassword') : $t('users.confirmPassword') }}</label>
-        <el-input v-model="user.repeatPassword" type="password"
-                  :class="{ error: formError.repeatPassword }"
-                  :placeholder="formError.repeatPassword"
-                  @focus="formError.repeatPassword=''"
-        ></el-input>
+        <el-input
+          v-model="user.repeatPassword"
+          type="password"
+          :class="{ error: formError.repeatPassword }"
+          :placeholder="formError.repeatPassword"
+          @focus="formError.repeatPassword=''">
+        </el-input>
       </div>
 
-      <el-button v-if="oper === 'edit'" class="toggle-btn" type="text" @click="changePassword = !changePassword">{{ changePassword ? $t('users.dontChangePassword') : $t('users.changePassword')}}</el-button>
+      <el-button
+        v-if="oper === 'edit'"
+        class="toggle-btn"
+        type="text"
+        @click="changePassword = !changePassword">
+        {{ changePassword ? $t('users.dontChangePassword') : $t('users.changePassword')}}
+      </el-button>
 
       <span slot="footer" class="dialog-footer">
-        <el-button icon="close" size="small" @click="dialogVisible=false" style="margin-right: 20px">{{ $t('users.cancel') }}</el-button>
-        <el-button type="success" icon="check" size="small"
+        <el-button
+          icon="close"
+          size="small"
+          style="margin-right: 20px"
+          @click="dialogVisible=false">
+          {{ $t('users.cancel') }}
+        </el-button>
+        <el-button
+          type="success"
+          icon="check"
+          size="small"
           :loading="btnLoading"
-          @click="save">{{ $t('users.save') }}
+          @click="save">
+          {{ $t('users.save') }}
         </el-button>
       </span>
     </el-dialog>
-
   </div>
 </template>
 
 
 <script>
-import { Row, Button, Table, TableColumn, Popover, Dialog, Input } from 'element-ui'
 import { mapActions } from 'vuex'
+import { Row, Button, Table, TableColumn, Popover, Dialog, Input } from 'element-ui'
 
 import { USER_LOGOUT } from '../store/mutation-types'
 import { httpGet, httpPost, httpPut, httpDelete } from '../store/api'
@@ -137,9 +176,6 @@ export default {
       dialogVisible: false,
       oper: '', // 'new' or 'edit'
     }
-  },
-  created() {
-    this.loadData()
   },
   methods: {
     ...mapActions([USER_LOGOUT]),
@@ -299,6 +335,9 @@ export default {
       })
     },
   },
+  created() {
+    this.loadData()
+  },
 }
 </script>
 
@@ -309,8 +348,8 @@ export default {
   .el-table {
     margin-top: 60px;
   }
-}
-.users-view .el-input {
-  margin: 5px 0 20px;
+  .el-input {
+    margin: 5px 0 20px;
+  }
 }
 </style>

@@ -20,6 +20,7 @@ const mutations = {
   },
 }
 
+
 export default {
   themes,
   actions,

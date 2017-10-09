@@ -148,6 +148,8 @@ export default {
   // http_api
   httpApi: {
     introduction: '说明',
+    desc: '除了帮助页面，所有URI返回application/json格式的的资源，每个请求都需要HTTP基本认证。默认用户是admin / public。\n' +
+    'emq_dashboard插件提供了一个Web管理控制台, dashboard有助于监控代理的运行状态，数据统计和MQTT包计数监测。',
     reference: '参考',
     method: '请求方法',
     path: '路径',
@@ -172,10 +174,5 @@ export default {
     save: '保存',
     delete: '删除',
     confirmDelete: '确认删除',
-  },
-  // api
-  api: {
-    desc: '除了帮助页面，所有URI返回application/json格式的的资源，每个请求都需要HTTP基本认证。默认用户是admin / public。\n' +
-    'emq_dashboard插件提供了一个Web管理控制台, dashboard有助于监控代理的运行状态，数据统计和MQTT包计数监测。',
   },
 }

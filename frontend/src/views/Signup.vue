@@ -1,7 +1,7 @@
 <template>
   <div class="signup-view">
     <el-row style="height: 100%;">
-      <el-col :xs="20" :sm="10" :md="8" :lg="8" class="signup-form">
+      <el-col class="signup-form" :xs="20" :sm="10" :md="8" :lg="8">
         <el-card class="box-card">
           <div slot="header">
             <span style="font-size: 16px">SIGN UP</span>
@@ -10,30 +10,30 @@
             <el-form-item label="Username">
               <el-input
                 v-model="username"
-                v-bind:class="{ error: signupError.username }"
-                v-bind:placeholder="signupError.username"
-                @focus="signupError.username=''"
-              ></el-input>
+                :class="{ error: signupError.username }"
+                :placeholder="signupError.username"
+                @focus="signupError.username=''">
+              </el-input>
             </el-form-item>
             <el-form-item label="Password">
               <el-input type="password"
                 v-model="password"
-                v-bind:class="{ error: signupError.password }"
-                v-bind:placeholder="signupError.password"
-                @focus="signupError.password=''"
-              ></el-input>
+                :class="{ error: signupError.password }"
+                :placeholder="signupError.password"
+                @focus="signupError.password=''">
+              </el-input>
             </el-form-item>
           </el-form>
           <div style="text-align: right;">
             <el-button type="success" @click="signup">Sign Up</el-button>
           </div>
           <div>
-            Is a member?<a href="javascript:;" @click="login"> Login now</a>
+            Is a member?
+            <a href="javascript:;" @click="login"> Login now</a>
           </div>
         </el-card>
       </el-col>
     </el-row>
-
   </div>
 </template>
 
@@ -41,6 +41,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { Col, Row, Card, Form, FormItem, Input, Button } from 'element-ui'
+
 import { httpPost } from '../store/api'
 import { USER_LOGIN } from '../store/mutation-types'
 
@@ -92,23 +93,22 @@ export default {
       })
     },
   },
-
 }
 </script>
 
 
-<style>
+<style lang="scss">
 .signup-view {
   background-color: #181818;
   height: 100%;
-}
-.signup-view .signup-form {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.signup-view .el-button {
-  padding: 9px 25px;
+  .signup-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .el-button {
+    padding: 9px 25px;
+  }
 }
 </style>

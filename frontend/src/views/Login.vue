@@ -1,27 +1,28 @@
 <template>
   <div class="login-view">
     <el-row style="height: 100%;">
-      <el-col :xs="20" :sm="10" :md="8" :lg="8" class="login-form">
+      <el-col class="login-form" :xs="20" :sm="10" :md="8" :lg="8">
         <el-card class="box-card">
           <div slot="header">
             <span style="font-size: 16px">LOG IN</span>
           </div>
-          <el-form label-position="top"  @keyup.enter.native="login">
+          <el-form label-position="top" @keyup.enter.native="login">
             <el-form-item label="Username">
               <el-input
                 v-model="username"
-                v-bind:class="{ error: loginError.username }"
-                v-bind:placeholder="loginError.username"
-                @focus="loginError.username=''"
-              ></el-input>
+                :class="{ error: loginError.username }"
+                :placeholder="loginError.username"
+                @focus="loginError.username=''">
+              </el-input>
             </el-form-item>
             <el-form-item label="Pasword">
-              <el-input type="password"
+              <el-input
+                type="password"
                 v-model="password"
-                v-bind:class="{ error: loginError.password }"
-                v-bind:placeholder="loginError.password"
-                @focus="loginError.password=''"
-              ></el-input>
+                :class="{ error: loginError.password }"
+                :placeholder="loginError.password"
+                @focus="loginError.password=''">
+              </el-input>
             </el-form-item>
           </el-form>
           <div class="login-footer">
@@ -116,18 +117,20 @@ export default {
 
 
 <style lang="scss">
-.login-view .login-form {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.login-view .el-button {
-  padding: 9px 25px;
-}
-.login-view .checkbox {
-  float: left;
-  display: inline-block;
-  margin: 6.5px 0 0;
+.login-view {
+  .login-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .el-button {
+    padding: 9px 25px;
+  }
+  .checkbox {
+    float: left;
+    display: inline-block;
+    margin: 6.5px 0 0;
+  }
 }
 </style>

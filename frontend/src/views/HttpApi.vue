@@ -1,46 +1,42 @@
 <template>
-<div class="http-api">
-  <div class="page-title">{{ $t('leftbar.api') }}</div>
-  <el-card class="box-card">
-    <div slot="header">
-      <span>{{ $t('httpApi.introduction') }}</span>
-    </div>
-    <div>
-      {{ $t('api.desc') }}
-    </div>
-  </el-card>
+  <div class="http-api">
+    <div class="page-title">{{ $t('leftbar.api') }}</div>
+    <el-card class="box-card">
+      <div slot="header">
+        <span>{{ $t('httpApi.introduction') }}</span>
+      </div>
+      <div>{{ $t('httpApi.desc') }}</div>
+    </el-card>
 
-  <el-card class="box-card" style="margin-top: 30px;">
-    <div slot="header">
-      <span>{{ $t('httpApi.reference') }}</span>
-    </div>
-    <el-table :data="tableData" border>
-        <el-table-column :label="$t('httpApi.method')" prop="method" width="120"></el-table-column>
-        <el-table-column :label="$t('httpApi.path')" min-width="160">
+    <el-card class="box-card" style="margin-top: 30px;">
+      <div slot="header">
+        <span>{{ $t('httpApi.reference') }}</span>
+      </div>
+      <el-table border :data="tableData">
+        <el-table-column prop="method" width="120" :label="$t('httpApi.method')"></el-table-column>
+        <el-table-column min-width="160" :label="$t('httpApi.path')">
           <template scope="props">
-            <a :href="isLink(props.row) ?  props.row.target : 'javascript:;'"
-               :class="['link', isLink(props.row) ? '' : 'link-disabled']"
-               target="_blank">{{ props.row.path }}</a>
+            <a
+              target="_blank"
+              :href="isLink(props.row) ?  props.row.target : 'javascript:;'"
+              :class="['link', isLink(props.row) ? '' : 'link-disabled']">{{ props.row.path }}
+            </a>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('httpApi.description')" min-width="240">
+        <el-table-column min-width="240" :label="$t('httpApi.description')">
           <template scope="props">
             <div v-html="props.row.description"></div>
           </template>
         </el-table-column>
-    </el-table>
-  </el-card>
-</div>
+      </el-table>
+    </el-card>
+  </div>
 </template>
 
 
 <script>
 import { mapActions } from 'vuex'
-import {
-  Tabs, TabPane,
-  TableColumn, Table,
-  Button, Tag, Popover, Card,
-} from 'element-ui'
+import { Tabs, TabPane, TableColumn, Table, Button, Tag, Popover, Card } from 'element-ui'
 
 import { httpGet } from '../store/api'
 import { CURRENT_NODE } from '../store/mutation-types'

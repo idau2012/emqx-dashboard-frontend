@@ -37,7 +37,6 @@ function httpRequest() {
       password: user.password,
     }
   }
-
   return axios.create(config)
 }
 

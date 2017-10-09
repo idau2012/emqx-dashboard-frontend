@@ -1,13 +1,11 @@
 <template>
   <div class="overview-view">
-    <div class="page-title">
-      {{ $t('leftbar.overview') }}
-    </div>
+    <div class="page-title">{{ $t('leftbar.overview') }}</div>
 
     <!-- Broker -->
      <div class="card-box">
        <div class="card-title">{{ $t('overview.broker') }}</div>
-       <el-row :gutter="10" class="broker-card">
+       <el-row class="broker-card" :gutter="10">
          <el-col :span="6">
            <div class="card-item">
              <div class="icon">
@@ -62,32 +60,34 @@
     <div class="card-box">
       <div class="card-title">{{ $t('overview.nodes') }}({{ nodes.length }})</div>
       <el-table :data="nodes" border>
-        <el-table-column :label="$t('overview.name')" prop="name" min-width="200"></el-table-column>
+        <el-table-column prop="name" min-width="200" :label="$t('overview.name')">
+        </el-table-column>
         <el-table-column :label="$t('overview.erlangProcesses')">
-          <el-table-column label="(used/avaliable)" min-width="150" prop="process">
+          <el-table-column min-width="150" prop="process" label="(used/avaliable)">
             <template scope="scope">
               {{ scope.row.process_used + ' / ' + scope.row.process_available }}
             </template>
           </el-table-column>
         </el-table-column>
         <el-table-column :label="$t('overview.cpuInfo')">
-          <el-table-column label=" (1load/5load/15load)" min-width="180">
+          <el-table-column min-width="180" label=" (1load/5load/15load)">
             <template scope="scope">
               {{ scope.row.load1 + ' / ' + scope.row.load5 + ' / ' + scope.row.load15 }}
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column :label="$t('overview.memoryInfo')" min-width="200">
-          <el-table-column label=" (used/total)" min-width="180">
+        <el-table-column min-width="200" :label="$t('overview.memoryInfo')">
+          <el-table-column min-width="180" label=" (used/total)">
             <template scope="scope">
               {{ scope.row.memory_used + ' / ' + scope.row.memory_total }}
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column :label="$t('overview.maxFds')" prop="max_fds" min-width="120"></el-table-column>
-        <el-table-column :label="$t('overview.status')" min-width="120">
+        <el-table-column prop="max_fds" min-width="120" :label="$t('overview.maxFds')">
+        </el-table-column>
+        <el-table-column min-width="120" :label="$t('overview.status')">
           <template scope="props">
-            <span v-bind:class="[props.row.node_status === 'Running' ? 'running' : 'stopped', 'status']">
+            <span :class="[props.row.node_status === 'Running' ? 'running' : 'stopped', 'status']">
               {{ props.row.node_status }}
             </span>
           </template>
@@ -99,17 +99,28 @@
     <div class="card-box">
       <div class="card-title">{{ $t('overview.stats') }}</div>
       <el-table :data="stats" border>
-        <el-table-column :label="$t('overview.name')" prop="name" min-width="150"></el-table-column>
-        <el-table-column :label="$t('overview.clientsCount')" prop="clients/count" min-width="150"></el-table-column>
-        <el-table-column :label="$t('overview.clientsMax')" prop="clients/max" min-width="150"></el-table-column>
-        <el-table-column :label="$t('overview.retainedCount')" prop="retained/count" min-width="150"></el-table-column>
-        <el-table-column :label="$t('overview.retainedMax')" prop="retained/max" min-width="150"></el-table-column>
-        <el-table-column :label="$t('overview.routesCount')" prop="routes/count" min-width="150"></el-table-column>
-        <el-table-column :label="$t('overview.routesMax')" prop="routes/max" min-width="150"></el-table-column>
-        <el-table-column :label="$t('overview.sessionsCount')" prop="sessions/count" min-width="150"></el-table-column>
-        <el-table-column :label="$t('overview.subscribersCount')" prop="subscriptions/count" min-width="160"></el-table-column>
-        <el-table-column :label="$t('overview.topicsCount')" prop="topics/count" min-width="150"></el-table-column>
-        <el-table-column :label="$t('overview.topicsMax')" prop="topics/max" min-width="150"></el-table-column>
+        <el-table-column prop="name" min-width="150" :label="$t('overview.name')">
+        </el-table-column>
+        <el-table-column prop="clients/count" min-width="150" :label="$t('overview.clientsCount')">
+        </el-table-column>
+        <el-table-column prop="clients/max" min-width="150" :label="$t('overview.clientsMax')">
+        </el-table-column>
+        <el-table-column prop="retained/count" min-width="150" :label="$t('overview.retainedCount')">
+        </el-table-column>
+        <el-table-column prop="retained/max" min-width="150" :label="$t('overview.retainedMax')">
+        </el-table-column>
+        <el-table-column prop="routes/count" min-width="150" :label="$t('overview.routesCount')">
+        </el-table-column>
+        <el-table-column prop="routes/max" min-width="150" :label="$t('overview.routesMax')">
+        </el-table-column>
+        <el-table-column prop="sessions/count" min-width="150" :label="$t('overview.sessionsCount')">
+        </el-table-column>
+        <el-table-column prop="subscriptions/count" min-width="160" :label="$t('overview.subscribersCount')">
+        </el-table-column>
+        <el-table-column prop="topics/count" min-width="150" :label="$t('overview.topicsCount')">
+        </el-table-column>
+        <el-table-column prop="topics/max" min-width="150" :label="$t('overview.topicsMax')">
+        </el-table-column>
       </el-table>
     </div>
 
@@ -124,10 +135,7 @@
               prop="key"
               :label="$t('overview.packetsData')">
             </el-table-column>
-            <el-table-column
-              prop="value"
-              label="">
-            </el-table-column>
+            <el-table-column prop="value" label=""></el-table-column>
           </el-table>
         </el-col>
 
@@ -138,10 +146,7 @@
               prop="key"
               :label="$t('overview.messagesData')">
             </el-table-column>
-            <el-table-column
-              prop="value"
-              label="">
-            </el-table-column>
+            <el-table-column prop="value" label=""></el-table-column>
           </el-table>
         </el-col>
 
@@ -152,10 +157,7 @@
               prop="key"
               :label="$t('overview.bytesData')">
             </el-table-column>
-            <el-table-column
-              prop="value"
-              label="">
-            </el-table-column>
+            <el-table-column prop="value" label=""></el-table-column>
           </el-table>
         </el-col>
       </el-row>
@@ -168,8 +170,7 @@
 import { mapActions } from 'vuex'
 
 import {
-  Tabs, TabPane, Row, Col, Option,
-  TableColumn, Table, Select,
+  Tabs, TabPane, Row, Col, Option, TableColumn, Table, Select,
   Button, Popover, Card, Tag,
 } from 'element-ui'
 
@@ -178,6 +179,20 @@ import { CURRENT_NODE } from '../store/mutation-types'
 
 export default {
   name: 'overview-view',
+  components: {
+    'el-option': Option,
+    'el-select': Select,
+    'el-tag': Tag,
+    'el-tabs': Tabs,
+    'el-tab-pane': TabPane,
+    'el-table': Table,
+    'el-table-column': TableColumn,
+    'el-button': Button,
+    'el-popover': Popover,
+    'el-card': Card,
+    'el-row': Row,
+    'el-col': Col,
+  },
   data() {
     return {
       loading: false,
@@ -197,20 +212,6 @@ export default {
       },
     }
   },
-  components: {
-    'el-option': Option,
-    'el-select': Select,
-    'el-tag': Tag,
-    'el-tabs': Tabs,
-    'el-tab-pane': TabPane,
-    'el-table': Table,
-    'el-table-column': TableColumn,
-    'el-button': Button,
-    'el-popover': Popover,
-    'el-card': Card,
-    'el-row': Row,
-    'el-col': Col,
-  },
   computed: {
     nodeInfo() {
       return this.$store.state.node.nodeName
@@ -218,9 +219,6 @@ export default {
   },
   watch: {
     nodeInfo: 'init',
-  },
-  created() {
-    this.init()
   },
   methods: {
     ...mapActions([CURRENT_NODE]),
@@ -310,6 +308,9 @@ export default {
         })
       })
     },
+  },
+  created() {
+    this.init()
   },
 }
 </script>
