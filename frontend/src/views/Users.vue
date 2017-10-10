@@ -220,35 +220,36 @@ export default {
     },
     save() {
       if (!this.user.username) {
-        this.formError.username = 'Username required'
+        this.formError.username = this.$t('users.usernameRequired')
         return false
       }
       if (!this.user.tags) {
-        this.formError.tags = 'Remark required'
+        this.formError.tags = this.$t('users.remarkRequired')
         return false
       }
-      if (this.user.username.length > 14) {
-        this.formError.username = 'Username too long'
+      if (this.user.username.length > 12 || this.user.username.length < 2) {
+        this.user.username = ''
+        this.formError.username = this.$t('users.usernameIllegal')
         return false
       }
       // add new user
       if (this.oper === 'new') {
         if (!this.user.password) {
-          this.formError.password = 'Password required'
+          this.formError.password = this.$t('users.passwordRequired')
           return false
         }
         if (this.user.password !== this.user.repeatPassword) {
           this.user.repeatPassword = ''
           this.user.password = ''
-          this.formError.repeatPassword = 'Password is inconsistent'
-          this.formError.password = 'Password is inconsistent'
+          this.formError.repeatPassword = this.$t('users.passwordInconsistent')
+          this.formError.password = this.$t('users.passwordInconsistent')
           return false
         }
         this.btnLoading = true
         this.user.tag = this.user.tags
         httpPost('/users', this.user).then((response) => {
           if (response.data.code === 0) {
-            this.$message.success('Create user success.')
+            this.$message.success(`${this.$t('users.createUser')}`)
             this.dialogVisible = false
             this.$router.push({ path: '/users' })
             this.loadData()
@@ -263,18 +264,18 @@ export default {
         // edit password
         if (this.changePassword) {
           if (!this.user.password) {
-            this.formError.password = 'Old password required'
+            this.formError.password = this.$t('users.passwordRequired')
             return false
           }
           if (!this.user.newPassword) {
-            this.formError.newPassword = 'New password required'
+            this.formError.newPassword = this.$t('users.newPasswordRequired')
             return false
           }
           if (this.user.newPassword !== this.user.repeatPassword) {
             this.user.repeatPassword = ''
             this.user.newPassword = ''
-            this.formError.repeatPassword = 'Password is inconsistent'
-            this.formError.newPassword = 'Password is inconsistent'
+            this.formError.repeatPassword = this.$t('users.passwordInconsistent')
+            this.formError.newPassword = this.$t('users.passwordInconsistent')
             return false
           }
           // this.updateUser()
@@ -289,7 +290,7 @@ export default {
               // old === now && user.now === edit.user, need't re authentication
               if (this.$store.state.user.username === this.user.username &&
               this.user.password !== this.user.newPassword) {
-                this.$message.error('You have changed your password. Please re authenticate！')
+                this.$message.error(this.$t('users.authenticate'))
                 this.logout()
               } else {
                 this.updateUser()
@@ -310,10 +311,10 @@ export default {
       this.btnLoading = true
       httpDelete(`/users/${username}`).then((response) => {
         if (response.data.code === 0) {
-          this.$message.success('Delete success!')
+          this.$message.success(`${this.$t('users.delete')}${this.$t('alert.success')}`)
           this.loadData()
         } else {
-          this.$message.error('Delete failure!')
+          this.$message.error(`${this.$t('users.delete')}${this.$t('alert.failure')}`)
         }
         this.btnLoading = false
         this.hidePopover()
@@ -324,12 +325,12 @@ export default {
       httpPut(`/users/${this.user.username}`, this.user).then((response) => {
         if (response.data.code === 0) {
           if (!changePassword) {
-            this.$message.success('Edit success!')
+            this.$message.success(`${this.$t('users.edit')}${this.$t('alert.success')}`)
           }
           this.dialogVisible = false
           this.loadData()
         } else if (!changePassword) {
-          this.$message.error('Edit failure!')
+          this.$message.error(`${this.$t('users.edit')}${this.$t('alert.failure')}`)
         }
         this.btnLoading = false
       })

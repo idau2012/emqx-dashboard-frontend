@@ -128,10 +128,6 @@ body {
   font-size: 14px;
   font-weight: 400;
 }
-/* nav top*/
-.nav-bar {
-  background-color: $nav-bg !important;
-}
 /* nprogress */
 body #nprogress .bar {
   background: $themes-color-native;
@@ -485,6 +481,7 @@ body #nprogress .peg {
     }
     /* 表格头部 & 全部 */
     th, tr, .el-table__header-wrapper {
+      border-bottom: 1px solid $table-border-middle !important;
       .el-table__header {
         tr div {
           color: $table-head-color !important;
@@ -779,7 +776,8 @@ body #nprogress .peg {
   }
 
   .nav-bar {
-    box-shadow: 0 1px 10px $color-risk;
+    background-color: $nav-bg !important;
+    border-bottom: 1px solid $border-color;
     .style-toggle {
       border-right: 1px solid $border-color !important;
       border-left: 1px solid $border-color !important;

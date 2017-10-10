@@ -75,6 +75,7 @@ $table-tr-color-hover: $table-head-color;
 
 /* 导航相关 */
 $nav-bg: $bg-color-dark;
+$nav-border: #313437;
 $left-bar-bg: $bg-color-dark;
 
 $left-bar-title: #e8e9e9;
@@ -164,10 +165,6 @@ body #nprogress .peg {
         }
       }
     }
-  }
-  /* nav top*/
-  .nav-bar {
-    background-color: $nav-bg !important;
   }
   /* form */
   .el-form {
@@ -434,6 +431,7 @@ body #nprogress .peg {
     }
     /* 表格头部 & 全部 */
     th, tr, .el-table__header-wrapper {
+      border-bottom: 1px solid $table-border-middle !important;
       .el-table__header {
         tr div {
           color: $table-head-color !important;
@@ -489,7 +487,7 @@ body #nprogress .peg {
     border-radius: 36px;
   }
   input[disabled='disabled'] {
-      background-color: $input-disabled-bg !important;
+      //background-color: $input-disabled-bg !important;
   }
   .el-input__inner, .el-textarea__inner {
     background-color: transparent;
@@ -823,6 +821,8 @@ body #nprogress .peg {
     }
   }
   .nav-bar {
+    background-color: $nav-bg !important;
+    border-bottom: 1px solid $nav-border;
     .bar-footer {
       span {
         color: $color !important;

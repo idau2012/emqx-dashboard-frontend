@@ -48,22 +48,15 @@
           <span>{{ scope.row.clean_sess ? 'true' : 'false' }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="max_inflight" min-width="120" :label="$t('sessions.maxInflight')">
-      </el-table-column>
-      <el-table-column prop="inflight_queue" min-width="150" :label="$t('sessions.inflightQueue')">
-      </el-table-column>
-      <el-table-column prop="message_queue" min-width="150" :label="$t('sessions.messageQueue')">
-      </el-table-column>
-      <el-table-column prop="message_dropped" min-width="150" :label="$t('sessions.messageDropped')">
-      </el-table-column>
-      <el-table-column prop="awaiting_rel" min-width="120" :label="$t('sessions.awaitingRel')">
-      </el-table-column>
-      <el-table-column prop="awaiting_ack" min-width="120" :label="$t('sessions.awaitingAck')">
-      </el-table-column>
-      <el-table-column prop="awaiting_comp" min-width="150" :label="$t('sessions.awaitingComp')">
-      </el-table-column>
-      <el-table-column prop="created_at" min-width="180" :label="$t('sessions.createdAt')">
-      </el-table-column>
+      <el-table-column prop="subscriptions" min-width="120" :label="$t('sessions.subscriptions')"></el-table-column>
+      <el-table-column prop="max_inflight" min-width="150" :label="$t('sessions.maxInflight')"></el-table-column>
+      <el-table-column prop="inflight_len" min-width="150" :label="$t('sessions.inflightLen')"></el-table-column>
+      <el-table-column prop="mqueue_len" min-width="150" :label="$t('sessions.mqueueLen')"></el-table-column>
+      <el-table-column prop="mqueue_dropped" min-width="150" :label="$t('sessions.mqueueDropped')"></el-table-column>
+      <el-table-column prop="awaiting_rel_len" min-width="150" :label="$t('sessions.awaitingRelLen')"></el-table-column>
+      <el-table-column prop="deliver_msg" min-width="150" :label="$t('sessions.deliverMsg')"></el-table-column>
+      <el-table-column prop="enqueue_msg" min-width="180" :label="$t('sessions.enqueueMsg')"></el-table-column>
+      <el-table-column prop="created_at" min-width="180" :label="$t('sessions.createdAt')"></el-table-column>
     </el-table>
 
     <!-- topics -->
@@ -179,7 +172,6 @@ export default {
     },
     // get path
     init() {
-      console.log('init into\n\n')
       this.activeTab = this.$route.path.split('/')[1]
       switch (this.activeTab) {
         case 'clients':
@@ -225,7 +217,6 @@ export default {
       this.searchView = false
       this.searchValue = ''
       if (!this.nodeName && this.activeTab !== 'routes') {
-        console.log('nodeName not ok ', 'datas')
         return
       }
       // load child with the currentPage asc
@@ -245,7 +236,7 @@ export default {
     },
     searchChild() {
       if (!this.searchValue) {
-        this.$message.error(`${this.searchPlaceholder} required!`)
+        this.$message.error(`${this.searchPlaceholder} ${this.$t('alert.required')}`)
         return
       }
       let requestURL = `/nodes/${this.nodeName}/${this.activeTab}/${this.searchValue}`
@@ -257,7 +248,6 @@ export default {
         if (response.data.result.objects.length === 0) {
           this.searchView = false
           this[this.activeTab] = []
-          // this.$message.error('No Data!')
           this.searchView = true
           // reset page
           this.total = 0

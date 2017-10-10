@@ -50,6 +50,7 @@
         <img src="../assets/exit.png">
       </a>
     </div>
+
   </div>
 </template>
 
@@ -152,11 +153,11 @@ export default {
 
 <style lang="scss" scoped>
 .nav-bar {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 200px;
   right: 0;
-  height: 64px;
+  height: 63px;
   z-index: 1000;
   display: flex;
   align-items: center;

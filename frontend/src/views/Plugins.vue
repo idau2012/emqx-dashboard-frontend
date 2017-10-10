@@ -316,10 +316,10 @@ export default{
       httpPut(`/nodes/${this.nodeName}/plugins/${row.name}`, data).then((response) => {
         this.loading = false
         if (response.data.code === 0) {
-          this.$message.success(`${row.active ? 'Stop' : 'Start'} success.`)
+          this.$message.success(`${row.active ? this.$t('plugins.stop') : this.$t('plugins.start')}${this.$t('alert.success')}`)
           this.loadPlugins()
         } else {
-          this.$message.error(`${row.active ? 'Stop' : 'Start'} failure with code ${response.data.code}: ${response.data.message}`)
+          this.$message.error(`${row.active ? this.$t('plugins.stop') : this.$t('plugins.start')}${this.$t('alert.failure')}:${response.data.code} ${response.data.message}`)
         }
       })
     },
@@ -380,7 +380,6 @@ export default{
         // load with plugin page
         const currentNode = this.$store.state.node.nodeName
         httpGet('/management/nodes').then((response) => {
-          console.log('load node from api', 'plugins')
           this.nodes = []
           // set default of select
           this.nodeName = currentNode || response.data.result[0].name || ''

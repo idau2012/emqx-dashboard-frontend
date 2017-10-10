@@ -13,7 +13,7 @@
         </el-col>
         <el-col :span="8">
           <label>{{ $t('websocket.port') }}:</label>
-          <el-input v-model="clientOption.port" size="small"></el-input>
+          <el-input v-model.number="clientOption.port" size="small"></el-input>
         </el-col>
         <el-col :span="8">
           <label>{{ $t('websocket.clientID') }}:</label>
@@ -31,7 +31,7 @@
         </el-col>
         <el-col :span="8">
           <label>{{ $t('websocket.keepAlive') }}:</label>
-          <el-input v-model="clientOption.keepalive" size="small"></el-input>
+          <el-input v-model.number="clientOption.keepalive" size="small"></el-input>
         </el-col>
       </el-row>
       <el-row>
@@ -80,7 +80,7 @@
           <label>{{ $t('websocket.topic') }}:</label>
           <el-input v-model="clientOption.subTopic" size="small"></el-input>
           <label>{{ $t('websocket.qoS') }}:</label>
-          <el-select v-model="clientOption.subQos" size="small" style="display: block;">
+          <el-select v-model.number="clientOption.subQos" size="small" style="display: block;">
             <el-option value="0"></el-option>
             <el-option value="1"></el-option>
             <el-option value="2"></el-option>
@@ -90,6 +90,7 @@
               type="success"
               icon="check"
               size="small"
+              :plain="true"
               @keyup.enter.native="mqttSubscribe"
               @click="mqttSubscribe">
               {{ $t('websocket.subscribe') }}
@@ -101,9 +102,9 @@
           <el-table :data="clientOption.subscriptions" :max-height="320">
             <el-table-column prop="topic" min-width="150" :label="$t('websocket.topic')">
             </el-table-column>
-            <el-table-column prop="qos" width="70" :label="$t('websocket.qoS')">
+            <el-table-column prop="qos" min-width="120" :label="$t('websocket.qoS')">
             </el-table-column>
-            <el-table-column prop="time" min-width="180" :label="$t('websocket.date')">
+            <el-table-column prop="time" min-width="180" :label="$t('websocket.time')">
             </el-table-column>
             <el-table-column prop="time" width="70" :label="$t('websocket.oper')">
               <template scope="props">
@@ -137,7 +138,7 @@
         </el-col>
         <el-col :span="6">
           <label>{{ $t('websocket.qoS') }}:</label>
-          <el-select v-model="clientOption.publishQos" size="small" style="display: block;">
+          <el-select v-model.number="clientOption.publishQos" size="small" style="display: block;">
             <el-option value="0"></el-option>
             <el-option value="1"></el-option>
             <el-option value="2"></el-option>
@@ -151,6 +152,7 @@
             type="success"
             icon="check"
             size="small"
+            :plain="true"
             @click="mqttPublish"
             @keyup.enter.native="mqttPublish">
             {{ $t('websocket.send') }}
@@ -172,9 +174,9 @@
             </el-table-column>
             <el-table-column prop="topic" :label="$t('websocket.topic')">
             </el-table-column>
-            <el-table-column prop="qos" width="70" :label="$t('websocket.qoS')">
+            <el-table-column prop="qos" min-width="120" :label="$t('websocket.qoS')">
             </el-table-column>
-            <el-table-column prop="time" width="180" :label="$t('websocket.subscribe')">
+            <el-table-column prop="time" min-width="180" :label="$t('websocket.time')">
             </el-table-column>
           </el-table>
         </el-col>
@@ -192,9 +194,9 @@
             </el-table-column>
             <el-table-column prop="topic" :label="$t('websocket.topic')">
             </el-table-column>
-            <el-table-column prop="qos" width="70" :label="$t('websocket.qoS')">
+            <el-table-column prop="qos" min-width="120" :label="$t('websocket.qoS')">
             </el-table-column>
-            <el-table-column prop="time" width="180" :label="$t('websocket.subscribe')">
+            <el-table-column prop="time" width="180" :label="$t('websocket.time')">
             </el-table-column>
           </el-table>
         </el-col>
@@ -213,7 +215,7 @@
 *   以上两条 ==> 用户期望可以手动终止，客户端也应该超时终止
 * 发布时： 非法发布(非法主题) ==> 服务器断开连接 ==> 客户端触发 reconnect ==> 回调函数error值为空
 * 其中 Qos, Topic, Message等必须是Number, String/Buffer, String/Buffer ==> 防止因为ElementUI 下拉选择切换
-* 导致Qos变为String ==> 强制类型转换相关值后再发送
+* 导致Qos变为String ==> 强制类型转换相关值后再发送 or 使用vue绑定修饰符
 * */
 import NProgress from 'nprogress'
 import mqtt from 'mqtt'
@@ -299,14 +301,13 @@ export default {
       this.loading = true
       this.retryTimes = 0
       const options = {
-        keepalive: Number(this.clientOption.keepalive),
+        keepalive: this.clientOption.keepalive,
         username: this.clientOption.username,
         password: this.clientOption.password,
         clientId: this.clientOption.clientId,
         clean: this.clientOption.clean,
         connectTimeout: 4000,
       }
-      console.log(options)
       this.client = mqtt.connect(`ws://${this.clientOption.host}:${this.clientOption.port}/mqtt`, options)
       this.client.on('connect', () => {
         this.loading = false
@@ -317,9 +318,9 @@ export default {
       this.client.on('reconnect', () => {
         if (this.retryTimes > 1) {
           if (this.sending) {
-            this.$message.error('Error: Disconnect due to the illegal topic!')
+            this.$message.error(this.$t('websocket.connectError'))
           } else {
-            this.$message.error(`Connect failure on ${this.clientOption.host}:${this.clientOption.port}!`)
+            this.$message.error(`${this.$t('websocket.connectFailure')} ${this.clientOption.host}:${this.clientOption.port}`)
           }
           this.retryTimes = 0
           this.sending = false
@@ -330,7 +331,7 @@ export default {
         }
         // trigger by sending illegal topic
         if (this.sending) {
-          this.$message.error('Error: Failure due to a illegal topic!')
+          this.$message.error(this.$t('websocket.connectError'))
         }
         this.retryTimes += 1
       })
@@ -360,7 +361,7 @@ export default {
           NProgress.done()
         })
       } else {
-        this.$message.error('The client does not connect to the broker!')
+        this.$message.error(this.$t('websocket.connectLeave'))
       }
     },
     mqttSubscribe() {
@@ -372,9 +373,8 @@ export default {
         })
         NProgress.start()
         this.client.subscribe(this.clientOption.subTopic,
-        { qos: Number(this.clientOption.subQos) },
-        (error, granted) => {
-          console.log(granted)
+        { qos: this.clientOption.subQos },
+        (error) => {
           if (error) {
             NProgress.done()
             this.$message.error(error.toString())
@@ -384,18 +384,18 @@ export default {
               qos: this.clientOption.subQos,
               time: this.now(),
             })
-            this.$message.success('Subscribe success.')
+            this.$message.success(this.$t('websocket.subscribeSuccess'))
             NProgress.done()
           }
         })
       } else {
-        this.$message.error('The client does not connect to the broker!')
+        this.$message.error(this.$t('websocket.connectLeave'))
       }
     },
     mqttPublish() {
       if (this.client.connected) {
         NProgress.start()
-        const options = { qos: Number(this.clientOption.publishQos),
+        const options = { qos: this.clientOption.publishQos,
           retain: this.clientOption.publishRetain }
         // to mark which trigger the reconnect
         this.sending = true
@@ -411,22 +411,22 @@ export default {
               qos: this.clientOption.publishQos,
               time: this.now(),
             })
-            this.$message.success('Message send out.')
+            this.$message.success(this.$t('websocket.messageSendOut'))
             NProgress.done()
           }
         })
       } else {
-        this.$message.error('The client does not connect to the broker!')
+        this.$message.error(this.$t('websocket.connectLeave'))
       }
     },
     mqttCacheScuscribe(topic) {
       if (!this.client.connected) {
-        this.$message.error('The client does not connect to the broker!')
+        this.$message.error(this.$t('websocket.connectLeave'))
         return
       }
       this.client.unsubscribe(topic, (error) => {
         if (error) {
-          this.$message.error(`Unsubscribe failure: ${error.toString()}!`)
+          this.$message.error(`${this.$t('websocket.unsubscribeFailure')} ${error.toString()}!`)
           return
         }
         this.clientOption.subscriptions.forEach((element, index) => {
@@ -486,6 +486,8 @@ export default {
   }
   .el-table {
     margin-top: 5px;
+    /* 增加内边距 */
+    border-width: 0 !important;
   }
   .blank-top {
     margin-top: 60px;
@@ -500,6 +502,9 @@ export default {
   .el-button {
     display: inline-block;
     width: 100px;
+    &.unsubscribe {
+      width: auto;
+    }
   }
 }
 </style>

@@ -336,7 +336,7 @@ export default {
       width: 100%;
       top: -34px;
       left: 0;
-      font-size: 18px;
+      font-size: 16px;
     }
     .el-table {
       margin-top: 0;

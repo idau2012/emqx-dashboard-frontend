@@ -5,9 +5,8 @@
       <div slot="header">
         <span>{{ $t('httpApi.introduction') }}</span>
       </div>
-      <div>{{ $t('httpApi.desc') }}</div>
+      <div v-html="$t('httpApi.desc')"></div>
     </el-card>
-
     <el-card class="box-card" style="margin-top: 30px;">
       <div slot="header">
         <span>{{ $t('httpApi.reference') }}</span>
@@ -418,6 +417,9 @@ export default {
   }
   .box-card {
     margin-top: 60px;
+  }
+  .el-table {
+    border-width: 0 !important;
   }
 }
 </style>

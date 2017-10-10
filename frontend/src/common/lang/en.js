@@ -73,13 +73,14 @@ export default {
   sessions: {
     clientId: 'ClientId',
     cleanSess: 'CleanSess',
+    subscriptions: 'Subscriptions',
     maxInflight: 'MaxInflight',
-    inflightQueue: 'InflightQueue',
-    messageQueue: 'MessageQueue',
-    messageDropped: 'MessageDropped',
-    awaitingRel: 'AwaitingRel',
-    awaitingAck: 'AwaitingAck',
-    awaitingComp: 'AwaitingComp',
+    inflightLen: 'Inflight Len',
+    mqueueLen: 'MqueueLen',
+    mqueueDropped: 'MqueueDropped',
+    awaitingRelLen: 'AwaitingRelLen',
+    deliverMsg: 'DeliverMsg',
+    enqueueMsg: 'EnqueueMsg',
     createdAt: 'CreatedAt',
   },
   // routes
@@ -144,12 +145,18 @@ export default {
     messagesAlreadySent: 'Messages already sent',
     messagesReceived: 'Messages received',
     time: 'Time',
+    connectError: 'Error: Disconnect due to the illegal topic',
+    connectFailure: 'Connect failed on',
+    connectLeave: 'The client does not connect to the broker',
+    subscribeSuccess: 'Subscribe success',
+    unsubscribeFailure: 'Unsubscribe Failure',
+    messageSendOut: 'Message send out',
   },
   // http_api
   httpApi: {
     introduction: 'Introduction',
-    desc: 'Apart from this help page, all URIs will serve only resources of type application/json, and will require HTTP basic authentication. The default user is admin/admin.\n' +
-    '\n' +
+    desc: 'Apart from this help page, all URIs will serve only resources of type application/json, and will require HTTP basic authentication. The default user is admin / public.\n' +
+    '<br/>' +
     'The emq_dashboard plugin provides a web management console. The Dashboard helps monitor broker\'s running status, statistics and metrics of MQTT packets.',
     reference: 'Reference',
     method: 'Method',
@@ -174,6 +181,21 @@ export default {
     cancel: 'Cancel',
     save: 'Save',
     delete: 'Delete',
+    confirm: 'Confirm',
     confirmDelete: 'Confirm Delete',
+    usernameRequired: 'Username required',
+    remarkRequired: 'Remark required',
+    usernameIllegal: 'Username illegal',
+    passwordRequired: 'Password required',
+    newPasswordRequired: 'new password required',
+    passwordInconsistent: 'Password is inconsistent',
+    authenticate: 'You have changed your password. Please re authenticate',
+    createUser: 'Create user success',
+  },
+  alert: {
+    required: 'required',
+    success: ' success',
+    failure: ' failure',
+    connect: 'Connect',
   },
 }
