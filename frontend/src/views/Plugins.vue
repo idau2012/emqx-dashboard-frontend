@@ -142,8 +142,8 @@
       </el-form>
     </el-card>
 
-    <el-dialog title="Notice" size="tiny" :visible.sync="dialogVisible">
-      <span>{{ notic }}</span>
+    <el-dialog :title="$t('plugins.noticeTitle')" size="tiny" :visible.sync="dialogVisible">
+      <span>{{ notice }}</span>
       <span slot="footer" class="dialog-footer">
         <el-button
           type="success"
@@ -230,7 +230,7 @@ export default{
   data() {
     return {
       filtered: false,
-      notic: '',
+      notice: '',
       oper: '',
       nextPath: '/plugins',
       dialogVisible: false,
@@ -432,16 +432,16 @@ export default{
         // load pluginOption
         httpPut(`nodes/${this.plugin.nodeName}/plugin_configs/${this.plugin.name}`, this.record).then((response) => {
           if (response.data.code === 0) {
-            this.$message.success('Config Success.')
+            this.$message.success(this.$t('plugins.configSuccess'))
             this.hashCode = JSON.stringify(this.record)
             this.$router.push({ path: '/plugins' })
           } else {
-            this.$message.error('Config failure!')
+            this.$message.error(this.$t('plugins.configFailure'))
           }
         })
       } else {
         // waiting the confirm
-        this.notic = 'Are you sure you want to submit changes and apply them ?'
+        this.notice = this.$t('plugins.notice')
         this.oper = 'update'
         this.handleOperation(true)
       }
@@ -471,7 +471,7 @@ export default{
           this.$set(this.record, item.key, item.default[0])
         })
       } else {
-        this.notic = 'Are you sure the reset configuration is the default?'
+        this.notice = 'Are you sure the reset configuration is the default?'
         this.oper = 'default'
         this.handleOperation(true)
       }
@@ -479,13 +479,13 @@ export default{
     abortOperation(confirm = false) {
       if (confirm) {
         this.$message({
-          message: 'You have given up this change',
+          message: this.$t('plugins.cacheNotice'),
           type: 'warning',
         })
         this.hashCode = JSON.stringify(this.record)
         this.$router.push({ path: this.nextPath })
       } else if (this.hashCode !== JSON.stringify(this.record)) {
-        this.notic = 'Are you sure you want to give up the change and exit?'
+        this.notice = this.$t('plugins.giveUpNotice')
         this.oper = 'cancel'
         // reset current node
         this.setNode()

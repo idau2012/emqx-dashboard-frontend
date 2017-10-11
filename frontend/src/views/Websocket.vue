@@ -269,12 +269,12 @@ export default {
   computed: {
     getStatus() {
       if (this.client.connected) {
-        return 'CONNECTED'
+        return this.$t('websocket.connected')
       }
       if (this.loading) {
-        return 'CONNECTING'
+        return this.$t('websocket.connecting')
       }
-      return 'DISCONNECTED'
+      return this.$t('websocket.disconnected')
     },
   },
   methods: {

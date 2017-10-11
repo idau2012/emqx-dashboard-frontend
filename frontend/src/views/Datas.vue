@@ -31,7 +31,7 @@
           <span>{{ scope.row.clean_sess ? 'true' : 'false' }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="proto_ver" width="90" :label="$t('clients.protoVer')">
+      <el-table-column prop="proto_ver" width="120" :label="$t('clients.protoVer')">
       </el-table-column>
       <el-table-column prop="keepalive" width="120" :label="$t('clients.keepalive')">
       </el-table-column>
@@ -43,7 +43,7 @@
     <el-table v-show="activeTab==='sessions'" v-loading="loading" border :data="sessions">
       <el-table-column prop="client_id" min-width="160" :label="$t('sessions.clientId')">
       </el-table-column>
-      <el-table-column prop="clean_sess" :label="$t('sessions.cleanSess')">
+      <el-table-column prop="clean_sess" width="120" :label="$t('sessions.cleanSess')">
         <template scope="scope">
           <span>{{ scope.row.clean_sess ? 'true' : 'false' }}</span>
         </template>
@@ -87,7 +87,8 @@
           size="small"
           type="text"
           icon="arrow-left"
-          @click="loadChild">Back
+          @click="loadChild">
+          {{ $t('clients.back') }}
         </el-button>
       </el-col>
     </el-row>

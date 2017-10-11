@@ -11,7 +11,7 @@
       <div slot="header">
         <span>{{ $t('httpApi.reference') }}</span>
       </div>
-      <el-table border :data="tableData">
+      <el-table border v-loading="loading" :data="tableData">
         <el-table-column prop="method" width="120" :label="$t('httpApi.method')"></el-table-column>
         <el-table-column min-width="160" :label="$t('httpApi.path')">
           <template scope="props">
@@ -56,6 +56,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       popoverVisible: false,
       nodeName: 'emq@127.0.0.1',
       tableData: [],
@@ -81,12 +82,14 @@ export default {
       return row.target && row.target.indexOf('{') === -1 && row.method === 'GET'
     },
     init() {
+      this.loading = true
       const currentNodeName = this.$store.state.node.nodeName
       httpGet('/management/nodes').then((response) => {
         this.nodeName = currentNodeName || response.data.result[0].name || ''
         this.nodes = response.data.result
         this.setNode()
         this.setApiData()
+        this.loading = false
       })
     },
     setApiData() {
@@ -218,7 +221,7 @@ export default {
             method: 'GET',
             path: '/api/v2/monitoring/listeners',
             target: '/api/v2/monitoring/listeners',
-            description: '获取集群节点的监听器列表',
+            description: '获取集群的监听器列表',
           },
           {
             method: 'GET',
@@ -230,25 +233,25 @@ export default {
             method: 'GET',
             path: '/api/v2/monitoring/metrics/',
             target: '/api/v2/monitoring/metrics/',
-            description: '获取全部节点的收发报文统计',
+            description: '获取全部节点的度量指标',
           },
           {
             method: 'GET',
             path: '/api/v2/monitoring/metrics/emq@127.0.0.1',
             target: `/api/v2/monitoring/metrics/${this.nodeName}`,
-            description: '获取指定节点的收发报文统计',
+            description: '获取指定节点的度量指标',
           },
           {
             method: 'GET',
             path: 'api/v2/monitoring/stats',
             target: 'api/v2/monitoring/stats',
-            description: '获取全部节点的连接会话统计',
+            description: '获取全部节点的运行统计',
           },
           {
             method: 'GET',
             path: '/api/v2/monitoring/stats/emq@127.0.0.1',
             target: `/api/v2/monitoring/stats/${this.nodeName}`,
-            description: '获取指定节点的连接会话统计',
+            description: '获取指定节点的运行统计',
           },
         ]
       } else {

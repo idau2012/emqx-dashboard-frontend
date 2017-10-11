@@ -254,8 +254,9 @@ export default {
             this.$router.push({ path: '/users' })
             this.loadData()
           } else {
-            this.$message.error(response.data.message)
-            this.formError.username = response.data.message
+            const errorCode = `users.errorCode[${response.data.code}]`
+            this.$message.error(this.$t(errorCode) || response.data.message)
+            this.formError.username = this.$t(errorCode) || response.data.message
           }
           this.btnLoading = false
         })
@@ -296,8 +297,9 @@ export default {
                 this.updateUser()
               }
             } else {
-              this.$message.error(response.data.message)
-              this.formError.password = response.data.message
+              const errorCode = `users.errorCode[${response.data.code}]`
+              this.$message.error(this.$t(errorCode) || response.data.message)
+              this.formError.username = this.$t(errorCode) || response.data.message
             }
             this.btnLoading = false
           })

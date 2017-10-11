@@ -115,7 +115,11 @@
         </el-table-column>
         <el-table-column prop="sessions/count" min-width="150" :label="$t('overview.sessionsCount')">
         </el-table-column>
+        <el-table-column prop="sessions/max" min-width="150" :label="$t('overview.sessionsMax')">
+        </el-table-column>
         <el-table-column prop="subscriptions/count" min-width="160" :label="$t('overview.subscribersCount')">
+        </el-table-column>
+        <el-table-column prop="subscriptions/max" min-width="160" :label="$t('overview.subscribersMax')">
         </el-table-column>
         <el-table-column prop="topics/count" min-width="150" :label="$t('overview.topicsCount')">
         </el-table-column>

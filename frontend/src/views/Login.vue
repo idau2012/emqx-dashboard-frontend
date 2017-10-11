@@ -4,10 +4,10 @@
       <el-col class="login-form" :xs="20" :sm="10" :md="8" :lg="8">
         <el-card class="box-card">
           <div slot="header">
-            <span style="font-size: 16px">LOG IN</span>
+            <span style="font-size: 16px">{{ $t('login.title') }}</span>
           </div>
           <el-form label-position="top" @keyup.enter.native="login">
-            <el-form-item label="Username">
+            <el-form-item :label="$t('login.username')">
               <el-input
                 v-model="username"
                 :class="{ error: loginError.username }"
@@ -15,7 +15,7 @@
                 @focus="loginError.username=''">
               </el-input>
             </el-form-item>
-            <el-form-item label="Pasword">
+            <el-form-item :label="$t('login.password')">
               <el-input
                 type="password"
                 v-model="password"
@@ -27,9 +27,9 @@
           </el-form>
           <div class="login-footer">
             <div class="checkbox">
-              <el-checkbox v-model="remember">Remember</el-checkbox>
+              <el-checkbox v-model="remember">{{ $t('login.remember') }}</el-checkbox>
             </div>
-            <el-button type="success" @click="login">Log In</el-button>
+            <el-button type="success" @click="login">{{ $t('login.loginButton') }}</el-button>
           </div>
           <!--<div>-->
             <!--Not a member?-->
@@ -79,10 +79,10 @@ export default {
     },
     login() {
       if (!this.username) {
-        this.loginError.username = 'Username Required'
+        this.loginError.username = this.$t('login.usernameRequired')
         return false
       } else if (!this.password) {
-        this.loginError.password = 'Password Required'
+        this.loginError.password = this.$t('login.passwordRequired')
         return false
       }
       const user = {
@@ -104,7 +104,7 @@ export default {
           const path = decodeURIComponent(this.$route.query.redirect || '/')
           this.$router.push({ path })
         } else {
-          this.loginError.username = 'Username Or Password Error'
+          this.loginError.username = this.$t('login.error')
           this.username = ''
           this.password = ''
         }

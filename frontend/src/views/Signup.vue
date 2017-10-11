@@ -88,7 +88,8 @@ export default {
         if (response.data.code === 0) {
           this.$router.push({ path: '/login' })
         } else {
-          this.$message.error(response.data.message)
+          const errorCode = `users.errorCode[${response.data.code}]`
+          this.$message.error(this.$t(errorCode) || response.data.message)
         }
       })
     },

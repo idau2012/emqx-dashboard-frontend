@@ -1,8 +1,8 @@
 <template>
   <div class="not-found">
     <p>404 Not Found</p>
-    <a href="javascript:;" @click="back">HomePage</a>
-    <a href="javascript:;" @click="back(true)">Back to last page</a>
+    <a href="javascript:;" @click="back">Homepage</a>
+    <a href="javascript:;" @click="back(true)">Back up</a>
   </div>
 </template>
 

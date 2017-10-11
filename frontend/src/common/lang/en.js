@@ -49,7 +49,9 @@ export default {
     routesCount: 'Routes/Count',
     routesMax: 'Routes/Max',
     sessionsCount: 'Sessions/Count',
+    sessionsMax: 'Sessions/Max',
     subscribersCount: 'Subscribers/Count',
+    subscribersMax: 'subscribers/Max',
     topicsCount: 'Topics/Count',
     topicsMax: 'Topics/Max',
     // Metrics
@@ -68,6 +70,7 @@ export default {
     protoVer: 'ProtoVer',
     keepalive: 'Keepalive(s)',
     connectedAt: 'ConnectedAt',
+    back: 'Back',
   },
   // sessions
   sessions: {
@@ -111,6 +114,12 @@ export default {
     cancel: 'Cancel',
     advancedConfig: 'Advanced Config',
     add: 'Add',
+    configSuccess: 'Config success',
+    configFailure: 'Config failure',
+    notice: 'Are you sure you want to submit changes and apply them ?',
+    giveUpNotice: 'Are you sure you want to give up the change and exit?',
+    noticeTitle: 'Notice',
+    cacheNotice: 'You have given up this change',
   },
   // listeners
   listeners: {
@@ -151,6 +160,9 @@ export default {
     subscribeSuccess: 'Subscribe success',
     unsubscribeFailure: 'Unsubscribe Failure',
     messageSendOut: 'Message send out',
+    connected: 'CONNECTED',
+    connecting: 'CONNECTING',
+    disconnected: 'DISCONNECTED',
   },
   // http_api
   httpApi: {
@@ -191,11 +203,39 @@ export default {
     passwordInconsistent: 'Password is inconsistent',
     authenticate: 'You have changed your password. Please re authenticate',
     createUser: 'Create user success',
+    errorCode: {
+      101: '',
+      102: '',
+      103: '',
+      104: '',
+      105: '',
+      106: '',
+      107: '',
+      108: '',
+      109: '',
+      110: '',
+      111: '',
+      112: '',
+      113: '',
+      114: '',
+    },
   },
+  // alert
   alert: {
     required: 'required',
     success: ' success',
     failure: ' failure',
     connect: 'Connect',
+  },
+  // login
+  login: {
+    title: 'LOG IN',
+    username: 'Username',
+    password: 'Password',
+    remember: 'Remember',
+    loginButton: 'Log In',
+    error: 'Username Or Password Error',
+    usernameRequired: 'Username Required',
+    passwordRequired: 'Password Required',
   },
 }
