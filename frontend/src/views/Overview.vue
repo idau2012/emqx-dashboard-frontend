@@ -263,16 +263,14 @@ export default {
       data.unshift(tem)
       return data
     },
-    // setInterval to refresh the data
+    // setInterval to refresh the data, if
     refreshInterval() {
-      window.clearInterval(this.timeoutTimer)
-      this.flag = window.setInterval(this.loadData, 1000 * 10)
-      this.TIMER({ timer: this.flag })
+      clearInterval(this.flag)
+      this.flag = setInterval(this.loadData, 1000 * 10)
     },
     // load data index by nodeName
     loadData() {
       if (this.$route.path !== '/') {
-        window.clearInterval(this.$store.state.timer.timer)
         return
       }
       if (!this.nodeName) {
@@ -319,6 +317,10 @@ export default {
   },
   created() {
     this.init()
+  },
+  beforeRouteLeave(to, from, next) {
+    clearInterval(this.flag)
+    next()
   },
 }
 </script>
