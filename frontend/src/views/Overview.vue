@@ -179,7 +179,7 @@ import {
 } from 'element-ui'
 
 import { httpGet } from '../store/api'
-import { CURRENT_NODE } from '../store/mutation-types'
+import { CURRENT_NODE, TIMER } from '../store/mutation-types'
 
 export default {
   name: 'overview-view',
@@ -220,12 +220,15 @@ export default {
     nodeInfo() {
       return this.$store.state.node.nodeName
     },
+    timeoutTimer() {
+      return this.$store.state.timer.timer
+    },
   },
   watch: {
     nodeInfo: 'init',
   },
   methods: {
-    ...mapActions([CURRENT_NODE]),
+    ...mapActions([CURRENT_NODE, TIMER]),
     // set global nodeName
     setNode() {
       this.CURRENT_NODE({ nodeName: this.nodeName, nodes: this.nodes })
@@ -262,13 +265,14 @@ export default {
     },
     // setInterval to refresh the data
     refreshInterval() {
-      window.clearInterval(this.flag)
+      window.clearInterval(this.timeoutTimer)
       this.flag = window.setInterval(this.loadData, 1000 * 10)
+      this.TIMER({ timer: this.flag })
     },
     // load data index by nodeName
     loadData() {
       if (this.$route.path !== '/') {
-        window.clearInterval(this.flag)
+        window.clearInterval(this.$store.state.timer.timer)
         return
       }
       if (!this.nodeName) {

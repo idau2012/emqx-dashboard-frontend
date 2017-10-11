@@ -123,6 +123,7 @@ export default {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    max-width: 600px;
   }
   .el-button {
     padding: 9px 25px;

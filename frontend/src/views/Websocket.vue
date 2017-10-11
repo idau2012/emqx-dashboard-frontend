@@ -247,7 +247,7 @@ export default {
       sending: false,
       clientOption: {
         host: window.location.hostname,
-        port: '8083',
+        port: 8083,
         username: '',
         password: '',
         keepalive: 60,

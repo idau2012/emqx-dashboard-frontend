@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import user from './modules/user'
 import node from './modules/node'
 import themes from './modules/themes'
+import timer from './modules/timer'
 
 Vue.use(Vuex)
 
@@ -14,5 +15,6 @@ export default new Vuex.Store({
     user,
     node,
     themes,
+    timer,
   },
 })
