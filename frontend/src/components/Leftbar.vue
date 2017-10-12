@@ -94,32 +94,22 @@ export default {
 <style lang="scss">
 .leftbar {
   position: fixed;
-  top: 60px;
+  top: 0;
   bottom: 0;
   width: 200px;
   z-index: 1000;
   overflow-y: auto;
   .el-menu {
-    position: relative;
+    position: absolute;
     left: 0;
-    top: 0;
+    top: 60px;
     width: 200px;
     padding-bottom: 52px;
-  }
-  .el-menu-item {
-    height: 40px;
-    line-height: 40px;
-  }
-  .el-menu-item-group__title {
-    font-weight: bolder;
-    margin-bottom: 10px;
-    margin-top: 15px;
-    font-size: 14px;
   }
   .bar-title {
     position: fixed;
     top: 0;
-    z-index: 1003;
+    z-index: 1006;
     padding-left: 20px;
     display: flex;
     height: 63px;
@@ -135,11 +125,18 @@ export default {
       width: 48px;
     }
   }
-  .fa {
-    margin-right: 10px;
+  .el-menu-item {
+    height: 40px;
+    line-height: 40px;
   }
-  .el-submenu .el-menu-item {
-    padding-left: 50px !important;
+  .el-menu-item-group__title {
+    font-weight: bolder;
+    margin-bottom: 10px;
+    margin-top: 15px;
+    font-size: 14px;
+  }
+  i {
+    width: 20px;
   }
 }
 </style>

@@ -7,28 +7,28 @@ export default {
   leftbar: {
     // MONITORING
     monitoring: '监控',
-    overview: '首页',
-    clients: '客户端',
+    overview: '控制台',
+    clients: '连接',
     sessions: '会话',
     routes: '路由',
     subscriptions: '订阅',
     // MANAGEMENT
     management: '管理',
     plugins: '插件',
-    listeners: '端口监听',
+    listeners: '监听器',
     // TOOLS
     tools: '工具',
     websocket: 'Websocket',
     api: 'HTTP接口',
     // ADMIN
     admin: '系统',
-    users: '用户管理',
+    users: '用户',
   },
   // overview
   overview: {
     // Broker
     broker: '系统信息',
-    systemName: '系统名称',
+    systemName: '名称',
     version: '版本',
     uptime: '运行时间',
     systemTime: '系统时间',
@@ -49,11 +49,11 @@ export default {
     routesCount: '路由数',
     routesMax: '路由峰值',
     sessionsCount: '会话数',
-    sessionsMax: '最大会话数',
+    sessionsMax: '会话峰值',
     subscribersCount: '订阅数',
-    subscribersMax: '最大订阅数',
+    subscribersMax: '订阅峰值',
     topicsCount: '主题数',
-    topicsMax: '最大主题数',
+    topicsMax: '主题峰值',
     // Metrics
     metrics: '度量指标',
     packetsData: 'MQTT报文',
@@ -66,17 +66,17 @@ export default {
     username: '用户名',
     ipAddr: 'IP地址',
     port: '端口',
-    cleanSess: '持久会话',
+    cleanSess: '清除会话',
     protoVer: '协议版本',
     keepalive: '心跳(秒)',
-    connectedAt: '创建时间',
+    connectedAt: '连接时间',
     back: '返回',
   },
   // sessions
   sessions: {
     clientId: '客户端ID',
-    cleanSess: '持久会话',
-    subscriptions: '订阅',
+    cleanSess: '清除会话',
+    subscriptions: '订阅数',
     maxInflight: '最大拥塞',
     inflightLen: '当前拥塞',
     mqueueLen: '当前缓存消息',

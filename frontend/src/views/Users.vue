@@ -347,12 +347,13 @@ export default {
 
 <style lang="scss">
 .users-view {
-  padding-top: 20px;
   .el-table {
-    margin-top: 60px;
+    margin-top: 24px;
   }
-  .el-input {
-    margin: 5px 0 20px;
+  .el-dialog {
+    .el-input {
+      margin: 5px 0 20px;
+    }
   }
 }
 </style>

@@ -3,7 +3,7 @@
     <div class="page-title">{{ $t('leftbar.overview') }}</div>
 
     <!-- Broker -->
-     <div class="card-box">
+     <div class="card-box" style="margin-top: 54px">
        <div class="card-title">{{ $t('overview.broker') }}</div>
        <el-row class="broker-card" :gutter="10">
          <el-col :span="6">
@@ -392,7 +392,6 @@ export default {
   span {
     line-height: 10px;
   }
-  padding-top: 20px;
   .box-card {
     margin-top: 20px;
   }

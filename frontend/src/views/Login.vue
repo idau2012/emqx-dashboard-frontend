@@ -118,6 +118,7 @@ export default {
 
 <style lang="scss">
 .login-view {
+  height: 100%;
   .login-form {
     position: absolute;
     top: 50%;

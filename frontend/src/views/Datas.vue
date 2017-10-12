@@ -7,10 +7,11 @@
           v-model="searchValue"
           class="input-radius"
           size="small"
-          icon="search"
+          :icon="iconStatus"
           :disabled="loading"
           :on-icon-click="searchChild"
           :placeholder="searchPlaceholder"
+          @change="searchView = false"
           @keyup.enter.native="searchChild">
         </el-input>
       </div>
@@ -77,21 +78,6 @@
       <el-table-column prop="topic" :label="$t('subscriptions.topic')"></el-table-column>
       <el-table-column prop="qos" :label="$t('subscriptions.qoS')"></el-table-column>
     </el-table>
-
-    <!-- refresh button -->
-    <el-row v-show="searchView" type="flex" justify="end">
-      <el-col :span="24">
-        <el-button
-          class="back-btn"
-          style="float: right;"
-          size="small"
-          type="text"
-          icon="arrow-left"
-          @click="loadChild">
-          {{ $t('clients.back') }}
-        </el-button>
-      </el-col>
-    </el-row>
 
     <!-- pagination -->
     <el-pagination
@@ -163,6 +149,9 @@ export default {
   computed: {
     nodeInfo() {
       return this.$store.state.node.nodeName
+    },
+    iconStatus() {
+      return this.searchView ? 'close' : 'search'
     },
   },
   methods: {
@@ -236,6 +225,10 @@ export default {
       })
     },
     searchChild() {
+      if (this.searchView) {
+        this.loadChild()
+        return
+      }
       if (!this.searchValue) {
         this.$message.error(`${this.searchPlaceholder} ${this.$t('alert.required')}`)
         return
@@ -252,13 +245,11 @@ export default {
           this.searchView = true
           // reset page
           this.total = 0
-          this.currentPage = 0
         } else {
           this[this.activeTab] = response.data.result.objects
           this.searchView = true
           // reset page
           this.total = 0
-          this.currentPage = 0
         }
         this.loading = false
       })
@@ -273,12 +264,8 @@ export default {
 
 <style lang="scss">
 .datas-view {
-  padding-top: 20px;
-  .page-title {
-    padding: 10px 0;
-  }
   .el-table {
-    margin-top: 60px;
+    margin-top: 24px;
   }
   .el-row {
     margin-top: 20px;

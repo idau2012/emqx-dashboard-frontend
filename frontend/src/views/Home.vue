@@ -22,10 +22,12 @@ export default {
 
 <style lang="scss">
 .home-view {
+  box-sizing: border-box;
   min-height: 100%;
   margin-top: 60px;
   .home-content {
     margin: 0 20px 0 220px;
+    padding-bottom: 20px;
   }
 }
 </style>

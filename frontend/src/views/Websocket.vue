@@ -2,7 +2,7 @@
   <div class="websocket-view">
     <div class="page-title">{{ $t('leftbar.websocket') }}</div>
 
-    <el-card class="box-card blank-top" @keyup.enter.native="mqttConnect">
+    <el-card @keyup.enter.native="mqttConnect">
       <div slot="header">
         <span>{{ $t('websocket.connect') }}</span>
       </div>
@@ -71,7 +71,7 @@
       </el-row>
     </el-card>
 
-    <el-card class="box-card blank-top" style="max-height: 450px">
+    <el-card style="max-height: 450px">
       <div slot="header">
         <span>{{ $t('websocket.subscribe') }}</span>
       </div>
@@ -80,7 +80,7 @@
           <label>{{ $t('websocket.topic') }}:</label>
           <el-input v-model="clientOption.subTopic" size="small"></el-input>
           <label>{{ $t('websocket.qoS') }}:</label>
-          <el-select v-model.number="clientOption.subQos" size="small" style="display: block;">
+          <el-select v-model.number="clientOption.subQos" size="small">
             <el-option value="0"></el-option>
             <el-option value="1"></el-option>
             <el-option value="2"></el-option>
@@ -123,7 +123,7 @@
       </el-row>
     </el-card>
 
-    <el-card class="box-card blank-middle" style="max-height: 800px;padding-bottom: 20px">
+    <el-card style="max-height: 800px;padding-bottom: 20px">
       <div slot="header">
         <span>{{ $t('websocket.messages') }}</span>
       </div>
@@ -170,7 +170,7 @@
            </i>
           </label>
           <el-table border :data="clientOption.publishedMessages" :max-height="600">
-            <el-table-column prop="message" :label="$t('websocket.messages')">
+            <el-table-column prop="message" min-width="100" :label="$t('websocket.messages')">
             </el-table-column>
             <el-table-column prop="topic" :label="$t('websocket.topic')">
             </el-table-column>
@@ -190,7 +190,7 @@
             </i>
           </label>
           <el-table border :data="clientOption.receivedMessages" :max-height="600">
-            <el-table-column prop="message" :label="$t('websocket.messages')">
+            <el-table-column prop="message" min-width="100" :label="$t('websocket.messages')">
             </el-table-column>
             <el-table-column prop="topic" :label="$t('websocket.topic')">
             </el-table-column>
@@ -472,10 +472,6 @@ export default {
 
 <style lang="scss">
 .websocket-view {
-  padding-top: 20px;
-  .page-title {
-    padding: 10px 0 ;
-  }
   .el-select {
     width: 100%;
   }
@@ -489,11 +485,8 @@ export default {
     /* 增加内边距 */
     border-width: 0 !important;
   }
-  .blank-top {
-    margin-top: 60px;
-  }
-  .blank-middle {
-    margin-top: 20px;
+  .el-card {
+    margin-top: 24px;
   }
   .el-input,
   .el-checkbox {

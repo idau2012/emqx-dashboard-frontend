@@ -94,15 +94,11 @@
 
 <style lang="scss">
 .listeners-view {
-  padding-top: 20px;
-  .page-title {
-    padding: 10px 0;
-  }
   .el-row {
     margin-top: 20px;
   }
   .el-table {
-    margin-top: 60px;
+    margin-top: 24px;
   }
 }
 </style>

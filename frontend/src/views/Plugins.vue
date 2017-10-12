@@ -55,8 +55,7 @@
     <el-card
       v-show="plugin.nodeName"
       v-loading="loading"
-      class="plugin-config"
-      style="margin-top: 32px">
+      class="plugin-config">
       <div slot="header" class="config-dialog">
         <span>{{ plugin.name }}</span>
       </div>
@@ -533,11 +532,12 @@ export default{
 /* Advanced Config DiaLog */
 .plugins-view {
   .el-table {
-    margin-top: 60px;
+    margin-top: 24px;
   }
-  padding-top: 20px;
-  .page-title {
-    padding: 10px 0;
+  .el-card {
+    &.plugin-config {
+      margin-top: 24px;
+    }
   }
   .el-row {
     margin-top: 20px;

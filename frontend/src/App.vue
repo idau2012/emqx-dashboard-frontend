@@ -20,4 +20,7 @@ export default {
     font-weight: 300;
     src: local('Roboto Light'), local('Roboto-Light'), url(./assets/fonts/Roboto-Light.woff) format('woff'), url(./assets/fonts/Roboto-Light.ttf) format('truetype');
   }
+  .page-title {
+    padding: 30px 0 10px 0 !important;
+  }
 </style>

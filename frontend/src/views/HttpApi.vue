@@ -1,13 +1,13 @@
 <template>
   <div class="http-api">
     <div class="page-title">{{ $t('leftbar.api') }}</div>
-    <el-card class="box-card">
+    <el-card>
       <div slot="header">
         <span>{{ $t('httpApi.introduction') }}</span>
       </div>
       <div v-html="$t('httpApi.desc')"></div>
     </el-card>
-    <el-card class="box-card" style="margin-top: 30px;">
+    <el-card>
       <div slot="header">
         <span>{{ $t('httpApi.reference') }}</span>
       </div>
@@ -413,13 +413,12 @@ export default {
 
 <style lang="scss">
 .http-api {
-  padding-top: 20px;
   margin-top: 0 !important;
   .link-disabled {
     cursor: not-allowed;
   }
-  .box-card {
-    margin-top: 60px;
+  .el-card {
+    margin-top: 24px;
   }
   .el-table {
     border-width: 0 !important;

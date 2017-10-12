@@ -162,6 +162,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  border-left: none;
+  border-right: none;
   .style-toggle {
     display: flex;
     justify-content: space-between;

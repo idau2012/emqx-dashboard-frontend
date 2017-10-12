@@ -3,7 +3,7 @@ $themes-color: #34c388;
 $themes-color-risk: #eaf9f3;
 $themes-color-native: #42d885;
 $themes-color-native-deep: #227D51;
-
+$themes-color-error: #e0b4b4;
 $themes-color-waring: #f9c855;
 $themes-color-danger: #ff6d6d;
 
@@ -115,28 +115,28 @@ $overview-broker-icon-bg: $themes-color-risk;
 /* plugin */
 $cache-btn: $color-deep;
 $cache-btn-active: $themes-color-danger;
-
 html, body, #app {
   height: 100%;
   margin: 0;
-  background-color: $app-bg;
 }
-body {
-  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Work sans", Arial, sans-serif;
-  -webkit-font-smoothing: subpixel-antialiased;
-  color: $default-font;
-  font-size: 14px;
-  font-weight: 400;
-}
-/* nprogress */
-body #nprogress .bar {
-  background: $themes-color-native;
-}
-body #nprogress .peg {
-  box-shadow: 0 0 10px $themes-color-native, 0 0 5px $themes-color-native;
-}
-
 .light-themes {
+  &html, body, #app {
+    background-color: $app-bg;
+  }
+  body {
+    font-family: "Roboto", "Helvetica Neue", "Helvetica", "Work sans", Arial, sans-serif;
+    -webkit-font-smoothing: subpixel-antialiased;
+    color: $default-font;
+    font-size: 14px;
+    font-weight: 400;
+  }
+  /* nprogress */
+  body #nprogress .bar {
+    background: $themes-color-native;
+  }
+  body #nprogress .peg {
+    box-shadow: 0 0 10px $themes-color-native, 0 0 5px $themes-color-native;
+  }
   .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6, p {
     color: $default-font;
     font-weight: 400;
@@ -307,9 +307,14 @@ body #nprogress .peg {
 
 
   /* input */
-  input[icon="search"] {
-    height: 36px;
-    border-radius: 36px;
+  /* input */
+  .input-radius {
+    input {
+      height: 36px;
+      border-radius: 36px;
+      padding: 0 12px;
+      line-height: normal;
+    }
   }
   .el-input__inner, .el-textarea__inner {
     background-color: transparent;
@@ -688,7 +693,6 @@ body #nprogress .peg {
   /* all is same */
   .login-view {
     background-color: #181818;
-    height: 100%;
     .el-input__inner {
       border: 1px solid #bfcbd9;
       background-color: transparent;
@@ -800,9 +804,6 @@ body #nprogress .peg {
       background-color: $left-bar-bg !important;
     }
   }
-
-
-
 
    .users-view, .login-view {
     .el-card {
