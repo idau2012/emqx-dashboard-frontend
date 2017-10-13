@@ -23,4 +23,7 @@ export default {
   .page-title {
     padding: 30px 0 10px 0 !important;
   }
+  ::-ms-clear, ::-ms-reveal {
+    display:none;
+  }
 </style>

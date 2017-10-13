@@ -38,36 +38,38 @@
           <el-checkbox v-model="clientOption.clean">{{ $t('websocket.cleanSession') }}</el-checkbox>
       </el-row>
 
-      <el-row class="connect-area" type="flex" justify="start" align="middle">
-        <el-button
-          type="success"
-          size="small"
-          :icon="loading ? 'loading': 'check'"
-          :disabled="loading || client.connected"
-          :plain="true"
-          @keyup.enter.native="mqttConnect"
-          @click="mqttConnect">
-          {{ $t('websocket.connect') }}
-        </el-button>
+      <el-row class="connect-area">
+        <el-col :span="24">
+          <el-button
+            type="success"
+            size="small"
+            :icon="loading ? 'loading': 'check'"
+            :disabled="loading || client.connected"
+            :plain="true"
+            @keyup.enter.native="mqttConnect"
+            @click="mqttConnect">
+            {{ $t('websocket.connect') }}
+          </el-button>
 
-        <el-button
-          class="close-btn"
-          type="danger"
-          icon="close"
-          size="small"
-          :plain="true"
-          :loading="loading && client.connected"
-          :disabled="!loading && !client.connected"
-          @keyup.enter.native="disconnectSwitch"
-          @click="disconnectSwitch">
-          {{ $t('websocket.disconnect') }}
-        </el-button>
+          <el-button
+            class="close-btn"
+            type="danger"
+            icon="close"
+            size="small"
+            :plain="true"
+            :loading="loading && client.connected"
+            :disabled="!loading && !client.connected"
+            @keyup.enter.native="disconnectSwitch"
+            @click="disconnectSwitch">
+            {{ $t('websocket.disconnect') }}
+          </el-button>
 
-        <div class="connect-state">{{ $t('websocket.currentState') }}:
-          <span :style="client.connected ? 'color: #42d885' : ''">
+          <div class="connect-state">{{ $t('websocket.currentState') }}:
+            <span :style="client.connected ? 'color: #42d885' : ''">
           {{ getStatus }}
-        </span>
-        </div>
+          </span>
+          </div>
+        </el-col>
       </el-row>
     </el-card>
 
@@ -276,6 +278,9 @@ export default {
       }
       return this.$t('websocket.disconnected')
     },
+    supportWebSocket() {
+      return window.WebSocket
+    },
   },
   methods: {
     now() {
@@ -293,6 +298,10 @@ export default {
       }
     },
     mqttConnect() {
+      if (!this.supportWebSocket) {
+        this.$message.error(this.$t('websocket.notSupport'))
+        return
+      }
       // prevent the connect from keyboard event
       if (this.client.connected || this.loading) {
         return
@@ -479,6 +488,9 @@ export default {
     font-size: 12px;
     margin-left: 8px;
     cursor: pointer;
+  }
+  .connect-state {
+    display: inline-block;
   }
   .el-table {
     margin-top: 5px;

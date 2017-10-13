@@ -1,5 +1,6 @@
 <template>
   <div class="nav-bar">
+
     <div class="select-node">
       <el-select
         class="select-radius"
@@ -16,6 +17,7 @@
         </el-option>
       </el-select>
     </div>
+
     <div class="style-toggle">
       <div class="btn-box">
         <a
@@ -151,23 +153,21 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 .nav-bar {
+  div {
+   /*border: 1px solid red;*/
+  }
   position: fixed;
   top: 0;
   left: 200px;
   right: 0;
   height: 63px;
+  line-height: 63px;
   z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
   border-left: none;
   border-right: none;
   .style-toggle {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     position: absolute;
     right: 160px;
     width: 200px;
@@ -183,7 +183,8 @@ export default {
       width: 1px;
     }
     .btn-box {
-      flex: 1;
+      width: 98px;
+      display: inline-block;
       text-align: center;
       color: #b0b0b0;
       height: 64px;
@@ -236,13 +237,16 @@ export default {
   }
 
   .bar-footer {
-    padding-right: 20px;
-    display: flex;
-    align-items: center;
+    float: right;
+    margin-right: 20px;
+    height: 64px;
+    line-height: 64px;
+    text-align: center;
     span {
       font-size: 16px;
       font-weight: bolder;
-      margin-right: 20px;
+      margin-right: 12px;
+      vertical-align:middle;
       &:hover {
         color: #333;
       }
@@ -251,7 +255,9 @@ export default {
       font-weight: bold;
       img {
         width: 24px;
-        margin-top: 4px;
+        height: 24px;
+        border: none;
+        vertical-align: middle;
       }
     }
   }

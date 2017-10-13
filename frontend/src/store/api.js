@@ -52,7 +52,9 @@ function handleError(error) {
 }
 
 function httpGet(url, config) {
-  return httpRequest().get(url, config).then((response) => {
+  const requestUrl = url.indexOf('?') === -1 ? `${url}?timestamps=${Date.now()}` :
+    `${url}&timestamps=${Date.now()}`
+  return httpRequest().get(requestUrl, config).then((response) => {
     NProgress.done()
     return response
   }).catch(handleError)

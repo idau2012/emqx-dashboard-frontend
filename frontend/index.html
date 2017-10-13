@@ -1,14 +1,25 @@
 <!DOCTYPE html>
 <html class="light-themes">
-  <head>
-    <meta charset="utf-8">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/static/css/iconfont.css">
-  </head>
-  <body>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-    <!--<link rel="stylesheet" href="/static/css/base.css">-->
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/static/css/iconfont.css">
+  <!--[if lte IE 9]><script src="/static/js/base64.min.js"></script><![endif]-->
+  <!--[if lte IE 8]><link rel="stylesheet" href="/static/css/common.css"><![endif]-->
+</head>
+<body>
+<!--[if lte IE 8]>
+<div class="backward-alert">
+  <p>你当前使用的浏览器版本过低，无法正常使用本系统，建议使用更高版本浏览器。</p>
+  <p>The browser version you are currently using is too low to use the system properly. It is recommended to use a higher version of the browser.</p>
+  <a href="https://www.mozilla.org/" target="_blank">FireFox</a>
+  <a href="https://www.google.com/intl/en/chrome/browser/" target="_blank">Chrome</a>
+</div>
+<![endif]-->
+<div id="app"></div>
+<!-- built files will be auto injected -->
+<!--<link rel="stylesheet" href="/static/css/base.css">-->
+</body>
 </html>

@@ -59,7 +59,7 @@
       <div slot="header" class="config-dialog">
         <span>{{ plugin.name }}</span>
       </div>
-      <el-row type="flex" justify="center">
+      <el-row>
         <el-col
           v-if="displayConfig === ''"
           style="text-align: center; font-size: 16px"
@@ -165,7 +165,7 @@
       :title="$t('plugins.advancedConfig')"
       :visible.sync="isAdvancedConfig"
       @keyup.enter.native="setAdvancedConfig(true)">
-     <el-row type="flex" justify="left" class="advanced-key" :gutter="20">
+     <el-row class="advanced-key" :gutter="20">
        <el-col :span="24">
          <label v-if="advancedConfig.length === 0">No Advanced Config</label>
          <el-checkbox-group v-model="selectedAdvancedConfig">

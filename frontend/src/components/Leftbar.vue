@@ -111,10 +111,9 @@ export default {
     top: 0;
     z-index: 1006;
     padding-left: 20px;
-    display: flex;
     height: 63px;
+    line-height: 63px;
     width: 180px;
-    align-items: center;
     border-bottom: 1px solid #313437;
     span {
       font-size: 16px;
@@ -122,7 +121,10 @@ export default {
       margin-left: 8px;
     }
     img {
+      margin-top: 10px;
       width: 48px;
+      height: 44px;
+      float: left;
     }
   }
   .el-menu-item {

@@ -162,6 +162,7 @@ export default {
     connected: '已连接',
     connecting: '正在连接',
     disconnected: '未连接',
+    notSupport: '你的浏览器暂不支持WebSocket',
   },
   // http_api
   httpApi: {

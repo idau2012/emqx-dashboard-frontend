@@ -351,6 +351,12 @@ export default {
     .el-table {
       margin-top: 0;
     }
+    @media screen and (max-width: 1280px) {
+      .el-col-6 {
+        width: 50% !important;
+        margin-top: 10px !important;
+      }
+    }
     .broker-card {
       &.el-row {
         overflow-x: auto;
@@ -358,12 +364,12 @@ export default {
       .el-col {
         .card-item {
           height: 90px;
-          display: flex;
-          justify-content: space-between;
-          padding: 0 20px;
-          align-items: center;
+          line-height: 90px;
+          padding: 18px 20px 0 20px;
           background-color: #5d5d60;
+          /*border: 1px solid red;*/
           .icon {
+            float: left;
             width: 54px;
             height: 54px;
             line-height: 50px;
@@ -375,14 +381,17 @@ export default {
             }
           }
           .desc {
+            line-height: normal;
+            float: right;
             text-align: right;
-            flex: 1;
+            height: 70px;
             h3 {
               font-size: 14px;
               font-weight: bold;
             }
             p {
               margin-top: 12px;
+              max-width: 150px;
             }
           }
         }
