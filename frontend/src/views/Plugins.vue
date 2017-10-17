@@ -4,7 +4,11 @@
     <div v-show="!plugin.nodeName" class="page-title">
       {{ $t('leftbar.plugins') }}
     </div>
-    <el-table v-show="!plugin.nodeName" v-loading="loading" border :data="tableData">
+    <el-table v-show="!plugin.nodeName"
+              v-loading="loading"
+              border
+              :data="enableTableData"
+              @filter-change="resetFilter">
       <el-table-column prop="name" width="240" :label="$t('plugins.name')">
       </el-table-column>
       <el-table-column prop="version" width="100" :label="$t('plugins.version')">
@@ -15,8 +19,7 @@
         prop="active"
         width="120"
         :label="$t('plugins.status')"
-        :filters="[{ text: $t('plugins.stopped'), value: false }, { text: $t('plugins.running'), value: true }]"
-        :filter-method="filterStatus">
+        :filters="[{ text: $t('plugins.stopped'), value: false }, { text: $t('plugins.running'), value: true }]">
         <template scope="props">
           <span :class="[props.row.active ? 'running' : 'stopped', 'status']">
             {{ props.row.active ? $t('plugins.running'): $t('plugins.stopped')}}
@@ -44,7 +47,6 @@
         </template>
       </el-table-column>
     </el-table>
-
     <!-- plugin config-->
     <div v-show="plugin.nodeName" class="page-title">
       <el-breadcrumb separator="/">
@@ -63,7 +65,7 @@
         <el-col
           v-if="displayConfig === ''"
           style="text-align: center; font-size: 16px"
-          :span="24">No Default Configuration
+          :span="24">{{ $t('plugins.emptyConfigOption') }}
         </el-col>
       </el-row>
       <!--  Plugin Config -->
@@ -123,7 +125,7 @@
               :plain="true"
               @click="abortOperation(false)"
               @keyup.enter.native="abortOperation(false)">
-              <i v-if="displayConfig === ''" class="el-icon-arrow-left"></i>
+              <i v-if="displayConfig === ''" class="fa fa-reply" aria-hidden="true"></i>
               {{ displayConfig === '' ? $t('plugins.back') : $t('plugins.cancel') }}
             </el-button>
             <el-button
@@ -140,7 +142,6 @@
         </el-row>
       </el-form>
     </el-card>
-
     <el-dialog :title="$t('plugins.noticeTitle')" size="tiny" :visible.sync="dialogVisible">
       <span>{{ notice }}</span>
       <span slot="footer" class="dialog-footer">
@@ -159,7 +160,6 @@
         </el-button>
       </span>
     </el-dialog>
-
     <el-dialog
       size="tiny"
       :title="$t('plugins.advancedConfig')"
@@ -228,7 +228,7 @@ export default{
   },
   data() {
     return {
-      filtered: false,
+      filterSet: new Set(),
       notice: '',
       oper: '',
       nextPath: '/plugins',
@@ -237,6 +237,7 @@ export default{
       nodeName: '',
       popoverVisible: false,
       tableData: [],
+      enableTableData: [],
       nodes: [],
       searchValue: '',
       record: {},
@@ -276,6 +277,22 @@ export default{
     setNode() {
       this.CURRENT_NODE({ nodeName: this.nodeName, nodes: this.nodes })
     },
+    handleFilter() {
+      // No need to initialize Set
+      this.enableTableData = this.tableData.filter(item => !this.filterSet.has(item.active))
+    },
+    resetFilter(e) {
+      this.filterSet.clear()
+      Object.keys(e).forEach((item) => {
+        e[item].forEach((active) => {
+          this.filterSet.add(!active)
+        })
+      })
+      if (this.filterSet.size === 2) {
+        this.filterSet.clear()
+      }
+      this.handleFilter()
+    },
     isAutoIncrement(item = '') {
       const key = item.split('$')
       if (key.length === 1) {
@@ -297,10 +314,6 @@ export default{
         const url = `/plugins/${btoa(currentNode)}/${pluginName}`
         this.$router.push({ path: url })
       }
-    },
-    filterStatus(value, row) {
-      this.filtered = true
-      return row.active === value
     },
     hidePopover() {
       this.popoverVisible = true
@@ -385,9 +398,7 @@ export default{
           this.nodes = response.data.result
           this.setNode()
           this.loading = false
-          if (!this.filtered) {
-            this.loadPlugins()
-          }
+          this.loadPlugins()
         })
         // this.nodeName = this.plugin.nodeName
         this.plugin.nodeName = ''
@@ -403,6 +414,7 @@ export default{
       this.setNode()
       httpGet(`/nodes/${this.nodeName}/plugins`).then((response) => {
         this.tableData = response.data.result
+        this.handleFilter()
         this.loading = false
       })
     },

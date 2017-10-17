@@ -23,30 +23,30 @@
             @click="showDialog('edit', props.row)">
             {{ $t('users.edit') }}
           </el-button>
-          <el-popover ref="popoverDeleted" placement="right" :value="popoverVisible">
-            <p>{{ $t('users.confirmDelete') }}？</p>
-            <div style="text-align: right">
-              <el-button
-                size="mini"
-                type="text"
-                @click="hidePopover">
-                {{ $t('users.cancel') }}
-              </el-button>
-              <el-button
-                size="mini"
-                type="success"
-                :loading="btnLoading"
-                @click="deleteUser(props.row.username)">
-                {{ $t('users.confirm') }}
-              </el-button>
-            </div>
-          </el-popover>
           <el-button
             v-if="props.row.username!=='admin'"
             size="mini"
             type="danger"
             v-popover:popoverDeleted
             :plain="true">
+            <el-popover ref="popoverDeleted" placement="right" trigger="click" :value="popoverVisible">
+              <p>{{ $t('users.confirmDelete') }}？</p>
+              <div style="text-align: right">
+                <el-button
+                  size="mini"
+                  type="text"
+                  @click="hidePopover">
+                  {{ $t('users.cancel') }}
+                </el-button>
+                <el-button
+                  size="mini"
+                  type="success"
+                  :loading="btnLoading"
+                  @click="deleteUser(props.row.username)">
+                  {{ $t('users.confirm') }}
+                </el-button>
+              </div>
+            </el-popover>
             {{ $t('users.delete') }}
           </el-button>
         </template>

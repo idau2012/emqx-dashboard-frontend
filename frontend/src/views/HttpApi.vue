@@ -9,16 +9,25 @@
     </el-card>
     <el-card>
       <div slot="header">
-        <span>{{ $t('httpApi.reference') }}</span>
+        <span v-if="!responseDate">{{ $t('httpApi.reference') }}</span>
+        <el-button
+          v-if="responseDate"
+          type="text"
+          size="small"
+          class="refresh-btn"
+          @click="loadResponse(null, false)">
+          <i class="fa fa-reply" aria-hidden="true"></i>
+          {{ $t('httpApi.back') }}
+        </el-button>
       </div>
-      <el-table border v-loading="loading" :data="tableData">
+      <el-table border v-if="!responseDate" v-loading="loading" :data="tableData">
         <el-table-column prop="method" width="120" :label="$t('httpApi.method')"></el-table-column>
         <el-table-column min-width="160" :label="$t('httpApi.path')">
           <template scope="props">
             <a
-              target="_blank"
-              :href="isLink(props.row) ?  props.row.target : 'javascript:;'"
-              :class="['link', isLink(props.row) ? '' : 'link-disabled']">{{ props.row.path }}
+              href="javascript:;"
+              :class="['link', isLink(props.row) ? '' : 'link-disabled']"
+              @click="loadResponse(props.row)">{{ props.row.path }}
             </a>
           </template>
         </el-table-column>
@@ -28,6 +37,17 @@
           </template>
         </el-table-column>
       </el-table>
+      <div
+        v-if="responseDate"
+        class="response-container">
+        <div class="response-header">
+          <h3>{{ $t('httpApi.linkAddress') }} :
+            <a href="javascript:;">{{ uri }}</a>
+          </h3>
+          <h3>{{ $t('httpApi.data') }} :</h3>
+        </div>
+        <div v-html="jsonFormatter" class="response.body"></div>
+      </div>
     </el-card>
   </div>
 </template>
@@ -37,7 +57,7 @@
 import { mapActions } from 'vuex'
 import { Tabs, TabPane, TableColumn, Table, Button, Tag, Popover, Card } from 'element-ui'
 
-import { httpGet } from '../store/api'
+import { httpGet, httpPut, httpPost } from '../store/api'
 import { CURRENT_NODE } from '../store/mutation-types'
 import { getLocalStorage } from '../common/storage'
 
@@ -61,11 +81,20 @@ export default {
       nodeName: 'emq@127.0.0.1',
       tableData: [],
       nodes: [],
+      responseDate: null,
+      scrollTop: 0,
+      uri: '',
     }
   },
   computed: {
     nodeInfo() {
       return this.$store.state.node.nodeName
+    },
+    jsonFormatter() {
+      let json = JSON.stringify(this.responseDate, null, '\t')
+      json = json.replace(/\n/g, '<br />')
+      json = json.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
+      return json
     },
   },
   watch: {
@@ -79,7 +108,7 @@ export default {
     },
     isLink(row = {}) {
       // could click
-      return row.target && row.target.indexOf('{') === -1 && row.method === 'GET'
+      return row.target && row.target.indexOf('{') === -1
     },
     init() {
       this.loading = true
@@ -92,6 +121,35 @@ export default {
         this.loading = false
       })
     },
+    loadResponse(props, isLoad = true) {
+      if (!isLoad) {
+        this.responseDate = null
+        document.documentElement.scrollTop = this.scrollTop
+        return
+      }
+      if (!this.isLink(props)) {
+        return
+      }
+      this.uri = `/api/v2${props.target}`
+      this.scrollTop = document.documentElement.scrollTop
+      document.documentElement.scrollTop = 0
+      switch (props.method) {
+        case 'GET': httpGet(props.target).then((response) => {
+          this.responseDate = response.data
+        })
+          break
+        case 'POST': httpPost(props.target).then((response) => {
+          this.responseDate = response.data
+        })
+          break
+        case 'PUT': httpPut(props.target).then((response) => {
+          this.responseDate = response.data
+        })
+          break
+        default: this.responseDate = null
+          break
+      }
+    },
     setApiData() {
       this.nodeName = this.$store.state.node.nodeName
       const language = getLocalStorage('language') || 'en'
@@ -100,145 +158,145 @@ export default {
           {
             method: 'GET',
             path: '/api/v2/management/nodes',
-            target: '/api/v2/management/nodes',
+            target: '/management/nodes',
             description: '获取全部节点的基本信息',
           },
           {
             method: 'GET',
             path: '/api/v2/management/nodes/emq@127.0.0.1',
-            target: `/api/v2/management/nodes/${this.nodeName}`,
+            target: `/management/nodes/${this.nodeName}`,
             description: '获取指定节点的基本信息',
           },
           {
             method: 'GET',
             path: '/api/v2/monitoring/nodes',
-            target: '/api/v2/monitoring/nodes',
+            target: '/monitoring/nodes',
             description: '获取全部节点的监控数据',
           },
           {
             method: 'GET',
             path: '/api/v2/monitoring/nodes/emq@127.0.0.1',
-            target: `/api/v2/monitoring/nodes/${this.nodeName}`,
+            target: `/monitoring/nodes/${this.nodeName}`,
             description: '获取指定节点的监控数据',
           },
           {
             method: 'GET',
             path: '/api/v2/nodes/emq@127.0.0.1/clients',
-            target: `/api/v2/nodes/${this.nodeName}/clients`,
+            target: `/nodes/${this.nodeName}/clients`,
             description: '获取指定节点的客户端连接列表',
           },
           {
             method: 'GET',
             path: '/api/v2/nodes/emq@127.0.0.1/clients/{clientid}',
-            target: `/api/v2/nodes/${this.nodeName}/clients/{clientid}`,
+            target: `/nodes/${this.nodeName}/clients/{clientid}`,
             description: '获取节点指定客户端连接的信息',
           },
           {
             method: 'GET',
             path: '/api/v2/clients/{clientid}',
-            target: '/api/v2/clients/{clientid}',
+            target: '/clients/{clientid}',
             description: '获取集群内指定客户端的信息',
           },
           {
             method: 'GET',
             path: '/api/v2/nodes/emq@127.0.0.1/sessions',
-            target: `/api/v2/nodes/${this.nodeName}/sessions`,
+            target: `/nodes/${this.nodeName}/sessions`,
             description: '获取指定节点的会话列表',
           },
           {
             method: 'GET',
             path: '/api/v2/nodes/emq@127.0.0.1/sessions/{clientid}',
-            target: `/api/v2/nodes/${this.nodeName}/sessions/{clientid}`,
+            target: `/nodes/${this.nodeName}/sessions/{clientid}`,
             description: '获取节点上指定客户端的会话信息',
           },
           {
             method: 'GET',
             path: '/api/v2/sessions/{clientid}',
-            target: '/api/v2/sessions/{clientid}',
+            target: '/sessions/{clientid}',
             description: '获取集群内指定客户端的会话信息',
           },
           {
             method: 'GET',
             path: '/api/v2/nodes/emq@127.0.0.1/subscriptions',
-            target: `/api/v2/nodes/${this.nodeName}/subscriptions`,
+            target: `/nodes/${this.nodeName}/subscriptions`,
             description: '获取某个节点上的订阅列表',
           },
           {
             method: 'GET',
             path: '/api/v2/nodes/emq@127.0.0.1/subscriptions/{clientid}',
-            target: `/api/v2/nodes/${this.nodeName}/subscriptions/{clientid}`,
+            target: `/nodes/${this.nodeName}/subscriptions/{clientid}`,
             description: '获取节点上指定客户端的订阅信息',
           },
           {
             method: 'GET',
             path: '/api/v2/subscriptions/{clientid}',
-            target: '/api/v2/subscriptions/{clientid}',
+            target: '/subscriptions/{clientid}',
             description: '获取集群内指定客户端的订阅信息',
           },
           {
             method: 'GET',
             path: '/api/v2/routes',
-            target: '/api/v2/routes',
+            target: '/routes',
             description: '获取集群路由表',
           },
           {
             method: 'GET',
             path: '/api/v2/routes/{topic}',
-            target: '/api/v2/routes/{topic}',
+            target: '/routes/{topic}',
             description: '获取集群内指定主题的路由信息',
           },
           {
             method: 'POST',
             path: '/api/v2/mqtt/publish',
-            target: '/api/v2/mqtt/publish',
+            target: '/mqtt/publish',
             description: '发布消息',
           },
           {
             method: 'POST',
             path: '/api/v2/mqtt/subscribe',
-            target: '/api/v2/mqtt/subscribe',
+            target: '/mqtt/subscribe',
             description: '创建订阅',
           },
           {
             method: 'POST',
             path: '/api/v2/mqtt/unsubscribe',
-            target: '/api/v2/mqtt/unsubscribe',
+            target: '/mqtt/unsubscribe',
             description: '取消订阅',
           },
           {
             method: 'GET',
             path: '/api/v2/nodes/emq@127.0.0.1/plugins',
-            target: `/api/v2/nodes/${this.nodeName}/plugins`,
+            target: `/nodes/${this.nodeName}/plugins`,
             description: '获取节点的插件列表',
           },
           {
             method: 'PUT',
             path: '/api/v2/nodes/emq@127.0.0.1/plugins/{name}',
-            target: `/api/v2/nodes/${this.nodeName}/plugins/{name}`,
+            target: `/nodes/${this.nodeName}/plugins/{name}`,
             description: '开启/关闭节点的指定插件',
           },
           {
             method: 'GET',
             path: '/api/v2/monitoring/listeners',
-            target: '/api/v2/monitoring/listeners',
+            target: '/monitoring/listeners',
             description: '获取集群的监听器列表',
           },
           {
             method: 'GET',
             path: '/api/v2/monitoring/listeners/emq@127.0.0.1',
-            target: `/api/v2/monitoring/listeners/${this.nodeName}`,
+            target: `/monitoring/listeners/${this.nodeName}`,
             description: '获取指定节点的监听器列表',
           },
           {
             method: 'GET',
             path: '/api/v2/monitoring/metrics/',
-            target: '/api/v2/monitoring/metrics/',
+            target: '/monitoring/metrics/',
             description: '获取全部节点的度量指标',
           },
           {
             method: 'GET',
             path: '/api/v2/monitoring/metrics/emq@127.0.0.1',
-            target: `/api/v2/monitoring/metrics/${this.nodeName}`,
+            target: `/monitoring/metrics/${this.nodeName}`,
             description: '获取指定节点的度量指标',
           },
           {
@@ -250,7 +308,7 @@ export default {
           {
             method: 'GET',
             path: '/api/v2/monitoring/stats/emq@127.0.0.1',
-            target: `/api/v2/monitoring/stats/${this.nodeName}`,
+            target: `/monitoring/stats/${this.nodeName}`,
             description: '获取指定节点的运行统计',
           },
         ]
@@ -259,145 +317,145 @@ export default {
           {
             method: 'GET',
             path: '/api/v2/management/nodes',
-            target: '/api/v2/management/nodes',
+            target: '/management/nodes',
             description: 'List all Nodes in the Cluster',
           },
           {
             method: 'GET',
             path: '/api/v2/management/nodes/emq@127.0.0.1',
-            target: `/api/v2/management/nodes/${this.nodeName}`,
+            target: `/management/nodes/${this.nodeName}`,
             description: 'Retrieve a Node’s Info',
           },
           {
             method: 'GET',
             path: '/api/v2/monitoring/nodes',
-            target: '/api/v2/monitoring/nodes',
+            target: '/monitoring/nodes',
             description: 'List all Nodes’statistics in the Cluster',
           },
           {
             method: 'GET',
             path: '/api/v2/monitoring/nodes/emq@127.0.0.1',
-            target: `/api/v2/monitoring/nodes/${this.nodeName}`,
+            target: `/monitoring/nodes/${this.nodeName}`,
             description: 'Retrieve a node’s statistics',
           },
           {
             method: 'GET',
             path: '/api/v2/nodes/emq@127.0.0.1/clients',
-            target: `/api/v2/nodes/${this.nodeName}/clients`,
+            target: `/nodes/${this.nodeName}/clients`,
             description: 'List all Clients on a Node',
           },
           {
             method: 'GET',
             path: '/api/v2/nodes/emq@127.0.0.1/clients/{client_id}',
-            target: `/api/v2/nodes/${this.nodeName}/clients/{client_id}`,
+            target: `/nodes/${this.nodeName}/clients/{client_id}`,
             description: 'Retrieve a Client on a Node',
           },
           {
             method: 'GET',
             path: '/api/v2/clients/{client_id}',
-            target: '/api/v2/clients/{client_id}',
+            target: '/clients/{client_id}',
             description: 'Retrieve a Client in the Cluster',
           },
           {
             method: 'GET',
             path: '/api/v2/node/emq@127.0.0.1/sessions?curr_page=1&page_size=20',
-            target: `/api/v2/node/${this.nodeName}/sessions?curr_page=1&page_size=20`,
+            target: `/node/${this.nodeName}/sessions?curr_page=1&page_size=20`,
             description: 'List all Sessions on a Node',
           },
           {
             method: 'GET',
             path: '/api/v2/nodes/emq@127.0.0.1/sessions/{client_id}',
-            target: `/api/v2/nodes/${this.nodeName}/sessions/{client_id}`,
+            target: `/nodes/${this.nodeName}/sessions/{client_id}`,
             description: 'Retrieve a Session on a Node',
           },
           {
             method: 'GET',
             path: '/api/v2/sessions/{client_id}',
-            target: '/api/v2/sessions/{client_id}',
+            target: '/sessions/{client_id}',
             description: 'Retrieve a Session in the Cluster',
           },
           {
             method: 'GET',
             path: '/api/v2/nodes/emq@127.0.0.1/subscriptions',
-            target: `/api/v2/nodes/${this.nodeName}/subscriptions`,
+            target: `/nodes/${this.nodeName}/subscriptions`,
             description: 'List all Subscriptions of a Node',
           },
           {
             method: 'GET',
             path: '/api/v2/subscriptions/{cliet_id}',
-            target: '/api/v2/subscriptions/{cliet_id}',
+            target: '/subscriptions/{cliet_id}',
             description: 'List Subscriptions of a Client',
           },
           {
             method: 'POST',
             path: '/api/v2/mqtt/subscribe',
-            target: '/api/v2/mqtt/subscribe',
+            target: '/mqtt/subscribe',
             description: 'Create a Subscription',
           },
           {
             method: 'GET',
             path: '/api/v2/routes',
-            target: '/api/v2/routes',
+            target: '/routes',
             description: 'List all Routes in the Cluster',
           },
           {
             method: 'GET',
             path: '/api/v2/routes/{topic}',
-            target: '/api/v2/routes/{topic}',
+            target: '/routes/{topic}',
             description: 'Retrieve a Route in the Cluster',
           },
           {
             method: 'GET',
             path: '/api/v2/nodes/emq@127.0.0.1/plugins/',
-            target: `/api/v2/nodes/${this.nodeName}/plugins/`,
+            target: `/nodes/${this.nodeName}/plugins/`,
             description: 'List all Plugins of a Node',
           },
           {
             method: 'PUT',
             path: '/api/v2/nodes/plugins/{name}',
-            target: '/api/v2/nodes/plugins/{name}',
+            target: '/nodes/plugins/{name}',
             description: 'Start/Stop a Plugin',
           },
           {
             method: 'GET',
             path: '/api/v2/monitoring/listeners',
-            target: '/api/v2/monitoring/listeners',
+            target: '/monitoring/listeners',
             description: 'List all Listeners',
           },
           {
             method: 'GET',
             path: '/api/v2/monitoring/listeners/emq@127.0.0.1',
-            target: `/api/v2/monitoring/listeners/${this.nodeName}`,
+            target: `/monitoring/listeners/${this.nodeName}`,
             description: 'List listeners of a Node',
           },
           {
             method: 'POST',
             path: '/api/v2/mqtt/publish',
-            target: '/api/v2/mqtt/publish',
+            target: '/mqtt/publish',
             description: 'Publish MQTT Message',
           },
           {
             method: 'GET',
             path: '/api/v2/monitoring/metrics/',
-            target: '/api/v2/monitoring/metrics/',
+            target: '/monitoring/metrics/',
             description: 'Get Metrics of all Nodes',
           },
           {
             method: 'GET',
             path: '/api/v2/monitoring/metrics/emq@127.0.0.1',
-            target: `/api/v2/monitoring/metrics/${this.nodeName}`,
+            target: `/monitoring/metrics/${this.nodeName}`,
             description: 'Get Metrics of a Node',
           },
           {
             method: 'GET',
             path: '/api/v2/monitoring/stats',
-            target: '/api/v2/monitoring/stats',
+            target: '/monitoring/stats',
             description: 'Get Statistics of all Nodes',
           },
           {
             method: 'GET',
             path: '/api/v2/monitoring/stats/emq@127.0.0.1',
-            target: `/api/v2/monitoring/stats/${this.nodeName}`,
+            target: `/monitoring/stats/${this.nodeName}`,
             description: 'Get Statistics of a Node',
           },
         ]
@@ -422,6 +480,20 @@ export default {
   }
   .el-table {
     border-width: 0 !important;
+  }
+  .refresh-btn {
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0 !important;
+  }
+  .response-container {
+    line-height: 1.5;
+    h3 {
+      font-size: 14px !important;
+    }
+    a {
+      margin-left: 12px;
+    }
   }
 }
 </style>

@@ -97,7 +97,7 @@ export default {
   top: 0;
   bottom: 0;
   width: 200px;
-  z-index: 1000;
+  z-index: 1002;
   overflow-y: auto;
   .el-menu {
     position: absolute;
@@ -109,7 +109,7 @@ export default {
   .bar-title {
     position: fixed;
     top: 0;
-    z-index: 1006;
+    z-index: 1003;
     padding-left: 20px;
     height: 63px;
     line-height: 63px;

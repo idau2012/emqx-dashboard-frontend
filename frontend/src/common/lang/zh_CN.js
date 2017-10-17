@@ -120,6 +120,7 @@ export default {
     giveUpNotice: '你确定放弃应用已更改的配置吗？',
     noticeTitle: '注意',
     cacheNotice: '已放弃操作',
+    emptyConfigOption: '默认配置项为空',
   },
   // listeners
   listeners: {
@@ -173,6 +174,9 @@ export default {
     method: '请求方法',
     path: '路径',
     description: '描述',
+    back: '返回',
+    linkAddress: '请求地址',
+    data: '响应数据',
   },
   // users
   users: {

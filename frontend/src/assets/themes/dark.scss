@@ -127,7 +127,7 @@ html, body, #app {
   margin: 0;
 }
 .dark-themes {
-  html, body, #app {
+  &html, body, #app {
     background-color: $app-bg;
   }
   body {
@@ -577,6 +577,12 @@ html, body, #app {
       color: $color !important;
       font-size: 16px;
       font-weight: 600;
+    }
+    .refresh-btn {
+      color: $color !important;
+      &:hover {
+        color: $color-white !important;
+      }
     }
   }
 

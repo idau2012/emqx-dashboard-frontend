@@ -120,6 +120,7 @@ export default {
     giveUpNotice: 'Are you sure you want to give up the change and exit?',
     noticeTitle: 'Notice',
     cacheNotice: 'You have given up this change',
+    emptyConfigOption: 'No Default Configuration',
   },
   // listeners
   listeners: {
@@ -175,6 +176,9 @@ export default {
     method: 'Method',
     path: 'Path',
     description: 'Description',
+    back: 'Back',
+    linkAddress: 'Request address',
+    data: 'Response data',
   },
   // users
   users: {

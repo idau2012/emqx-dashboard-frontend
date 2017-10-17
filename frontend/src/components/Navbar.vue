@@ -164,7 +164,7 @@ export default {
   right: 0;
   height: 63px;
   line-height: 63px;
-  z-index: 1000;
+  z-index: 1001;
   border-left: none;
   border-right: none;
   .style-toggle {
