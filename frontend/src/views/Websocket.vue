@@ -9,33 +9,34 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <label>{{ $t('websocket.host') }}:</label>
-          <el-input v-model="clientOption.host" size="small"></el-input>
+          <el-input v-model="host" size="small"></el-input>
         </el-col>
         <el-col :span="8">
           <label>{{ $t('websocket.port') }}:</label>
-          <el-input v-model.number="clientOption.port" size="small"></el-input>
+          <el-input v-model.number="port" size="small"></el-input>
         </el-col>
         <el-col :span="8">
           <label>{{ $t('websocket.clientID') }}:</label>
-          <el-input v-model="clientOption.clientId" size="small"></el-input>
+          <el-input v-model="clientId" size="small"></el-input>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
           <label>{{ $t('websocket.username') }}:</label>
-          <el-input v-model="clientOption.username" size="small"></el-input>
+          <el-input v-model="username" size="small"></el-input>
         </el-col>
         <el-col :span="8">
           <label>{{ $t('websocket.password') }}:</label>
-          <el-input v-model="clientOption.password" size="small"></el-input>
+          <el-input v-model="password" size="small"></el-input>
         </el-col>
         <el-col :span="8">
           <label>{{ $t('websocket.keepAlive') }}:</label>
-          <el-input v-model.number="clientOption.keepalive" size="small"></el-input>
+          <el-input v-model.number="keepalive" size="small"></el-input>
         </el-col>
       </el-row>
       <el-row>
-          <el-checkbox v-model="clientOption.clean">{{ $t('websocket.cleanSession') }}</el-checkbox>
+        <el-checkbox v-model="clean">{{ $t('websocket.cleanSession') }}</el-checkbox>
+        <el-checkbox style="margin-left: 50px" v-model="isSSL">SSL</el-checkbox>
       </el-row>
 
       <el-row class="connect-area">
@@ -80,9 +81,9 @@
       <el-row :gutter="20" @keyup.enter.native="mqttSubscribe">
         <el-col :span="12">
           <label>{{ $t('websocket.topic') }}:</label>
-          <el-input v-model="clientOption.subTopic" size="small"></el-input>
+          <el-input v-model="subTopic" size="small"></el-input>
           <label>{{ $t('websocket.qoS') }}:</label>
-          <el-select v-model.number="clientOption.subQos" size="small">
+          <el-select v-model.number="subQos" size="small">
             <el-option value="0"></el-option>
             <el-option value="1"></el-option>
             <el-option value="2"></el-option>
@@ -101,7 +102,7 @@
         </el-col>
         <el-col :span="12">
           <label>{{ $t('websocket.subscribe') }}:</label>
-          <el-table :data="clientOption.subscriptions" :max-height="320">
+          <el-table :data="subscriptions" :max-height="320">
             <el-table-column prop="topic" min-width="150" :label="$t('websocket.topic')">
             </el-table-column>
             <el-table-column prop="qos" min-width="120" :label="$t('websocket.qoS')">
@@ -132,22 +133,22 @@
       <el-row :gutter="20" @keyup.enter.native="mqttPublish">
         <el-col :span="6">
           <label>{{ $t('websocket.topic') }}:</label>
-          <el-input v-model="clientOption.publishTopic" size="small"></el-input>
+          <el-input v-model="publishTopic" size="small"></el-input>
         </el-col>
         <el-col :span="6">
           <label>{{ $t('websocket.messages') }}:</label>
-          <el-input v-model="clientOption.publishMessage" size="small"></el-input>
+          <el-input v-model="publishMessage" size="small"></el-input>
         </el-col>
         <el-col :span="6">
           <label>{{ $t('websocket.qoS') }}:</label>
-          <el-select v-model.number="clientOption.publishQos" size="small" style="display: block;">
+          <el-select v-model.number="publishQos" size="small" style="display: block;">
             <el-option value="0"></el-option>
             <el-option value="1"></el-option>
             <el-option value="2"></el-option>
           </el-select>
         </el-col>
         <el-col :span="6" style="margin-top: 21px">
-          <el-checkbox v-model="clientOption.publishRetain" style="margin-right: 15px;">
+          <el-checkbox v-model="publishRetain" style="margin-right: 15px;">
             {{ $t('websocket.retained') }}
           </el-checkbox>
           <el-button
@@ -171,7 +172,7 @@
               @click="clearMessage(false)">
            </i>
           </label>
-          <el-table border :data="clientOption.publishedMessages" :max-height="600">
+          <el-table border :data="publishedMessages" :max-height="600">
             <el-table-column prop="message" min-width="100" :label="$t('websocket.messages')">
             </el-table-column>
             <el-table-column prop="topic" :label="$t('websocket.topic')">
@@ -191,7 +192,7 @@
               @click="clearMessage">
             </i>
           </label>
-          <el-table border :data="clientOption.receivedMessages" :max-height="600">
+          <el-table border :data="receivedMessages" :max-height="600">
             <el-table-column prop="message" min-width="100" :label="$t('websocket.messages')">
             </el-table-column>
             <el-table-column prop="topic" :label="$t('websocket.topic')">
@@ -226,7 +227,7 @@ import {
   Card, Row, Col, Input, Checkbox, Button, Select, Option, Table, TableColumn,
 } from 'element-ui'
 
-import clientObject from '../store/mqttConnect'
+import MQTTConnect from '../common/MQTTConnect'
 
 export default {
   name: 'websocket-view',
@@ -247,24 +248,23 @@ export default {
       retryTimes: 0,
       loading: false,
       sending: false,
-      clientOption: {
-        host: window.location.hostname,
-        port: 8083,
-        username: '',
-        password: '',
-        keepalive: 60,
-        clean: true,
-        clientId: '',
-        subQos: 0,
-        publishQos: 0,
-        publishMessage: 'Hello world!',
-        subTopic: '/World',
-        publishTopic: '/World',
-        publishRetain: false,
-        receivedMessages: [],
-        publishedMessages: [],
-        subscriptions: [],
-      },
+      host: window.location.hostname,
+      port: 8083,
+      username: '',
+      isSSL: false,
+      password: '',
+      keepalive: 60,
+      clean: true,
+      clientId: `mqttjs_${Math.random().toString(16).substr(2, 10)}`,
+      subQos: 0,
+      publishQos: 0,
+      publishMessage: 'Hello world!',
+      subTopic: '/World',
+      publishTopic: '/World',
+      publishRetain: false,
+      receivedMessages: [],
+      publishedMessages: [],
+      subscriptions: [],
       client: {},
     }
   },
@@ -310,18 +310,17 @@ export default {
       this.loading = true
       this.retryTimes = 0
       const options = {
-        keepalive: this.clientOption.keepalive,
-        username: this.clientOption.username,
-        password: this.clientOption.password,
-        clientId: this.clientOption.clientId,
-        clean: this.clientOption.clean,
+        keepalive: this.keepalive,
+        username: this.username,
+        password: this.password,
+        clientId: this.clientId,
+        clean: this.clean,
         connectTimeout: 4000,
       }
-      this.client = mqtt.connect(`ws://${this.clientOption.host}:${this.clientOption.port}/mqtt`, options)
+      const protocol = this.isSSL ? 'wss' : 'ws'
+      this.client = mqtt.connect(`${protocol}://${this.host}:${this.port}/mqtt`, options)
       this.client.on('connect', () => {
         this.loading = false
-        clientObject.client = this.client
-        clientObject.clientOption = this.clientOption
         NProgress.done()
       })
       this.client.on('reconnect', () => {
@@ -329,7 +328,7 @@ export default {
           if (this.sending) {
             this.$message.error(this.$t('websocket.connectError'))
           } else {
-            this.$message.error(`${this.$t('websocket.connectFailure')} ${this.clientOption.host}:${this.clientOption.port}`)
+            this.$message.error(`${this.$t('websocket.connectFailure')} ${this.host}:${this.port}`)
           }
           this.retryTimes = 0
           this.sending = false
@@ -351,7 +350,7 @@ export default {
         NProgress.done()
       })
       this.client.on('message', (topic, message, packet) => {
-        this.clientOption.receivedMessages.unshift({
+        this.receivedMessages.unshift({
           topic,
           message: message.toString(),
           qos: packet.qos,
@@ -375,22 +374,22 @@ export default {
     },
     mqttSubscribe() {
       if (this.client.connected) {
-        this.clientOption.subscriptions.forEach((x, index) => {
-          if (x.topic === this.clientOption.subTopic) {
-            this.clientOption.subscriptions.splice(index, index + 1)
+        this.subscriptions.forEach((x, index) => {
+          if (x.topic === this.subTopic) {
+            this.subscriptions.splice(index, index + 1)
           }
         })
         NProgress.start()
-        this.client.subscribe(this.clientOption.subTopic,
-        { qos: this.clientOption.subQos },
+        this.client.subscribe(this.subTopic,
+        { qos: this.subQos },
         (error) => {
           if (error) {
             NProgress.done()
             this.$message.error(error.toString())
           } else {
-            this.clientOption.subscriptions.unshift({
-              topic: this.clientOption.subTopic,
-              qos: this.clientOption.subQos,
+            this.subscriptions.unshift({
+              topic: this.subTopic,
+              qos: this.subQos,
               time: this.now(),
             })
             this.$message.success(this.$t('websocket.subscribeSuccess'))
@@ -404,20 +403,20 @@ export default {
     mqttPublish() {
       if (this.client.connected) {
         NProgress.start()
-        const options = { qos: this.clientOption.publishQos,
-          retain: this.clientOption.publishRetain }
+        const options = { qos: this.publishQos,
+          retain: this.publishRetain }
         // to mark which trigger the reconnect
         this.sending = true
-        this.client.publish(this.clientOption.publishTopic,
-        this.clientOption.publishMessage, options, (error) => {
+        this.client.publish(this.publishTopic,
+        this.publishMessage, options, (error) => {
           if (error) {
             NProgress.done()
             this.$message.error(error.toString())
           } else {
-            this.clientOption.publishedMessages.unshift({
-              message: this.clientOption.publishMessage,
-              topic: this.clientOption.publishTopic,
-              qos: this.clientOption.publishQos,
+            this.publishedMessages.unshift({
+              message: this.publishMessage,
+              topic: this.publishTopic,
+              qos: this.publishQos,
               time: this.now(),
             })
             this.$message.success(this.$t('websocket.messageSendOut'))
@@ -438,42 +437,52 @@ export default {
           this.$message.error(`${this.$t('websocket.unsubscribeFailure')} ${error.toString()}!`)
           return
         }
-        this.clientOption.subscriptions.forEach((element, index) => {
+        this.subscriptions.forEach((element, index) => {
           if (element.topic === topic) {
-            this.clientOption.subscriptions.splice(index, 1)
+            this.subscriptions.splice(index, 1)
             // clear message which in this topic
           }
         })
       })
     },
     reset() {
-      this.clientOption.subscriptions = []
-      this.clientOption.receivedMessages = []
-      this.clientOption.publishedMessages = []
-      this.clientOption.publishMessage = 'Hello world!'
-      this.clientOption.subTopic = '/World'
-      this.clientOption.publishTopic = '/World'
-    },
-    loadConnect() {
-      if (!clientObject.client.connected) {
-        // reset
-        this.clientOption.clientId = `mqttjs_${Math.random().toString(16).substr(2, 10)}`
-      } else {
-        // reload
-        this.client = clientObject.client
-        this.clientOption = clientObject.clientOption
-      }
+      this.subscriptions = []
+      this.receivedMessages = []
+      this.publishedMessages = []
+      this.publishMessage = 'Hello world!'
+      this.subTopic = '/World'
+      this.publishTopic = '/World'
     },
     clearMessage(received = true) {
       if (received) {
-        this.clientOption.receivedMessages = []
+        this.receivedMessages = []
       } else {
-        this.clientOption.publishedMessages = []
+        this.publishedMessages = []
       }
+    },
+    loadConnect() {
+      if (MQTTConnect.client && MQTTConnect.client.connected) {
+        this.client = MQTTConnect.client
+        Object.keys(MQTTConnect.options).forEach((item) => {
+          this[item] = MQTTConnect.options[item]
+        })
+      }
+    },
+    stashConnect() {
+      MQTTConnect.client = this.client
+      Object.keys(MQTTConnect.options).forEach((item) => {
+        MQTTConnect.options[item] = this[item]
+      })
     },
   },
   created() {
     this.loadConnect()
+  },
+  beforeRouteLeave(to, from, next) {
+    if (this.client.connected) {
+      this.stashConnect()
+    }
+    next()
   },
 }
 </script>
