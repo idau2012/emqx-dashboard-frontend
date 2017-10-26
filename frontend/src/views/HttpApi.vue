@@ -54,12 +54,10 @@
 
 
 <script>
-import { mapActions } from 'vuex'
 import { Tabs, TabPane, TableColumn, Table, Button, Tag, Popover, Card } from 'element-ui'
 
 import { httpGet, httpPut, httpPost } from '../store/api'
-import { CURRENT_NODE } from '../store/mutation-types'
-import { getLocalStorage } from '../common/storage'
+// import { getLocalStorage } from '../common/storage'
 
 
 export default {
@@ -87,9 +85,9 @@ export default {
     }
   },
   computed: {
-    nodeInfo() {
+    /* nodeInfo() {
       return this.$store.state.node.nodeName
-    },
+    }, */
     jsonFormatter() {
       let json = JSON.stringify(this.responseDate, null, '\t')
       json = json.replace(/\n/g, '<br />')
@@ -101,24 +99,21 @@ export default {
     nodeInfo: 'setApiData',
   },
   methods: {
-    ...mapActions([CURRENT_NODE]),
-    // set global nodeName
-    setNode() {
-      this.CURRENT_NODE({ nodeName: this.nodeName, nodes: this.nodes })
-    },
     isLink(row = {}) {
       // could click
-      return row.target && row.target.indexOf('{') === -1
+      return row.target && row.target.indexOf(':') === -1
     },
     init() {
       this.loading = true
       const currentNodeName = this.$store.state.node.nodeName
-      httpGet('/management/nodes').then((response) => {
-        this.nodeName = currentNodeName || response.data.result[0].name || ''
-        this.nodes = response.data.result
-        this.setNode()
+      httpGet('/nodes').then((response) => {
+        this.nodeName = currentNodeName || response.data[0].name
+        this.nodes = response.data
         this.setApiData()
         this.loading = false
+      }).catch(() => {
+        this.loading = false
+        this.$message.error(this.$t('error.networkError'))
       })
     },
     loadResponse(props, isLoad = true) {
@@ -136,14 +131,23 @@ export default {
       switch (props.method) {
         case 'GET': httpGet(props.target).then((response) => {
           this.responseDate = response.data
+        }).catch(() => {
+          this.loading = false
+          this.$message.error(this.$t('error.networkError'))
         })
           break
         case 'POST': httpPost(props.target).then((response) => {
           this.responseDate = response.data
+        }).catch(() => {
+          this.loading = false
+          this.$message.error(this.$t('error.networkError'))
         })
           break
         case 'PUT': httpPut(props.target).then((response) => {
           this.responseDate = response.data
+        }).catch(() => {
+          this.loading = false
+          this.$message.error(this.$t('error.networkError'))
         })
           break
         default: this.responseDate = null
@@ -151,6 +155,7 @@ export default {
       }
     },
     setApiData() {
+      /*
       this.nodeName = this.$store.state.node.nodeName
       const language = getLocalStorage('language') || 'en'
       if (language === 'zh') {
@@ -158,7 +163,7 @@ export default {
           {
             method: 'GET',
             path: '/api/v2/management/nodes',
-            target: '/management/nodes',
+            target: '/nodes',
             description: '获取全部节点的基本信息',
           },
           {
@@ -317,7 +322,7 @@ export default {
           {
             method: 'GET',
             path: '/api/v2/management/nodes',
-            target: '/management/nodes',
+            target: '/nodes',
             description: 'List all Nodes in the Cluster',
           },
           {
@@ -459,7 +464,26 @@ export default {
             description: 'Get Statistics of a Node',
           },
         ]
-      }
+      } */
+      // {"name":"list_clients","method":"GET","path":"/clients/",
+      // "descr":"A list of all clients in the cluster"}
+      httpGet('/').then((response) => {
+        this.tableData = []
+        let data = JSON.stringify(response.data)
+        data = data.replace(/:bin/g, '')
+        data = data.replace(/:atom/g, '')
+        data = data.replace(/:node/g, this.nodeName)
+        data = JSON.parse(data)
+        console.log(data)
+        Object.keys(data).forEach((item) => {
+          this.tableData.push({
+            method: data[item].method,
+            path: `/api/v2${data[item].path}`,
+            target: data[item].path,
+            description: data[item].descr,
+          })
+        })
+      })
     },
   },
   created() {

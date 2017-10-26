@@ -1,23 +1,6 @@
 <template>
   <div class="nav-bar">
 
-    <div class="select-node">
-      <el-select
-        class="select-radius"
-        v-model="nodeName"
-        placeholder="Select Node"
-        size="small"
-        :disabled="loading"
-        @change="setNode">
-        <el-option
-          v-for="item in nodes"
-          :key="item.name"
-          :label="item.name"
-          :value="item.name">
-        </el-option>
-      </el-select>
-    </div>
-
     <div class="style-toggle">
       <div class="btn-box">
         <a
@@ -59,23 +42,14 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { Select, Option } from 'element-ui'
 
-import { httpGet } from '../store/api'
 import { setLocalStorage, getLocalStorage } from '../common/storage'
-import { USER_LOGOUT, CURRENT_NODE, THEMES_SWITCH } from '../store/mutation-types'
+import { USER_LOGOUT, THEMES_SWITCH } from '../store/mutation-types'
 
 export default {
   name: 'nav-bar',
-  components: {
-    'el-option': Option,
-    'el-select': Select,
-  },
   data() {
     return {
-      loading: false,
-      nodeName: '',
-      nodes: [],
       temp: this.themes,
       language: '',
     }
@@ -96,41 +70,16 @@ export default {
       return this.$store.state.node.nodeName
     },
   },
-  watch: {
-    nodeInfo: 'reloadNode',
-  },
   methods: {
-    ...mapActions([CURRENT_NODE, USER_LOGOUT, THEMES_SWITCH]),
+    ...mapActions([USER_LOGOUT, THEMES_SWITCH]),
     // logout
     logout() {
       this.USER_LOGOUT()
       this.$router.push({ path: '/login' })
     },
-    // set global nodeName
-    setNode() {
-      this.CURRENT_NODE({ node: { nodeName: this.nodeName, nodes: this.nodes } })
-    },
     // toggle theme
     themesToggle(str) {
       this.THEMES_SWITCH({ themes: str })
-    },
-    // load nodes form store or server then load data
-    loadNode() {
-      const currentNode = this.$store.state.node.nodeName
-      if (!currentNode) {
-        httpGet('/management/nodes').then((response) => {
-          this.nodes = response.data.result
-          this.nodeName = currentNode || response.data.result[0].name || ''
-          this.setNode()
-        })
-      } else {
-        this.nodes = this.$store.state.node.nodes
-        this.nodeName = currentNode
-      }
-    },
-    // reload node from store
-    reloadNode() {
-      this.nodes = this.$store.state.node.nodes
     },
     // default language
     loadLanguage() {
@@ -146,7 +95,6 @@ export default {
     },
   },
   mounted() {
-    this.loadNode()
     this.loadLanguage()
   },
 }

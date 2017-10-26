@@ -3,6 +3,13 @@ import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
 
 export default {
   ...zhLocale,
+  // 全局
+  select: {
+    cluster: '选择全部节点',
+  },
+  error: {
+    networkError: '网络错误',
+  },
   // leftbar
   leftbar: {
     // MONITORING
@@ -62,6 +69,7 @@ export default {
   },
   // Clients
   clients: {
+    node: '节点',
     clientId: '客户端ID',
     username: '用户名',
     ipAddr: 'IP地址',

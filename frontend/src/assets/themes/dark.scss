@@ -1,4 +1,4 @@
-/* light-themes-color */
+/* dark-themes-color */
 $themes-color: #34c388;
 $themes-color-risk: #232d2e;
 $themes-color-native: #42d885;
@@ -7,12 +7,14 @@ $themes-color-waring: #f9c855;
 $themes-color-danger: #ff6d6d;
 $themes-color-error: #e0b4b4;
 
-
 $bg-color: #141519;
 $bg-color-risk: #232429;
 $bg-color-dark: #1d1e24;
 $bg-hover: #343e43;
 $bg-disabled: #d6d9e2;
+
+/* light-region-color */
+$app-bg: $bg-color;
 
 $bg-btn-disabled: $bg-disabled;
 
@@ -26,8 +28,8 @@ $color-risk: #929299;
 $color-deeper: #6e6e75;
 $color-white: #ffffff;
 
-
-
+/* link */
+$api-link: $themes-color;
 
 /* 下拉选择相关 */
 $el-select-bg: transparent;
@@ -40,11 +42,6 @@ $select-color-active: $color;
 
 $select-dropdown-bg: $bg-color-risk;
 $select-item-bg: $bg-color-risk;
-
-
-/* link */
-$api-link: $themes-color;
-
 
 /* pagination */
 $pagination-bg: $themes-color;
@@ -86,11 +83,6 @@ $left-bar-active-bg: $bg-hover;
 
 $left-bar-icon: $color-deeper;
 
-/* light-region-color */
-$app-bg: $bg-color;
-
-
-
 /* 字体相关 */
 $default-font: $color;
 $default-link: $themes-color;
@@ -112,6 +104,7 @@ $stopped-text: $color;
 /* title */
 $page-title: $themes-color;
 $overview-item-title: $color-white;
+
 /* broker */
 $overview-broker-bg: $table-bg;
 $overview-broker-border: transparent;
@@ -137,6 +130,7 @@ html, body, #app {
     font-size: 14px;
     font-weight: 400;
   }
+
   /* nprogress */
   body #nprogress .bar {
     background: $themes-color-native;
@@ -144,7 +138,6 @@ html, body, #app {
   body #nprogress .peg {
     box-shadow: 0 0 10px $themes-color-native, 0 0 5px $themes-color-native;
   }
-
   .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6, p {
     color: $default-font;
     font-weight: 400;
@@ -167,18 +160,21 @@ html, body, #app {
       }
     }
   }
+
   /* form */
   .el-form {
     .el-form-item__label {
       color: $color !important;
     }
   }
+
   /* button 不再定义语义化的颜色变量，请直接使用原始变量赋值 */
   .el-button {
     font-family: "Roboto", "Helvetica Neue", "Helvetica", "Work sans", Arial, sans-serif;
     i {
       margin-right: 5px;
     }
+
     /* default */
     &.el-button--default {
       &:hover, &:focus {
@@ -198,6 +194,7 @@ html, body, #app {
         color: #fff !important;
       }
     }
+
     /* success */
     &.el-button--success {
       border-color: $themes-color-native !important;
@@ -221,10 +218,10 @@ html, body, #app {
         }
       }
     }
-
     &.unsubscribe {
       color: $color !important;
     }
+
     /* danger */
     &.el-button--danger {
       &.is-plain {
@@ -295,7 +292,6 @@ html, body, #app {
         border-color: $themes-color !important;
         color: $themes-color !important;
       }
-
       &.is-disabled {
         background-color: $bg-btn-disabled !important;
         color: $color !important;
@@ -306,9 +302,7 @@ html, body, #app {
           border-color: $bg-btn-disabled !important;
         }
       }
-
     }
-
   }
 
   /* checkbox-start */
@@ -362,8 +356,6 @@ html, body, #app {
     }
   }
 
-
-
   /* popover */
   .el-popover .el-button--success {
     color: #fff;
@@ -383,7 +375,7 @@ html, body, #app {
 
   /* select */
   .el-select {
-    width: 250px;
+    width: 240px;
     /* 圆角 */
     &.select-radius {
       .el-input__inner {

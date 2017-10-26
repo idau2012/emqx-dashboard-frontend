@@ -1,6 +1,21 @@
 <template>
   <div class="overview-view">
-    <div class="page-title">{{ $t('leftbar.overview') }}</div>
+    <div class="page-title">{{ $t('leftbar.overview') }}
+      <el-select
+        class="select-radius"
+        v-model="nodeName"
+        placeholder="Select Node"
+        size="small"
+        :disabled="loading"
+        @change="loadData">
+        <el-option
+          v-for="item in nodes"
+          :key="item.name"
+          :label="item.name"
+          :value="item.name">
+        </el-option>
+      </el-select>
+    </div>
 
     <!-- Broker -->
      <div class="card-box" style="margin-top: 54px">
@@ -179,7 +194,7 @@ import {
 } from 'element-ui'
 
 import { httpGet } from '../store/api'
-import { CURRENT_NODE, TIMER } from '../store/mutation-types'
+import { CURRENT_NODE } from '../store/mutation-types'
 
 export default {
   name: 'overview-view',
@@ -208,7 +223,7 @@ export default {
       brokers: {},
       nodes: [],
       stats: [],
-      flag: 0,
+      timer: 0,
       metrics: {
         packets: [],
         messages: [],
@@ -216,38 +231,23 @@ export default {
       },
     }
   },
-  computed: {
-    nodeInfo() {
-      return this.$store.state.node.nodeName
-    },
-    timeoutTimer() {
-      return this.$store.state.timer.timer
-    },
-  },
-  watch: {
-    nodeInfo: 'init',
-  },
   methods: {
-    ...mapActions([CURRENT_NODE, TIMER]),
+    ...mapActions([CURRENT_NODE]),
     // set global nodeName
-    setNode() {
-      this.CURRENT_NODE({ nodeName: this.nodeName, nodes: this.nodes })
+    stashNode() {
+      this.CURRENT_NODE({ nodeName: this.nodeName })
     },
     init() {
       // load nodes every page
-      const currentNode = this.$store.state.node.nodeName
-      httpGet('/management/nodes').then((response) => {
-        // set default of select
-        this.nodeName = currentNode || response.data.result[0].name || ''
-        this.nodes = response.data.result
-        this.setNode()
-        this.loadData()
+      httpGet('/nodes').then((response) => {
+        // set default of select not clan
+        this.nodeName = this.$store.state.node.nodeName || response.data[0].name
+        this.nodes = response.data
         this.refreshInterval()
+      }).catch(() => {
+        this.loading = false
+        this.$message.error(this.$t('error.networkError'))
       })
-    },
-    // Object2Array, to adaptation the backend
-    parseToArray(obj) {
-      return new Array(obj)
     },
     // sort
     sortByNodeName(data) {
@@ -263,39 +263,37 @@ export default {
       data.unshift(tem)
       return data
     },
-    // setInterval to refresh the data, if
     refreshInterval() {
-      clearInterval(this.flag)
-      this.flag = setInterval(this.loadData, 1000 * 10)
+      clearInterval(this.timer)
+      this.timer = setInterval(this.loadData, 1000 * 10)
+      console.log('执行了')
     },
-    // load data index by nodeName
     loadData() {
       if (this.$route.path !== '/') {
         return
       }
       if (!this.nodeName) {
-        // no nodeName, can not load data
         return
       }
+      this.stashNode()
       // nodes[]
-      httpGet('monitoring/nodes').then((response) => {
-        this.nodes = this.sortByNodeName(response.data.result)
+      httpGet('/nodes').then((response) => {
+        this.nodes = this.sortByNodeName(response.data)
+      }).catch(() => {
+        this.loading = false
+        this.$message.error(this.$t('error.networkError'))
       })
       // stats[]
-      httpGet(`/monitoring/stats/${this.nodeName}`).then((response) => {
-        // the backend is so bad
-        response.data.result.name = this.nodeName
-        this.stats = this.parseToArray(response.data.result)
+      httpGet(`/nodes/${this.nodeName}/stats`).then((response) => {
+        response.data.name = this.nodeName
+        this.stats = [response.data]
       })
       // brokers[]
-      httpGet(`/management/nodes/${this.nodeName}`).then((response) => {
-        this.brokers = response.data.result
+      httpGet(`/brokers/${this.nodeName}`).then((response) => {
+        this.brokers = response.data
       })
       // metrics[{}, {}, {}]
-      httpGet(`/monitoring/metrics/${this.nodeName}`).then((response) => {
-        if (response.data.code !== 0) {
-          return
-        }
+      httpGet(`/nodes/${this.nodeName}/metrics`).then((response) => {
         this.metrics = {
           packets: [],
           messages: [],
@@ -309,7 +307,7 @@ export default {
         Object.keys(indexTable).forEach((item) => {
           indexTable[item].forEach((item2) => {
             const indexKey = `${item}/${item2}`
-            this.metrics[item].push({ key: item2, value: response.data.result[indexKey] })
+            this.metrics[item].push({ key: item2, value: response.data[indexKey] })
           })
         })
       })
@@ -319,7 +317,7 @@ export default {
     this.init()
   },
   beforeRouteLeave(to, from, next) {
-    clearInterval(this.flag)
+    clearInterval(this.timer)
     next()
   },
 }

@@ -3,6 +3,13 @@ import enLocale from 'element-ui/lib/locale/lang/en'
 
 export default {
   ...enLocale,
+  // globe
+  select: {
+    cluster: 'All Nodes',
+  },
+  error: {
+    networkError: 'Network Error',
+  },
   // leftbar
   leftbar: {
     // MONITORING
@@ -62,6 +69,7 @@ export default {
   },
   // Clients
   clients: {
+    node: 'Node',
     clientId: 'ClientId',
     username: 'Username',
     ipAddr: 'IPAddr',

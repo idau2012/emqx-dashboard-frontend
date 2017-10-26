@@ -7,6 +7,7 @@
           v-model="searchValue"
           class="input-radius"
           size="small"
+          style="float: right;padding-left: 20px"
           :icon="iconStatus"
           :disabled="loading"
           :on-icon-click="searchChild"
@@ -14,11 +15,33 @@
           @change="searchView = false"
           @keyup.enter.native="searchChild">
         </el-input>
+
+        <el-select
+          v-if="activeTab !== 'routes'"
+          class="select-radius"
+          v-model="nodeName"
+          placeholder="Select Node"
+          size="small"
+          :disabled="loading"
+          @change="loadChild(true)">
+          <el-option
+            :label="$t('select.cluster')"
+            value="cluster">
+          </el-option>
+          <el-option
+            v-for="item in nodes"
+            :key="item.name"
+            :label="item.name"
+            :value="item.name">
+          </el-option>
+        </el-select>
       </div>
     </div>
 
     <!-- clients -->
     <el-table v-show="activeTab==='clients'" v-loading="loading" border :data="clients">
+      <el-table-column v-if="cluster" prop="node" min-width="160" :label="$t('clients.node')">
+      </el-table-column>
       <el-table-column prop="client_id" min-width="160" :label="$t('clients.clientId')">
       </el-table-column>
       <el-table-column prop="username" min-width="130" :label="$t('clients.username')">
@@ -42,6 +65,8 @@
 
     <!-- sessions -->
     <el-table v-show="activeTab==='sessions'" v-loading="loading" border :data="sessions">
+      <el-table-column v-if="cluster" prop="node" min-width="160" :label="$t('clients.node')">
+      </el-table-column>
       <el-table-column prop="client_id" min-width="160" :label="$t('sessions.clientId')">
       </el-table-column>
       <el-table-column prop="clean_sess" width="120" :label="$t('sessions.cleanSess')">
@@ -74,6 +99,8 @@
 
     <!-- subscriptions -->
     <el-table v-loading="loading" v-show="activeTab==='subscriptions'" border :data="subscriptions">
+      <el-table-column v-if="cluster" prop="node" min-width="160" :label="$t('clients.node')">
+      </el-table-column>
       <el-table-column prop="client_id" :label="$t('subscriptions.clientId')"></el-table-column>
       <el-table-column prop="topic" :label="$t('subscriptions.topic')"></el-table-column>
       <el-table-column prop="qos" :label="$t('subscriptions.qoS')"></el-table-column>
@@ -81,12 +108,13 @@
 
     <!-- pagination -->
     <el-pagination
-      v-if="total>0"
+      small
+      v-if="count > limit"
       layout="prev, pager, next"
-      :current-page="currentPage"
-      :page-size="pageSize"
-      :total="total"
-      @current-change="currentPageChanged">
+      :current-page.sync="page"
+      :page-size="limit"
+      @current-change="turnPage"
+      :total="count">
     </el-pagination>
   </div>
 </template>
@@ -125,10 +153,14 @@ export default {
     return {
       searchView: false,
       loading: false,
+      cluster: false,
+      popoverVisible: false,
+      limit: 10,
+      page: 1,
+      count: 0,
       nodeName: '',
       nodes: [],
       activeTab: 'clients',
-      popoverVisible: false,
       searchKey: '',
       searchValue: '',
       searchPlaceholder: 'ClientId',
@@ -137,39 +169,30 @@ export default {
       topics: [],
       routes: [],
       subscriptions: [],
-      pageSize: 10,
-      currentPage: 1,
-      total: 0,
     }
   },
   watch: {
     $route: 'init',
-    nodeInfo: 'init',
   },
   computed: {
-    nodeInfo() {
-      return this.$store.state.node.nodeName
-    },
     iconStatus() {
       return this.searchView ? 'close' : 'search'
     },
   },
   methods: {
     ...mapActions([CURRENT_NODE]),
-    // set global nodeName
-    setNode() {
-      this.CURRENT_NODE({ nodeName: this.nodeName, nodes: this.nodes })
+    // set global nodeName without
+    stashNode() {
+      this.cluster = this.nodeName === 'cluster'
+      if (this.cluster) {
+        return
+      }
+      this.CURRENT_NODE({ nodeName: this.nodeName })
     },
     // get path
     init() {
       this.activeTab = this.$route.path.split('/')[1]
       switch (this.activeTab) {
-        case 'clients':
-        case 'sessions':
-        case 'subscriptions':
-          this.searchPlaceholder = 'ClientId'
-          break
-        case 'topics':
         case 'routes':
           this.searchPlaceholder = 'Topic'
           break
@@ -181,50 +204,50 @@ export default {
     },
     loadData() {
       this.loading = true
-      this.currentPage = 1
+      this.page = 1
       this.searchValue = ''
-      // load routes needn't nodes
-      if (this.activeTab === 'routes') {
-        this.loadChild()
-        return
-      }
       // set default of select
-      const currentNode = this.$store.state.node.nodeName
-      httpGet('/management/nodes').then((response) => {
-        this.nodeName = currentNode || response.data.result[0].name || ''
-        this.nodes = response.data.result
-        this.setNode()
-        // load child with sync
+      httpGet('/nodes').then((response) => {
+        const currentNode = this.$store.state.node.nodeName || response.data[0].name
+        this.nodeName = this.cluster ? 'cluster' : currentNode
+        this.nodes = response.data
+        this.loading = false
         this.loadChild()
+      }).catch(() => {
+        this.loading = false
+        this.$message.error(this.$t('error.networkError'))
       })
     },
-    // load child with pagination
-    currentPageChanged(target) {
-      this.currentPage = target
-      this.loadChild()
-    },
     loadChild(reload = false) {
+      this.stashNode()
       this.searchView = false
       this.searchValue = ''
       if (!this.nodeName && this.activeTab !== 'routes') {
         return
       }
-      // load child with the currentPage asc
+      // load child with the page asc
       if (reload) {
-        this.currentPage = 1
+        this.page = 1
       }
       this.loading = true
-      let requestURL = `/nodes/${this.nodeName}/${this.activeTab}?curr_page=${this.currentPage}&page_size=${this.pageSize}`
-      if (this.activeTab === 'routes') {
-        requestURL = `/routes?curr_page=${this.currentPage}&page_size=${this.pageSize}`
+      let requestURL = `/nodes/${this.nodeName}/${this.activeTab}?_page=${this.page}&_limit=${this.limit}`
+      // cluster
+      if (this.activeTab === 'routes' || this.cluster) {
+        requestURL = `/${this.activeTab}?_page=${this.page}&_limit=${this.limit}`
       }
       httpGet(requestURL).then((response) => {
-        this[this.activeTab] = response.data.result.objects
-        this.total = response.data.result.total_num || 0
+        console.log('loadChild', response.data)
+        this[this.activeTab] = response.data.items
+        this.count = response.data.meta.count || 0
+        this.page = response.data.meta.page || 1
         this.loading = false
+      }).catch(() => {
+        this.loading = false
+        this.$message.error(this.$t('error.networkError'))
       })
     },
     searchChild() {
+      // click x button
       if (this.searchView) {
         this.loadChild()
         return
@@ -234,25 +257,25 @@ export default {
         return
       }
       let requestURL = `/nodes/${this.nodeName}/${this.activeTab}/${this.searchValue}`
-      if (this.activeTab === 'routes') {
-        requestURL = `/routes/${this.searchValue}`
+      if (this.activeTab === 'routes' || this.cluster) {
+        requestURL = `/${this.activeTab}/${encodeURI(this.searchValue)}`
       }
       this.loading = true
       httpGet(requestURL).then((response) => {
-        if (response.data.result.objects.length === 0) {
-          this.searchView = false
-          this[this.activeTab] = []
-          this.searchView = true
-          // reset page
-          this.total = 0
-        } else {
-          this[this.activeTab] = response.data.result.objects
-          this.searchView = true
-          // reset page
-          this.total = 0
-        }
+        // reset page
+        this.count = 0
+        this.page = 1
+        this.searchView = true
+        this[this.activeTab] = response.data
         this.loading = false
+      }).catch(() => {
+        this.loading = false
+        this.$message.error(this.$t('error.networkError'))
       })
+    },
+    // load child with pagination
+    turnPage() {
+      this.loadChild()
     },
   },
   created() {

@@ -3,6 +3,20 @@
     <!-- plugin list -->
     <div v-show="!plugin.nodeName" class="page-title">
       {{ $t('leftbar.plugins') }}
+      <el-select
+        class="select-radius"
+        v-model="nodeName"
+        placeholder="Select Node"
+        size="small"
+        :disabled="loading"
+        @change="loadPlugins">
+        <el-option
+          v-for="item in nodes"
+          :key="item.name"
+          :label="item.name"
+          :value="item.name">
+        </el-option>
+      </el-select>
     </div>
     <el-table v-show="!plugin.nodeName"
               v-loading="loading"
@@ -263,19 +277,92 @@ export default{
     changeListener() {
       return this.hashCode !== JSON.stringify(this.record)
     },
-    nodeInfo() {
-      return this.$store.state.node.nodeName
-    },
   },
   watch: {
     $route: 'loadData',
-    nodeInfo: 'reloadOnSelectChange',
   },
   methods: {
     ...mapActions([CURRENT_NODE]),
     // set global nodeName
-    setNode() {
-      this.CURRENT_NODE({ nodeName: this.nodeName, nodes: this.nodes })
+    stashNode() {
+      this.CURRENT_NODE({ nodeName: this.nodeName })
+    },
+    loadData() {
+      // To config plugins
+      const nodeName = this.$route.params.nodeName
+      this.selectedAdvancedConfig = []
+      this.advancedConfig = []
+      this.record = {}
+      // nodeName in url
+      if (nodeName) {
+        if (this.$route.params.pluginName === 'emq_dashboard') {
+          this.$router.push({ path: '/not_found' })
+          return
+        }
+        this.plugin.nodeName = atob(nodeName)
+        this.nodeName = this.plugin.nodeName
+        // set nodeName to store
+        this.stashNode()
+        this.plugin.name = this.$route.params.pluginName || ''
+        this.clockStatus = true
+        this.loading = true
+        // load & render pluginOption
+        httpGet(`nodes/${this.plugin.nodeName}/plugin_configs/${this.plugin.name}`).then((response) => {
+          this.plugin.option = response.data
+          // sort & define
+          this.plugin.option.sort(this.sortObject())
+          this.plugin.option.forEach((item) => {
+            if (item.key.indexOf('$') !== -1) {
+              return
+            }
+            if (item.required) {
+              /*
+              if (item.value.length < 35) {
+                recordList.unshift(item)
+              } else {
+                recordList.push(item)
+              }
+              */
+              this.$set(this.record, item.key, item.value)
+            } else {
+              this.advancedConfig.push(item)
+            }
+          })
+          // hashCode
+          this.hashCode = JSON.stringify(this.record)
+          this.loading = false
+        }).catch(() => {
+          this.loading = false
+          this.$message.error(this.$t('error.networkError'))
+        })
+      } else {
+        // load with plugin page
+        httpGet('/nodes').then((response) => {
+          this.nodeName = this.$store.state.node.nodeName || response.data[0].name
+          this.nodes = response.data
+          this.loading = false
+        }).catch(() => {
+          this.loading = false
+          this.$message.error(this.$t('error.networkError'))
+        })
+        this.plugin.nodeName = ''
+      }
+    },
+    loadPlugins() {
+      this.stashNode()
+      if (!this.nodeName) {
+        return
+      }
+      this.loading = true
+      this.searchValue = ''
+      httpGet(`/nodes/${this.nodeName}/plugins`).then((response) => {
+        this.tableData = response.data
+        this.handleFilter()
+        this.loading = false
+      }).catch(() => {
+        this.loading = false
+        this.$message.error(this.$t('error.networkError'))
+      })
     },
     handleFilter() {
       // No need to initialize Set
@@ -333,6 +420,9 @@ export default{
         } else {
           this.$message.error(`${row.active ? this.$t('plugins.stop') : this.$t('plugins.start')}${this.$t('alert.failure')}:${response.data.code} ${response.data.message}`)
         }
+      }).catch(() => {
+        this.loading = false
+        this.$message.error(this.$t('error.networkError'))
       })
     },
     sortObject() {
@@ -342,81 +432,6 @@ export default{
         }
         return 0
       }
-    },
-    loadData() {
-      // To config plugins
-      const nodeName = this.$route.params.nodeName
-      this.selectedAdvancedConfig = []
-      this.advancedConfig = []
-      this.record = {}
-      // nodeName in url
-      if (nodeName) {
-        if (this.$route.params.pluginName === 'emq_dashboard') {
-          this.$router.push({ path: '/not_found' })
-          return
-        }
-        // set nodeName to store
-        this.setNode()
-        this.plugin.nodeName = atob(nodeName)
-        this.nodeName = this.plugin.nodeName
-        this.plugin.name = this.$route.params.pluginName || ''
-        this.clockStatus = true
-        this.loading = true
-        // load & render pluginOption
-        httpGet(`nodes/${this.plugin.nodeName}/plugin_configs/${this.plugin.name}`).then((response) => {
-          this.plugin.option = response.data.result
-          // sort & define
-          this.plugin.option.sort(this.sortObject())
-          this.plugin.option.forEach((item) => {
-            if (item.key.indexOf('$') !== -1) {
-              return
-            }
-            if (item.required) {
-              /*
-              if (item.value.length < 35) {
-                recordList.unshift(item)
-              } else {
-                recordList.push(item)
-              }
-              */
-              this.$set(this.record, item.key, item.value)
-            } else {
-              this.advancedConfig.push(item)
-            }
-          })
-          // hashCode
-          this.hashCode = JSON.stringify(this.record)
-          this.loading = false
-        })
-      } else {
-        // load with plugin page
-        const currentNode = this.$store.state.node.nodeName
-        httpGet('/management/nodes').then((response) => {
-          this.nodes = []
-          // set default of select
-          this.nodeName = currentNode || response.data.result[0].name || ''
-          this.nodes = response.data.result
-          this.setNode()
-          this.loading = false
-          this.loadPlugins()
-        })
-        // this.nodeName = this.plugin.nodeName
-        this.plugin.nodeName = ''
-      }
-    },
-    loadPlugins() {
-      if (!this.nodeName) {
-        return
-      }
-      this.loading = true
-      this.searchValue = ''
-      // set nodeName to store
-      this.setNode()
-      httpGet(`/nodes/${this.nodeName}/plugins`).then((response) => {
-        this.tableData = response.data.result
-        this.handleFilter()
-        this.loading = false
-      })
     },
     // to config view
     config(row) {
@@ -449,6 +464,9 @@ export default{
           } else {
             this.$message.error(this.$t('plugins.configFailure'))
           }
+        }).catch(() => {
+          this.loading = false
+          this.$message.error(this.$t('error.networkError'))
         })
       } else {
         // waiting the confirm
@@ -499,7 +517,7 @@ export default{
         this.notice = this.$t('plugins.giveUpNotice')
         this.oper = 'cancel'
         // reset current node
-        this.setNode()
+        this.stashNode()
         this.handleOperation(true)
       } else {
         this.$router.push({ path: '/plugins' })

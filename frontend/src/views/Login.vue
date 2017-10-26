@@ -98,16 +98,22 @@ export default {
         },
       }
       axios.create(config).post('/auth', user).then((response) => {
-        if (response.data.code === 0) {
+        if (response.data === 'ok') {
           const password = user.password
           this.USER_LOGIN({ user: { ...user, password }, remember: this.remember })
           const path = decodeURIComponent(this.$route.query.redirect || '/')
           this.$router.push({ path })
         } else {
           this.loginError.username = this.$t('login.error')
+          this.$message.error(this.$t('login.error'))
           this.username = ''
           this.password = ''
         }
+      }).catch(() => {
+        this.loginError.username = this.$t('login.error')
+        this.$message.error(this.$t('login.error'))
+        this.username = ''
+        this.password = ''
       })
     },
   },

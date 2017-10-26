@@ -9,8 +9,12 @@ $themes-color-danger: #ff6d6d;
 
 $bg-color: #ffffff;
 $bg-color-risk: #f6f7fb;
+$bg-color-dark: #1d1e24;
 $bg-hover: #e5e7ef;
 $bg-disabled: #d6d9e2;
+
+/* light-region-color */
+$app-bg: $bg-color-risk;
 
 $bg-btn-disabled: $bg-disabled;
 
@@ -22,11 +26,22 @@ $color: #71737d;
 $color-deep: #777c8f;
 $color-risk: #b6bac6;
 $color-deeper: #1f1d1d;
-
+$color-white: #ffffff;
 
 /* link */
 $api-link: $themes-color;
 
+/* 下拉选择相关 */
+$el-select-bg: transparent;
+$select-color: $color-deep;
+$select-border: $border-color;
+$select-border-active: $border-color-deep;
+
+$select-bg-active: $bg-color-risk;
+$select-color-active: $color-deep;
+
+$select-dropdown-bg: $bg-color;
+$select-item-bg: $bg-color-risk;
 
 /* pagination */
 $pagination-bg: $themes-color;
@@ -47,12 +62,17 @@ $input-placeholder: $color-risk;
 $input-border-hover: $border-color-deep;
 $input-disabled-bg: #d6d9e2;
 
-
-/* light-region-color */
-$app-bg: $bg-color-risk;
+/* 表格相关 */
+$table-bg: $bg-color;
+$table-color: $color;
+$table-border-middle: $border-color;
+$table-head-color: $color;
+$table-tr-bg-hover: $bg-hover;
+$table-tr-color-hover: $table-head-color;
 
 /* 导航相关 */
 $nav-bg: $bg-color;
+$nav-border: #313437;
 $left-bar-bg: #191f28;
 
 $left-bar-title: #e8e9e9;
@@ -62,14 +82,6 @@ $left-bar-active: $themes-color;
 $left-bar-active-bg: #33383f;
 
 $left-bar-icon: #8c8f93;
-
-/* 表格相关 */
-$table-bg: $bg-color;
-$table-color: $color;
-$table-border-middle: $border-color;
-$table-head-color: $color;
-$table-tr-bg-hover: $bg-hover;
-$table-tr-color-hover: $table-head-color;
 
 /* 字体相关 */
 $default-font: $color;
@@ -89,22 +101,10 @@ $running-text: $themes-color;
 $stopped-bg: $color;
 $stopped-text: $color;
 
-
-/* 下拉选择相关 */
-$el-select-bg: transparent;
-$select-color: $color-deep;
-$select-border: $border-color;
-$select-border-active: $border-color-deep;
-
-$select-bg-active: $bg-color-risk;
-$select-color-active: $color-deep;
-
-$select-dropdown-bg: $bg-color;
-$select-item-bg: $bg-color-risk;
-
 /* title */
 $page-title: $themes-color;
 $overview-item-title: #383838;
+
 /* broker */
 $overview-broker-bg: $bg-color;
 $overview-broker-border: transparent;
@@ -130,6 +130,7 @@ html, body, #app {
     font-size: 14px;
     font-weight: 400;
   }
+
   /* nprogress */
   body #nprogress .bar {
     background: $themes-color-native;
@@ -146,18 +147,34 @@ html, body, #app {
     text-decoration: none;
   }
 
+  /* table-filter */
+  .el-table-filter {
+    .el-checkbox {
+      color: $color-deep !important;
+    }
+    .el-table-filter__bottom {
+      button {
+        &:hover {
+          color: $themes-color-native !important;
+        }
+      }
+    }
+  }
+
   /* form */
   .el-form {
     .el-form-item__label {
       color: $color !important;
     }
   }
+
   /* button 不再定义语义化的颜色变量，请直接使用原始变量赋值 */
   .el-button {
     font-family: "Roboto", "Helvetica Neue", "Helvetica", "Work sans", Arial, sans-serif;
     i {
       margin-right: 5px;
     }
+
     /* default */
     &.el-button--default {
       &:hover, &:focus {
@@ -177,6 +194,7 @@ html, body, #app {
         color: $bg-color !important;
       }
     }
+
     /* success */
     &.el-button--success {
       border-color: $themes-color-native !important;
@@ -246,21 +264,7 @@ html, body, #app {
 
   }
 
-  /* table-filter */
-  .el-table-filter {
-    .el-checkbox {
-      color: $color-deep !important;
-    }
-    .el-table-filter__bottom {
-      button {
-        &:hover {
-          color: $themes-color-native !important;
-        }
-      }
-    }
-  }
   /* websocket */
-
   .websocket-view {
     .el-checkbox__label {
       color: $color;
@@ -437,7 +441,7 @@ html, body, #app {
 
   /* select */
   .el-select {
-    width: 250px;
+    width: 240px;
     /* 圆角 */
     &.select-radius {
       .el-input__inner {

@@ -214,8 +214,11 @@ export default {
     loadData() {
       this.loading = true
       httpGet('/users').then((response) => {
-        this.users = response.data.result
+        this.users = response.data
         this.loading = false
+      }).catch(() => {
+        this.loading = false
+        this.$message.error(this.$t('error.networkError'))
       })
     },
     save() {
@@ -251,7 +254,6 @@ export default {
           if (response.data.code === 0) {
             this.$message.success(`${this.$t('users.createUser')}`)
             this.dialogVisible = false
-            this.$router.push({ path: '/users' })
             this.loadData()
           } else {
             const errorCode = `users.errorCode[${response.data.code}]`
@@ -259,6 +261,9 @@ export default {
             this.formError.username = this.$t(errorCode) || response.data.message
           }
           this.btnLoading = false
+        }).catch(() => {
+          this.loading = false
+          this.$message.error(this.$t('error.networkError'))
         })
       } else {
         // edit
@@ -302,6 +307,9 @@ export default {
               this.formError.username = this.$t(errorCode) || response.data.message
             }
             this.btnLoading = false
+          }).catch(() => {
+            this.loading = false
+            this.$message.error(this.$t('error.networkError'))
           })
         } else {
           this.updateUser()
@@ -312,7 +320,7 @@ export default {
     deleteUser(username) {
       this.btnLoading = true
       httpDelete(`/users/${username}`).then((response) => {
-        if (response.data.code === 0) {
+        if (response.data === 'ok') {
           this.$message.success(`${this.$t('users.delete')}${this.$t('alert.success')}`)
           this.loadData()
         } else {
@@ -320,12 +328,15 @@ export default {
         }
         this.btnLoading = false
         this.hidePopover()
+      }).catch(() => {
+        this.loading = false
+        this.$message.error(this.$t('error.networkError'))
       })
     },
     updateUser(changePassword = false) {
       this.btnLoading = true
-      httpPut(`/users/${this.user.username}`, this.user).then((response) => {
-        if (response.data.code === 0) {
+      httpPut(`/users${this.user.username}`, this.user).then((response) => {
+        if (response.data.code === 'ok') {
           if (!changePassword) {
             this.$message.success(`${this.$t('users.edit')}${this.$t('alert.success')}`)
           }
@@ -335,6 +346,9 @@ export default {
           this.$message.error(`${this.$t('users.edit')}${this.$t('alert.failure')}`)
         }
         this.btnLoading = false
+      }).catch(() => {
+        this.loading = false
+        this.$message.error(this.$t('error.networkError'))
       })
     },
   },

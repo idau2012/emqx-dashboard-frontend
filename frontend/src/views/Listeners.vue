@@ -1,6 +1,23 @@
 <template>
   <div class="listeners-view">
-    <div class="page-title">{{ $t('leftbar.listeners') }}</div>
+    <div class="page-title">
+      {{ $t('leftbar.listeners') }}
+      <el-select
+        class="select-radius"
+        v-model="nodeName"
+        placeholder="Select Node"
+        size="small"
+        style="float: right"
+        :disabled="loading"
+        @change="loadListeners">
+        <el-option
+          v-for="item in nodes"
+          :key="item.name"
+          :label="item.name"
+          :value="item.name">
+        </el-option>
+      </el-select>
+    </div>
     <el-table v-loading="loading" border :data="listeners">
       <el-table-column prop="protocol" width="240" :label="$t('listeners.protocol')">
       </el-table-column>
@@ -52,36 +69,30 @@
         listeners: [],
       }
     },
-    computed: {
-      nodeInfo() {
-        return this.$store.state.node.nodeName
-      },
-    },
-    watch: {
-      nodeInfo: 'loadData',
-    },
     methods: {
       ...mapActions([CURRENT_NODE]),
       // set global nodeName
-      setNode() {
-        this.CURRENT_NODE({ nodeName: this.nodeName, nodes: this.nodes })
+      stashNode() {
+        this.CURRENT_NODE({ nodeName: this.nodeName })
       },
       loadData() {
-        const currentNode = this.$store.state.node.nodeName
-        httpGet('/management/nodes').then((response) => {
-          // set default of select
-          this.nodeName = currentNode || response.data.result[0].name || ''
-          this.nodes = response.data.result
-          this.setNode()
-          this.loadListeners()
+        httpGet('/nodes').then((response) => {
+          this.nodeName = this.$store.state.node.nodeName || response.data[0].name
+          this.nodes = response.data
+        }).catch(() => {
+          this.loading = false
+          this.$message.error(this.$t('error.networkError'))
         })
       },
-      // load listener
       loadListeners() {
+        this.stashNode()
         this.loading = true
-        httpGet(`/monitoring/listeners/${this.nodeName}`).then((response) => {
-          this.listeners = response.data.result
+        httpGet(`/nodes/${this.nodeName}/listeners`).then((response) => {
+          this.listeners = response.data
           this.loading = false
+        }).catch(() => {
+          this.loading = false
+          this.$message.error(this.$t('error.networkError'))
         })
       },
     },
