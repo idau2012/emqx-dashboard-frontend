@@ -30,6 +30,7 @@ export default {
     // ADMIN
     admin: '系统',
     users: '用户',
+    settings: '设置',
   },
   // overview
   overview: {
@@ -248,5 +249,12 @@ export default {
     error: '用户名或密码错误',
     usernameRequired: '请填写用户名',
     passwordRequired: '请填写密码',
+  },
+  // settings
+  settings: {
+    themes: '样式主题',
+    language: '系统语言',
+    apply: '应 用',
+    success: '修改成功',
   },
 }

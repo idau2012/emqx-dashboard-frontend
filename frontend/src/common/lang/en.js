@@ -30,6 +30,7 @@ export default {
     // ADMIN
     admin: 'ADMIN',
     users: 'Users',
+    settings: 'Settings',
   },
   // overview
   overview: {
@@ -250,5 +251,12 @@ export default {
     error: 'Username Or Password Error',
     usernameRequired: 'Username Required',
     passwordRequired: 'Password Required',
+  },
+  // settings
+  settings: {
+    themes: 'Themes',
+    language: 'Language',
+    apply: 'Apply',
+    success: 'Apply success',
   },
 }

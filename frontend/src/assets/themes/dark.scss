@@ -264,7 +264,7 @@ html, body, #app {
 
   /* websocket */
 
-  .websocket-view {
+  .websocket-view, .settings-view {
     .el-checkbox__label {
       color: $color;
     }
@@ -818,7 +818,7 @@ html, body, #app {
   }
 
   .leftbar {
-    .bar-title {
+    .bar-title, .bar-footer {
       background-color: $left-bar-bg !important;
     }
   }

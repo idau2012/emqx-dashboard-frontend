@@ -20,20 +20,36 @@ const routes = [
   // },
   {
     path: '/',
-    component: () => import('@/views/Home.vue'),
+    component: () => import('@/views/Home'),
     children: [
       {
         path: '',
         alias: 'overview',
-        component: () => import('@/views/Overview.vue'),
+        component: () => import('@/views/Overview'),
+      },
+      {
+        path: '/clients',
+        component: () => import('@/views/Datas'),
+      },
+      {
+        path: '/sessions',
+        component: () => import('@/views/Datas'),
+      },
+      {
+        path: '/routes',
+        component: () => import('@/views/Datas'),
+      },
+      {
+        path: '/subscriptions',
+        component: () => import('@/views/Datas'),
       },
       {
         path: '/plugins',
-        component: () => import('@/views/Plugins.vue'),
+        component: () => import('@/views/Plugins'),
       },
       {
         path: '/plugins/:nodeName/:pluginName',
-        component: () => import('@/views/Plugins.vue'),
+        component: () => import('@/views/Plugins'),
       },
       {
         path: '/listeners',
@@ -41,31 +57,19 @@ const routes = [
       },
       {
         path: '/websocket',
-        component: () => import('@/views/Websocket.vue'),
+        component: () => import('@/views/Websocket'),
       },
       {
         path: '/http_api',
-        component: () => import('@/views/HttpApi.vue'),
+        component: () => import('@/views/HttpApi'),
       },
       {
         path: '/users',
-        component: () => import('@/views/Users.vue'),
+        component: () => import('@/views/Users'),
       },
       {
-        path: '/clients',
-        component: () => import('@/views/Datas.vue'),
-      },
-      {
-        path: '/sessions',
-        component: () => import('@/views/Datas.vue'),
-      },
-      {
-        path: '/routes',
-        component: () => import('@/views/Datas.vue'),
-      },
-      {
-        path: '/subscriptions',
-        component: () => import('@/views/Datas.vue'),
+        path: '/settings',
+        component: () => import('@/views/Settings'),
       },
     ],
   },

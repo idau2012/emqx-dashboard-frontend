@@ -57,8 +57,19 @@
           <i class="fa fa-user-o"></i>
           {{ $t('leftbar.users') }}
         </el-menu-item>
+        <el-menu-item index="/settings">
+          <i class="fa fa-cog"></i>
+          {{ $t('leftbar.settings') }}
+        </el-menu-item>
       </el-menu-item-group>
     </el-menu>
+
+    <div class="bar-footer">
+      <span>{{ user.username }}</span>
+      <a href="javascript:;" @click="logout">
+        <img src="../assets/exit.png">
+      </a>
+    </div>
   </div>
 </template>
 
@@ -66,7 +77,9 @@
 <script>
 import { Menu, MenuItem, MenuItemGroup } from 'element-ui'
 import { mapActions } from 'vuex'
-import { USER_LOGOUT } from '../store/mutation-types'
+
+import { USER_LOGOUT, THEMES_SWITCH } from '../store/mutation-types'
+import { getLocalStorage } from '../common/storage'
 
 export default {
   name: 'leftbar',
@@ -81,11 +94,21 @@ export default {
     },
   },
   methods: {
-    ...mapActions([USER_LOGOUT]),
+    ...mapActions([USER_LOGOUT, THEMES_SWITCH]),
+    loadThemes() {
+      let currentThemes = this.$store.state.themes.themes
+      if (!currentThemes) {
+        currentThemes = getLocalStorage('themes') || 'dark-themes'
+      }
+      this.THEMES_SWITCH({ themes: currentThemes })
+    },
     logout() {
       this.USER_LOGOUT()
       this.$router.push({ path: '/login' })
     },
+  },
+  created() {
+    this.loadThemes()
   },
 }
 </script>
@@ -104,7 +127,7 @@ export default {
     left: 0;
     top: 60px;
     width: 200px;
-    padding-bottom: 52px;
+    padding-bottom: 80px;
   }
   .bar-title {
     position: fixed;
@@ -125,6 +148,32 @@ export default {
       width: 48px;
       height: 44px;
       float: left;
+    }
+  }
+  .bar-footer {
+    position: fixed;
+    bottom: 0;
+    width: 180px;
+    z-index: 1003;
+    padding-left: 20px;
+    height: 63px;
+    line-height: 63px;
+    border-top: 1px solid #313437;
+    text-align: center;
+    span {
+      font-size: 16px;
+      font-weight: bolder;
+      margin-right: 12px;
+      vertical-align:middle;
+    }
+    a {
+      font-weight: bold;
+      img {
+        width: 20px;
+        height: 20px;
+        border: none;
+        vertical-align: middle;
+      }
     }
   }
   .el-menu-item {
