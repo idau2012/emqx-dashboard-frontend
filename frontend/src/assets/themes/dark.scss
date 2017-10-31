@@ -7,7 +7,7 @@ $themes-color-waring: #f9c855;
 $themes-color-danger: #ff6d6d;
 $themes-color-error: #e0b4b4;
 
-$bg-color: #141519;
+$bg-color: #161616;
 $bg-color-risk: #232429;
 $bg-color-dark: #1d1e24;
 $bg-hover: #343e43;
@@ -21,8 +21,9 @@ $bg-btn-disabled: $bg-disabled;
 $border-color: #44444d;
 $border-color-deep: #a7a7a7;
 $border-native-border: #bfcbd9;
+$border-simple: #d1dbe5;
 
-$color: #b0b0b0;
+$color: #a7a7a7;
 $color-deep: #777c8f;
 $color-risk: #929299;
 $color-deeper: #6e6e75;
@@ -34,13 +35,13 @@ $api-link: $themes-color;
 /* 下拉选择相关 */
 $el-select-bg: transparent;
 $select-color: $color;
-$select-border: #6c7786;
-$select-border-active: $color;
+$select-border: grey;
+$select-border-active: #737373;
 
-$select-bg-active: #343e43;
+$select-bg-active: #37363d;
 $select-color-active: $color;
 
-$select-dropdown-bg: $bg-color-risk;
+$select-dropdown-bg: #1f1d1d;
 $select-item-bg: $bg-color-risk;
 
 /* pagination */
@@ -59,27 +60,27 @@ $input-bg: transparent;
 $input-border: #6c7786;
 $input-color: #c8c8c8;
 $input-placeholder: $input-border;
-$input-border-hover: $border-color-deep;
+$input-border-hover: #737373;
 $input-disabled-bg: #323538;
 
 /* 表格相关 */
-$table-bg: $bg-color-risk;
-$table-color: $color;
-$table-border-middle: $border-color;
-$table-head-color: $color;
+$table-bg: #1f1d1d;
+$table-color: #a7a7a7;
+$table-border-middle: $bg-color;
+$table-head-color: #ddd;
 $table-tr-bg-hover: #393a3e;
 $table-tr-color-hover: $table-head-color;
 
 /* 导航相关 */
 $nav-bg: $bg-color-dark;
 $nav-border: #313437;
-$left-bar-bg: $bg-color-dark;
+$left-bar-bg: #242327;
 
-$left-bar-title: #e8e9e9;
-$left-bar-color: $color-risk;
+$left-bar-title: #fff;
+$left-bar-color: #a7a7a7;
 
-$left-bar-active: $themes-color;
-$left-bar-active-bg: $bg-hover;
+$left-bar-active: $themes-color-native-deep;
+$left-bar-active-bg: #37363b;
 
 $left-bar-icon: $color-deeper;
 
@@ -96,19 +97,19 @@ $icon-color: $color-deeper;
 $icon-focus: $themes-color;
 
 /* running status */
-$running-bg: $themes-color;
-$running-text: $themes-color;
+$running-bg: $themes-color-native-deep;
+$running-text: $themes-color-native-deep;
 $stopped-bg: $color;
 $stopped-text: $color;
 
 /* title */
-$page-title: $themes-color;
+$page-title: #fff;
 $overview-item-title: $color-white;
 
 /* broker */
 $overview-broker-bg: $table-bg;
 $overview-broker-border: transparent;
-$overview-broker-icon: $themes-color;
+$overview-broker-icon: $themes-color-native-deep;
 $overview-broker-desc: $color-risk;
 $overview-broker-icon-bg: $themes-color-risk;
 
@@ -143,7 +144,7 @@ html, body, #app {
     font-weight: 400;
   }
   a {
-    color: $default-link;
+    color: $themes-color-native-deep;
     text-decoration: none;
   }
 
@@ -261,7 +262,25 @@ html, body, #app {
     }
 
   }
-
+  /* radio */
+  .el-radio-group {
+    .el-radio {
+      color: $color !important;
+      .el-radio__input {
+        .el-radio__inner {
+          &:hover {
+            border-color: $themes-color !important;
+          }
+        }
+        &.is-checked {
+          .el-radio__inner {
+            border-color: $themes-color !important;
+            background-color: $themes-color !important;
+          }
+        }
+      }
+    }
+  }
   /* websocket */
 
   .websocket-view, .settings-view {
@@ -335,6 +354,10 @@ html, body, #app {
   /* left-bar */
   .leftbar {
     background-color: $left-bar-bg;
+    .bar-title, .bar-footer {
+      background-color: $left-bar-bg !important;
+      color: $left-bar-title !important;
+    }
     .el-menu--dark {
       background-color: $left-bar-bg;
     }
@@ -390,8 +413,8 @@ html, body, #app {
       }
       .el-input__inner {
         background-color: $el-select-bg !important;
-        border-color: $select-border !important;
-        color: $select-color !important;
+        border-color: #37363d !important;
+        color: $color !important;
         &:hover,
         &:focus {
           border-color: $select-border-active !important;
@@ -401,7 +424,7 @@ html, body, #app {
   }
   .el-select-dropdown {
     background-color: $select-dropdown-bg !important;
-    border-color: $select-border-active !important;
+    border-color: grey !important;
     .el-select-dropdown__item {
       color: $select-color !important;
       &.selected.hover, &.selected, &.hover {
@@ -417,15 +440,15 @@ html, body, #app {
     margin-top: 20px;
     color: $table-color !important;
     background-color: $table-bg;
+    border: 1px solid #292929 !important;
     /* 增加内边距 */
-    border: 20px solid transparent !important;
     &::after,
     &::before {
       background-color: transparent;
     }
     /* 表格头部 & 全部 */
     th, tr, .el-table__header-wrapper {
-      border-bottom: 1px solid $table-border-middle !important;
+       //border-bottom: 1px solid $table-border-middle !important;
       .el-table__header {
         tr div {
           color: $table-head-color !important;
@@ -489,7 +512,7 @@ html, body, #app {
   }
   .el-input__inner, .el-textarea__inner {
     background-color: transparent;
-    border-color: $input-border !important;
+    border-color: #37363d !important;
     color: $input-color !important;
     &:focus, &:hover {
       border-color: $input-border-hover !important;
@@ -561,12 +584,12 @@ html, body, #app {
   /* card */
   .el-card {
     border: none !important;
-    background-color: $bg-color-risk !important;
+    background-color: $table-bg !important;
     color: $color !important;
     .el-card__header {
       padding: 12px 20px;
-      border-bottom: 1px solid $border-color;
-      color: $color !important;
+      border-bottom: 1px solid #37363c;
+      color: #fff !important;
       font-size: 16px;
       font-weight: 600;
     }
@@ -595,6 +618,9 @@ html, body, #app {
         background-color: $overview-broker-icon-bg;
       }
       .desc {
+        h3 {
+          color: #fff;
+        }
         p {
           color: $overview-broker-desc;
         }
@@ -678,7 +704,7 @@ html, body, #app {
 
   .http-api {
     .link {
-      color: $api-link !important;
+      color: $themes-color-native-deep !important;
     }
   }
 
@@ -705,6 +731,9 @@ html, body, #app {
     .el-card {
       color: #1f2d3d !important;
       background-color: #fff !important;
+      .el-card__header {
+        color: #1f2d3d !important;
+      }
       .el-input__inner {
         border: 1px solid $border-native-border !important;
         color: #1f2d3d !important;
@@ -816,39 +845,4 @@ html, body, #app {
       }
     }
   }
-
-  .leftbar {
-    .bar-title, .bar-footer {
-      background-color: $left-bar-bg !important;
-    }
-  }
-  .nav-bar {
-    background-color: $nav-bg !important;
-    border-bottom: 1px solid $nav-border;
-    .bar-footer {
-      span {
-        color: $color !important;
-        &:hover {
-          color: #e8e9e9 !important;
-        }
-      }
-    }
-    .style-toggle {
-      border-right: 1px solid #313437;
-      border-left: 1px solid #313437;
-      &::before {
-        background-color: #313437;
-      }
-      .btn-box {
-        color: #b0b0b0;
-        span {
-          cursor: pointer;
-          &:hover {
-            color: #aeaeae;
-          }
-        }
-      }
-    }
-  }
-
 }

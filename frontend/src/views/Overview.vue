@@ -4,7 +4,7 @@
       <el-select
         class="select-radius"
         v-model="nodeName"
-        placeholder="Select Node"
+        :placeholder="$t('select.placeholder')"
         size="small"
         :disabled="loading"
         @change="loadData">
@@ -266,7 +266,6 @@ export default {
     refreshInterval() {
       clearInterval(this.timer)
       this.timer = setInterval(this.loadData, 1000 * 10)
-      console.log('执行了')
     },
     loadData() {
       if (this.$route.path !== '/') {

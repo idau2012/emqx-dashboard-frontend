@@ -1,0 +1,20 @@
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Roboto Light'), local('Roboto-Light'), url(./assets/fonts/Roboto-Light.woff) format('woff'), url(./assets/fonts/Roboto-Light.ttf) format('truetype');
+}
+.page-title {
+  padding: 30px 0 10px 0 !important;
+  .el-select {
+    float: right;
+  }
+}
+.el-button {
+  &.el-button--small {
+    border-radius: 36px !important;
+  }
+}
+::-ms-clear, ::-ms-reveal {
+  display:none;
+}

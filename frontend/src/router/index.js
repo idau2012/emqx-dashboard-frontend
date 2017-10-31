@@ -76,7 +76,7 @@ const routes = [
   {
     path: '*',
     meta: { requiresAuth: false },
-    component: () => import('@/views/404.vue'),
+    component: () => import('@/views/404'),
   },
 ]
 
@@ -90,7 +90,6 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   const { requiresAuth = true } = to.meta
   if (requiresAuth) {
-    // if (!store.state.user.token) {
     if (!store.state.user.password) {
       next({
         path: '/login',

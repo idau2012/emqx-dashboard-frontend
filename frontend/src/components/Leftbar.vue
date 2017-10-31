@@ -123,9 +123,6 @@ export default {
   z-index: 1002;
   overflow-y: auto;
   .el-menu {
-    position: absolute;
-    left: 0;
-    top: 60px;
     width: 200px;
     padding-bottom: 80px;
   }
@@ -134,19 +131,18 @@ export default {
     top: 0;
     z-index: 1003;
     padding-left: 20px;
-    height: 63px;
-    line-height: 63px;
+    height: 47px;
+    line-height: 47px;
     width: 180px;
-    border-bottom: 1px solid #313437;
+    border-bottom: 1px solid #161616;
     span {
       font-size: 16px;
-      color: #34c388;
       margin-left: 8px;
     }
     img {
-      margin-top: 10px;
-      width: 48px;
-      height: 44px;
+      margin-top: 6px;
+      width: 40px;
+      height: 35px;
       float: left;
     }
   }
@@ -156,10 +152,9 @@ export default {
     width: 180px;
     z-index: 1003;
     padding-left: 20px;
-    height: 63px;
-    line-height: 63px;
-    border-top: 1px solid #313437;
-    text-align: center;
+    height: 47px;
+    line-height: 47px;
+    border-top: 1px solid #161616;
     span {
       font-size: 16px;
       font-weight: bolder;

@@ -5,7 +5,7 @@
       <el-select
         class="select-radius"
         v-model="nodeName"
-        placeholder="Select Node"
+        :placeholder="$t('select.placeholder')"
         size="small"
         style="float: right"
         :disabled="loading"

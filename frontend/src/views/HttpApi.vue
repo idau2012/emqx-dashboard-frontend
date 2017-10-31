@@ -57,8 +57,6 @@
 import { Tabs, TabPane, TableColumn, Table, Button, Tag, Popover, Card } from 'element-ui'
 
 import { httpGet, httpPut, httpPost } from '../store/api'
-// import { getLocalStorage } from '../common/storage'
-
 
 export default {
   name: 'http-api',
@@ -474,7 +472,6 @@ export default {
         data = data.replace(/:atom/g, '')
         data = data.replace(/:node/g, this.nodeName)
         data = JSON.parse(data)
-        console.log(data)
         Object.keys(data).forEach((item) => {
           this.tableData.push({
             method: data[item].method,

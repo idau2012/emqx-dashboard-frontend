@@ -36,7 +36,7 @@
       </el-row>
       <el-row>
         <el-checkbox v-model="clean">{{ $t('websocket.cleanSession') }}</el-checkbox>
-        <el-checkbox style="margin-left: 50px" v-model="isSSL">SSL</el-checkbox>
+        <el-checkbox style="margin-left: 50px" v-model="isSSL" @change="handleSSL">SSL</el-checkbox>
       </el-row>
 
       <el-row class="connect-area">
@@ -84,9 +84,9 @@
           <el-input v-model="subTopic" size="small"></el-input>
           <label>{{ $t('websocket.qoS') }}:</label>
           <el-select v-model.number="subQos" size="small">
-            <el-option value="0"></el-option>
-            <el-option value="1"></el-option>
-            <el-option value="2"></el-option>
+            <el-option :value="0"></el-option>
+            <el-option :value="1"></el-option>
+            <el-option :value="2"></el-option>
           </el-select>
           <div class="between">
             <el-button
@@ -109,7 +109,7 @@
             </el-table-column>
             <el-table-column prop="time" min-width="180" :label="$t('websocket.time')">
             </el-table-column>
-            <el-table-column prop="time" width="70" :label="$t('websocket.oper')">
+            <el-table-column width="90" :label="$t('websocket.oper')">
               <template scope="props">
                 <el-button
                   title="Unsubscribe"
@@ -142,9 +142,9 @@
         <el-col :span="6">
           <label>{{ $t('websocket.qoS') }}:</label>
           <el-select v-model.number="publishQos" size="small" style="display: block;">
-            <el-option value="0"></el-option>
-            <el-option value="1"></el-option>
-            <el-option value="2"></el-option>
+            <el-option :value="0"></el-option>
+            <el-option :value="1"></el-option>
+            <el-option :value="2"></el-option>
           </el-select>
         </el-col>
         <el-col :span="6" style="margin-top: 21px">
@@ -283,6 +283,9 @@ export default {
     },
   },
   methods: {
+    handleSSL() {
+      this.port = this.isSSL ? 8084 : 8083
+    },
     now() {
       return dateformat(new Date(), 'yyyy-mm-dd hh:MM:ss')
     },
@@ -515,9 +518,10 @@ export default {
   }
   .el-button {
     display: inline-block;
-    width: 100px;
+    min-width: 110px;
     &.unsubscribe {
-      width: auto;
+      text-align: left;
+      padding-left: 6px;
     }
   }
 }

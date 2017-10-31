@@ -251,7 +251,7 @@ export default {
         this.btnLoading = true
         this.user.tag = this.user.tags
         httpPost('/users', this.user).then((response) => {
-          if (response.data.code === 0) {
+          if (response.data === 'ok') {
             this.$message.success(`${this.$t('users.createUser')}`)
             this.dialogVisible = false
             this.loadData()
@@ -292,7 +292,7 @@ export default {
           }
           this.btnLoading = true
           httpPut(`/change_pwd/${this.user.username}/`, chageUser).then((response) => {
-            if (response.data.code === 0) {
+            if (response.data === 'ok') {
               // old === now && user.now === edit.user, need't re authentication
               if (this.$store.state.user.username === this.user.username &&
               this.user.password !== this.user.newPassword) {

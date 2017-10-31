@@ -6,7 +6,7 @@
       <el-select
         class="select-radius"
         v-model="nodeName"
-        placeholder="Select Node"
+        :placeholder="$t('select.placeholder')"
         size="small"
         :disabled="loading"
         @change="loadPlugins">
@@ -90,7 +90,7 @@
         :model="record"
         @keyup.enter.native="putConfig(false)">
         <el-row :gutter="20">
-          <el-col v-for="item in plugin.option" :lg="8" :md="12" :sm="12" :key="item.key">
+          <el-col v-for="item in plugin.option" :span="12" :key="item.key">
             <el-form-item v-if="record.hasOwnProperty(item.key)" :label="item.key">
               <!--icon="plus" @click="setAdvancedOption(item)"-->
               <el-input

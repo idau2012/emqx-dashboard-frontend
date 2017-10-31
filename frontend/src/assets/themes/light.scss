@@ -119,6 +119,7 @@ html, body, #app {
   height: 100%;
   margin: 0;
 }
+
 .light-themes {
   &html, body, #app {
     background-color: $app-bg;
@@ -264,6 +265,26 @@ html, body, #app {
 
   }
 
+  /* radio */
+  .el-radio-group {
+    .el-radio {
+      color: $color !important;
+      .el-radio__input {
+        .el-radio__inner {
+          &:hover {
+            border-color: $themes-color !important;
+          }
+        }
+        &.is-checked {
+          .el-radio__inner {
+            border-color: $themes-color !important;
+            background-color: $themes-color !important;
+          }
+        }
+      }
+    }
+  }
+
   /* websocket */
   .websocket-view, .settings-view {
     .el-checkbox__label {
@@ -280,7 +301,7 @@ html, body, #app {
         }
       }
     }
-    &.close-btn:not(.is-disabled){
+    &.close-btn:not(.is-disabled) {
       border-color: #ff6d6d;
       color: #ff6d6d;
       &:hover {
@@ -308,7 +329,6 @@ html, body, #app {
     }
 
   }
-
 
   /* input */
   /* input */
@@ -363,7 +383,7 @@ html, body, #app {
   .el-checkbox__input.is-focus .el-checkbox__inner {
     border-color: #42d885;
   }
-  .el-checkbox .el-checkbox__input.is-checked .el-checkbox__inner{
+  .el-checkbox .el-checkbox__input.is-checked .el-checkbox__inner {
     background-color: #42d885 !important;
     border-color: #42d885 !important;
   }
@@ -386,6 +406,10 @@ html, body, #app {
   /* left-bar */
   .leftbar {
     background-color: $left-bar-bg;
+    .bar-title, .bar-footer {
+      background-color: $left-bar-bg !important;
+      color: #fff !important;
+    }
     .el-menu--dark {
       background-color: $left-bar-bg;
     }
@@ -437,8 +461,6 @@ html, body, #app {
     padding-right: 0;
   }
 
-
-
   /* select */
   .el-select {
     width: 240px;
@@ -481,8 +503,8 @@ html, body, #app {
     margin-top: 20px;
     color: $table-color !important;
     background-color: $table-bg;
+    border: 1px solid $bg-color !important;
     /* 增加内边距 */
-    border: 20px solid transparent !important;
     &::after,
     &::before {
       background-color: transparent;
@@ -536,7 +558,6 @@ html, body, #app {
     border-bottom: none !important;
   }
 
-
   /* pagination */
   .el-pagination {
     margin-top: 24px;
@@ -572,25 +593,23 @@ html, body, #app {
   }
 
   /* card */
-.el-card {
-  border: none !important;
-  background-color: $bg-color !important;
-  color: $color !important;
-  .el-card__header {
-    padding: 12px 20px;
-    border-bottom: 1px solid $border-color;
-    color: $color-deep !important;
-    font-size: 16px;
-  }
-  .refresh-btn {
+  .el-card {
+    border: none !important;
+    background-color: $bg-color !important;
     color: $color !important;
-    &:hover {
-      color: $color-deeper !important;
+    .el-card__header {
+      padding: 12px 20px;
+      border-bottom: 1px solid $border-color;
+      color: $color-deep !important;
+      font-size: 16px;
+    }
+    .refresh-btn {
+      color: $color !important;
+      &:hover {
+        color: $color-deeper !important;
+      }
     }
   }
-}
-
-
 
   /* ------------------ private style ------------------ */
   .home-view {
@@ -600,7 +619,7 @@ html, body, #app {
   .overview-view {
     .card-item {
       background-color: $overview-broker-bg !important;
-      border:1px solid $overview-broker-border;
+      border: 1px solid $overview-broker-border;
       .icon {
         color: $overview-broker-icon;
         border-color: $overview-broker-icon;
@@ -688,7 +707,6 @@ html, body, #app {
     }
   }
 
-
   .signup-view .el-card {
     background-color: #fff;
   }
@@ -734,7 +752,7 @@ html, body, #app {
       .el-checkbox__inner:hover {
         border-color: #42d885;
       }
-      .el-checkbox__input.is-checked .el-checkbox__inner{
+      .el-checkbox__input.is-checked .el-checkbox__inner {
         background-color: #42d885 !important;
         border-color: #42d885 !important;
       }
@@ -763,7 +781,6 @@ html, body, #app {
     }
   }
 
-
   /* oper-block */
   .plugins-view .plugin-config .oper-block {
     .el-button--text {
@@ -787,34 +804,7 @@ html, body, #app {
       }
     }
   }
-
-  .nav-bar {
-    background-color: $nav-bg !important;
-    border-bottom: 1px solid $border-color;
-    .style-toggle {
-      border-right: 1px solid $border-color !important;
-      border-left: 1px solid $border-color !important;
-      &::before {
-        background-color: $border-color !important;
-      }
-      .btn-box {
-        color: $color-deep !important;
-        span {
-          cursor: pointer;
-          &:hover {
-            color: #aeaeae;
-          }
-        }
-      }
-    }
-  }
-  .leftbar {
-    .bar-title, .bar-footer {
-      background-color: $left-bar-bg !important;
-    }
-  }
-
-   .users-view, .login-view {
+  .users-view, .login-view {
     .el-card {
       background-color: #fff !important;
       color: #1f2d3d !important;
@@ -860,7 +850,7 @@ html, body, #app {
           color: #42d885;
         }
       }
-      }
+    }
   }
 
   .plugins-view {

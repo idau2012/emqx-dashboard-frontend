@@ -6,6 +6,7 @@ export default {
   // globe
   select: {
     cluster: 'All Nodes',
+    placeholder: 'Select Node',
   },
   error: {
     networkError: 'Network Error',

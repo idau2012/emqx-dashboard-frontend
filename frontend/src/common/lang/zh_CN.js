@@ -5,7 +5,8 @@ export default {
   ...zhLocale,
   // 全局
   select: {
-    cluster: '选择全部节点',
+    cluster: '全部节点',
+    placeholder: '请选择',
   },
   error: {
     networkError: '网络错误',

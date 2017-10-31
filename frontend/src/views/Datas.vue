@@ -20,7 +20,7 @@
           v-if="activeTab !== 'routes'"
           class="select-radius"
           v-model="nodeName"
-          placeholder="Select Node"
+          :placeholder="$t('select.placeholder')"
           size="small"
           :disabled="loading"
           @change="loadChild(true)">
@@ -153,7 +153,7 @@ export default {
     return {
       searchView: false,
       loading: false,
-      cluster: false,
+      cluster: true,
       popoverVisible: false,
       limit: 10,
       page: 1,
@@ -236,7 +236,6 @@ export default {
         requestURL = `/${this.activeTab}?_page=${this.page}&_limit=${this.limit}`
       }
       httpGet(requestURL).then((response) => {
-        console.log('loadChild', response.data)
         this[this.activeTab] = response.data.items
         this.count = response.data.meta.count || 0
         this.page = response.data.meta.page || 1
