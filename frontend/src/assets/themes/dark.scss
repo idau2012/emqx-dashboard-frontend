@@ -762,6 +762,13 @@ html, body, #app {
       .el-dialog__header {
         border-bottom: 1px solid #EFF2F7;
         padding: 15px 20px;
+        .el-dialog__headerbtn {
+          &:hover, &:focus {
+            .el-dialog__close {
+              color: $themes-color-native !important;
+            }
+          }
+        }
       }
       .el-dialog__footer {
         border-top: 1px solid #EFF2F7;

@@ -178,6 +178,9 @@ export default {
     iconStatus() {
       return this.searchView ? 'close' : 'search'
     },
+    searchValueEncode() {
+      return this.searchValue.replace(/\//g, '%2f')
+    },
   },
   methods: {
     ...mapActions([CURRENT_NODE]),
@@ -255,9 +258,9 @@ export default {
         this.$message.error(`${this.searchPlaceholder} ${this.$t('alert.required')}`)
         return
       }
-      let requestURL = `/nodes/${this.nodeName}/${this.activeTab}/${this.searchValue}`
+      let requestURL = `/nodes/${this.nodeName}/${this.activeTab}/${this.searchValueEncode}`
       if (this.activeTab === 'routes' || this.cluster) {
-        requestURL = `/${this.activeTab}/${encodeURI(this.searchValue)}`
+        requestURL = `/${this.activeTab}/${this.searchValueEncode}`
       }
       this.loading = true
       httpGet(requestURL).then((response) => {

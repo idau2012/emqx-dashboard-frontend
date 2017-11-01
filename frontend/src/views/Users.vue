@@ -335,7 +335,7 @@ export default {
     },
     updateUser(changePassword = false) {
       this.btnLoading = true
-      httpPut(`/users${this.user.username}`, this.user).then((response) => {
+      httpPut(`/users/${this.user.username}`, this.user).then((response) => {
         if (response.data.code === 'ok') {
           if (!changePassword) {
             this.$message.success(`${this.$t('users.edit')}${this.$t('alert.success')}`)
