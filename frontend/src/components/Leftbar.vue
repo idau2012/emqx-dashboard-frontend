@@ -57,19 +57,19 @@
           <i class="fa fa-user-o"></i>
           {{ $t('leftbar.users') }}
         </el-menu-item>
-        <el-menu-item index="/settings">
+        <el-menu-item index="/settings" class="last-item">
           <i class="fa fa-cog"></i>
           {{ $t('leftbar.settings') }}
         </el-menu-item>
       </el-menu-item-group>
-    </el-menu>
 
-    <div class="bar-footer">
-      <span>{{ user.username }}</span>
-      <a href="javascript:;" @click="logout">
-        <img src="../assets/exit.png">
-      </a>
-    </div>
+      <div class="bar-footer">
+        <span>{{ user.username }}</span>
+        <a href="javascript:;" @click="logout">
+          <img src="../assets/exit.png">
+        </a>
+      </div>
+    </el-menu>
   </div>
 </template>
 
@@ -122,9 +122,10 @@ export default {
   width: 200px;
   z-index: 1002;
   overflow-y: auto;
+  padding-top: 48px;
   .el-menu {
     width: 200px;
-    padding-bottom: 80px;
+    min-height: 100%;
   }
   .bar-title {
     position: fixed;
@@ -147,7 +148,7 @@ export default {
     }
   }
   .bar-footer {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     width: 180px;
     z-index: 1003;
@@ -174,6 +175,9 @@ export default {
   .el-menu-item {
     height: 40px;
     line-height: 40px;
+  }
+  .last-item {
+    margin-bottom: 72px;
   }
   .el-menu-item-group__title {
     font-weight: bolder;
