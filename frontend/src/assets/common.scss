@@ -4,15 +4,13 @@
   font-weight: 300;
   src: local('Roboto Light'), local('Roboto-Light'), url(./assets/fonts/Roboto-Light.woff) format('woff'), url(./assets/fonts/Roboto-Light.ttf) format('truetype');
 }
+.el-button--small {
+  padding: 8px !important;
+}
 .page-title {
   padding: 30px 0 10px 0 !important;
   .el-select {
     float: right;
-  }
-}
-.el-button {
-  &.el-button--small {
-    border-radius: 36px !important;
   }
 }
 ::-ms-clear, ::-ms-reveal {

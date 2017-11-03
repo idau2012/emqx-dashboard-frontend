@@ -114,15 +114,13 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button
-          icon="close"
           size="small"
-          style="margin-right: 20px"
+          type="text"
           @click="dialogVisible=false">
           {{ $t('users.cancel') }}
         </el-button>
         <el-button
           type="success"
-          icon="check"
           size="small"
           :loading="btnLoading"
           @click="save">
@@ -367,6 +365,9 @@ export default {
   .el-dialog {
     .el-input {
       margin: 5px 0 20px;
+    }
+    .el-button {
+      width: 80px;
     }
   }
 }

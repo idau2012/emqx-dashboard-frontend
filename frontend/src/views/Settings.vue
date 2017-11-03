@@ -28,7 +28,6 @@
               <el-button
                 type="success"
                 size="small"
-                :plain="true"
                 :disabled="notChanged"
                 @click="applySetting">
                 {{ $t('settings.apply') }}
@@ -131,6 +130,9 @@ export default {
 .settings-view {
   .el-card {
     margin-top: 24px;
+  }
+  .el-button {
+    width: 80px;
   }
   .el-switch {
     &.is-checked{

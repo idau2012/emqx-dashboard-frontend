@@ -122,7 +122,7 @@ export default {
   width: 200px;
   z-index: 1002;
   overflow-y: auto;
-  padding-top: 48px;
+  padding-top: 56px;
   .el-menu {
     width: 200px;
     min-height: 100%;
@@ -132,8 +132,8 @@ export default {
     top: 0;
     z-index: 1003;
     padding-left: 20px;
-    height: 47px;
-    line-height: 47px;
+    height: 55px;
+    line-height: 55px;
     width: 180px;
     border-bottom: 1px solid #161616;
     span {
@@ -142,8 +142,8 @@ export default {
     }
     img {
       margin-top: 6px;
-      width: 40px;
-      height: 35px;
+      width: 48px;
+      height: 42px;
       float: left;
     }
   }

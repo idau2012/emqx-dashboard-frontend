@@ -45,7 +45,7 @@
           <el-button
             slot="reference"
             size="mini"
-            :disabled="props.row.name === 'emq_dashboard'"
+            :disabled="props.row.name.indexOf('dashboard') !== -1"
             :type="props.row.active ? 'warning' : 'success'"
             @click="update(props.row)" :plain="true">
             {{ props.row.active ? $t('plugins.stop') : $t('plugins.start') }}
@@ -53,7 +53,7 @@
           <el-button
             type="success"
             size="mini"
-            :disabled="props.row.name === 'emq_dashboard'"
+            :disabled="props.row.name.indexOf('dashboard') !== -1"
             :plain="true"
             @click="config(props.row)">
             {{ $t('plugins.config') }}
@@ -92,7 +92,6 @@
         <el-row :gutter="20">
           <el-col v-for="item in plugin.option" :span="12" :key="item.key">
             <el-form-item v-if="record.hasOwnProperty(item.key)" :label="item.key">
-              <!--icon="plus" @click="setAdvancedOption(item)"-->
               <el-input
                 v-if="item.value.length < 36 && record.hasOwnProperty(item.key) && isAutoIncrement(item.key)[0]"
                 v-model="record[item.key]"
@@ -127,7 +126,6 @@
               v-show="displayConfig !== ''"
               type="success"
               size="small"
-              :plain="true"
               :disabled="!changeListener"
               @click="putConfig(false)"
               @keyup.enter.native="putConfig(false)">
@@ -135,8 +133,8 @@
             </el-button>
             <el-button
               class="cancel-btn"
+              type="text"
               size="small"
-              :plain="true"
               @click="abortOperation(false)"
               @keyup.enter.native="abortOperation(false)">
               <i v-if="displayConfig === ''" class="fa fa-reply" aria-hidden="true"></i>
@@ -160,17 +158,18 @@
       <span>{{ notice }}</span>
       <span slot="footer" class="dialog-footer">
         <el-button
+          size="small"
+          @click="handleOperation(false, false)"
+          type="text"
+          @keyup.enter.native="handleOperation(false, false)">
+          {{ $t('plugins.cancel') }}
+        </el-button>
+        <el-button
           type="success"
           size="small"
           @click="handleOperation(true, false)"
           @keyup.enter.native="handleOperation(true, false)">
           {{ $t('plugins.confirm') }}
-        </el-button>
-        <el-button
-          size="small"
-          @click="handleOperation(false, false)"
-          @keyup.enter.native="handleOperation(false, false)">
-          {{ $t('plugins.cancel') }}
         </el-button>
       </span>
     </el-dialog>
@@ -571,6 +570,16 @@ export default{
   }
   .el-row {
     margin-top: 20px;
+  }
+  .el-dialog {
+    .el-button {
+      width: 80px;
+    }
+  }
+  .config-area {
+    .el-button {
+      width: 80px;
+    }
   }
   .advanced-key {
     .el-checkbox-group {
