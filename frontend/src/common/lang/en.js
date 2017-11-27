@@ -218,22 +218,6 @@ export default {
     passwordInconsistent: 'Password is inconsistent',
     authenticate: 'You have changed your password. Please re authenticate',
     createUser: 'Create user success',
-    errorCode: {
-      101: '',
-      102: '',
-      103: '',
-      104: '',
-      105: '',
-      106: '',
-      107: '',
-      108: '',
-      109: '',
-      110: '',
-      111: '',
-      112: '',
-      113: '',
-      114: '',
-    },
   },
   // alert
   alert: {

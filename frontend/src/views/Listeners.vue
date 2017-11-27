@@ -79,9 +79,9 @@
         httpGet('/nodes').then((response) => {
           this.nodeName = this.$store.state.node.nodeName || response.data[0].name
           this.nodes = response.data
-        }).catch(() => {
+        }).catch((error) => {
           this.loading = false
-          this.$message.error(this.$t('error.networkError'))
+          this.$message.error(error || this.$t('error.networkError'))
         })
       },
       loadListeners() {
@@ -90,9 +90,9 @@
         httpGet(`/nodes/${this.nodeName}/listeners`).then((response) => {
           this.listeners = response.data
           this.loading = false
-        }).catch(() => {
+        }).catch((error) => {
           this.loading = false
-          this.$message.error(this.$t('error.networkError'))
+          this.$message.error(error || this.$t('error.networkError'))
         })
       },
     },

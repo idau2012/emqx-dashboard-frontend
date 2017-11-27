@@ -109,9 +109,9 @@ export default {
         this.nodes = response.data
         this.setApiData()
         this.loading = false
-      }).catch(() => {
+      }).catch((error) => {
         this.loading = false
-        this.$message.error(this.$t('error.networkError'))
+        this.$message.error(error || this.$t('error.networkError'))
       })
     },
     loadResponse(props, isLoad = true) {
@@ -129,23 +129,23 @@ export default {
       switch (props.method) {
         case 'GET': httpGet(props.target).then((response) => {
           this.responseDate = response.data
-        }).catch(() => {
+        }).catch((error) => {
           this.loading = false
-          this.$message.error(this.$t('error.networkError'))
+          this.$message.error(error || this.$t('error.networkError'))
         })
           break
         case 'POST': httpPost(props.target).then((response) => {
           this.responseDate = response.data
-        }).catch(() => {
+        }).catch((error) => {
           this.loading = false
-          this.$message.error(this.$t('error.networkError'))
+          this.$message.error(error || this.$t('error.networkError'))
         })
           break
         case 'PUT': httpPut(props.target).then((response) => {
           this.responseDate = response.data
-        }).catch(() => {
+        }).catch((error) => {
           this.loading = false
-          this.$message.error(this.$t('error.networkError'))
+          this.$message.error(error || this.$t('error.networkError'))
         })
           break
         default: this.responseDate = null

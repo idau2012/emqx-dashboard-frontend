@@ -2,7 +2,7 @@ import axios from 'axios'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
-NProgress.configure({ showSpinner: false });
+NProgress.configure({ showSpinner: false })
 
 
 const baseURL = '/api/v2'
@@ -19,17 +19,7 @@ function httpRequest() {
   }
 
   const user = JSON.parse(sessionStorage.getItem('user')) ||
-   JSON.parse(localStorage.getItem('user'))
-
-  if (user && user.token) {
-    config.auth = {
-      username: user.token,
-      password: '',
-    }
-  }
-
-  // const user = JSON.parse(sessionStorage.getItem('user')) ||
-  //   JSON.parse(localStorage.getItem('user'))
+    JSON.parse(localStorage.getItem('user'))
 
   if (user && user.password) {
     config.auth = {
@@ -48,7 +38,7 @@ function handleError(error) {
   } else {
     console.log('Net work error ')
   }
-  return Promise.reject(error)
+  return Promise.reject(error.response.data.message || undefined)
 }
 
 function httpGet(url, config) {

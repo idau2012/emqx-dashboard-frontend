@@ -330,9 +330,9 @@ export default{
           // hashCode
           this.hashCode = JSON.stringify(this.record)
           this.loading = false
-        }).catch(() => {
+        }).catch((error) => {
           this.loading = false
-          this.$message.error(this.$t('error.networkError'))
+          this.$message.error(error || this.$t('error.networkError'))
         })
       } else {
         // load with plugin page
@@ -340,9 +340,9 @@ export default{
           this.nodeName = this.$store.state.node.nodeName || response.data[0].name
           this.nodes = response.data
           this.loading = false
-        }).catch(() => {
+        }).catch((error) => {
           this.loading = false
-          this.$message.error(this.$t('error.networkError'))
+          this.$message.error(error || this.$t('error.networkError'))
         })
         this.plugin.nodeName = ''
       }
@@ -358,9 +358,9 @@ export default{
         this.tableData = response.data
         this.handleFilter()
         this.loading = false
-      }).catch(() => {
+      }).catch((error) => {
         this.loading = false
-        this.$message.error(this.$t('error.networkError'))
+        this.$message.error(error || this.$t('error.networkError'))
       })
     },
     handleFilter() {
@@ -410,18 +410,15 @@ export default{
     update(row) {
       this.hidePopover()
       this.loading = true
-      const data = { active: !row.active }
-      httpPut(`/nodes/${this.nodeName}/plugins/${row.name}`, data).then((response) => {
+      const operation = row.active ? 'unload' : 'load'
+      httpPut(`/nodes/${this.nodeName}/plugins/${row.name}/${operation}`).then(() => {
         this.loading = false
-        if (response.data.code === 0) {
-          this.$message.success(`${row.active ? this.$t('plugins.stop') : this.$t('plugins.start')}${this.$t('alert.success')}`)
-          this.loadPlugins()
-        } else {
-          this.$message.error(`${row.active ? this.$t('plugins.stop') : this.$t('plugins.start')}${this.$t('alert.failure')}:${response.data.code} ${response.data.message}`)
-        }
-      }).catch(() => {
+        this.$message.success(`${row.active ? this.$t('plugins.stop') : this.$t('plugins.start')}${this.$t('alert.success')}`)
+        this.loadPlugins()
+      }).catch((error) => {
         this.loading = false
-        this.$message.error(this.$t('error.networkError'))
+        this.$message.error(error || this.$t('error.networkError'))
+        this.loadPlugins()
       })
     },
     sortObject() {
@@ -436,7 +433,7 @@ export default{
     config(row) {
       this.plugin.name = row.name
       this.plugin.desc = row.description
-      this.$router.push({ path: `/plugins/${btoa(this.nodeName)}/${row.name}` })
+      this.$router.push({ path: `/nodes/${btoa(this.nodeName)}/plugin_configs/${row.name}` })
     },
     putConfig(confirm = false) {
       if (confirm) {
@@ -455,17 +452,13 @@ export default{
         */
         // update the config
         // load pluginOption
-        httpPut(`nodes/${this.plugin.nodeName}/plugin_configs/${this.plugin.name}`, this.record).then((response) => {
-          if (response.data.code === 0) {
-            this.$message.success(this.$t('plugins.configSuccess'))
-            this.hashCode = JSON.stringify(this.record)
-            this.$router.push({ path: '/plugins' })
-          } else {
-            this.$message.error(this.$t('plugins.configFailure'))
-          }
+        httpPut(`nodes/${this.plugin.nodeName}/plugin_configs/${this.plugin.name}`, this.record).then(() => {
+          this.$message.success(this.$t('plugins.configSuccess'))
+          this.hashCode = JSON.stringify(this.record)
+          this.$router.push({ path: '/plugins' })
         }).catch(() => {
           this.loading = false
-          this.$message.error(this.$t('error.networkError'))
+          this.$message.error(this.$t('plugins.configFailure'))
         })
       } else {
         // waiting the confirm

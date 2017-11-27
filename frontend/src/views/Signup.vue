@@ -91,9 +91,9 @@ export default {
           const errorCode = `users.errorCode[${response.data.code}]`
           this.$message.error(this.$t(errorCode) || response.data.message)
         }
-      }).catch(() => {
+      }).catch((error) => {
         this.loading = false
-        this.$message.error(this.$t('error.networkError'))
+        this.$message.error(error || this.$t('error.networkError'))
       })
     },
   },

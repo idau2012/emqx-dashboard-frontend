@@ -214,9 +214,9 @@ export default {
       httpGet('/users').then((response) => {
         this.users = response.data
         this.loading = false
-      }).catch(() => {
+      }).catch((error) => {
         this.loading = false
-        this.$message.error(this.$t('error.networkError'))
+        this.$message.error(error || this.$t('error.networkError'))
       })
     },
     save() {
@@ -248,20 +248,14 @@ export default {
         }
         this.btnLoading = true
         this.user.tag = this.user.tags
-        httpPost('/users', this.user).then((response) => {
-          if (response.data === 'ok') {
-            this.$message.success(`${this.$t('users.createUser')}`)
-            this.dialogVisible = false
-            this.loadData()
-          } else {
-            const errorCode = `users.errorCode[${response.data.code}]`
-            this.$message.error(this.$t(errorCode) || response.data.message)
-            this.formError.username = this.$t(errorCode) || response.data.message
-          }
+        httpPost('/users', this.user).then(() => {
           this.btnLoading = false
-        }).catch(() => {
+          this.dialogVisible = false
+          this.$message.success(`${this.$t('users.createUser')}`)
+          this.loadData()
+        }).catch((error) => {
+          this.$message.error(error || this.$t('error.networkError'))
           this.loading = false
-          this.$message.error(this.$t('error.networkError'))
         })
       } else {
         // edit
@@ -289,25 +283,20 @@ export default {
             new_pwd: this.user.newPassword,
           }
           this.btnLoading = true
-          httpPut(`/change_pwd/${this.user.username}/`, chageUser).then((response) => {
-            if (response.data === 'ok') {
-              // old === now && user.now === edit.user, need't re authentication
-              if (this.$store.state.user.username === this.user.username &&
+          httpPut(`/change_pwd/${this.user.username}/`, chageUser).then(() => {
+            // old === now && user.now === edit.user, need't re authentication
+            if (this.$store.state.user.username === this.user.username &&
               this.user.password !== this.user.newPassword) {
-                this.$message.error(this.$t('users.authenticate'))
-                this.logout()
-              } else {
-                this.updateUser()
-              }
+              this.$message.error(this.$t('users.authenticate'))
+              this.logout()
             } else {
-              const errorCode = `users.errorCode[${response.data.code}]`
-              this.$message.error(this.$t(errorCode) || response.data.message)
-              this.formError.username = this.$t(errorCode) || response.data.message
+              this.updateUser()
             }
             this.btnLoading = false
-          }).catch(() => {
+          }).catch((error) => {
             this.loading = false
-            this.$message.error(this.$t('error.networkError'))
+            this.$message.error(error || this.$t('error.networkError'))
+            this.btnLoading = false
           })
         } else {
           this.updateUser()
@@ -317,36 +306,28 @@ export default {
     },
     deleteUser(username) {
       this.btnLoading = true
-      httpDelete(`/users/${username}`).then((response) => {
-        if (response.data === 'ok') {
-          this.$message.success(`${this.$t('users.delete')}${this.$t('alert.success')}`)
-          this.loadData()
-        } else {
-          this.$message.error(`${this.$t('users.delete')}${this.$t('alert.failure')}`)
-        }
+      httpDelete(`/users/${username}`).then(() => {
+        this.$message.success(`${this.$t('users.delete')}${this.$t('alert.success')}`)
+        this.loadData()
         this.btnLoading = false
         this.hidePopover()
-      }).catch(() => {
+      }).catch((error) => {
         this.loading = false
-        this.$message.error(this.$t('error.networkError'))
+        this.$message.error(error || this.$t('error.networkError'))
       })
     },
     updateUser(changePassword = false) {
       this.btnLoading = true
-      httpPut(`/users/${this.user.username}`, this.user).then((response) => {
-        if (response.data.code === 'ok') {
-          if (!changePassword) {
-            this.$message.success(`${this.$t('users.edit')}${this.$t('alert.success')}`)
-          }
-          this.dialogVisible = false
-          this.loadData()
-        } else if (!changePassword) {
-          this.$message.error(`${this.$t('users.edit')}${this.$t('alert.failure')}`)
+      httpPut(`/users/${this.user.username}`, this.user).then(() => {
+        if (!changePassword) {
+          this.$message.success(`${this.$t('users.edit')}${this.$t('alert.success')}`)
         }
+        this.dialogVisible = false
+        this.loadData()
         this.btnLoading = false
-      }).catch(() => {
+      }).catch((error) => {
         this.loading = false
-        this.$message.error(this.$t('error.networkError'))
+        this.$message.error(error || this.$t('error.networkError'))
       })
     },
   },

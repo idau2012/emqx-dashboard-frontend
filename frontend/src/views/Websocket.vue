@@ -342,9 +342,10 @@ export default {
         this.retryTimes += 1
       })
       this.client.on('error', (error) => {
-        this.$message.error(error)
+        this.$message.error(error.toString() || this.$t('error.networkError'))
         // to prevent reconnect
         this.retryTimes = 0
+        this.client.end()
         NProgress.done()
       })
       this.client.on('message', (topic, message, packet) => {

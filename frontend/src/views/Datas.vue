@@ -216,9 +216,9 @@ export default {
         this.nodes = response.data
         this.loading = false
         this.loadChild()
-      }).catch(() => {
+      }).catch((error) => {
         this.loading = false
-        this.$message.error(this.$t('error.networkError'))
+        this.$message.error(error || this.$t('error.networkError'))
       })
     },
     loadChild(reload = false) {
@@ -243,9 +243,9 @@ export default {
         this.count = response.data.meta.count || 0
         this.page = response.data.meta.page || 1
         this.loading = false
-      }).catch(() => {
+      }).catch((error) => {
         this.loading = false
-        this.$message.error(this.$t('error.networkError'))
+        this.$message.error(error || this.$t('error.networkError'))
       })
     },
     searchChild() {
@@ -270,9 +270,9 @@ export default {
         this.searchView = true
         this[this.activeTab] = response.data
         this.loading = false
-      }).catch(() => {
+      }).catch((error) => {
         this.loading = false
-        this.$message.error(this.$t('error.networkError'))
+        this.$message.error(error || this.$t('error.networkError'))
       })
     },
     // load child with pagination
