@@ -45,7 +45,7 @@
           <el-button
             slot="reference"
             size="mini"
-            :disabled="props.row.name === 'emq_dashboard'"
+            :disabled="props.row.name.indexOf('dashboard') !== -1"
             :type="props.row.active ? 'warning' : 'success'"
             @click="update(props.row)" :plain="true">
             {{ props.row.active ? $t('plugins.stop') : $t('plugins.start') }}
@@ -53,7 +53,7 @@
           <el-button
             type="success"
             size="mini"
-            :disabled="props.row.name === 'emq_dashboard'"
+            :disabled="props.row.name.indexOf('dashboard') !== -1"
             :plain="true"
             @click="config(props.row)">
             {{ $t('plugins.config') }}
@@ -92,7 +92,6 @@
         <el-row :gutter="20">
           <el-col v-for="item in plugin.option" :span="12" :key="item.key">
             <el-form-item v-if="record.hasOwnProperty(item.key)" :label="item.key">
-              <!--icon="plus" @click="setAdvancedOption(item)"-->
               <el-input
                 v-if="item.value.length < 36 && record.hasOwnProperty(item.key) && isAutoIncrement(item.key)[0]"
                 v-model="record[item.key]"
@@ -127,7 +126,6 @@
               v-show="displayConfig !== ''"
               type="success"
               size="small"
-              :plain="true"
               :disabled="!changeListener"
               @click="putConfig(false)"
               @keyup.enter.native="putConfig(false)">
@@ -135,8 +133,8 @@
             </el-button>
             <el-button
               class="cancel-btn"
+              type="text"
               size="small"
-              :plain="true"
               @click="abortOperation(false)"
               @keyup.enter.native="abortOperation(false)">
               <i v-if="displayConfig === ''" class="fa fa-reply" aria-hidden="true"></i>
@@ -160,17 +158,18 @@
       <span>{{ notice }}</span>
       <span slot="footer" class="dialog-footer">
         <el-button
+          size="small"
+          @click="handleOperation(false, false)"
+          type="text"
+          @keyup.enter.native="handleOperation(false, false)">
+          {{ $t('plugins.cancel') }}
+        </el-button>
+        <el-button
           type="success"
           size="small"
           @click="handleOperation(true, false)"
           @keyup.enter.native="handleOperation(true, false)">
           {{ $t('plugins.confirm') }}
-        </el-button>
-        <el-button
-          size="small"
-          @click="handleOperation(false, false)"
-          @keyup.enter.native="handleOperation(false, false)">
-          {{ $t('plugins.cancel') }}
         </el-button>
       </span>
     </el-dialog>
@@ -331,9 +330,9 @@ export default{
           // hashCode
           this.hashCode = JSON.stringify(this.record)
           this.loading = false
-        }).catch(() => {
+        }).catch((error) => {
           this.loading = false
-          this.$message.error(this.$t('error.networkError'))
+          this.$message.error(error || this.$t('error.networkError'))
         })
       } else {
         // load with plugin page
@@ -341,9 +340,9 @@ export default{
           this.nodeName = this.$store.state.node.nodeName || response.data[0].name
           this.nodes = response.data
           this.loading = false
-        }).catch(() => {
+        }).catch((error) => {
           this.loading = false
-          this.$message.error(this.$t('error.networkError'))
+          this.$message.error(error || this.$t('error.networkError'))
         })
         this.plugin.nodeName = ''
       }
@@ -359,9 +358,9 @@ export default{
         this.tableData = response.data
         this.handleFilter()
         this.loading = false
-      }).catch(() => {
+      }).catch((error) => {
         this.loading = false
-        this.$message.error(this.$t('error.networkError'))
+        this.$message.error(error || this.$t('error.networkError'))
       })
     },
     handleFilter() {
@@ -411,18 +410,15 @@ export default{
     update(row) {
       this.hidePopover()
       this.loading = true
-      const data = { active: !row.active }
-      httpPut(`/nodes/${this.nodeName}/plugins/${row.name}`, data).then((response) => {
+      const operation = row.active ? 'unload' : 'load'
+      httpPut(`/nodes/${this.nodeName}/plugins/${row.name}/${operation}`).then(() => {
         this.loading = false
-        if (response.data.code === 0) {
-          this.$message.success(`${row.active ? this.$t('plugins.stop') : this.$t('plugins.start')}${this.$t('alert.success')}`)
-          this.loadPlugins()
-        } else {
-          this.$message.error(`${row.active ? this.$t('plugins.stop') : this.$t('plugins.start')}${this.$t('alert.failure')}:${response.data.code} ${response.data.message}`)
-        }
-      }).catch(() => {
+        this.$message.success(`${row.active ? this.$t('plugins.stop') : this.$t('plugins.start')}${this.$t('alert.success')}`)
+        this.loadPlugins()
+      }).catch((error) => {
         this.loading = false
-        this.$message.error(this.$t('error.networkError'))
+        this.$message.error(error || this.$t('error.networkError'))
+        this.loadPlugins()
       })
     },
     sortObject() {
@@ -437,7 +433,7 @@ export default{
     config(row) {
       this.plugin.name = row.name
       this.plugin.desc = row.description
-      this.$router.push({ path: `/plugins/${btoa(this.nodeName)}/${row.name}` })
+      this.$router.push({ path: `/nodes/${btoa(this.nodeName)}/plugin_configs/${row.name}` })
     },
     putConfig(confirm = false) {
       if (confirm) {
@@ -456,17 +452,13 @@ export default{
         */
         // update the config
         // load pluginOption
-        httpPut(`nodes/${this.plugin.nodeName}/plugin_configs/${this.plugin.name}`, this.record).then((response) => {
-          if (response.data.code === 0) {
-            this.$message.success(this.$t('plugins.configSuccess'))
-            this.hashCode = JSON.stringify(this.record)
-            this.$router.push({ path: '/plugins' })
-          } else {
-            this.$message.error(this.$t('plugins.configFailure'))
-          }
+        httpPut(`nodes/${this.plugin.nodeName}/plugin_configs/${this.plugin.name}`, this.record).then(() => {
+          this.$message.success(this.$t('plugins.configSuccess'))
+          this.hashCode = JSON.stringify(this.record)
+          this.$router.push({ path: '/plugins' })
         }).catch(() => {
           this.loading = false
-          this.$message.error(this.$t('error.networkError'))
+          this.$message.error(this.$t('plugins.configFailure'))
         })
       } else {
         // waiting the confirm
@@ -571,6 +563,16 @@ export default{
   }
   .el-row {
     margin-top: 20px;
+  }
+  .el-dialog {
+    .el-button {
+      width: 80px;
+    }
+  }
+  .config-area {
+    .el-button {
+      width: 80px;
+    }
   }
   .advanced-key {
     .el-checkbox-group {

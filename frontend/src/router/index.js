@@ -48,7 +48,7 @@ const routes = [
         component: () => import('@/views/Plugins'),
       },
       {
-        path: '/plugins/:nodeName/:pluginName',
+        path: '/nodes/:nodeName/plugin_configs/:pluginName',
         component: () => import('@/views/Plugins'),
       },
       {

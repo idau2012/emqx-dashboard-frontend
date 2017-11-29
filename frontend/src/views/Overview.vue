@@ -244,9 +244,9 @@ export default {
         this.nodeName = this.$store.state.node.nodeName || response.data[0].name
         this.nodes = response.data
         this.refreshInterval()
-      }).catch(() => {
+      }).catch((error) => {
         this.loading = false
-        this.$message.error(this.$t('error.networkError'))
+        this.$message.error(error || this.$t('error.networkError'))
       })
     },
     // sort
@@ -278,9 +278,9 @@ export default {
       // nodes[]
       httpGet('/nodes').then((response) => {
         this.nodes = this.sortByNodeName(response.data)
-      }).catch(() => {
+      }).catch((error) => {
         this.loading = false
-        this.$message.error(this.$t('error.networkError'))
+        this.$message.error(error || this.$t('error.networkError'))
       })
       // stats[]
       httpGet(`/nodes/${this.nodeName}/stats`).then((response) => {

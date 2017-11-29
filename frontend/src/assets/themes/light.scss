@@ -73,15 +73,6 @@ $table-tr-color-hover: $table-head-color;
 /* 导航相关 */
 $nav-bg: $bg-color;
 $nav-border: #313437;
-$left-bar-bg: #191f28;
-
-$left-bar-title: #e8e9e9;
-$left-bar-color: #8c8f93;
-
-$left-bar-active: $themes-color;
-$left-bar-active-bg: #33383f;
-
-$left-bar-icon: #8c8f93;
 
 /* 字体相关 */
 $default-font: $color;
@@ -102,7 +93,7 @@ $stopped-bg: $color;
 $stopped-text: $color;
 
 /* title */
-$page-title: $themes-color;
+$page-title: $color;
 $overview-item-title: #383838;
 
 /* broker */
@@ -173,7 +164,7 @@ html, body, #app {
   .el-button {
     font-family: "Roboto", "Helvetica Neue", "Helvetica", "Work sans", Arial, sans-serif;
     i {
-      margin-right: 5px;
+      transform: scale(0.9) !important;
     }
 
     /* default */
@@ -186,10 +177,10 @@ html, body, #app {
     &.add-btn {
       height: 36px;
       border-radius: 36px;
-      padding: 0 18px;
-      background-color: $bg-disabled !important;
+      padding: 0 18px !important;
+      background-color: transparent !important;
       color: $color-deep !important;
-      border-color: transparent !important;
+      border-color: $bg-disabled !important;
       &:hover, &:focus {
         background-color: $themes-color-native !important;
         color: $bg-color !important;
@@ -198,7 +189,6 @@ html, body, #app {
 
     /* success */
     &.el-button--success {
-      border-color: $themes-color-native !important;
       /* 使用默认的success 样式 */
       &.is-plain {
         &:focus, &:hover {
@@ -237,17 +227,13 @@ html, body, #app {
         color: $color-deep !important;
       }
     }
-    /* disabled */
-    &.is-disabled {
-      &.is-plain {
-        &, &:hover, &:focus, .el-button.is-disabled {
-          color: $color-deep !important;
-          background-color: $input-disabled-bg !important;
-          border-color: $input-disabled-bg !important;
-        }
+    /* text */
+    &.el-button--text {
+      color: $color !important;
+      &:hover {
+        color: $themes-color-native !important;
       }
     }
-
     /* data-back-btn */
     &.back-btn {
       color: $back-btn !important;
@@ -256,7 +242,6 @@ html, body, #app {
         color: $back-btn-hover !important;
       }
     }
-
     /* to cover default */
     &.is-plain {
       color: $color !important;
@@ -315,22 +300,10 @@ html, body, #app {
         color: $themes-color !important;
       }
 
-      &.is-disabled {
-        background-color: $bg-btn-disabled !important;
-        color: $color !important;
-        border-color: $bg-btn-disabled !important;
-        &:hover {
-          background-color: $bg-btn-disabled !important;
-          color: $color-risk !important;
-          border-color: $bg-btn-disabled !important;
-        }
-      }
-
     }
 
   }
 
-  /* input */
   /* input */
   .input-radius {
     input {
@@ -401,34 +374,6 @@ html, body, #app {
     text-transform: capitalize;
     color: $page-title;
     padding: 10px 0;
-  }
-
-  /* left-bar */
-  .leftbar {
-    background-color: $left-bar-bg;
-    .bar-title, .bar-footer {
-      background-color: $left-bar-bg !important;
-      color: #fff !important;
-    }
-    .el-menu--dark {
-      background-color: $left-bar-bg;
-    }
-    .el-menu-item {
-      color: $left-bar-color;
-      i {
-        color: $left-bar-icon !important;
-      }
-      &.is-active, &:hover {
-        & > i {
-          color: $left-bar-active !important;
-        }
-        color: $left-bar-active !important;
-        background-color: $left-bar-active-bg !important;
-      }
-    }
-    .el-menu-item-group__title {
-      color: $left-bar-title;
-    }
   }
 
   /* tabs */
@@ -536,8 +481,12 @@ html, body, #app {
   }
   .el-table--enable-row-hover .el-table__body {
     tr {
+      &:last-child {
+        td {
+          border-bottom-color: transparent !important;
+        }
+      }
       td {
-        // background-clip: border-box;
         div {
           background-color: transparent !important;
         }
@@ -607,6 +556,17 @@ html, body, #app {
       color: $color !important;
       &:hover {
         color: $color-deeper !important;
+      }
+    }
+  }
+  .el-dialog {
+    .el-dialog__header {
+      .el-dialog__headerbtn {
+        &:hover, &:focus {
+          .el-dialog__close {
+            color: $themes-color-native !important;
+          }
+        }
       }
     }
   }
@@ -836,6 +796,13 @@ html, body, #app {
       .el-dialog__header {
         border-bottom: 1px solid #EFF2F7;
         padding: 15px 20px;
+        .el-dialog__headerbtn {
+          &:hover, &:focus {
+            .el-dialog__close {
+              color: $themes-color-native !important;
+            }
+          }
+        }
       }
       .el-dialog__footer {
         border-top: 1px solid #EFF2F7;

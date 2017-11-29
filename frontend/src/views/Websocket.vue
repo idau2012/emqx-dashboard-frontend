@@ -36,7 +36,12 @@
       </el-row>
       <el-row>
         <el-checkbox v-model="clean">{{ $t('websocket.cleanSession') }}</el-checkbox>
-        <el-checkbox style="margin-left: 50px" v-model="isSSL" @change="handleSSL">SSL</el-checkbox>
+        <el-checkbox
+          style="margin-left: 50px"
+          :disabled="client.connected || loading"
+          v-model="isSSL"
+          @change="handleSSL">SSL
+        </el-checkbox>
       </el-row>
 
       <el-row class="connect-area">
@@ -44,9 +49,7 @@
           <el-button
             type="success"
             size="small"
-            :icon="loading ? 'loading': 'check'"
             :disabled="loading || client.connected"
-            :plain="true"
             @keyup.enter.native="mqttConnect"
             @click="mqttConnect">
             {{ $t('websocket.connect') }}
@@ -55,9 +58,7 @@
           <el-button
             class="close-btn"
             type="danger"
-            icon="close"
             size="small"
-            :plain="true"
             :loading="loading && client.connected"
             :disabled="!loading && !client.connected"
             @keyup.enter.native="disconnectSwitch"
@@ -91,9 +92,7 @@
           <div class="between">
             <el-button
               type="success"
-              icon="check"
               size="small"
-              :plain="true"
               @keyup.enter.native="mqttSubscribe"
               @click="mqttSubscribe">
               {{ $t('websocket.subscribe') }}
@@ -114,7 +113,6 @@
                 <el-button
                   title="Unsubscribe"
                   class="unsubscribe"
-                  icon="close"
                   size="mini"
                   type="text"
                   @click="mqttCacheScuscribe(props.row.topic)">
@@ -153,9 +151,7 @@
           </el-checkbox>
           <el-button
             type="success"
-            icon="check"
             size="small"
-            :plain="true"
             @click="mqttPublish"
             @keyup.enter.native="mqttPublish">
             {{ $t('websocket.send') }}
@@ -166,10 +162,9 @@
         <el-col :span="12">
           <label>{{ $t('websocket.messagesAlreadySent') }}:
             <i
-             title="clear message"
+              title="clear message"
               class="fa fa-refresh refresh-btn"
-              aria-hidden="true"
-              @click="clearMessage(false)">
+              aria-hidden="true">
            </i>
           </label>
           <el-table border :data="publishedMessages" :max-height="600">
@@ -347,9 +342,10 @@ export default {
         this.retryTimes += 1
       })
       this.client.on('error', (error) => {
-        this.$message.error(error)
+        this.$message.error(error.toString() || this.$t('error.networkError'))
         // to prevent reconnect
         this.retryTimes = 0
+        this.client.end()
         NProgress.done()
       })
       this.client.on('message', (topic, message, packet) => {
@@ -518,7 +514,7 @@ export default {
   }
   .el-button {
     display: inline-block;
-    min-width: 110px;
+    min-width: 80px;
     &.unsubscribe {
       text-align: left;
       padding-left: 6px;
