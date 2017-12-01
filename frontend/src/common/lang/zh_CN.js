@@ -18,7 +18,7 @@ export default {
     overview: '控制台',
     clients: '连接',
     sessions: '会话',
-    routes: '路由',
+    topics: '主题',
     subscriptions: '订阅',
     // MANAGEMENT
     management: '管理',
@@ -51,18 +51,16 @@ export default {
     status: '状态',
     // Stats
     stats: '运行统计',
+    topicsCount: '主题数',
+    topicsMax: '主题峰值',
     clientsCount: '连接数',
     clientsMax: '连接峰值',
     retainedCount: '保留消息数',
     retainedMax: '最大保留消息数',
-    routesCount: '路由数',
-    routesMax: '路由峰值',
     sessionsCount: '会话数',
     sessionsMax: '会话峰值',
     subscribersCount: '订阅数',
     subscribersMax: '订阅峰值',
-    topicsCount: '主题数',
-    topicsMax: '主题峰值',
     // Metrics
     metrics: '度量指标',
     packetsData: 'MQTT报文',
@@ -96,8 +94,8 @@ export default {
     enqueueMsg: '入队消息',
     createdAt: '创建时间',
   },
-  // routes
-  routes: {
+  // topics
+  topics: {
     topic: '主题',
     node: '节点',
   },

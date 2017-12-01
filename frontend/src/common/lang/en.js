@@ -18,7 +18,7 @@ export default {
     overview: 'Overview',
     clients: 'Clients',
     sessions: 'Sessions',
-    routes: 'Routes',
+    topics: 'Topics',
     subscriptions: 'Subscriptions',
     // MANAGEMENT
     management: 'MANAGEMENT',
@@ -51,18 +51,16 @@ export default {
     status: 'Status',
     // Stats
     stats: 'Stats',
+    topicsCount: 'Topics/Count',
+    topicsMax: 'Topics/Max',
     clientsCount: 'Clients/Count',
     clientsMax: 'Clients/Max',
     retainedCount: 'Retained/Count',
     retainedMax: 'Retained/Max',
-    routesCount: 'Routes/Count',
-    routesMax: 'Routes/Max',
     sessionsCount: 'Sessions/Count',
     sessionsMax: 'Sessions/Max',
     subscribersCount: 'Subscribers/Count',
     subscribersMax: 'subscribers/Max',
-    topicsCount: 'Topics/Count',
-    topicsMax: 'Topics/Max',
     // Metrics
     metrics: 'Metrics',
     packetsData: 'The packets data',
@@ -96,8 +94,8 @@ export default {
     enqueueMsg: 'EnqueueMsg',
     createdAt: 'CreatedAt',
   },
-  // routes
-  routes: {
+  // topics
+  topics: {
     topic: 'Topic',
     node: 'Node',
   },

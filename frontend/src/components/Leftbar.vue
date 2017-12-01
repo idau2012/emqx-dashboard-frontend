@@ -24,9 +24,12 @@
           <i class="fa fa-exchange"></i>
           {{ $t('leftbar.sessions') }}
         </el-menu-item>
-        <el-menu-item index="/routes">
-          <i class="fa fa-random"></i>
-          {{ $t('leftbar.routes') }}
+        <el-menu-item index="/topics">
+          <i class="fa dash-topic">
+            <img src="../assets/topic-black.svg" class="black">
+            <img src="../assets/topic-green.svg" class="green">
+          </i>
+          {{ $t('leftbar.topics') }}
         </el-menu-item>
         <el-menu-item index="/subscriptions">
           <i class="fa fa-rss-square"></i>
@@ -187,6 +190,24 @@ export default {
   }
   i {
     width: 20px;
+  }
+  .dash-topic img {
+    width: 14px;
+    height: 15px;
+    &.green {
+      display: none;
+    }
+    .black {
+      display: block;
+    }
+  }
+  .is-active > .dash-topic {
+    .black {
+      display: none;
+    }
+    .green {
+      display: block;
+    }
   }
 }
 </style>
