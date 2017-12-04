@@ -17,7 +17,7 @@
         </el-input>
 
         <el-select
-          v-if="activeTab !== 'routes'"
+          v-if="activeTab !== 'topics'"
           class="select-radius"
           v-model="nodeName"
           :placeholder="$t('select.placeholder')"
@@ -86,15 +86,9 @@
     </el-table>
 
     <!-- topics -->
-    <el-table v-show="activeTab==='topics'" v-loading="loading" border :data="topics">
-      <el-table-column prop="topic" label="Topic"></el-table-column>
-      <el-table-column prop="subTopicCount" label="SubTopicCount"></el-table-column>
-    </el-table>
-
-     <!-- routes -->
-    <el-table :data="routes" v-show="activeTab==='routes'" v-loading="loading" border>
-      <el-table-column prop="topic" :label="$t('routes.topic')"></el-table-column>
-      <el-table-column prop="node" :label="$t('routes.node')"></el-table-column>
+    <el-table :data="topics" v-show="activeTab==='topics'" v-loading="loading" border>
+      <el-table-column prop="topic" :label="$t('topics.topic')"></el-table-column>
+      <el-table-column prop="node" :label="$t('topics.node')"></el-table-column>
     </el-table>
 
     <!-- subscriptions -->
@@ -167,7 +161,6 @@ export default {
       clients: [],
       sessions: [],
       topics: [],
-      routes: [],
       subscriptions: [],
     }
   },
@@ -196,7 +189,7 @@ export default {
     init() {
       this.activeTab = this.$route.path.split('/')[1]
       switch (this.activeTab) {
-        case 'routes':
+        case 'topics':
           this.searchPlaceholder = 'Topic'
           break
         default:
@@ -225,7 +218,7 @@ export default {
       this.stashNode()
       this.searchView = false
       this.searchValue = ''
-      if (!this.nodeName && this.activeTab !== 'routes') {
+      if (!this.nodeName && this.activeTab !== 'topics') {
         return
       }
       // load child with the page asc
@@ -235,7 +228,7 @@ export default {
       this.loading = true
       let requestURL = `/nodes/${this.nodeName}/${this.activeTab}?_page=${this.page}&_limit=${this.limit}`
       // cluster
-      if (this.activeTab === 'routes' || this.cluster) {
+      if (this.activeTab === 'topics' || this.cluster) {
         requestURL = `/${this.activeTab}?_page=${this.page}&_limit=${this.limit}`
       }
       httpGet(requestURL).then((response) => {
@@ -259,7 +252,7 @@ export default {
         return
       }
       let requestURL = `/nodes/${this.nodeName}/${this.activeTab}/${this.searchValueEncode}`
-      if (this.activeTab === 'routes' || this.cluster) {
+      if (this.activeTab === 'topics' || this.cluster) {
         requestURL = `/${this.activeTab}/${this.searchValueEncode}`
       }
       this.loading = true

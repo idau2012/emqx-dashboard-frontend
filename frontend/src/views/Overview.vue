@@ -116,6 +116,10 @@
       <el-table :data="stats" border>
         <el-table-column prop="name" min-width="150" :label="$t('overview.name')">
         </el-table-column>
+        <el-table-column prop="topics/count" min-width="150" :label="$t('overview.topicsCount')">
+        </el-table-column>
+        <el-table-column prop="topics/max" min-width="150" :label="$t('overview.topicsMax')">
+        </el-table-column>
         <el-table-column prop="clients/count" min-width="150" :label="$t('overview.clientsCount')">
         </el-table-column>
         <el-table-column prop="clients/max" min-width="150" :label="$t('overview.clientsMax')">
@@ -124,10 +128,6 @@
         </el-table-column>
         <el-table-column prop="retained/max" min-width="150" :label="$t('overview.retainedMax')">
         </el-table-column>
-        <el-table-column prop="routes/count" min-width="150" :label="$t('overview.routesCount')">
-        </el-table-column>
-        <el-table-column prop="routes/max" min-width="150" :label="$t('overview.routesMax')">
-        </el-table-column>
         <el-table-column prop="sessions/count" min-width="150" :label="$t('overview.sessionsCount')">
         </el-table-column>
         <el-table-column prop="sessions/max" min-width="150" :label="$t('overview.sessionsMax')">
@@ -135,10 +135,6 @@
         <el-table-column prop="subscriptions/count" min-width="160" :label="$t('overview.subscribersCount')">
         </el-table-column>
         <el-table-column prop="subscriptions/max" min-width="160" :label="$t('overview.subscribersMax')">
-        </el-table-column>
-        <el-table-column prop="topics/count" min-width="150" :label="$t('overview.topicsCount')">
-        </el-table-column>
-        <el-table-column prop="topics/max" min-width="150" :label="$t('overview.topicsMax')">
         </el-table-column>
       </el-table>
     </div>

@@ -36,7 +36,7 @@ const routes = [
         component: () => import('@/views/Datas'),
       },
       {
-        path: '/routes',
+        path: '/topics',
         component: () => import('@/views/Datas'),
       },
       {
