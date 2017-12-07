@@ -14,14 +14,14 @@
       </el-table-column>
       <el-table-column prop="tags" :label="$t('users.remark')">
       </el-table-column>
-      <el-table-column width="140" :label="$t('users.oper')">
+      <el-table-column width="140" :label="$t('oper.oper')">
         <template scope="props">
           <el-button
             size="mini"
             type="warning"
             :plain="true"
             @click="showDialog('edit', props.row)">
-            {{ $t('users.edit') }}
+            {{ $t('oper.edit') }}
           </el-button>
           <el-button
             v-if="props.row.username!=='admin'"
@@ -30,30 +30,31 @@
             v-popover:popoverDeleted
             :plain="true">
             <el-popover ref="popoverDeleted" placement="right" trigger="click" :value="popoverVisible">
-              <p>{{ $t('users.confirmDelete') }}？</p>
+              <p>{{ $t('oper.confirmDelete') }}</p>
               <div style="text-align: right">
                 <el-button
                   size="mini"
                   type="text"
                   @click="hidePopover">
-                  {{ $t('users.cancel') }}
+                  {{ $t('oper.cancel') }}
                 </el-button>
                 <el-button
                   size="mini"
                   type="success"
                   :loading="btnLoading"
                   @click="deleteUser(props.row.username)">
-                  {{ $t('users.confirm') }}
+                  {{ $t('oper.confirm') }}
                 </el-button>
               </div>
             </el-popover>
-            {{ $t('users.delete') }}
+            {{ $t('oper.delete') }}
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <el-dialog
+      class="oper-panel"
       v-model="dialogVisible"
       :title="oper === 'new' ? $t('users.newUser') : $t('users.editUser')"
       @keyup.enter.native="save">
@@ -117,14 +118,14 @@
           size="small"
           type="text"
           @click="dialogVisible=false">
-          {{ $t('users.cancel') }}
+          {{ $t('oper.cancel') }}
         </el-button>
         <el-button
           type="success"
           size="small"
           :loading="btnLoading"
           @click="save">
-          {{ $t('users.save') }}
+          {{ $t('oper.save') }}
         </el-button>
       </span>
     </el-dialog>
@@ -320,7 +321,7 @@ export default {
       this.btnLoading = true
       httpPut(`/users/${this.user.username}`, this.user).then(() => {
         if (!changePassword) {
-          this.$message.success(`${this.$t('users.edit')}${this.$t('alert.success')}`)
+          this.$message.success(`${this.$t('oper.edit')}${this.$t('alert.success')}`)
         }
         this.dialogVisible = false
         this.loadData()

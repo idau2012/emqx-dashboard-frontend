@@ -40,7 +40,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column width="180" :label="$t('plugins.oper')">
+      <el-table-column width="180" :label="$t('oper.oper')">
         <template scope="props">
           <el-button
             slot="reference"
@@ -129,7 +129,7 @@
               :disabled="!changeListener"
               @click="putConfig(false)"
               @keyup.enter.native="putConfig(false)">
-              {{ $t('plugins.confirm') }}
+              {{ $t('oper.confirm') }}
             </el-button>
             <el-button
               class="cancel-btn"
@@ -138,7 +138,7 @@
               @click="abortOperation(false)"
               @keyup.enter.native="abortOperation(false)">
               <i v-if="displayConfig === ''" class="fa fa-reply" aria-hidden="true"></i>
-              {{ displayConfig === '' ? $t('plugins.back') : $t('plugins.cancel') }}
+              {{ displayConfig === '' ? $t('plugins.back') : $t('oper.cancel') }}
             </el-button>
             <el-button
               v-if="advancedConfig.length !== 0"
@@ -162,14 +162,14 @@
           @click="handleOperation(false, false)"
           type="text"
           @keyup.enter.native="handleOperation(false, false)">
-          {{ $t('plugins.cancel') }}
+          {{ $t('oper.cancel') }}
         </el-button>
         <el-button
           type="success"
           size="small"
           @click="handleOperation(true, false)"
           @keyup.enter.native="handleOperation(true, false)">
-          {{ $t('plugins.confirm') }}
+          {{ $t('oper.confirm') }}
         </el-button>
       </span>
     </el-dialog>
@@ -200,7 +200,7 @@
           size="small"
           @click="isAdvancedConfig = false"
           @keyup.enter.native="isAdvancedConfig = false">
-          {{ $t('plugins.cancel') }}
+          {{ $t('oper.cancel') }}
         </el-button>
       </span>
     </el-dialog>

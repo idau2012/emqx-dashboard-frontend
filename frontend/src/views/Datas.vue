@@ -229,7 +229,7 @@ export default {
       let requestURL = `/nodes/${this.nodeName}/${this.activeTab}?_page=${this.page}&_limit=${this.limit}`
       // cluster
       if (this.activeTab === 'topics' || this.cluster) {
-        requestURL = `/${this.activeTab}?_page=${this.page}&_limit=${this.limit}`
+        requestURL = `/routes?_page=${this.page}&_limit=${this.limit}`
       }
       httpGet(requestURL).then((response) => {
         this[this.activeTab] = response.data.items

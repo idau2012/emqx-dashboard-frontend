@@ -1,7 +1,7 @@
 <template>
   <div class="login-view">
     <el-row style="height: 100%;">
-      <el-col class="login-form" :xs="20" :sm="10" :md="8" :lg="8">
+      <el-col class="login-form oper-panel" :xs="20" :sm="10" :md="8" :lg="8">
         <el-card class="box-card">
           <div slot="header">
             <span style="font-size: 16px">{{ $t('login.title') }}</span>

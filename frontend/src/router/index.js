@@ -60,6 +60,10 @@ const routes = [
         component: () => import('@/views/Websocket'),
       },
       {
+        path: '/applications',
+        component: () => import('@/views/Applications'),
+      },
+      {
         path: '/http_api',
         component: () => import('@/views/HttpApi'),
       },

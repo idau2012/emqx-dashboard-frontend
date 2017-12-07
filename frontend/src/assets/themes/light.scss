@@ -412,7 +412,7 @@ html, body, #app {
     /* 圆角 */
     &.select-radius {
       .el-input__inner {
-        height: 36px;
+        height: 36px !important;
         border-radius: 36px;
       }
     }
@@ -764,7 +764,7 @@ html, body, #app {
       }
     }
   }
-  .users-view, .login-view {
+  .oper-panel {
     .el-card {
       background-color: #fff !important;
       color: #1f2d3d !important;
@@ -780,6 +780,9 @@ html, body, #app {
       color: $color;
     }
     .el-dialog {
+      .el-input {
+        margin: 5px 0 20px;
+      }
       .el-input__inner {
         border: 1px solid $border-native-border !important;
         color: #1f2d3d !important;
@@ -807,6 +810,9 @@ html, body, #app {
       .el-dialog__footer {
         border-top: 1px solid #EFF2F7;
         padding: 15px 20px;
+        .el-button {
+          min-width: 80px;
+        }
       }
       .el-input.error input {
         border: 2px solid #e0b4b4 !important;
