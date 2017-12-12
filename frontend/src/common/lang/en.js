@@ -8,8 +8,25 @@ export default {
     cluster: 'All Nodes',
     placeholder: 'Select Node',
   },
+  // error
   error: {
     networkError: 'Network Error',
+  },
+  // success
+  success: {
+    createSuccess: 'Create Success',
+  },
+  // oper
+  oper: {
+    confirmDelete: 'Confirm Delete ?',
+    cancel: 'Cancel',
+    confirm: 'Confirm',
+    delete: 'Delete',
+    oper: 'Oper',
+    edit: 'Edit',
+    save: 'Save',
+    create: 'Create',
+    view: 'view',
   },
   // leftbar
   leftbar: {
@@ -28,6 +45,7 @@ export default {
     tools: 'TOOLS',
     websocket: 'Websocket',
     api: 'HTTP API',
+    applications: 'Applications',
     // ADMIN
     admin: 'ADMIN',
     users: 'Users',
@@ -118,8 +136,6 @@ export default {
     stop: 'Stop',
     config: 'Config',
     back: 'Back',
-    confirm: 'Confirm',
-    cancel: 'Cancel',
     advancedConfig: 'Advanced Config',
     add: 'Add',
     configSuccess: 'Config success',
@@ -188,6 +204,16 @@ export default {
     linkAddress: 'Request address',
     data: 'Response data',
   },
+  // applications
+  app: {
+    appId: 'AppID',
+    secret: 'AppSecret',
+    newApp: 'New App',
+    create: 'Create',
+    errors: 'AppId Required',
+    name: 'AppName',
+    desc: 'Remark',
+  },
   // users
   users: {
     newUser: 'New User',
@@ -201,13 +227,8 @@ export default {
     confirmNewPassword: 'Confirm New Password',
     changePassword: 'Change Password',
     dontChangePassword: 'Don\'t Change Password',
-    oper: 'Oper',
-    edit: 'Edit',
-    cancel: 'Cancel',
-    save: 'Save',
-    delete: 'Delete',
     confirm: 'Confirm',
-    confirmDelete: 'Confirm Delete',
+    confirmDelete: 'Confirm Delete ?',
     usernameRequired: 'Username required',
     remarkRequired: 'Remark required',
     usernameIllegal: 'Username illegal',

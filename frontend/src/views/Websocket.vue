@@ -346,6 +346,8 @@ export default {
         // to prevent reconnect
         this.retryTimes = 0
         this.client.end()
+        this.sending = false
+        this.loading = false
         NProgress.done()
       })
       this.client.on('message', (topic, message, packet) => {

@@ -21,7 +21,7 @@
     <el-table v-loading="loading" border :data="listeners">
       <el-table-column prop="protocol" width="240" :label="$t('listeners.protocol')">
       </el-table-column>
-      <el-table-column prop="listen" min-width="240" :label="$t('listeners.listenOn')">
+      <el-table-column prop="listen_on" min-width="240" :label="$t('listeners.listenOn')">
       </el-table-column>
       <el-table-column prop="max_clients" min-width="180" :label="$t('listeners.maxClients')">
       </el-table-column>

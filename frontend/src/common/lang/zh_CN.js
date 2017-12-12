@@ -8,8 +8,25 @@ export default {
     cluster: '全部节点',
     placeholder: '请选择',
   },
+  // error
   error: {
     networkError: '网络错误',
+  },
+  // success
+  success: {
+    createSuccess: 'Create Success',
+  },
+  // oper
+  oper: {
+    confirmDelete: '确认删除该项?',
+    confirm: '确认',
+    cancel: '取消',
+    delete: '删除',
+    oper: '操作',
+    edit: '编辑',
+    save: '保存',
+    create: '创建',
+    view: '查看',
   },
   // leftbar
   leftbar: {
@@ -28,6 +45,8 @@ export default {
     tools: '工具',
     websocket: 'Websocket',
     api: 'HTTP接口',
+    // APPLICATIONS
+    applications: '应用',
     // ADMIN
     admin: '系统',
     users: '用户',
@@ -113,13 +132,10 @@ export default {
     status: '状态',
     stopped: '已停止',
     running: '运行中',
-    oper: '操作',
     start: '启动',
     stop: '停止',
     config: '配置',
     back: '返回',
-    confirm: '确认',
-    cancel: '取消',
     advancedConfig: '高级配置',
     add: '新增',
     configSuccess: '配置成功',
@@ -186,6 +202,15 @@ export default {
     linkAddress: '请求地址',
     data: '响应数据',
   },
+  // applications
+  app: {
+    appId: 'AppID',
+    secret: 'AppSecret',
+    newApp: '新建APP',
+    errors: '请填写AppId',
+    name: 'App名称',
+    desc: '备注',
+  },
   // users
   users: {
     newUser: '新建用户',
@@ -199,13 +224,6 @@ export default {
     confirmNewPassword: '确认新密码',
     changePassword: '修改密码',
     dontChangePassword: '不修改密码',
-    oper: '操作',
-    edit: '编辑',
-    cancel: '取消',
-    save: '保存',
-    delete: '删除',
-    confirm: '确定',
-    confirmDelete: '确认删除',
     usernameRequired: '请填写用户名',
     remarkRequired: '请填写备注',
     usernameIllegal: '用户名长度非法',

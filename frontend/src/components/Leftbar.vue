@@ -10,12 +10,12 @@
       unique-opened
       router
       :default-active="'/' + $route.path.split('/')[1]">
+      <!-- MONITORING -->
       <el-menu-item-group :title="$t('leftbar.monitoring')">
         <el-menu-item index="/">
           <i class="fa fa-bar-chart"></i>
           {{ $t('leftbar.overview') }}
         </el-menu-item>
-      </el-menu-item-group>
         <el-menu-item index="/clients">
           <i class="fa fa-microchip"></i>
           {{ $t('leftbar.clients') }}
@@ -35,6 +35,9 @@
           <i class="fa fa-rss-square"></i>
           {{ $t('leftbar.subscriptions') }}
         </el-menu-item>
+      </el-menu-item-group>
+
+      <!-- MANAGEMENT -->
       <el-menu-item-group :title="$t('leftbar.management')">
         <el-menu-item index="/plugins">
           <i class="fa fa-plug"></i>
@@ -45,6 +48,8 @@
           {{ $t('leftbar.listeners') }}
         </el-menu-item>
       </el-menu-item-group>
+
+      <!-- TOOLS -->
       <el-menu-item-group :title="$t('leftbar.tools')">
         <el-menu-item index="/websocket">
           <i class="fa fa-html5"></i>
@@ -55,6 +60,16 @@
           {{ $t('leftbar.api') }}
         </el-menu-item>
       </el-menu-item-group>
+
+      <!-- APPLICATIONS -->
+      <el-menu-item-group :title="$t('leftbar.applications')">
+        <el-menu-item index="/applications">
+          <i class="fa fa-archive"></i>
+          {{ $t('leftbar.applications') }}
+        </el-menu-item>
+      </el-menu-item-group>
+
+      <!-- ADMIN -->
       <el-menu-item-group :title="$t('leftbar.admin')">
         <el-menu-item index="/users">
           <i class="fa fa-user-o"></i>
