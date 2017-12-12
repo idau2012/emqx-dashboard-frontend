@@ -26,6 +26,7 @@ export default {
     edit: 'Edit',
     save: 'Save',
     create: 'Create',
+    view: 'view',
   },
   // leftbar
   leftbar: {
@@ -210,6 +211,8 @@ export default {
     newApp: 'New App',
     create: 'Create',
     errors: 'AppId Required',
+    name: 'AppName',
+    desc: 'Remark',
   },
   // users
   users: {

@@ -26,6 +26,7 @@ export default {
     edit: '编辑',
     save: '保存',
     create: '创建',
+    view: '查看',
   },
   // leftbar
   leftbar: {
@@ -207,6 +208,8 @@ export default {
     secret: 'AppSecret',
     newApp: '新建APP',
     errors: '请填写AppId',
+    name: 'App名称',
+    desc: '备注',
   },
   // users
   users: {

@@ -12,7 +12,20 @@
     <!-- applications list -->
     <el-table v-loading="loading" border :data="tableData">
       <el-table-column prop="app_id" :label="$t('app.appId')"></el-table-column>
-      <el-table-column prop="secret" :label="$t('app.secret')"></el-table-column>
+      <el-table-column prop="name" :label="$t('app.name')"></el-table-column>
+      <el-table-column prop="desc" :label="$t('app.desc')"></el-table-column>
+      <el-table-column :label="$t('app.secret')">
+        <template scope="props">
+          {{ props.row.secret }}
+          <el-button
+            v-if="!props.row.secret"
+            type="success"
+            size="mini"
+            :plain="true"
+            @click="viewSecret(props.row)">{{ $t('oper.view') }}
+          </el-button>
+        </template>
+      </el-table-column>
       <el-table-column width="120px" :label="$t('oper.oper')">
         <template scope="props">
           <el-button
@@ -51,10 +64,18 @@
       :title="$t('app.newApp')">
       <label>{{ $t('app.appId') }}</label>
       <el-input
-        v-model="app.appId"
+        v-model="app.app_id"
         :class="{ error: app.errors }"
-        :placeholder="app.errors"
-        @focus="app.errors=''">
+        :placeholder="app.errors">
+      </el-input>
+
+      <label>{{ $t('app.name') }}</label>
+      <el-input
+        v-model="app.name">
+      </el-input>
+
+      <label>{{ $t('app.desc') }}</label>
+      <el-input v-model="app.desc">
       </el-input>
       <span slot="footer" class="dialog-footer">
         <el-button
@@ -112,7 +133,9 @@ export default {
       displayDialog: false,
       loading: false,
       app: {
-        appId: '',
+        app_id: '',
+        name: '',
+        desc: '',
         errors: '',
       },
       popoverVisible: false,
@@ -133,23 +156,22 @@ export default {
       if (startCreate) {
         this.displayDialog = true
         this.app = {
-          appId: '',
+          app_id: '',
+          name: '',
+          desc: '',
           errors: '',
         }
         return
       }
-      if (!this.app.appId) {
+      if (!this.app.app_id) {
         this.app.errors = this.$t('app.errors')
         return
       }
-      this.loading = true
-      httpPost('/apps', { app_id: this.app.appId }).then(() => {
+      httpPost('/apps', this.app).then(() => {
         this.$message.success(this.$t('success.createSuccess'))
-        this.loading = false
         this.displayDialog = false
         this.loadApp()
       }).catch((error) => {
-        this.loading = false
         this.app.appId = ''
         this.app.errors = error || this.$t('error.networkError')
         this.$message.error(error || this.$t('error.networkError'))
@@ -170,6 +192,13 @@ export default {
       setTimeout(() => {
         this.popoverVisible = false
       }, 0)
+    },
+    viewSecret(row) {
+      httpGet(`/apps/${row.app_id}`).then((response) => {
+        this.$set(row, 'secret', response.data.secret)
+      }).catch((error) => {
+        this.$message.error(error || this.$t('error.networkError'))
+      })
     },
   },
   created() {

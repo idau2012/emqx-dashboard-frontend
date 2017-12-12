@@ -229,7 +229,8 @@ export default {
       let requestURL = `/nodes/${this.nodeName}/${this.activeTab}?_page=${this.page}&_limit=${this.limit}`
       // cluster
       if (this.activeTab === 'topics' || this.cluster) {
-        requestURL = `/routes?_page=${this.page}&_limit=${this.limit}`
+        const url = this.activeTab === 'topics' ? 'routes' : this.activeTab
+        requestURL = `/${url}?_page=${this.page}&_limit=${this.limit}`
       }
       httpGet(requestURL).then((response) => {
         this[this.activeTab] = response.data.items
@@ -253,7 +254,8 @@ export default {
       }
       let requestURL = `/nodes/${this.nodeName}/${this.activeTab}/${this.searchValueEncode}`
       if (this.activeTab === 'topics' || this.cluster) {
-        requestURL = `/${this.activeTab}/${this.searchValueEncode}`
+        const url = this.activeTab === 'topics' ? 'routes' : this.activeTab
+        requestURL = `/${url}/${this.searchValueEncode}`
       }
       this.loading = true
       httpGet(requestURL).then((response) => {
