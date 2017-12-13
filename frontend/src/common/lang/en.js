@@ -26,7 +26,8 @@ export default {
     edit: 'Edit',
     save: 'Save',
     create: 'Create',
-    view: 'view',
+    view: 'View',
+    editSuccess: 'Edit success',
   },
   // leftbar
   leftbar: {
@@ -209,10 +210,19 @@ export default {
     appId: 'AppID',
     secret: 'AppSecret',
     newApp: 'New App',
+    viewApp: 'View App',
+    editApp: 'Edit App',
     create: 'Create',
-    errors: 'AppId Required',
+    errors: 'Option Required',
     name: 'AppName',
     desc: 'Remark',
+    expired: 'Expired date',
+    status: 'Status',
+    enable: 'Allowed',
+    disable: 'Denied',
+    enableText: 'Access allowed',
+    disableText: 'Access barred',
+    expiredText: 'Never expired',
   },
   // users
   users: {

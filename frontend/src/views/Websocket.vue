@@ -115,6 +115,7 @@
                   class="unsubscribe"
                   size="mini"
                   type="text"
+                  icon="close"
                   @click="mqttCacheScuscribe(props.row.topic)">
                 </el-button>
               </template>

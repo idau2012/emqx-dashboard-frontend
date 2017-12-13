@@ -27,6 +27,7 @@ export default {
     save: '保存',
     create: '创建',
     view: '查看',
+    editSuccess: '编辑成功',
   },
   // leftbar
   leftbar: {
@@ -205,11 +206,20 @@ export default {
   // applications
   app: {
     appId: 'AppID',
-    secret: 'AppSecret',
+    secret: 'App密钥',
     newApp: '新建APP',
-    errors: '请填写AppId',
+    viewApp: '查看App',
+    editApp: ' 编辑App',
+    errors: '该项为必填项',
     name: 'App名称',
     desc: '备注',
+    expired: '到期日期',
+    status: '状态',
+    enable: '允许访问',
+    disable: '拒绝访问',
+    enableText: '允许访问',
+    disableText: '拒绝访问',
+    expiredText: '永不过期',
   },
   // users
   users: {
