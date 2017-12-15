@@ -116,13 +116,13 @@
       <el-table :data="stats" border>
         <el-table-column prop="name" min-width="150" :label="$t('overview.name')">
         </el-table-column>
-        <el-table-column prop="topics/count" min-width="150" :label="$t('overview.topicsCount')">
-        </el-table-column>
-        <el-table-column prop="topics/max" min-width="150" :label="$t('overview.topicsMax')">
-        </el-table-column>
         <el-table-column prop="clients/count" min-width="150" :label="$t('overview.clientsCount')">
         </el-table-column>
         <el-table-column prop="clients/max" min-width="150" :label="$t('overview.clientsMax')">
+        </el-table-column>
+        <el-table-column prop="topics/count" min-width="150" :label="$t('overview.topicsCount')">
+        </el-table-column>
+        <el-table-column prop="topics/max" min-width="150" :label="$t('overview.topicsMax')">
         </el-table-column>
         <el-table-column prop="retained/count" min-width="150" :label="$t('overview.retainedCount')">
         </el-table-column>

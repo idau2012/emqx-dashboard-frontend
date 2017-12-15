@@ -468,8 +468,6 @@ export default {
       httpGet('/').then((response) => {
         this.tableData = []
         let data = JSON.stringify(response.data)
-        data = data.replace(/:bin/g, '')
-        data = data.replace(/:atom/g, '')
         data = data.replace(/:node/g, this.nodeName)
         data = JSON.parse(data)
         Object.keys(data).forEach((item) => {

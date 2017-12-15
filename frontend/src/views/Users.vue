@@ -189,6 +189,7 @@ export default {
       }, 0)
     },
     showDialog(oper, row) {
+      this.btnLoading = false
       this.formError = {
         username: '',
         password: '',
