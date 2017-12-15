@@ -63,7 +63,7 @@
     },
     data() {
       return {
-        loading: false,
+        loading: true,
         nodeName: '',
         nodes: [],
         listeners: [],

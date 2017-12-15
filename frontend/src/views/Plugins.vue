@@ -246,7 +246,7 @@ export default{
       oper: '',
       nextPath: '/plugins',
       dialogVisible: false,
-      loading: false,
+      loading: true,
       nodeName: '',
       popoverVisible: false,
       tableData: [],
