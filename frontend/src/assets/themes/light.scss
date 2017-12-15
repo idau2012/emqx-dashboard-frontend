@@ -406,6 +406,28 @@ html, body, #app {
     padding-right: 0;
   }
 
+  /* date-picker */
+  .el-date-table td {
+    &.current:not(.disabled), &.end-date, &.start-date {
+      background-color: $themes-color !important;
+      color: #fff;
+    }
+    &.today {
+      color: $themes-color;
+      &::before {
+        border-top-color: $themes-color;
+      }
+    }
+  }
+  .el-date-picker__header-label {
+    &.active, &:hover {
+      color: $themes-color;
+    }
+  }
+  .el-picker-panel__icon-btn:hover {
+    color: $themes-color;
+  }
+
   /* select */
   .el-select {
     width: 240px;
@@ -779,7 +801,14 @@ html, body, #app {
     .el-checkbox__label {
       color: $color;
     }
+    .el-date-editor.el-input {
+      width: 100%;
+    }
+    .el-select {
+      width: 100%;
+    }
     .el-dialog {
+      max-width: 600px;
       .el-input {
         margin: 5px 0 20px;
       }
