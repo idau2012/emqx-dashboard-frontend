@@ -13,11 +13,6 @@ const routes = [
     component: () => import('@/views/Login.vue'),
     meta: { requiresAuth: false },
   },
-  // {
-  //   path: '/signup',
-  //   component: () => import('@/views/Signup.vue'),
-  //   meta: { requiresAuth: false },
-  // },
   {
     path: '/',
     component: () => import('@/views/Home'),
@@ -48,7 +43,7 @@ const routes = [
         component: () => import('@/views/Plugins'),
       },
       {
-        path: '/nodes/:nodeName/plugin_configs/:pluginName',
+        path: '/plugins/:nodeName/:pluginName',
         component: () => import('@/views/Plugins'),
       },
       {

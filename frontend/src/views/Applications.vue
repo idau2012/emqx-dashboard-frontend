@@ -20,7 +20,7 @@
       <el-table-column prop="name" :label="$t('app.name')"></el-table-column>
       <el-table-column prop="expired" :label="$t('app.expired')">
         <template scope="props">
-          {{ props.row.expired | dateFormat }}
+          {{ dateFormat(props.row.expired) }}
         </template>
       </el-table-column>
       <el-table-column prop="desc" :label="$t('app.desc')"></el-table-column>
@@ -338,15 +338,13 @@ export default {
         this.popoverVisible = false
       }, 0)
     },
-  },
-  filters: {
     dateFormat(date) {
       try {
         return date.toString().length === 10
           ? dateformat(date * 1000, 'yyyy-mm-dd')
-          : 'N/A'
+          : this.$t('app.expiredText')
       } catch (e) {
-        return 'N/A'
+        return this.$t('app.expiredText')
       }
     },
   },
