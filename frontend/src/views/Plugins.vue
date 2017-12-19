@@ -433,7 +433,7 @@ export default{
     config(row) {
       this.plugin.name = row.name
       this.plugin.desc = row.description
-      this.$router.push({ path: `/nodes/${btoa(this.nodeName)}/plugin_configs/${row.name}` })
+      this.$router.push({ path: `/plugins/${btoa(this.nodeName)}/${row.name}` })
     },
     putConfig(confirm = false) {
       if (confirm) {
