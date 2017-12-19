@@ -191,6 +191,15 @@ html, body, #app {
     }
   }
 
+  /* tooltip */
+  .el-tooltip__popper{
+    &.is-dark {
+      background: #707277 !important;
+    }
+    .popper__arrow, .popper__arrow::after {
+      border-left-color: #707277 !important;
+    }
+  }
   /* form */
   .el-form {
     .el-form-item__label {
