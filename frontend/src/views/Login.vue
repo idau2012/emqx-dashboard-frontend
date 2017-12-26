@@ -44,7 +44,7 @@
 
 <script>
 import axios from 'axios'
-import { Col, Row, Card, Form, FormItem, Input, Checkbox, Button } from 'element-ui'
+import { Input, Checkbox, Button, Form, FormItem, Row, Col, Card } from 'element-ui'
 import { mapActions } from 'vuex'
 
 import { USER_LOGIN } from '../store/mutation-types'
@@ -52,14 +52,14 @@ import { USER_LOGIN } from '../store/mutation-types'
 export default {
   name: 'login-view',
   components: {
-    'el-col': Col,
-    'el-row': Row,
-    'el-card': Card,
-    'el-form': Form,
-    'el-form-item': FormItem,
     'el-input': Input,
     'el-checkbox': Checkbox,
     'el-button': Button,
+    'el-form': Form,
+    'el-form-item': FormItem,
+    'el-row': Row,
+    'el-col': Col,
+    'el-card': Card,
   },
   data() {
     return {

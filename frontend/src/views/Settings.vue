@@ -42,11 +42,8 @@
 
 
 <script>
+import { Radio, RadioGroup, Button, Form, FormItem, Row, Col, Card } from 'element-ui'
 import { mapActions } from 'vuex'
-import {
-  Form, FormItem, Row, Col, Radio,
-  RadioGroup, Button, Card,
-} from 'element-ui'
 
 import { setLocalStorage, getLocalStorage } from '../common/storage'
 import { USER_LOGOUT, THEMES_SWITCH } from '../store/mutation-types'
@@ -54,14 +51,14 @@ import { USER_LOGOUT, THEMES_SWITCH } from '../store/mutation-types'
 export default {
   name: 'settings-view',
   components: {
-    'el-radio-group': RadioGroup,
     'el-radio': Radio,
+    'el-radio-group': RadioGroup,
+    'el-button': Button,
     'el-form': Form,
     'el-form-item': FormItem,
-    'el-button': Button,
-    'el-card': Card,
     'el-row': Row,
     'el-col': Col,
+    'el-card': Card,
   },
   data() {
     return {

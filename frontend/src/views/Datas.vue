@@ -116,10 +116,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import {
-  Tabs, TabPane, TableColumn, Table, Button, Tag, Popover, Breadcrumb, BreadcrumbItem,
-  Row, Input, Select, Pagination, Option, Col,
-} from 'element-ui'
+import { Pagination, Input, Select, Option, Table, TableColumn } from 'element-ui'
 
 import { httpGet } from '../store/api'
 import { CURRENT_NODE } from '../store/mutation-types'
@@ -127,21 +124,12 @@ import { CURRENT_NODE } from '../store/mutation-types'
 export default {
   name: 'datas-view',
   components: {
-    'el-col': Col,
+    'el-pagination': Pagination,
+    'el-input': Input,
     'el-select': Select,
-    'el-tabs': Tabs,
-    'el-tab-pane': TabPane,
+    'el-option': Option,
     'el-table': Table,
     'el-table-column': TableColumn,
-    'el-button': Button,
-    'el-tag': Tag,
-    'el-popover': Popover,
-    'el-breadcrumb': Breadcrumb,
-    'el-breadcrumb-item': BreadcrumbItem,
-    'el-row': Row,
-    'el-input': Input,
-    'el-pagination': Pagination,
-    'el-option': Option,
   },
   data() {
     return {
@@ -170,9 +158,6 @@ export default {
   computed: {
     iconStatus() {
       return this.searchView ? 'close' : 'search'
-    },
-    searchValueEncode() {
-      return this.searchValue.replace(/\//g, '%2f')
     },
   },
   methods: {
@@ -252,10 +237,10 @@ export default {
         this.$message.error(`${this.searchPlaceholder} ${this.$t('alert.required')}`)
         return
       }
-      let requestURL = `/nodes/${this.nodeName}/${this.activeTab}/${this.searchValueEncode}`
+      let requestURL = `/nodes/${this.nodeName}/${this.activeTab}/${encodeURIComponent(this.searchValue)}`
       if (this.activeTab === 'topics' || this.cluster) {
         const url = this.activeTab === 'topics' ? 'routes' : this.activeTab
-        requestURL = `/${url}/${this.searchValueEncode}`
+        requestURL = `/${url}/${encodeURIComponent(this.searchValue)}`
       }
       this.loading = true
       httpGet(requestURL).then((response) => {

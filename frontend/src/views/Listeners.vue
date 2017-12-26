@@ -34,10 +34,7 @@
 
 <script>
   import { mapActions } from 'vuex'
-  import {
-    Breadcrumb, BreadcrumbItem, Table, TableColumn, Select, Option, Row, Input,
-    Button, Popover, Dialog, Col, Form, FormItem, Card,
-  } from 'element-ui';
+  import { Select, Option, Table, TableColumn } from 'element-ui'
 
   import { httpGet } from '../store/api'
   import { CURRENT_NODE } from '../store/mutation-types'
@@ -45,21 +42,10 @@
   export default{
     name: 'listeners-view',
     components: {
-      'el-form-item': FormItem,
-      'el-form': Form,
-      'el-col': Col,
       'el-select': Select,
-      'el-dialog': Dialog,
-      'el-row': Row,
-      'el-card': Card,
       'el-option': Option,
-      'el-input': Input,
-      'el-breadcrumb': Breadcrumb,
-      'el-breadcrumb-item': BreadcrumbItem,
       'el-table': Table,
       'el-table-column': TableColumn,
-      'el-button': Button,
-      'el-popover': Popover,
     },
     data() {
       return {

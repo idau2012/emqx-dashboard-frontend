@@ -216,12 +216,14 @@ export default {
       display: block;
     }
   }
-  .is-active > .dash-topic {
-    .black {
-      display: none;
-    }
-    .green {
-      display: block;
+  .is-active, .el-menu-item:hover {
+    & > .dash-topic {
+      .black {
+        display: none;
+      }
+      .green {
+        display: block;
+      }
     }
   }
 }

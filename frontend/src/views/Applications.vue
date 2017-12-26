@@ -156,8 +156,8 @@
 
 <script>
 import {
-  Tabs, TabPane, TableColumn, Table, Button, Tag, Popover, Breadcrumb, BreadcrumbItem, Tooltip,
-  Row, Input, Select, Pagination, Option, Col, Dialog, Form, FormItem, DatePicker, Switch,
+  Dialog, Input, Switch, Select, Option, Button,
+  Table, TableColumn, DatePicker, Popover, Tooltip,
 } from 'element-ui'
 import dateformat from 'dateformat'
 
@@ -166,26 +166,16 @@ import { httpGet, httpPost, httpPut, httpDelete } from '@/store/api'
 export default {
   name: 'applications-view',
   components: {
-    'el-col': Col,
+    'el-dialog': Dialog,
+    'el-input': Input,
+    'el-switch': Switch,
     'el-select': Select,
-    'el-tabs': Tabs,
-    'el-tab-pane': TabPane,
+    'el-option': Option,
+    'el-button': Button,
     'el-table': Table,
     'el-table-column': TableColumn,
-    'el-button': Button,
-    'el-tag': Tag,
-    'el-popover': Popover,
-    'el-breadcrumb': Breadcrumb,
-    'el-breadcrumb-item': BreadcrumbItem,
-    'el-row': Row,
-    'el-input': Input,
-    'el-pagination': Pagination,
-    'el-option': Option,
-    'el-dialog': Dialog,
-    'el-form': Form,
-    'el-form-item': FormItem,
     'el-date-picker': DatePicker,
-    'el-switch': Switch,
+    'el-popover': Popover,
     'el-tooltip': Tooltip,
   },
   data() {
