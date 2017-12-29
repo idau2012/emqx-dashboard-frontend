@@ -182,12 +182,8 @@
 
 
 <script>
+import { Select, Option, Table, TableColumn, Row, Col } from 'element-ui'
 import { mapActions } from 'vuex'
-
-import {
-  Tabs, TabPane, Row, Col, Option, TableColumn, Table, Select,
-  Button, Popover, Card, Tag,
-} from 'element-ui'
 
 import { httpGet } from '../store/api'
 import { CURRENT_NODE } from '../store/mutation-types'
@@ -195,16 +191,10 @@ import { CURRENT_NODE } from '../store/mutation-types'
 export default {
   name: 'overview-view',
   components: {
-    'el-option': Option,
     'el-select': Select,
-    'el-tag': Tag,
-    'el-tabs': Tabs,
-    'el-tab-pane': TabPane,
+    'el-option': Option,
     'el-table': Table,
     'el-table-column': TableColumn,
-    'el-button': Button,
-    'el-popover': Popover,
-    'el-card': Card,
     'el-row': Row,
     'el-col': Col,
   },

@@ -209,11 +209,11 @@
 
 
 <script>
-import { mapActions } from 'vuex'
 import {
-  Breadcrumb, BreadcrumbItem, Table, TableColumn, Select, Option, Row, Input, Checkbox,
-  CheckboxGroup, Button, Popover, Dialog, Col, Form, FormItem, Card,
+  Dialog, Input, Checkbox, CheckboxGroup, Select, Option, Button, Table, TableColumn,
+  Breadcrumb, BreadcrumbItem, Form, FormItem, Row, Col, Card,
 } from 'element-ui'
+import { mapActions } from 'vuex'
 
 import { httpGet, httpPut } from '../store/api'
 import { CURRENT_NODE } from '../store/mutation-types'
@@ -221,23 +221,22 @@ import { CURRENT_NODE } from '../store/mutation-types'
 export default{
   name: 'plugins-view',
   components: {
+    'el-dialog': Dialog,
+    'el-input': Input,
     'el-checkbox': Checkbox,
     'el-checkbox-group': CheckboxGroup,
-    'el-form-item': FormItem,
-    'el-form': Form,
-    'el-col': Col,
     'el-select': Select,
-    'el-dialog': Dialog,
-    'el-row': Row,
-    'el-card': Card,
     'el-option': Option,
-    'el-input': Input,
-    'el-breadcrumb': Breadcrumb,
-    'el-breadcrumb-item': BreadcrumbItem,
+    'el-button': Button,
     'el-table': Table,
     'el-table-column': TableColumn,
-    'el-button': Button,
-    'el-popover': Popover,
+    'el-breadcrumb': Breadcrumb,
+    'el-breadcrumb-item': BreadcrumbItem,
+    'el-form': Form,
+    'el-form-item': FormItem,
+    'el-row': Row,
+    'el-col': Col,
+    'el-card': Card,
   },
   data() {
     return {

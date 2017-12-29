@@ -54,20 +54,16 @@
 
 
 <script>
-import { Tabs, TabPane, TableColumn, Table, Button, Tag, Popover, Card } from 'element-ui'
+import { Button, Table, TableColumn, Card } from 'element-ui'
 
 import { httpGet, httpPut, httpPost } from '../store/api'
 
 export default {
   name: 'http-api',
   components: {
-    'el-tabs': Tabs,
-    'el-tab-pane': TabPane,
+    'el-button': Button,
     'el-table': Table,
     'el-table-column': TableColumn,
-    'el-button': Button,
-    'el-tag': Tag,
-    'el-popover': Popover,
     'el-card': Card,
   },
   data() {

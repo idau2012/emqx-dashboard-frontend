@@ -134,8 +134,8 @@
 
 
 <script>
+import { Dialog, Input, Button, Table, TableColumn, Popover } from 'element-ui'
 import { mapActions } from 'vuex'
-import { Row, Button, Table, TableColumn, Popover, Dialog, Input } from 'element-ui'
 
 import { USER_LOGOUT } from '../store/mutation-types'
 import { httpGet, httpPost, httpPut, httpDelete } from '../store/api'
@@ -143,13 +143,12 @@ import { httpGet, httpPost, httpPut, httpDelete } from '../store/api'
 export default {
   name: 'users-view',
   components: {
-    'el-row': Row,
+    'el-dialog': Dialog,
+    'el-input': Input,
     'el-button': Button,
     'el-table': Table,
     'el-table-column': TableColumn,
     'el-popover': Popover,
-    'el-dialog': Dialog,
-    'el-input': Input,
   },
   data() {
     return {

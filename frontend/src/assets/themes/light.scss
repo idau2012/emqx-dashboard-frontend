@@ -153,6 +153,15 @@ html, body, #app {
     }
   }
 
+  /* tooltip */
+  .el-tooltip__popper{
+    &.is-dark {
+      background: #8D8E93 !important;
+    }
+    .popper__arrow, .popper__arrow::after {
+      border-left-color: #8D8E93 !important;
+    }
+  }
   /* form */
   .el-form {
     .el-form-item__label {
