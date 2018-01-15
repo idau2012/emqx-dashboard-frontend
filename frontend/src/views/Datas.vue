@@ -66,23 +66,65 @@
     <!-- sessions -->
     <el-table v-show="activeTab==='sessions'" v-loading="loading" border :data="sessions">
       <el-table-column v-if="cluster" prop="node" min-width="160" :label="$t('clients.node')">
+        <template scope="props">
+          {{ props.row.node || '0'}}
+        </template>
       </el-table-column>
       <el-table-column prop="client_id" min-width="160" :label="$t('sessions.clientId')">
+        <template scope="props">
+          {{ props.row.client_id || '0'}}
+        </template>
       </el-table-column>
       <el-table-column prop="clean_sess" width="120" :label="$t('sessions.cleanSess')">
         <template scope="scope">
           <span>{{ scope.row.clean_sess ? 'true' : 'false' }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="subscriptions" min-width="120" :label="$t('sessions.subscriptions')"></el-table-column>
-      <el-table-column prop="max_inflight" min-width="150" :label="$t('sessions.maxInflight')"></el-table-column>
-      <el-table-column prop="inflight_len" min-width="150" :label="$t('sessions.inflightLen')"></el-table-column>
-      <el-table-column prop="mqueue_len" min-width="150" :label="$t('sessions.mqueueLen')"></el-table-column>
-      <el-table-column prop="mqueue_dropped" min-width="150" :label="$t('sessions.mqueueDropped')"></el-table-column>
-      <el-table-column prop="awaiting_rel_len" min-width="150" :label="$t('sessions.awaitingRelLen')"></el-table-column>
-      <el-table-column prop="deliver_msg" min-width="150" :label="$t('sessions.deliverMsg')"></el-table-column>
-      <el-table-column prop="enqueue_msg" min-width="180" :label="$t('sessions.enqueueMsg')"></el-table-column>
-      <el-table-column prop="created_at" min-width="180" :label="$t('sessions.createdAt')"></el-table-column>
+      <el-table-column prop="subscriptions" min-width="120" :label="$t('sessions.subscriptions')">
+        <template scope="props">
+          {{ props.row.subscriptions || '0'}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="max_inflight" min-width="150" :label="$t('sessions.maxInflight')">
+        <template scope="props">
+          {{ props.row.max_inflight || '0'}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="inflight_len" min-width="150" :label="$t('sessions.inflightLen')">
+        <template scope="props">
+          {{ props.row.inflight_len || '0'}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="mqueue_len" min-width="150" :label="$t('sessions.mqueueLen')">
+        <template scope="props">
+          {{ props.row.mqueue_len || '0'}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="mqueue_dropped" min-width="150" :label="$t('sessions.mqueueDropped')">
+        <template scope="props">
+          {{ props.row.mqueue_dropped || '0'}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="awaiting_rel_len" min-width="150" :label="$t('sessions.awaitingRelLen')">
+        <template scope="props">
+          {{ props.row.awaiting_rel_len || '0'}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="deliver_msg" min-width="150" :label="$t('sessions.deliverMsg')">
+        <template scope="props">
+          {{ props.row.deliver_msg || '0'}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="enqueue_msg" min-width="180" :label="$t('sessions.enqueueMsg')">
+        <template scope="props">
+          {{ props.row.enqueue_msg || '0'}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="created_at" min-width="180" :label="$t('sessions.createdAt')">
+        <template scope="props">
+          {{ props.row.created_at || '0'}}
+        </template>
+      </el-table-column>
     </el-table>
 
     <!-- topics -->

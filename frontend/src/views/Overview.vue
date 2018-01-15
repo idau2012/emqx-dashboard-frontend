@@ -112,17 +112,17 @@
 
     <!-- Stats -->
     <div class="card-box">
-      <div class="card-title">{{ $t('overview.stats') }}</div>
+      <div class="card-title">{{ $t('overview.stats') }}({{ stats.length }})</div>
       <el-table :data="stats" border>
-        <el-table-column prop="name" min-width="150" :label="$t('overview.name')">
+        <el-table-column prop="node" min-width="150" :label="$t('overview.name')">
         </el-table-column>
         <el-table-column prop="clients/count" min-width="150" :label="$t('overview.clientsCount')">
         </el-table-column>
         <el-table-column prop="clients/max" min-width="150" :label="$t('overview.clientsMax')">
         </el-table-column>
-        <el-table-column prop="topics/count" min-width="150" :label="$t('overview.topicsCount')">
+        <el-table-column prop="clients/count" min-width="150" :label="$t('overview.topicsCount')">
         </el-table-column>
-        <el-table-column prop="topics/max" min-width="150" :label="$t('overview.topicsMax')">
+        <el-table-column prop="clients/max" min-width="150" :label="$t('overview.topicsMax')">
         </el-table-column>
         <el-table-column prop="retained/count" min-width="150" :label="$t('overview.retainedCount')">
         </el-table-column>
@@ -269,9 +269,8 @@ export default {
         this.$message.error(error || this.$t('error.networkError'))
       })
       // stats[]
-      httpGet(`/nodes/${this.nodeName}/stats`).then((response) => {
-        response.data.name = this.nodeName
-        this.stats = [response.data]
+      httpGet('/stats').then((response) => {
+        this.stats = response.data
       })
       // brokers[]
       httpGet(`/brokers/${this.nodeName}`).then((response) => {
