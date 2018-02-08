@@ -165,7 +165,8 @@
             <i
               title="clear message"
               class="fa fa-refresh refresh-btn"
-              aria-hidden="true">
+              aria-hidden="true"
+              @click="clearMessage(true)">
            </i>
           </label>
           <el-table border :data="publishedMessages" :max-height="600">
