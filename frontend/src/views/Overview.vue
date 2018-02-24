@@ -75,8 +75,8 @@
     <div class="card-box">
       <div class="card-title">{{ $t('overview.nodes') }}({{ nodes.length }})</div>
       <el-table :data="nodes" border>
-        <el-table-column prop="name" min-width="200" :label="$t('overview.name')">
-        </el-table-column>
+        <el-table-column prop="name" min-width="200" :label="$t('overview.name')"></el-table-column>
+        <el-table-column prop="otp_release" min-width="200" :label="$t('overview.erlangOTPRelease')"></el-table-column>
         <el-table-column :label="$t('overview.erlangProcesses')">
           <el-table-column min-width="150" prop="process" label="(used/avaliable)">
             <template scope="scope">

@@ -56,6 +56,7 @@ export default {
   overview: {
     // Broker
     broker: 'Broker',
+    erlangOTPRelease: 'Erlang/OTP Release',
     systemName: 'System Name',
     version: 'Version',
     uptime: 'Uptime',
