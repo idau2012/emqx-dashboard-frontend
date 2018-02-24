@@ -64,6 +64,7 @@ export default {
     // Nodes
     nodes: '节点信息',
     name: '节点名称',
+    erlangOTPRelease: 'Erlang/OTP 版本',
     erlangProcesses: 'Erlang进程',
     cpuInfo: 'CPU',
     memoryInfo: '内存',
