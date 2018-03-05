@@ -24,9 +24,7 @@
           size="small"
           :disabled="loading"
           @change="loadChild(true)">
-          <el-option
-            :label="$t('select.cluster')"
-            value="cluster">
+          <el-option value="cluster" :label="$t('select.cluster')">
           </el-option>
           <el-option
             v-for="item in nodes"
@@ -276,7 +274,7 @@ export default {
         return
       }
       if (!this.searchValue) {
-        this.$message.error(`${this.searchPlaceholder} ${this.$t('alert.required')}`)
+        this.loadData()
         return
       }
       let requestURL = `/nodes/${this.nodeName}/${this.activeTab}/${encodeURIComponent(this.searchValue)}`
