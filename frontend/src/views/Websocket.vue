@@ -1,4 +1,3 @@
-<!--suppress ALL -->
 <template>
   <div class="websocket-view">
     <div class="page-title">{{ $t('leftbar.websocket') }}</div>

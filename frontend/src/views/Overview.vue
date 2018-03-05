@@ -339,6 +339,12 @@ export default {
         margin-top: 10px !important;
       }
     }
+    @media screen and (max-width: 740px) {
+      .el-col-6 {
+        width: 100% !important;
+        margin-top: 10px !important;
+      }
+    }
     .broker-card {
       &.el-row {
         overflow-x: auto;
@@ -346,6 +352,7 @@ export default {
       .el-col {
         .card-item {
           height: 90px;
+          min-width: 250px;
           line-height: 90px;
           padding: 18px 20px 0 20px;
           background-color: #5d5d60;

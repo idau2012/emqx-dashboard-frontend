@@ -60,7 +60,7 @@ $input-border: $border-color;
 $input-color: $color-deep;
 $input-placeholder: $color-risk;
 $input-border-hover: $border-color-deep;
-$input-disabled-bg: #d6d9e2;
+$input-disabled-bg: #e8e8e8;
 
 /* 表格相关 */
 $table-bg: $bg-color;
@@ -154,7 +154,7 @@ html, body, #app {
   }
 
   /* tooltip */
-  .el-tooltip__popper{
+  .el-tooltip__popper {
     &.is-dark {
       background: #8D8E93 !important;
     }
@@ -717,8 +717,8 @@ html, body, #app {
       color: #1f2d3d;
     }
     .el-input.is-disabled .el-input__inner {
-      background-color: #eef1f6;
-      border-color: #d1dbe5;
+      background-color: $input-disabled-bg;
+      border-color: $input-disabled-bg;
       color: #bbb;
       cursor: not-allowed;
     }
@@ -795,15 +795,37 @@ html, body, #app {
       }
     }
   }
+
+  /* dialog */
   .oper-panel {
     .el-card {
-      background-color: #fff !important;
       color: #1f2d3d !important;
+      background-color: #fff !important;
+      .el-card__header {
+        color: #1f2d3d !important;
+      }
+    }
+    .el-input {
+      margin: 5px 0 20px;
+      &.is-disabled {
+        .el-input__inner {
+          background-color: $input-disabled-bg !important;
+          border-color: $input-disabled-bg !important;
+          color: #bbb;
+          cursor: not-allowed;
+        }
+        &:hover, &:focus {
+          border-color: $input-disabled-bg !important;
+        }
+      }
+      &.error input {
+        border: 2px solid #e0b4b4 !important;
+      }
       .el-input__inner {
         border: 1px solid $border-native-border !important;
         color: #1f2d3d !important;
         &:hover, &:focus {
-          border-color: $border-color-deep !important;
+          border-color: $input-disabled-bg !important;
         }
       }
     }
@@ -818,42 +840,16 @@ html, body, #app {
     }
     .el-dialog {
       max-width: 600px;
-      .el-input {
-        margin: 5px 0 20px;
-      }
-      .el-input__inner {
-        border: 1px solid $border-native-border !important;
-        color: #1f2d3d !important;
-        &:hover, &:focus {
-          border-color: $border-color-deep !important;
-        }
-      }
-      .el-input.is-disabled .el-input__inner {
-        background-color: #eef1f6;
-        border-color: #d1dbe5;
-        color: #bbb;
-        cursor: not-allowed;
-      }
       .el-dialog__header {
-        border-bottom: 1px solid #EFF2F7;
+        border-bottom: 1px solid #eff2f7;
         padding: 15px 20px;
-        .el-dialog__headerbtn {
-          &:hover, &:focus {
-            .el-dialog__close {
-              color: $themes-color-native !important;
-            }
-          }
-        }
       }
       .el-dialog__footer {
-        border-top: 1px solid #EFF2F7;
+        border-top: 1px solid #eff2f7;
         padding: 15px 20px;
         .el-button {
           min-width: 80px;
         }
-      }
-      .el-input.error input {
-        border: 2px solid #e0b4b4 !important;
       }
       .toggle-btn {
         color: #13ce66;

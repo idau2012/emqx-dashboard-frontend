@@ -2,7 +2,7 @@
 $themes-color: #34c388;
 $themes-color-risk: #232d2e;
 $themes-color-native: #42d885;
-$themes-color-native-deep: #227D51;
+$themes-color-native-deep: #227d51;
 $themes-color-waring: #f9c855;
 $themes-color-danger: #ff6d6d;
 $themes-color-error: #e0b4b4;
@@ -35,13 +35,13 @@ $api-link: $themes-color;
 /* 下拉选择相关 */
 $el-select-bg: transparent;
 $select-color: $color;
-$select-border: grey;
+$select-border: #373737;
 $select-border-active: #737373;
 
-$select-bg-active: #37363d;
+$select-bg-active: #282828;
 $select-color-active: $color;
 
-$select-dropdown-bg: #1f1d1d;
+$select-dropdown-bg: #373737;
 $select-item-bg: $bg-color-risk;
 
 /* pagination */
@@ -61,7 +61,7 @@ $input-border: #6c7786;
 $input-color: #c8c8c8;
 $input-placeholder: $input-border;
 $input-border-hover: #737373;
-$input-disabled-bg: #323538;
+$input-disabled-bg: #e8e8e8;
 
 /* 表格相关 */
 $table-bg: #1f1d1d;
@@ -154,7 +154,7 @@ html, body, #app {
     background-color: $app-bg;
   }
   body {
-    font-family: "Roboto", "Helvetica Neue", "Helvetica", "Work sans", Arial, sans-serif;
+    font-family: "roboto", "helvetica neue", "helvetica", "work sans", arial, sans-serif;
     -webkit-font-smoothing: subpixel-antialiased;
     color: $default-font;
     font-size: 14px;
@@ -192,7 +192,7 @@ html, body, #app {
   }
 
   /* tooltip */
-  .el-tooltip__popper{
+  .el-tooltip__popper {
     &.is-dark {
       background: #707277 !important;
     }
@@ -209,7 +209,7 @@ html, body, #app {
 
   /* button 不再定义语义化的颜色变量，请直接使用原始变量赋值 */
   .el-button {
-    font-family: "Roboto", "Helvetica Neue", "Helvetica", "Work sans", Arial, sans-serif;
+    font-family: "roboto", "helvetica neue", "helvetica", "work sans", arial, sans-serif;
     i {
       transform: scale(0.9) !important;
     }
@@ -439,7 +439,7 @@ html, body, #app {
   }
   .el-select-dropdown {
     background-color: $select-dropdown-bg !important;
-    border-color: grey !important;
+    border-color: $select-border !important;
     .el-select-dropdown__item {
       color: $select-color !important;
       &.selected.hover, &.selected, &.hover {
@@ -522,7 +522,7 @@ html, body, #app {
       border-radius: 36px;
       padding: 0 12px;
       &[disabled="disabled"] {
-        background-color: $input-disabled-bg;
+        background-color: #37363d;
       }
       line-height: normal;
     }
@@ -545,8 +545,13 @@ html, body, #app {
     }
     &.is-disabled {
       .el-input__inner {
-        background-color: $input-disabled-bg;
-        border-color: $input-disabled-bg;
+        //background-color: #323538;
+        border-color: #323538 !important;
+      }
+      .el-textarea__inner {
+        background-color: transparent;
+        border-color: $input-border;
+        color: $input-color;
       }
     }
     .el-textarea__inner {
@@ -756,11 +761,28 @@ html, body, #app {
       .el-card__header {
         color: #1f2d3d !important;
       }
+    }
+    .el-input {
+      margin: 5px 0 20px;
+      &.is-disabled {
+        .el-input__inner {
+          background-color: $input-disabled-bg !important;
+          border-color: $input-disabled-bg !important;
+          color: #bbb;
+          cursor: not-allowed;
+        }
+        &:hover, &:focus {
+          border-color: $input-disabled-bg !important;
+        }
+      }
+      &.error input {
+        border: 2px solid #e0b4b4 !important;
+      }
       .el-input__inner {
         border: 1px solid $border-native-border !important;
         color: #1f2d3d !important;
         &:hover, &:focus {
-          border-color: $border-color-deep !important;
+          border-color: $input-disabled-bg !important;
         }
       }
     }
@@ -775,35 +797,16 @@ html, body, #app {
     }
     .el-dialog {
       max-width: 600px;
-      .el-input {
-        margin: 5px 0 20px;
-      }
-      .el-input__inner {
-        border: 1px solid $border-native-border !important;
-        color: #1f2d3d !important;
-        &:hover, &:focus {
-          border-color: $border-color-deep !important;
-        }
-      }
-      .el-input.is-disabled .el-input__inner {
-        background-color: #eef1f6;
-        border-color: #d1dbe5;
-        color: #bbb;
-        cursor: not-allowed;
-      }
       .el-dialog__header {
-        border-bottom: 1px solid #EFF2F7;
+        border-bottom: 1px solid #eff2f7;
         padding: 15px 20px;
       }
       .el-dialog__footer {
-        border-top: 1px solid #EFF2F7;
+        border-top: 1px solid #eff2f7;
         padding: 15px 20px;
         .el-button {
           min-width: 80px;
         }
-      }
-      .el-input.error input {
-        border: 2px solid #e0b4b4 !important;
       }
       .toggle-btn {
         color: #13ce66;
@@ -814,16 +817,6 @@ html, body, #app {
     }
   }
 
-  .signup-view .el-card {
-    background-color: #fff;
-  }
-  .signup-view .el-card__header {
-    border-bottom: 1px solid #d1dbe5
-  }
-  .signup-view .el-input.error input {
-    border: 2px solid #e0b4b4 !important;
-  }
-
   /* all is same */
   .login-view {
     .el-input__inner {
@@ -832,8 +825,8 @@ html, body, #app {
       color: #1f2d3d;
     }
     .el-input.is-disabled .el-input__inner {
-      background-color: #eef1f6;
-      border-color: #d1dbe5;
+      background-color: $input-disabled-bg;
+      border-color: $input-disabled-bg !important;
       color: #bbb;
       cursor: not-allowed;
     }
@@ -842,7 +835,7 @@ html, body, #app {
       background-color: #fff;
     }
     .el-card__header {
-      border-color: #EFF2F7;
+      border-color: #eff2f7;
       background-color: #fff;
     }
     .el-input.error input {
@@ -851,7 +844,7 @@ html, body, #app {
     .login-footer {
       margin: 25px 0;
       text-align: right;
-      border-bottom: 1px solid #EFF2F7;
+      border-bottom: 1px solid #eff2f7;
       padding-bottom: 25px;
     }
     .el-checkbox {
