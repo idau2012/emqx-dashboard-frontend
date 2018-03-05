@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <template>
   <div class="websocket-view">
     <div class="page-title">{{ $t('leftbar.websocket') }}</div>
@@ -207,16 +208,6 @@
 
 
 <script>
-/*
-* https://www.npmjs.com/package/mqtt
-* MQTT.js 2.13.0版本中
-* 连接中： 网络不可达时 ==> 尝试重连 ==> 触发 reconnect ==> 无限重连
-* 使用IP地址连接时： IP地址格式错误 ==> 未能捕捉到WS库的校验报错 ==> 不会触发任何事件 ==> 连接状态锁死
-*   以上两条 ==> 用户期望可以手动终止，客户端也应该超时终止
-* 发布时： 非法发布(非法主题) ==> 服务器断开连接 ==> 客户端触发 reconnect ==> 回调函数error值为空
-* 其中 Qos, Topic, Message等必须是Number, String/Buffer, String/Buffer ==> 防止因为ElementUI 下拉选择切换
-* 导致Qos变为String ==> 强制类型转换相关值后再发送 or 使用vue绑定修饰符
-* */
 import NProgress from 'nprogress'
 import mqtt from 'mqtt'
 import dateformat from 'dateformat'
@@ -224,7 +215,6 @@ import {
   Input, Checkbox, Select, Option, Button,
   Table, TableColumn, Row, Col, Card,
 } from 'element-ui'
-
 
 import MQTTConnect from '../common/MQTTConnect'
 
@@ -277,9 +267,6 @@ export default {
       }
       return this.$t('websocket.disconnected')
     },
-    supportWebSocket() {
-      return window.WebSocket
-    },
   },
   methods: {
     handleSSL() {
@@ -300,7 +287,7 @@ export default {
       }
     },
     mqttConnect() {
-      if (!this.supportWebSocket) {
+      if (!window.WebSocket) {
         this.$message.error(this.$t('websocket.notSupport'))
         return
       }
@@ -320,48 +307,34 @@ export default {
         connectTimeout: 4000,
       }
       const protocol = this.isSSL ? 'wss' : 'ws'
-      this.client = mqtt.connect(`${protocol}://${this.host}:${this.port}/mqtt`, options)
-      this.client.on('connect', () => {
-        this.loading = false
-        NProgress.done()
-      })
-      this.client.on('reconnect', () => {
-        if (this.retryTimes > 1) {
-          if (this.sending) {
-            this.$message.error(this.$t('websocket.connectError'))
-          } else {
-            this.$message.error(`${this.$t('websocket.connectFailure')} ${this.host}:${this.port}`)
-          }
+      try {
+        this.client = mqtt.connect(`${protocol}://${this.host}:${this.port}/mqtt`, options)
+        this.client.on('connect', () => {
+          this.loading = false
+          NProgress.done()
+        })
+        this.client.on('reconnect', this.handleReconnect)
+        this.client.on('error', (error) => {
+          this.$message.error(error.toString() || this.$t('error.networkError'))
+          // to prevent reconnect
           this.retryTimes = 0
+          this.client.end()
           this.sending = false
           this.loading = false
           NProgress.done()
-          this.client.end()
-          this.client = {}
-        }
-        // trigger by sending illegal topic
-        if (this.sending) {
-          this.$message.error(this.$t('websocket.connectError'))
-        }
-        this.retryTimes += 1
-      })
-      this.client.on('error', (error) => {
-        this.$message.error(error.toString() || this.$t('error.networkError'))
-        // to prevent reconnect
-        this.retryTimes = 0
-        this.client.end()
-        this.sending = false
-        this.loading = false
-        NProgress.done()
-      })
-      this.client.on('message', (topic, message, packet) => {
-        this.receivedMessages.unshift({
-          topic,
-          message: message.toString(),
-          qos: packet.qos,
-          time: this.now(),
         })
-      })
+        this.client.on('message', (topic, message, packet) => {
+          this.receivedMessages.unshift({
+            topic,
+            message: message.toString(),
+            qos: packet.qos,
+            time: this.now(),
+          })
+        })
+      } catch (error) {
+        this.loading = false
+        this.$message.error(error.toString())
+      }
     },
     mqttDisconnect() {
       if (this.client.connected) {
@@ -385,9 +358,7 @@ export default {
           }
         })
         NProgress.start()
-        this.client.subscribe(this.subTopic,
-        { qos: this.subQos },
-        (error) => {
+        this.client.subscribe(this.subTopic, { qos: this.subQos }, (error) => {
           if (error) {
             NProgress.done()
             this.$message.error(error.toString())
@@ -450,6 +421,26 @@ export default {
         })
       })
     },
+    handleReconnect() {
+      if (this.retryTimes > 1) {
+        if (this.sending) {
+          this.$message.error(this.$t('websocket.connectError'))
+        } else {
+          this.$message.error(`${this.$t('websocket.connectFailure')} ${this.host}:${this.port}`)
+        }
+        this.retryTimes = 0
+        this.sending = false
+        this.loading = false
+        NProgress.done()
+        this.client.end()
+        this.client = {}
+      }
+      // trigger by sending illegal topic
+      if (this.sending) {
+        this.$message.error(this.$t('websocket.connectError'))
+      }
+      this.retryTimes += 1
+    },
     reset() {
       this.subscriptions = []
       this.receivedMessages = []
@@ -479,8 +470,15 @@ export default {
         MQTTConnect.options[item] = this[item]
       })
     },
+    setSSL() {
+      if (window.location.protocol === 'https:') {
+        this.isSSl = true
+        this.port = 8084
+      }
+    },
   },
   created() {
+    this.setSSL()
     this.loadConnect()
   },
   beforeRouteLeave(to, from, next) {
