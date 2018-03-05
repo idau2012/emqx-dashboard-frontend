@@ -34,14 +34,14 @@
         width="120"
         :label="$t('plugins.status')"
         :filters="[{ text: $t('plugins.stopped'), value: false }, { text: $t('plugins.running'), value: true }]">
-        <template scope="props">
+        <template slot-scope="props">
           <span :class="[props.row.active ? 'running' : 'stopped', 'status']">
             {{ props.row.active ? $t('plugins.running'): $t('plugins.stopped')}}
           </span>
         </template>
       </el-table-column>
       <el-table-column width="180" :label="$t('oper.oper')">
-        <template scope="props">
+        <template slot-scope="props">
           <el-button
             slot="reference"
             size="mini"

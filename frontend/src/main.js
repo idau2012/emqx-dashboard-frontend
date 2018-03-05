@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import { sync } from 'vuex-router-sync'
-
 import VueI18n from 'vue-i18n'
 import ElementLocale from 'element-ui/lib/locale'
 import { Loading, Message } from 'element-ui'
@@ -11,7 +10,6 @@ import store from './store'
 import * as filters from './filters'
 import lang from './common/lang'
 import { getLocalStorage } from './common/storage'
-
 
 Vue.config.productionTip = false
 Vue.use(VueI18n)
@@ -29,7 +27,7 @@ Object.keys(filters).forEach((key) => {
 sync(store, router)
 
 const i18n = new VueI18n({
-  locale: getLocalStorage('language') || 'en',  // default language
+  locale: getLocalStorage('language') || 'en', // default language
   messages: lang,
 })
 

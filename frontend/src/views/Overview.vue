@@ -75,25 +75,33 @@
     <div class="card-box">
       <div class="card-title">{{ $t('overview.nodes') }}({{ nodes.length }})</div>
       <el-table :data="nodes" border>
-        <el-table-column prop="name" min-width="200" :label="$t('overview.name')"></el-table-column>
-        <el-table-column prop="otp_release" min-width="200" :label="$t('overview.erlangOTPRelease')"></el-table-column>
+        <el-table-column
+          prop="name"
+          min-width="200"
+          :label="$t('overview.name')">
+        </el-table-column>
+        <el-table-column
+          prop="otp_release"
+          min-width="200"
+          :label="$t('overview.erlangOTPRelease')">
+        </el-table-column>
         <el-table-column :label="$t('overview.erlangProcesses')">
           <el-table-column min-width="150" prop="process" label="(used/avaliable)">
-            <template scope="scope">
+            <template slot-scope="scope">
               {{ scope.row.process_used + ' / ' + scope.row.process_available }}
             </template>
           </el-table-column>
         </el-table-column>
         <el-table-column :label="$t('overview.cpuInfo')">
           <el-table-column min-width="180" label=" (1load/5load/15load)">
-            <template scope="scope">
+            <template slot-scope="scope">
               {{ scope.row.load1 + ' / ' + scope.row.load5 + ' / ' + scope.row.load15 }}
             </template>
           </el-table-column>
         </el-table-column>
         <el-table-column min-width="200" :label="$t('overview.memoryInfo')">
           <el-table-column min-width="180" label=" (used/total)">
-            <template scope="scope">
+            <template slot-scope="scope">
               {{ scope.row.memory_used + ' / ' + scope.row.memory_total }}
             </template>
           </el-table-column>
@@ -101,7 +109,7 @@
         <el-table-column prop="max_fds" min-width="120" :label="$t('overview.maxFds')">
         </el-table-column>
         <el-table-column min-width="120" :label="$t('overview.status')">
-          <template scope="props">
+          <template slot-scope="props">
             <span :class="[props.row.node_status === 'Running' ? 'running' : 'stopped', 'status']">
               {{ props.row.node_status }}
             </span>

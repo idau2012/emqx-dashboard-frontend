@@ -33,59 +33,59 @@
 
 
 <script>
-  import { mapActions } from 'vuex'
-  import { Select, Option, Table, TableColumn } from 'element-ui'
+import { mapActions } from 'vuex'
+import { Select, Option, Table, TableColumn } from 'element-ui'
 
-  import { httpGet } from '../store/api'
-  import { CURRENT_NODE } from '../store/mutation-types'
+import { httpGet } from '../store/api'
+import { CURRENT_NODE } from '../store/mutation-types'
 
-  export default{
-    name: 'listeners-view',
-    components: {
-      'el-select': Select,
-      'el-option': Option,
-      'el-table': Table,
-      'el-table-column': TableColumn,
+export default {
+  name: 'listeners-view',
+  components: {
+    'el-select': Select,
+    'el-option': Option,
+    'el-table': Table,
+    'el-table-column': TableColumn,
+  },
+  data() {
+    return {
+      loading: true,
+      nodeName: '',
+      nodes: [],
+      listeners: [],
+    }
+  },
+  methods: {
+    ...mapActions([CURRENT_NODE]),
+    // set global nodeName
+    stashNode() {
+      this.CURRENT_NODE({ nodeName: this.nodeName })
     },
-    data() {
-      return {
-        loading: true,
-        nodeName: '',
-        nodes: [],
-        listeners: [],
-      }
+    loadData() {
+      httpGet('/nodes').then((response) => {
+        this.nodeName = this.$store.state.node.nodeName || response.data[0].name
+        this.nodes = response.data
+      }).catch((error) => {
+        this.loading = false
+        this.$message.error(error || this.$t('error.networkError'))
+      })
     },
-    methods: {
-      ...mapActions([CURRENT_NODE]),
-      // set global nodeName
-      stashNode() {
-        this.CURRENT_NODE({ nodeName: this.nodeName })
-      },
-      loadData() {
-        httpGet('/nodes').then((response) => {
-          this.nodeName = this.$store.state.node.nodeName || response.data[0].name
-          this.nodes = response.data
-        }).catch((error) => {
-          this.loading = false
-          this.$message.error(error || this.$t('error.networkError'))
-        })
-      },
-      loadListeners() {
-        this.stashNode()
-        this.loading = true
-        httpGet(`/nodes/${this.nodeName}/listeners`).then((response) => {
-          this.listeners = response.data
-          this.loading = false
-        }).catch((error) => {
-          this.loading = false
-          this.$message.error(error || this.$t('error.networkError'))
-        })
-      },
+    loadListeners() {
+      this.stashNode()
+      this.loading = true
+      httpGet(`/nodes/${this.nodeName}/listeners`).then((response) => {
+        this.listeners = response.data
+        this.loading = false
+      }).catch((error) => {
+        this.loading = false
+        this.$message.error(error || this.$t('error.networkError'))
+      })
     },
-    created() {
-      this.loadData()
-    },
-  }
+  },
+  created() {
+    this.loadData()
+  },
+}
 </script>
 
 

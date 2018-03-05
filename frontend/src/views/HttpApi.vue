@@ -23,7 +23,7 @@
       <el-table border v-if="!responseDate" v-loading="loading" :data="tableData">
         <el-table-column prop="method" width="120" :label="$t('httpApi.method')"></el-table-column>
         <el-table-column min-width="160" :label="$t('httpApi.path')">
-          <template scope="props">
+          <template slot-scope="props">
             <a
               href="javascript:;"
               :class="['link', isLink(props.row) ? '' : 'link-disabled']"
@@ -32,7 +32,7 @@
           </template>
         </el-table-column>
         <el-table-column min-width="240" :label="$t('httpApi.description')">
-          <template scope="props">
+          <template slot-scope="props">
             <div v-html="props.row.description"></div>
           </template>
         </el-table-column>

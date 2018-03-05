@@ -19,13 +19,13 @@
       <el-table-column prop="app_id" min-width="90px" :label="$t('app.appId')"></el-table-column>
       <el-table-column prop="name" min-width="100px" :label="$t('app.name')"></el-table-column>
       <el-table-column prop="expired" min-width="120px" :label="$t('app.expired')">
-        <template scope="props">
+        <template slot-scope="props">
           {{ dateFormat(props.row.expired) }}
         </template>
       </el-table-column>
       <el-table-column prop="desc" min-width="90px" :label="$t('app.desc')"></el-table-column>
       <el-table-column :label="$t('app.status')">
-        <template scope="props">
+        <template slot-scope="props">
           <el-tooltip
             :content="props.row.status ? $t('app.enableText') : $t('app.disableText')"
             placement="left">
@@ -41,7 +41,7 @@
         </template>
       </el-table-column>
       <el-table-column width="180px" :label="$t('oper.oper')">
-        <template scope="props">
+        <template slot-scope="props">
           <!-- view -->
           <el-button type="success" size="mini" :plain="true" @click="showApp(props.row)">
             {{ $t('oper.view') }}

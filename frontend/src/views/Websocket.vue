@@ -109,7 +109,7 @@
             <el-table-column prop="time" min-width="180" :label="$t('websocket.time')">
             </el-table-column>
             <el-table-column width="90" :label="$t('websocket.oper')">
-              <template scope="props">
+              <template slot-scope="props">
                 <el-button
                   title="Unsubscribe"
                   class="unsubscribe"
@@ -378,26 +378,28 @@ export default {
     mqttPublish() {
       if (this.client.connected) {
         NProgress.start()
-        const options = { qos: this.publishQos,
-          retain: this.publishRetain }
+        const options = {
+          qos: this.publishQos,
+          retain: this.publishRetain,
+        }
         // to mark which trigger the reconnect
         this.sending = true
         this.client.publish(this.publishTopic,
-        this.publishMessage, options, (error) => {
-          if (error) {
-            NProgress.done()
-            this.$message.error(error.toString())
-          } else {
-            this.publishedMessages.unshift({
-              message: this.publishMessage,
-              topic: this.publishTopic,
-              qos: this.publishQos,
-              time: this.now(),
-            })
-            this.$message.success(this.$t('websocket.messageSendOut'))
-            NProgress.done()
-          }
-        })
+          this.publishMessage, options, (error) => {
+            if (error) {
+              NProgress.done()
+              this.$message.error(error.toString())
+            } else {
+              this.publishedMessages.unshift({
+                message: this.publishMessage,
+                topic: this.publishTopic,
+                qos: this.publishQos,
+                time: this.now(),
+              })
+              this.$message.success(this.$t('websocket.messageSendOut'))
+              NProgress.done()
+            }
+          })
       } else {
         this.$message.error(this.$t('websocket.connectLeave'))
       }

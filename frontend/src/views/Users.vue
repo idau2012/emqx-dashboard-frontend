@@ -15,7 +15,7 @@
       <el-table-column prop="tags" :label="$t('users.remark')">
       </el-table-column>
       <el-table-column width="140" :label="$t('oper.oper')">
-        <template scope="props">
+        <template slot-scope="props">
           <el-button
             size="mini"
             type="warning"

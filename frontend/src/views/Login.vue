@@ -105,13 +105,11 @@ export default {
           this.$router.push({ path })
         } else {
           this.loginError.username = this.$t('login.error')
-          this.$message.error(this.$t('login.error'))
           this.username = ''
           this.password = ''
         }
       }).catch(() => {
         this.loginError.username = this.$t('login.error')
-        this.$message.error(this.$t('login.error'))
         this.username = ''
         this.password = ''
       })
