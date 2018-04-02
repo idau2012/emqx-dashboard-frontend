@@ -442,7 +442,7 @@ html, body, #app {
     border-color: $select-border !important;
     .el-select-dropdown__item {
       color: $select-color !important;
-      &.selected.hover, &.selected, &.hover {
+      &.selected.hover, &.selected, &:hover, &.hover {
         background-color: $select-bg-active !important;
         color: $select-color-active !important;
       }
@@ -842,9 +842,7 @@ html, body, #app {
       border-color: #e0b4b4 !important;
     }
     .login-footer {
-      margin: 25px 0;
       text-align: right;
-      border-bottom: 1px solid #eff2f7;
       padding-bottom: 25px;
     }
     .el-checkbox {

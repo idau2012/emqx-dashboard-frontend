@@ -20,3 +20,8 @@
 ::-ms-clear, ::-ms-reveal {
   display:none;
 }
+.el-card {
+  .el-card__header {
+    border: none !important;
+  }
+}

@@ -467,7 +467,7 @@ html, body, #app {
     border-color: $select-border-active !important;
     .el-select-dropdown__item {
       color: $select-color;
-      &.selected.hover, &.selected {
+      &.selected.hover, &.selected, &:hover, &.hover {
         background-color: $select-bg-active;
         color: $select-color-active;
       }
@@ -734,9 +734,7 @@ html, body, #app {
       border-color: #e0b4b4 !important;
     }
     .login-footer {
-      margin: 25px 0;
       text-align: right;
-      border-bottom: 1px solid #EFF2F7;
       padding-bottom: 25px;
     }
     .el-checkbox {
