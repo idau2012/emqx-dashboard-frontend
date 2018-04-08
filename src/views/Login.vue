@@ -1,38 +1,39 @@
 <template>
   <el-card class="login-view">
-      <div slot="header">
-        {{ $t('login.title') }}
-      </div>
-      <el-form class="el-form--public" size="medium" label-position="top" :model="user" @keyup.enter.native="login">
-        <el-form-item :label="$t('login.username')">
-          <el-input
-            v-model="user.username"
-            :class="{ error: loginError.username }"
-            :placeholder="loginError.username"
-            @focus="loginError.username=''">
-          </el-input>
-        </el-form-item>
-        <el-form-item :label="$t('login.password')">
-          <el-input
-            type="password"
-            v-model="user.password"
-            :class="{ error: loginError.password }"
-            :placeholder="loginError.password"
-            @focus="loginError.password=''">
-          </el-input>
-        </el-form-item>
-      </el-form>
-      <div class="login-footer">
-        <el-checkbox v-model="remember">{{ $t('login.remember') }}</el-checkbox>
-        <el-button
-          type="success"
-          :loading="$store.state.loading"
-          :disabled="$store.state.loading"
-          @click="login">{{ $t('login.loginButton') }}
-        </el-button>
-      </div>
+    <div slot="header">
+      {{ $t('login.title') }}
+    </div>
+    <el-form class="el-form--public" size="medium" label-position="top" :model="user" @keyup.enter.native="login">
+      <el-form-item :label="$t('login.username')">
+        <el-input
+          v-model="user.username"
+          :class="{ error: loginError.username }"
+          :placeholder="loginError.username"
+          @focus="loginError.username=''">
+        </el-input>
+      </el-form-item>
+      <el-form-item :label="$t('login.password')">
+        <el-input
+          type="password"
+          v-model="user.password"
+          :class="{ error: loginError.password }"
+          :placeholder="loginError.password"
+          @focus="loginError.password=''">
+        </el-input>
+      </el-form-item>
+    </el-form>
+    <div class="login-footer">
+      <el-checkbox v-model="remember">{{ $t('login.remember') }}</el-checkbox>
+      <el-button
+        type="success"
+        class="confirm-btn"
+        :loading="$store.state.loading"
+        :disabled="$store.state.loading"
+        @click="login">{{ $t('login.loginButton') }}
+      </el-button>
+    </div>
     <div class="clear-fix"></div>
-    </el-card>
+  </el-card>
 </template>
 
 
@@ -103,8 +104,12 @@ export default {
     .el-card__header {
       font-size: 16px;
     }
+    .el-card__body {
+      padding: 10px 20px;
+    }
   }
   .login-footer {
+    padding: 40px 0 0 0;
     float: right;
     .el-checkbox {
       margin-right: 20px;
