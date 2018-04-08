@@ -62,7 +62,7 @@
       </div>
 
       <el-button
-        v-else
+        v-if="!$store.state.loading && configOptions.length === 0"
         type="text"
         icon="el-icon-arrow-left"
         @click="$router.push('/plugins')">
@@ -282,6 +282,7 @@ export default {
   }
   .advanced-btn {
     font-size: 12px !important;
+    font-weight: 500;
   }
   .el-checkbox {
     display: block;

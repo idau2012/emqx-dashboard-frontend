@@ -129,6 +129,7 @@ export default {
   .el-menu {
     width: 200px;
     min-height: 100%;
+    border-right: none !important;
   }
   .bar-title {
     position: fixed;
@@ -139,6 +140,8 @@ export default {
     line-height: 55px;
     width: 180px;
     border-bottom: 1px solid #161616;
+    color: #fff !important;
+    background-color: #242327;
     span {
       font-size: 16px;
       margin-left: 8px;
@@ -159,6 +162,7 @@ export default {
     height: 47px;
     line-height: 47px;
     border-top: 1px solid #161616;
+    color: #a7a7a7 !important;
     span {
       font-size: 16px;
       font-weight: bolder;
@@ -212,6 +216,9 @@ export default {
     .black {
       display: block;
     }
+  }
+  .el-menu-item-group__title {
+    color: #fff !important;
   }
   .is-active, .el-menu-item:hover {
     & > .dash-topic {

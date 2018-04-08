@@ -55,6 +55,7 @@
       <div class="operation-area">
         <el-button
           type="success"
+          class="confirm-btn"
           :disabled="loading || client.connected"
           @keyup.enter.native="mqttConnect"
           @click="mqttConnect">
@@ -537,6 +538,7 @@ export default {
   .connect-state {
     display: inline-block;
     margin-left: 20px;
+    font-size: 14px;
     color: #a7a7a7;
     span {
       margin-left: 4px;

@@ -44,12 +44,12 @@
       <el-table-column width="180px" :label="$t('oper.oper')">
         <template slot-scope="props">
           <!-- view -->
-          <el-button type="success" size="mini" :plain="true" @click="showApp(props.row)">
+          <el-button type="success" size="mini" plain @click="showApp(props.row)">
             {{ $t('oper.view') }}
           </el-button>
 
           <!-- edit -->
-          <el-button type="success" size="mini" :plain="true" @click="handleOperation(false, props.row)">
+          <el-button type="success" size="mini" plain @click="handleOperation(false, props.row)">
             {{ $t('oper.edit') }}
           </el-button>
 

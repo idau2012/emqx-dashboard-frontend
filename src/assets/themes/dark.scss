@@ -3,6 +3,11 @@
 .dark-themes {
   &html, body, #app {
     background-color: #161616;
+    color: #a7a7a7;
+  }
+  .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6, p {
+    color: #a7a7a7;
+    font-weight: 400;
   }
   /* Table */
   .el-table {
@@ -54,6 +59,9 @@
     .el-input__inner {
       background-color: transparent !important;
       color: #a7a7a7;
+      &:focus, &:hover {
+        border-color: #737373;
+      }
     }
     &.select-radius {
       .el-input__inner {
@@ -73,6 +81,8 @@
   .el-select-dropdown {
     border-color: #373737;
     background-color: #373737;
+    border-left: none;
+    border-right: none;
     .el-select-dropdown__item {
       color: #a7a7a7 !important;
       &.selected, &.hover {
@@ -113,6 +123,7 @@
       &.is-disabled {
         .el-input__inner, .el-textarea__inner {
           background-color: #323538 !important;
+          border-color: #323538 !important;
         }
         &:hover .el-input__inner, .el-textarea__inner {
           border-color: #323538 !important;

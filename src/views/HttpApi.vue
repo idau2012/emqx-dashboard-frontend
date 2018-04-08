@@ -28,7 +28,8 @@
             <a
               href="javascript:;"
               :class="['link', isLink(props.row) ? '' : 'link-disabled']"
-              @click="loadResponse(props.row)">{{ props.row.path }}
+              @click="loadResponse(props.row)">
+              {{ props.row.path }}
             </a>
           </template>
         </el-table-column>

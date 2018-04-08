@@ -346,8 +346,6 @@ export default {
           min-width: 250px;
           line-height: 90px;
           padding: 18px 20px 0 20px;
-          background-color: #5d5d60;
-          /*border: 1px solid red;*/
           .icon {
             float: left;
             width: 54px;
