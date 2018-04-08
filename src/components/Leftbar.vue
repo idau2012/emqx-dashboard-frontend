@@ -162,7 +162,7 @@ export default {
     height: 47px;
     line-height: 47px;
     border-top: 1px solid #161616;
-    color: #a7a7a7 !important;
+    color: #fff !important;
     span {
       font-size: 16px;
       font-weight: bolder;
