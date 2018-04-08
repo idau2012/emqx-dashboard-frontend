@@ -34,7 +34,7 @@
         :label="$t('plugins.status')"
         :filters="[{ text: $t('plugins.stopped'), value: false }, { text: $t('plugins.running'), value: true }]">
         <template slot-scope="props">
-          <span :class="[props.row.active ? 'running' : 'stopped', 'status']">
+          <span :class="[props.row.active ? 'running' : '', 'status']">
             {{ props.row.active ? $t('plugins.running'): $t('plugins.stopped')}}
           </span>
         </template>

@@ -23,7 +23,9 @@
       </el-form-item>
     </el-form>
     <div class="login-footer">
-      <el-checkbox v-model="remember">{{ $t('login.remember') }}</el-checkbox>
+      <el-checkbox v-model="remember">
+        {{ $t('login.remember') }}
+      </el-checkbox>
       <el-button
         type="success"
         class="confirm-btn"
@@ -95,7 +97,7 @@ export default {
 
 <style lang="scss">
 .login-view {
-  width: 500px;
+  width: 420px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -108,11 +110,17 @@ export default {
       padding: 10px 20px;
     }
   }
+  .error input {
+    border:2px solid #e0b4b4;
+  }
   .login-footer {
     padding: 40px 0 0 0;
-    float: right;
     .el-checkbox {
-      margin-right: 20px;
+      float: left;
+      margin-top: 6px;
+    }
+    .el-button {
+      float: right;
     }
   }
 }

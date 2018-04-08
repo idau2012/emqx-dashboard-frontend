@@ -93,6 +93,14 @@ input {
   margin: 20px 0;
   float: right;
 }
+.status:before {
+  content: "";
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+  margin-right: 3px;
+  border-radius: 4px;
+}
 /* reset themes color */
 $--color-success: $themes-color-native;
 $--color-primary: $themes-color-native;

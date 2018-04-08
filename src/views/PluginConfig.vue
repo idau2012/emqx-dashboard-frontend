@@ -56,16 +56,14 @@
         <el-button class="cache-btn" type="text" @click="cacheConfig">
           {{ $t('oper.cancel') }}
         </el-button>
-        <span v-if="advancedConfig.length > 0" class="cache-btn" @click="selecting = true">
+        <span v-if="advancedConfig.length > 0" class="cache-btn advanced-btn" @click="selecting = true">
           {{ $t('plugins.advancedConfig') }}
         </span>
       </div>
 
       <el-button
         v-else
-        class="confirm-btn"
-        plain
-        type="success"
+        type="text"
         icon="el-icon-arrow-left"
         @click="$router.push('/plugins')">
         {{ $t('plugins.back') }}
@@ -78,7 +76,6 @@
       :visible.sync="selecting"
       @keyup.enter.native="moreConfig">
       <div class="advanced-config" :gutter="20">
-          <!--<label v-if="advancedConfig.length === 0">No Advanced Config</label>-->
           <el-checkbox-group v-model="selectedAdvancedConfig">
             <el-checkbox v-for="item in advancedConfig" :label="item" :key="item.key">
               {{ item.key }}
@@ -282,6 +279,9 @@ export default {
       text-align: center;
       margin: 20px auto;
     }
+  }
+  .advanced-btn {
+    font-size: 12px !important;
   }
   .el-checkbox {
     display: block;

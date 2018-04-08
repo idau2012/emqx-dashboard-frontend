@@ -388,12 +388,4 @@ export default {
    margin-top: 20px;
   }
 }
-.status:before {
-  content: "";
-  display: inline-block;
-  height: 8px;
-  width: 8px;
-  margin-right: 3px;
-  border-radius: 4px;
-}
 </style>

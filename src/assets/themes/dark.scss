@@ -259,10 +259,13 @@
   /* Running Status */
   .status {
     &:before {
-      background-color: #a7a7a7;
+      background-color: #a7a7a7 !important;
+    }
+    &.running {
+      color: #227d51 !important;
     }
     &.running:before {
-      background-color: #227d51;
+      background-color: #227d51 !important;
     }
   }
 }
