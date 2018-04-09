@@ -2,7 +2,8 @@ import Vue from 'vue'
 import { sync } from 'vuex-router-sync'
 import VueI18n from 'vue-i18n'
 import ElementLocale from 'element-ui/lib/locale'
-import { Loading, Message, MessageBox } from 'element-ui'
+// import { Loading, Message, MessageBox } from 'element-ui'
+import ElelentUI from 'element-ui'
 
 import App from './App'
 import router from './router'
@@ -15,14 +16,15 @@ import { getLocalStorage } from './common/storage'
 
 Vue.config.productionTip = false
 Vue.use(VueI18n)
-Vue.use(Loading)
+Vue.use(ElelentUI)
+// Vue.use(Loading)
 Vue.use(Mount)
 
 Vue.prototype.$ELEMENT = { size: 'small' }
-Vue.prototype.$message = Message
-Vue.prototype.$confirm = MessageBox.confirm
-Vue.prototype.$alert = MessageBox.alert
-Vue.prototype.$prompt = MessageBox.prompt
+// Vue.prototype.$message = Message
+// Vue.prototype.$confirm = MessageBox.confirm
+// Vue.prototype.$alert = MessageBox.alert
+// Vue.prototype.$prompt = MessageBox.prompt
 
 const i18n = new VueI18n({
   locale: getLocalStorage('language') || 'en',

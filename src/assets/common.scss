@@ -49,8 +49,12 @@ a {
     float: right;
   }
   .el-breadcrumb {
+    margin-top: 2px;
     font-size: 24px;
     text-transform: lowercase;
+    .uppercase {
+      text-transform: Capitalize;
+    }
   }
 }
 
@@ -87,6 +91,13 @@ input {
 .el-pagination {
   margin: 20px 0;
   float: right;
+}
+.el-card {
+  &.thin__body {
+    .el-card__body {
+      padding: 0 20px;
+    }
+  }
 }
 
 .status:before {

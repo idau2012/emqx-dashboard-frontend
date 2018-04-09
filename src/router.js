@@ -48,6 +48,14 @@ const routes = [
         component: () => import('~/views/Listeners'),
       },
       {
+        path: '/services',
+        component: () => import('~/views/services/Services'),
+      },
+      {
+        path: '/services/:serviceName',
+        component: () => import('~/views/services/ServiceDetails'),
+      },
+      {
         path: '/websocket',
         component: () => import('~/views/WebSocket'),
       },

@@ -3,7 +3,7 @@
     <div class="page-title">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/plugins' }">{{ nodeName }}</el-breadcrumb-item>
-        <el-breadcrumb-item class="plugin-name">{{ pluginName }}</el-breadcrumb-item>
+        <el-breadcrumb-item class="breadcrumb-name">{{ pluginName }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 

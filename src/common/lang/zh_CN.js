@@ -42,6 +42,7 @@ export default {
     management: '管理',
     plugins: '插件',
     listeners: '监听器',
+    services: '服务',
     // TOOLS
     tools: '工具',
     websocket: 'Websocket',

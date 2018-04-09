@@ -234,7 +234,7 @@
         }
       }
       .el-breadcrumb__item {
-        &.plugin-name, &.plugin-name:hover {
+        &.breadcrumb-name, &.breadcrumb-name:hover {
           .el-breadcrumb__inner {
             color: #929299 !important;
           }

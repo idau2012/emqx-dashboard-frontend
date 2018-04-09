@@ -42,6 +42,7 @@ export default {
     management: 'MANAGEMENT',
     plugins: 'Plugins',
     listeners: 'Listeners',
+    services: 'Services',
     // TOOLS
     tools: 'TOOLS',
     websocket: 'Websocket',
