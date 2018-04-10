@@ -47,7 +47,8 @@
         </el-menu-item>
         <el-menu-item v-if="$env.platform === 'refactor'" index="/services">
           <i class="fa fa-server"></i>
-          {{ $t('leftbar.services') }}
+          <!--{{ $t('leftbar.services') }}-->
+          Instance
         </el-menu-item>
         <el-menu-item index="/listeners">
           <i class="fa fa-superpowers"></i>

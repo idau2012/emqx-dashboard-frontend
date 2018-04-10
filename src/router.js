@@ -78,6 +78,10 @@ const routes = [
     ],
   },
   {
+    path: '/test',
+    component: () => import('~/views/Test'),
+  },
+  {
     path: '*',
     meta: { requiresAuth: false },
     component: () => import('~/views/NotFound'),

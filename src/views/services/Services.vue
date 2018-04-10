@@ -1,7 +1,18 @@
 <template>
   <div class="services-view">
     <div class="page-title">
-      {{ $t('leftbar.services') }}
+      Instance
+      <el-button
+        class="confirm-btn"
+        round
+        plain
+        type="success"
+        icon="el-icon-plus"
+        size="medium"
+        style="float: right"
+        :disable="$store.state.loading">
+        新建
+      </el-button>
     </div>
     <tabs-head></tabs-head>
 
