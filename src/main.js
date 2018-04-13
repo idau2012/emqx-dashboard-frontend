@@ -13,18 +13,22 @@ import lang from './common/lang'
 import Mount from './common/mount'
 import { initThemes } from './common/themes'
 import { getLocalStorage } from './common/storage'
+import filter from './common/filter'
 
 Vue.config.productionTip = false
 Vue.use(VueI18n)
 Vue.use(ElelentUI)
+Vue.prototype.$ELEMENT = { size: 'small' }
 // Vue.use(Loading)
 Vue.use(Mount)
 
-Vue.prototype.$ELEMENT = { size: 'small' }
 // Vue.prototype.$message = Message
 // Vue.prototype.$confirm = MessageBox.confirm
 // Vue.prototype.$alert = MessageBox.alert
 // Vue.prototype.$prompt = MessageBox.prompt
+Object.keys(filter).forEach((name) => {
+  Vue.filter(name, filter[name])
+})
 
 const i18n = new VueI18n({
   locale: getLocalStorage('language') || 'en',

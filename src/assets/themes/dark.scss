@@ -10,7 +10,7 @@
     font-weight: 400;
   }
   /* Table */
-  .el-table {
+  .el-table:not(.el-table--public) {
     color: #a7a7a7 !important;
     border: 1px solid #292929;
     background-color: transparent !important;
@@ -122,11 +122,13 @@
       }
       &.is-disabled {
         .el-input__inner, .el-textarea__inner {
-          background-color: #323538 !important;
-          border-color: #323538 !important;
+          background-color: #242325 !important;
+          border-color: #242325 !important;
         }
-        &:hover .el-input__inner, .el-textarea__inner {
-          border-color: #323538 !important;
+        &:hover {
+          .el-input__inner, .el-textarea__inner {
+            border-color: #242325 !important;
+          }
         }
       }
       &.input-radius {

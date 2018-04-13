@@ -3244,6 +3244,10 @@ hosted-git-info@^2.1.4:
   version "2.6.0"
   resolved "http://registry.npm.taobao.org/hosted-git-info/download/hosted-git-info-2.6.0.tgz#23235b29ab230c576aab0d4f13fc046b0b038222"
 
+how-long@^1.0.3:
+  version "1.0.3"
+  resolved "http://registry.npm.taobao.org/how-long/download/how-long-1.0.3.tgz#529dcf3c86cde2d11e8e2be31989d162dc8b63dd"
+
 hpack.js@^2.1.6:
   version "2.1.6"
   resolved "http://registry.npm.taobao.org/hpack.js/download/hpack.js-2.1.6.tgz#87774c0949e513f42e84575b3c45681fade2a0b2"

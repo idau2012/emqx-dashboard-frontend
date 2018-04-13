@@ -1,6 +1,5 @@
 import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
 
-
 export default {
   ...zhLocale,
   // 全局
@@ -19,6 +18,7 @@ export default {
   // oper
   oper: {
     confirmDelete: '确认删除该项?',
+    confirmStop: '确认停止?',
     confirm: '确认',
     cancel: '取消',
     delete: '删除',
@@ -28,6 +28,9 @@ export default {
     create: '创建',
     view: '查看',
     editSuccess: '编辑成功',
+    from: '从',
+    stop: '停止',
+    start: '启动',
   },
   // leftbar
   leftbar: {
@@ -42,7 +45,7 @@ export default {
     management: '管理',
     plugins: '插件',
     listeners: '监听器',
-    services: '服务',
+    instances: '服务',
     // TOOLS
     tools: '工具',
     websocket: 'Websocket',
@@ -148,6 +151,36 @@ export default {
     noticeTitle: '注意',
     cacheNotice: '已放弃操作',
     emptyConfigOption: '默认配置项为空',
+  },
+  // instances
+  instances: {
+    instances: '服务',
+    back: '返回',
+    info: '基本信息',
+    name: '实例名称',
+    descr: '备注信息',
+    service: '所属服务',
+    configInfo: '配置信息',
+    initConfig: '初始化配置或',
+    remarkConfig: '请输入备注信息',
+    createInstance: '新建服务',
+    selectServiceType: '选择实例类型',
+    all: '全部',
+    running: '运行中',
+    stopped: '已停止',
+    auth: '认证',
+    backend: '持久化',
+    hock: '回调钩子',
+    bridge: '数据桥接',
+    other: '其他',
+    select: '选择',
+    selected: '已选择',
+    nextStep: '下一步',
+    authDesc: '提供登录认证与发布订阅 ACL 服务。',
+    backendDesc: '提供消息持久化到数据库服务。',
+    bridgeDesc: '提供将消息流桥接为消息中间件数据源服务。',
+    hockDesc: '使用触发回调机制响应操作的服务。',
+    otherDesc: '系统运行信息等其他服务。',
   },
   // listeners
   listeners: {
@@ -270,5 +303,27 @@ export default {
     language: '系统语言',
     apply: '应 用',
     success: '修改成功',
+  },
+  // importConfig
+  config: {
+    importConfig: '导入配置',
+    selectConfigFile: '选择配置文件',
+    configFileMustBeJson: '请确保备份文件为正常 JSON 格式',
+    createBy: '由',
+    create: '创建',
+    createUser: '创建用户',
+    nodeName: '节点名称',
+    host: '主机地址',
+    descr: '备注信息',
+    createAt: '创建时间',
+    more: '更多信息',
+    reSelect: '重新选择',
+    not_a_valid_config_file: '不是合法的配置文件',
+    payload_error: '无效的内容',
+    import_file_error: '导入文件出错',
+    exportConfig: '导出配置',
+    ex: '导出',
+    atLeastThree: '至少3个字符',
+    importSuccess: '导入成功',
   },
 }
