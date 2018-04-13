@@ -98,13 +98,11 @@
                     </div>
                     <el-button slot="reference" type="danger" size="mini" @click.stop="">
                       {{ $t('oper.stop') }}
-                      <i class="fa fa-stop" aria-hidden="true"></i>
                     </el-button>
                   </el-popover>
                 </div>
                 <el-button v-else type="success" size="mini" @click.stop="handleInstance">
                   $t('oper.start')
-                  <i class="el-icon-caret-right"></i>
                 </el-button>
               </div>
             </div>

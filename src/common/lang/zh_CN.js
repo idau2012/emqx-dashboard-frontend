@@ -31,6 +31,7 @@ export default {
     from: '从',
     stop: '停止',
     start: '启动',
+    notice: '注意',
   },
   // leftbar
   leftbar: {

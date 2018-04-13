@@ -31,6 +31,7 @@ export default {
     from: 'From',
     stop: 'Stop',
     start: 'Start',
+    notice: 'Notice',
   },
   // leftbar
   leftbar: {
