@@ -1,6 +1,5 @@
 import enLocale from 'element-ui/lib/locale/lang/en'
 
-
 export default {
   ...enLocale,
   // globe
@@ -157,7 +156,7 @@ export default {
   instances: {
     instances: 'Instances',
     back: 'Back',
-    info: 'info',
+    info: 'Basic Info',
     name: 'instance name',
     descr: 'description',
     service: 'service',
@@ -315,7 +314,7 @@ export default {
     importConfig: 'Import',
     selectConfigFile: 'Select a config file',
     configFileMustBeJson: 'Config file must be JSON',
-    createBy: 'create By',
+    createBy: 'Create by',
     create: '',
     createUser: 'owner',
     nodeName: 'node name',
@@ -328,8 +327,9 @@ export default {
     payload_error: 'Config option is empty',
     import_file_error: 'Import failure',
     exportConfig: 'Export',
-    ex: 'Import',
+    ex: 'Export',
     atLeastThree: 'At least three words',
     importSuccess: 'Import success',
+    notice: 'Use backup configuration files to configure initialization modification. <br/> Notice: configuration files may contain important data, such as database address and authentication information. Please keep good configuration files and use backup function reasonably.',
   },
 }

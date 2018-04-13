@@ -3,10 +3,10 @@
     <div class="page-title">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item @click.native="$router.go(-1)" class="uppercase">
-          $t('instances.instances')
+          {{ $t('instances.instances') }}
         </el-breadcrumb-item>
         <el-breadcrumb-item class="breadcrumb-name">
-          {{ instanceID ? instanceName : $t('config.create') }}
+          {{ instanceID ? instanceName : $t('oper.create') }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -18,7 +18,7 @@
           class="refresh-btn"
           @click="$router.go(-1)">
           <i class="el-icon-arrow-left"></i>
-          $t('instances.back')
+          {{ $t('instances.back') }}
         </el-button>
         <span v-else>
           {{ instanceID ? `${$t('oper.edit')} ${instanceName}` : `${$t('oper.from')} ${serviceName} ${$t('oper.create')}` }}
@@ -28,7 +28,7 @@
         <i v-else-if="instanceID && !view" class="el-icon-view edit-btn" @click="view = true"></i>
       </div>
       <el-row>
-        <el-col style="font-size: 14px;margin: 0 0 20px 0">
+        <el-col class="sub-title" style="font-size: 14px;margin: 0 0 20px 0">
           <span>{{ $t('instances.info') }}</span>
         </el-col>
       </el-row>
@@ -64,11 +64,20 @@
         </el-row>
       </el-form>
       <el-row style="margin: 20px auto">
-        <el-col style="font-size: 14px">
+        <el-col class="sub-title" style="font-size: 14px">
           <span>{{ instanceID ? $t('instances.configInfo') : $t('instances.initConfig')}}</span>
           <el-button v-if="!view" type="text" size="medium" @click="handleImport">
             {{ $t('config.importConfig') }}
           </el-button>
+          <el-popover
+            v-if="!view"
+            placement="right"
+            width="200"
+            title="Notice"
+            trigger="hover">
+            <p v-html="$t('config.notice')" style="text-align: left"></p>
+            <i slot="reference" class="fa fa-question-circle-o tips" aria-hidden="true"></i>
+          </el-popover>
         </el-col>
       </el-row>
       <el-form
@@ -289,7 +298,7 @@ export default {
       })
     },
     handleRouter() {
-      if (this.$route.path.split('/')[1] === 'instances') {
+      if (!this.$route.path.includes('/create')) {
         this.instanceID = this.$route.params.instanceID
         this.view = this.$route.query.oper !== 'edit'
         this.loadInstance()
@@ -334,6 +343,9 @@ export default {
       color: #ffffff;
     }
   }
+  .sub-title {
+    color: #fff !important;
+  }
   .el-select {
     width: 100%;
   }
@@ -344,6 +356,9 @@ export default {
     cursor: pointer;
     font-size: 16px;
     padding: 0 !important;
+  }
+  .tips {
+    cursor: pointer;
   }
 }
 </style>

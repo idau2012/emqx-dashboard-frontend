@@ -98,7 +98,7 @@
                     </div>
                     <el-button slot="reference" type="danger" size="mini" @click.stop="">
                       {{ $t('oper.stop') }}
-                      <i class="el-icon-close"></i>
+                      <i class="fa fa-stop" aria-hidden="true"></i>
                     </el-button>
                   </el-popover>
                 </div>

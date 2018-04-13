@@ -13,7 +13,7 @@
           accept="application/json"
           :before-upload="handleReader">
           <el-button slot="trigger" type="success" size="large" round>
-            $t('config.selectConfigFile')
+            {{ $t('config.selectConfigFile') }}
             <i class="el-icon-upload el-icon--right"></i>
           </el-button>
           <div slot="tip" class="el-upload__tip">
@@ -194,31 +194,30 @@ export default {
 
 
 <style lang="scss">
-  .import-config {
-    .config-dialog {
-      .el-dialog__body {
-        height: 400px;
-        overflow-y: auto;
-      }
-      .config__upload {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        height: 100%;
-      }
-      .config__tree {
-        height: 100%;
-      }
-      .el-popover {
-        .el-button {
-          font-size: 14px;
-        }
-        .re-select {
-          font-size: 14px;
-          color: #a7a7a7;
-        }
-      }
+.import-config {
+  .config-dialog {
+    .el-dialog__body {
+      height: 400px;
+      overflow-y: auto;
+    }
+    .config__upload {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100%;
+    }
+    .config__tree {
+      height: 100%;
+    }
+    .el-button--small {
+      font-size: 14px !important;
+    }
+    .re-select {
+      font-size: 14px;
+      color: #a7a7a7 !important;
+      float: right;
     }
   }
+}
 </style>
