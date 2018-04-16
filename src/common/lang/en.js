@@ -220,6 +220,7 @@ export default {
     connectFailure: 'Connect failed on',
     connectLeave: 'The client does not connect to the broker',
     subscribeSuccess: 'Subscribe success',
+    subscribeFailure: 'Subscribe failure',
     unsubscribeFailure: 'Unsubscribe Failure',
     messageSendOut: 'Message send out',
     connected: 'CONNECTED',

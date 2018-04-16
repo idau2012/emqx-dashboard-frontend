@@ -375,10 +375,12 @@ export default {
           }
         })
         NProgress.start()
-        this.client.subscribe(this.subTopic, { qos: this.subQos }, (error) => {
-          if (error) {
+        this.client.subscribe(this.subTopic, { qos: this.subQos }, (error, granted) => {
+          if (error || (
+            granted[0] && ![0, 1, 2].includes(granted[0].qos)
+          )) {
             NProgress.done()
-            this.$message.error(error.toString())
+            this.$message.error(error ? error.message : this.$t('websocket.subscribeFailure'))
           } else {
             this.subscriptions.unshift({
               topic: this.subTopic,
