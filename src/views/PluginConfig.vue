@@ -151,7 +151,7 @@ export default {
   methods: {
     loadConfig() {
       if (this.pluginName.includes('dashboard')) {
-        this.$router.push('/plugins')
+        this.$router.hook('/plugins')
         return
       }
       this.$httpGet(`/nodes/${this.nodeName}/plugin_configs/${this.pluginName}`).then((response) => {
@@ -180,7 +180,7 @@ export default {
           this.configOptions.push(item)
         }
         this.$set(this.record, item.selfKey, item.value)
-        if (item.key.includes('$')) {
+        if (!item.required && !item.value) {
           this.advancedConfig.push(item)
           this.$delete(this.record, item.selfKey)
         }
@@ -207,6 +207,9 @@ export default {
         // format record
         const record = {}
         Object.keys(this.record).forEach((key) => {
+          if (!this.record[key]) {
+            return
+          }
           record[key.replace(/__/g, '.')] = this.record[key]
         })
         this.$httpPut(`/nodes/${this.nodeName}/plugin_configs/${this.pluginName}`, record).then(() => {

@@ -21,6 +21,7 @@ class Config {
   static rulesConstructor(schema = []) {
     const rules = {}
     schema.forEach((item) => {
+      item.selfKey = item.key.replace(/\./g, '__')
       if (item.required) {
         if (!rules[item.selfKey]) {
           rules[item.selfKey] = []

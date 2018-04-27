@@ -16,6 +16,7 @@
       </el-button>
     </div>
     <tabs-head></tabs-head>
+
     <div class="instances-list">
       <el-row :gutter="20">
         <el-col
@@ -27,6 +28,7 @@
           :xl="4"
           :key="index">
           <el-card class="el-card--self" @click.native="$router.push(`/instances/${instance.id}`)">
+            <i class="el-icon-close delete-btn" @click.stop="deleteInstance(instance)"></i>
             <!-- card body -->
             <div class="instance-card-top">
               <!-- card icon -->
@@ -34,7 +36,7 @@
                 <i v-if="instance.type === 'auth'" class="fa fa-lock" aria-hidden="true"></i>
                 <i v-else-if="instance.type === 'backend'" class="fa fa-floppy-o" aria-hidden="true"></i>
                 <i v-else-if="instance.type === 'bridge'" class="fa fa-expand" aria-hidden="true"></i>
-                <i v-else-if="instance.type === 'hock'" class="fa fa-toggle-off" aria-hidden="true"></i>
+                <i v-else-if="instance.type === 'hook'" class="fa fa-toggle-off" aria-hidden="true"></i>
                 <i v-else class="fa fa-plug" aria-hidden="true"></i>
               </div>
               <!-- card description -->
@@ -110,107 +112,44 @@
         </el-col>
       </el-row>
     </div>
+
     <el-dialog
       width="600px"
       :title="$t('instances.selectServiceType')"
       :visible.sync="dialogVisible">
-      <el-tabs v-model="initInstance.serviceType">
+      <el-tabs v-model="serviceType" @tab-click="handlerServiceListFilter">
         <el-tab-pane name="auth" :label="$t('instances.auth')">
           {{ description.auth }}
-          <div class="service-card" >
-            <el-table class="el-table--public" :data="serviceList.auth">
-              <el-table-column prop="name" min-width="200px"></el-table-column>
-              <el-table-column prop="descr" min-width="160px"></el-table-column>
-              <el-table-column min-width="100px">
-                <template slot-scope="props">
-                  <el-button v-if="serviceName !== props.row.name" type="success" size="small" @click="serviceName = props.row.name">
-                    {{ $t('instances.select') }}
-                  </el-button>
-                  <el-button style="display: block" v-if="serviceName === props.row.name" type="danger" size="small" @click="serviceName = ''">
-                    {{ $t('instances.selected') }}
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
         </el-tab-pane>
         <el-tab-pane name="backend" :label="$t('instances.backend')">
           {{ description.backend }}
-          <div class="service-card" >
-            <el-table class="el-table--public" :data="serviceList.backend">
-              <el-table-column prop="name" min-width="200px"></el-table-column>
-              <el-table-column prop="descr" min-width="160px"></el-table-column>
-              <el-table-column min-width="100px">
-                <template slot-scope="props">
-                  <el-button v-if="serviceName !== props.row.name" type="success" size="small" @click="serviceName = props.row.name">
-                    {{ $t('instances.select') }}
-                  </el-button>
-                  <el-button style="display: block" v-if="serviceName === props.row.name" type="danger" size="small" @click="serviceName = ''">
-                    {{ $t('instances.selected') }}
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
         </el-tab-pane>
         <el-tab-pane name="bridge" :label="$t('instances.bridge')">
           {{ description.bridge }}
-          <div class="service-card" >
-            <el-table class="el-table--public" :data="serviceList.bridge">
-              <el-table-column prop="name" min-width="200px"></el-table-column>
-              <el-table-column prop="descr" min-width="160px"></el-table-column>
-              <el-table-column min-width="100px">
-                <template slot-scope="props">
-                  <el-button v-if="serviceName !== props.row.name" type="success" size="small" @click="serviceName = props.row.name">
-                    {{ $t('instances.select') }}
-                  </el-button>
-                  <el-button style="display: block" v-if="serviceName === props.row.name" type="danger" size="small" @click="serviceName = ''">
-                    {{ $t('instances.selected') }}
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
         </el-tab-pane>
-        <el-tab-pane name="hock" :label="$t('instances.hock')">
-          {{ description.hock }}
-          <div class="service-card" >
-            <el-table class="el-table--public" :data="serviceList.hock">
-              <el-table-column prop="name" min-width="200px"></el-table-column>
-              <el-table-column prop="descr" min-width="160px"></el-table-column>
-              <el-table-column min-width="100px">
-                <template slot-scope="props">
-                  <el-button v-if="serviceName !== props.row.name" type="success" size="small" @click="serviceName = props.row.name">
-                    {{ $t('instances.select') }}
-                  </el-button>
-                  <el-button style="display: block" v-if="serviceName === props.row.name" type="danger" size="small" @click="serviceName = ''">
-                    {{ $t('instances.selected') }}
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
+        <el-tab-pane name="hook" :label="$t('instances.hook')">
+          {{ description.hook }}
         </el-tab-pane>
         <el-tab-pane name="other" :label="$t('instances.other')">
           {{ description.other }}
-          <div class="service-card" >
-            <el-table class="el-table--public" :data="serviceList.other">
-              <el-table-column prop="name" min-width="200px"></el-table-column>
-              <el-table-column prop="descr" min-width="160px"></el-table-column>
-              <el-table-column min-width="100px">
-                <template slot-scope="props">
-                  <el-button v-if="serviceName !== props.row.name" type="success" size="small" @click="serviceName = props.row.name">
-                    {{ $t('instances.select') }}
-                  </el-button>
-                  <el-button style="display: block" v-if="serviceName === props.row.name" type="danger" size="small" @click="serviceName = ''">
-                    {{ $t('instances.selected') }}
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
         </el-tab-pane>
       </el-tabs>
+
+      <div class="service-card">
+        <el-table
+          class="el-table--public"
+          ref="serviceTable"
+          :data="displayServiceList">
+          <el-table-column prop="name" min-width="200px"></el-table-column>
+          <el-table-column prop="descr" min-width="160px"></el-table-column>
+          <el-table-column width="55">
+            <template slot-scope="props">
+              <el-radio v-model="serviceName" :label="props.row.name" @change="handleCurrentChange(props.row)"></el-radio>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+
       <div slot="footer">
         <el-button type="success" class="confirm-btn" size="small" :disabled="!serviceName" @click="$router.push(`/instances/${serviceName}/create`)">
           {{ $t('instances.nextStep') }}
@@ -234,41 +173,37 @@ export default {
       const type = this.filterType.includes(this.$route.query.type) ? this.$route.query.type : 'all'
       return this.description[type]
     },
+    state() {
+      return Object.keys(this.filterState).includes(this.$route.query.state) ? this.$route.query.state : 'All'
+    },
   },
   watch: {
     $route: 'handlerFilter',
   },
   data() {
     return {
-      state: 'All',
       displayStyle: 'card',
       popoverVisible: false,
       stopPopover: false,
       dialogVisible: false,
-      filterType: ['auth', 'backend', 'bridge', 'hock'],
+      filterType: ['auth', 'backend', 'bridge', 'hook'],
       filterState: {
         stopped: 0,
         running: 1,
       },
-      initInstance: {
-        serviceType: 'auth',
-      },
+      serviceType: 'auth',
       serviceName: '',
       currentService: {},
       services: {},
       instanceList: [],
       displayList: [],
-      serviceList: {
-        auth: [],
-        bridge: [],
-        backend: [],
-        other: [],
-      },
+      serviceList: [],
+      displayServiceList: [],
       description: {
         auth: this.$t('instances.authDesc'),
         backend: this.$t('instances.backendDesc'),
         bridge: this.$t('instances.bridgeDesc'),
-        hock: this.$t('instances.hockDesc'),
+        hook: this.$t('instances.hookDesc'),
         other: this.$t('instances.otherDesc'),
       },
     }
@@ -316,12 +251,26 @@ export default {
         }).catch(this.handleError)
       }
     },
-    loadStateFromUrl() {
-      this.state = Object.keys(this.filterState).includes(this.$route.query.state) ? this.$route.query.state : 'All'
-    },
     handleError(error) {
       this.$message.error(error.message || this.$t('error.networkError'))
     },
+    deleteInstance(instance) {
+      this.$confirm(this.$t('oper.confirmDelete'), 'Notice', {
+        confirmButtonClass: 'confirm-btn',
+        confirmButtonText: this.$t('oper.confirm'),
+        cancelButtonClass: 'cache-btn el-button--text',
+        cancelButtonText: this.$t('oper.cancel'),
+        type: 'warning',
+      }).then(() => {
+        this.$httpDelete(`/instances/${instance.id}`).then(() => {
+          this.$message.success(this.$t('oper.deleteSuccess'))
+          this.loadData()
+        }).catch((error) => {
+          this.$message.error(error.message || this.$t('error.networkError'))
+        })
+      }).catch()
+    },
+    // filter instances
     handlerFilter() {
       this.displayList = this.instanceList.filter((instance) => {
         // state
@@ -331,22 +280,32 @@ export default {
         return true
       })
     },
+    // load all services
     handleService() {
       this.dialogVisible = true
+      this.serviceName = ''
       this.$httpGet('/services').then((response) => {
-        response.data.items.forEach((item) => {
-          if (this.filterType.includes(item.type)) {
-            this.serviceList[item.type].push(item)
-          } else {
-            this.serviceList.other.push(item)
-          }
-        })
+        this.serviceList = response.data.items
+        this.handlerServiceListFilter()
       }).catch()
+    },
+    // filter services
+    handlerServiceListFilter() {
+      this.serviceName = ''
+      this.displayServiceList = this.serviceList.filter((item) => {
+        const other = !this.filterType.includes(item.type)
+        if (this.serviceType === 'other') {
+          return other
+        }
+        return this.serviceType === item.type
+      })
+    },
+    handleCurrentChange(row) {
+      this.serviceName = row.name
     },
   },
   created() {
     this.loadData()
-    this.loadStateFromUrl()
   },
 }
 </script>
@@ -373,6 +332,14 @@ export default {
         .el-card {
           transition: all .5s;
           font-size: 14px !important;
+          .delete-btn {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+            top: 10px;
+          }
           .el-card__body {
             padding-bottom: 0;
           }
@@ -454,32 +421,28 @@ export default {
         }
       }
     }
-    .service-list {
-      .service-card {
-        max-height: 320px;
-        overflow-y: auto;
-        width: 100%;
-        margin-top: 10px;
-        .el-table__header-wrapper {
-          display: none;
+    .service-card {
+      max-height: 320px;
+      overflow-y: auto;
+      width: 100%;
+      margin-top: 10px;
+      .el-table__header-wrapper {
+        display: none;
+      }
+      .el-radio__label {
+        display: none;
+      }
+      .el-button {
+        display: none;
+      }
+      .el-card {
+        border-radius: 4px;
+        border: 1px solid #e4e7ed;
+        .el-card__body {
+          padding: 0;
         }
-        .el-button {
-          display: none;
-        }
-        .el-table__row:hover {
-          .el-button {
-            display: block;
-          }
-        }
-        .el-card {
-          border-radius: 4px;
-          border: 1px solid #e4e7ed;
-          .el-card__body {
-            padding: 0;
-          }
-          h3 {
-            color: #606266;
-          }
+        h3 {
+          color: #606266;
         }
       }
     }

@@ -100,7 +100,7 @@
                 <el-option
                   v-for="(option, index) in item.default"
                   :key="index"
-                  :label="option"
+                  :label="option.toString()"
                   :value="option">
                 </el-option>
               </el-select>
@@ -145,6 +145,33 @@
       @close="importConfig = false"
       @import="handleImported">
     </import-config>
+
+
+    <!-- advancedConfig -->
+    <el-dialog
+      width="500px"
+      :title="$t('plugins.advancedConfig')"
+      :visible.sync="selecting"
+      @keyup.enter.native="moreConfig">
+      <div class="advanced-config" :gutter="20">
+        <el-checkbox-group v-model="selectedAdvancedConfig">
+          <el-checkbox v-for="item in advance" :label="item" :key="item.key">
+            {{ item.key }}
+          </el-checkbox>
+        </el-checkbox-group>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button v-if="advance.length > 0" type="text" class="cache-btn" @click="selecting = true">
+          {{ $t('plugins.advancedConfig') }}
+        </el-button>
+        <el-button type="text" class="cache-btn" @click="selecting = false">
+          {{ $t('oper.cancel') }}
+        </el-button>
+        <el-button class="confirm-btn" type="success" @click="moreConfig">
+          {{ $t('oper.confirm') }}
+        </el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -161,18 +188,20 @@ export default {
   data() {
     return {
       importConfig: false,
+      selecting: false,
       serviceName: '',
       instanceName: '',
       instanceID: '',
       service: {},
       record: {},
+      rules: {},
       view: true,
       instance: {
         name: '',
         descr: '',
         serviceName: '',
       },
-      rules: {},
+      selectedAdvancedConfig: [],
       instanceRules: {
         name: [
           { required: true, message: this.$t('alert.required') },
@@ -182,6 +211,7 @@ export default {
         ],
       },
       items: [],
+      advance: [],
     }
   },
   methods: {
@@ -193,7 +223,9 @@ export default {
       this.importConfig = false
       if (instance.conf) {
         Object.keys(instance.conf).forEach((key) => {
-          this.$set(this.record, key.replace(/\./g, '__'), instance.conf[key])
+          if (instance.conf[key]) {
+            this.$set(this.record, key.replace(/\./g, '__'), instance.conf[key])
+          }
         })
         this.$message.success(this.$t('config.importSuccess'))
       }
@@ -210,6 +242,9 @@ export default {
           const config = {}
           Object.keys(this.record).forEach((item) => {
             const key = item.replace(/__/g, '.')
+            if (!this.record[item]) {
+              return
+            }
             config[key] = this.record[item]
           })
           if (this.instanceID) {
@@ -244,7 +279,9 @@ export default {
     initInstanceForm() {
       Object.keys(this.instance.conf).forEach((item) => {
         const key = item.replace(/\./g, '__')
-        this.$set(this.record, key, this.instance.conf[item])
+        if (this.instance.conf[item]) {
+          this.$set(this.record, key, this.instance.conf[item])
+        }
       })
     },
     loadInstance() {
@@ -276,6 +313,10 @@ export default {
           this.items.push(item)
         } else {
           this.items.unshift(item)
+        }
+        if (!item.required && !item.value) {
+          this.advance.push(item)
+          // this.$delete(this.record, item.selfKey)
         }
       })
       if (this.instanceID && !resetDefault) {
@@ -310,6 +351,23 @@ export default {
         this.view = false
         this.loadData()
       }
+    },
+    moreConfig() {
+      const selectedKeyList = []
+      // remove cancel select && add selected options
+      this.selectedAdvancedConfig.forEach((config) => {
+        // add
+        if (this.record[config.selfKey] === undefined) {
+          this.$set(this.record, config.selfKey, config.value)
+        }
+        selectedKeyList.push(config.selfKey)
+        // remove
+      })
+      this.advance.forEach((item) => {
+        if (!selectedKeyList.includes(item.selfKey)) {
+          this.$delete(this.record, item.selfKey)
+        }
+      })
     },
   },
   created() {
