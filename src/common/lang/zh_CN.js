@@ -10,6 +10,7 @@ export default {
   // error
   error: {
     networkError: '网络错误',
+    initializationError: '初始化错误',
   },
   // success
   success: {
@@ -28,6 +29,8 @@ export default {
     create: '创建',
     view: '查看',
     editSuccess: '编辑成功',
+    startSuccess: '启动成功',
+    stopSuccess: '停止成功',
     from: '从',
     stop: '停止',
     start: '启动',

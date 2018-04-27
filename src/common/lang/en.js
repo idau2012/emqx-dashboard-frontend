@@ -10,6 +10,7 @@ export default {
   // error
   error: {
     networkError: 'Network Error',
+    initializationError: 'Initialization Error',
   },
   // success
   success: {
@@ -28,6 +29,8 @@ export default {
     create: 'Create',
     view: 'View',
     editSuccess: 'Edit success',
+    startSuccess: 'Start Success',
+    stopSuccess: 'Stop Success',
     from: 'From',
     stop: 'Stop',
     start: 'Start',
@@ -321,8 +324,8 @@ export default {
     createUser: 'owner',
     nodeName: 'node name',
     host: 'host',
-    descr: 'Description',
-    createAt: 'CreateAt',
+    descr: 'description',
+    createAt: 'createAt',
     more: 'more',
     reSelect: 'Select another',
     not_a_valid_config_file: 'Not a valid config file',

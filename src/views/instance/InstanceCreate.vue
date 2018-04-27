@@ -81,13 +81,12 @@
         size="medium"
         label-position="top">
         <el-row :gutter="20">
-          <el-col v-for="item in items" v-if="record[item.key] !== undefined" :span="12" :key="item.key">
-            <el-form-item :prop="(item.required || rules[item.key]) ? item.key : ''" :label="item.key">
+          <el-col v-for="item in items" v-if="record[item.selfKey] !== undefined" :span="12" :key="item.key">
+            <el-form-item :prop="(item.required || rules[item.selfKey]) ? item.selfKey : ''" :label="item.key">
               <!-- Boolean -->
               <el-select
                 v-if="item.type === 'boolean'"
-                v-model="record[item.key]"
-                placeholder=""
+                v-model="record[item.selfKey]"
                 clearable>
                 <el-option label="是" :value="true"></el-option>
                 <el-option label="否" :value="false"></el-option>
@@ -95,7 +94,7 @@
               <!-- Array -->
               <el-select
                 v-else-if="item.type === 'array'"
-                v-model="record[item.key]"
+                v-model="record[item.selfKey]"
                 placeholder=""
                 clearable>
                 <el-option
@@ -108,20 +107,20 @@
               <!-- number -->
               <el-input
                 v-else-if="item.type === 'number'"
-                v-model.number="record[item.key]"
+                v-model.number="record[item.selfKey]"
                 :placeholder="item.desc">
               </el-input>
               <!-- String (default) -->
               <el-input
                 v-else-if="item.default.length > 35"
-                v-model="record[item.key]"
+                v-model="record[item.selfKey]"
                 type="textarea"
                 :rows="2"
                 :placeholder="item.desc">
               </el-input>
               <el-input
                 v-else
-                v-model="record[item.key]"
+                v-model="record[item.selfKey]"
                 :placeholder="item.desc">
               </el-input>
             </el-form-item>
@@ -171,7 +170,7 @@ export default {
       instance: {
         name: '',
         descr: '',
-        serviceName: this.serviceName,
+        serviceName: '',
       },
       rules: {},
       instanceRules: {
@@ -194,7 +193,7 @@ export default {
       this.importConfig = false
       if (instance.conf) {
         Object.keys(instance.conf).forEach((key) => {
-          this.$set(this.record, key, instance.conf[key])
+          this.$set(this.record, key.replace(/\./g, '__'), instance.conf[key])
         })
         this.$message.success(this.$t('config.importSuccess'))
       }
@@ -208,13 +207,23 @@ export default {
           if (!isValid) {
             return
           }
+          const config = {}
+          Object.keys(this.record).forEach((item) => {
+            const key = item.replace(/__/g, '.')
+            config[key] = this.record[item]
+          })
           if (this.instanceID) {
-            this.$httpPut(`/instances/${this.instanceID}`, this.record).then(() => {
+            this.$httpPut(`/instances/${this.instanceID}`, {
+              name: this.instance.name,
+              descr: this.instance.descr,
+              config,
+            }).then(() => {
               this.$message.success(this.$t('oper.editSuccess'))
               this.$router.push('/instances')
             }).catch(this.handleError)
           } else {
-            this.$httpPost('/instances', { ...this.instance, config: this.record }).then(() => {
+            this.instance.serviceName = this.serviceName
+            this.$httpPost('/instances', { ...this.instance, config }).then(() => {
               this.$message.success(this.$t('success.success'))
               this.$router.push('/instances')
             }).catch(this.handleError)
@@ -230,11 +239,12 @@ export default {
       }).catch(this.handleError)
     },
     handleError(error) {
-      this.$message.error(error.message || this.$t('error.networkError'))
+      this.$message.error(error.message || this.$t('error.initializationError'))
     },
     initInstanceForm() {
       Object.keys(this.instance.conf).forEach((item) => {
-        this.$set(this.record, item, this.instance.conf[item])
+        const key = item.replace(/\./g, '__')
+        this.$set(this.record, key, this.instance.conf[item])
       })
     },
     loadInstance() {
@@ -249,17 +259,18 @@ export default {
       this.items = []
       this.service.schema.forEach((item) => {
         item.type = typeof item.default
+        item.selfKey = item.key.replace(/\./g, '__')
         if (item.type === 'object') {
           item.type = Array.isArray(item.default) ? 'array' : item.type
         }
         if (item.type === 'array') {
-          item.value = item.default[0]
+          item.value = item.default[0] || ''
         } else {
-          item.value = item.default
+          item.value = item.default || ''
         }
         // reset to default when you edit it
         if (!this.instanceID || resetDefault) {
-          this.$set(this.record, item.key, item.value)
+          this.$set(this.record, item.selfKey, item.value)
         }
         if (item.value.toString().length > 35) {
           this.items.push(item)
@@ -286,7 +297,6 @@ export default {
         if (error !== 'cancel') {
           this.$message.error(`${this.$t('alert.failure')}: ${error.message}`)
         }
-        console.log(error)
       })
     },
     handleRouter() {

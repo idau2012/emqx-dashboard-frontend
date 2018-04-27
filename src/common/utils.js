@@ -16,31 +16,31 @@ class Config {
     }
     return this.validateSchema(config, service)
   }
-  
+
   // Constructor from rules
   static rulesConstructor(schema = []) {
     const rules = {}
     schema.forEach((item) => {
       if (item.required) {
-        if (!rules[item.key]) {
-          rules[item.key] = []
+        if (!rules[item.selfKey]) {
+          rules[item.selfKey] = []
         }
-        rules[item.key].push({
+        rules[item.selfKey].push({
           required: true, message: `${item.key} is required`,
         })
       }
       if (typeof item.default === 'number') {
-        if (!rules[item.key]) {
-          rules[item.key] = []
+        if (!rules[item.selfKey]) {
+          rules[item.selfKey] = []
         }
-        rules[item.key].push({
+        rules[item.selfKey].push({
           validator: this.validateNumber,
         })
       }
     })
     return rules
   }
-  
+
   static validateNumber(rule, value, callback) {
     if (!value) {
       callback()
@@ -50,7 +50,7 @@ class Config {
     }
     callback()
   }
-  
+
   static validateSchema(config = {}, schema = {}) {
     const errors = []
     Object.keys(schema).forEach((key) => {
@@ -73,7 +73,7 @@ class Config {
     })
     return errors
   }
-  
+
   // parse
   static configParse(config = {}) {
     const data = {
@@ -87,7 +87,7 @@ class Config {
       throw new Error('$i18n_not_a_valid_config_file')
     }
   }
-  
+
   // export config
   static exportConfig(option = {}, payload) {
     if (!Array.isArray(payload) || payload.length === 0) {
@@ -107,7 +107,7 @@ class Config {
     content.fileName = `EMQ X-${content.type} config-${content.name}-${content.description}-${dateformat('yyyymmddHHMM')}.json`
     return JSON.stringify(content, null, 4)
   }
-  
+
   static renderDownload(fileName, content) {
     const aTag = document.createElement('a')
     aTag.download = fileName

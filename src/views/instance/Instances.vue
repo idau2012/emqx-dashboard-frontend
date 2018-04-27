@@ -92,7 +92,7 @@
                       <el-button type="text" class="cache-btn" size="mini" @click="hidePopover">
                         {{ $t('oper.cancel') }}
                       </el-button>
-                      <el-button type="success"  size="mini" @click.native="handleInstance(false)">
+                      <el-button type="success"  size="mini" @click.native="handleInstance(false, instance.id)">
                         {{ $t('oper.confirm') }}
                       </el-button>
                     </div>
@@ -101,8 +101,8 @@
                     </el-button>
                   </el-popover>
                 </div>
-                <el-button v-else type="success" size="mini" @click.stop="handleInstance">
-                  $t('oper.start')
+                <el-button v-else type="success" size="mini" @click.stop="handleInstance(true, instance.id)">
+                  {{ $t('oper.start') }}
                 </el-button>
               </div>
             </div>
@@ -299,17 +299,25 @@ export default {
         this.currentService = response.data
       }).catch()
     },
-    handleInstance(start = true) {
+    handleInstance(start = true, id) {
       if (start) {
-        this.$message.success('等待后端完成API')
+        this.$httpPut(`/instances/${id}/start`).then(() => {
+          this.$message.success(this.$t('oper.startSuccess'))
+          this.loadData()
+        }).catch(this.handleError)
       } else {
         this.hidePopover()
-        this.$message.success('等待后端完成API')
+        this.$httpPut(`/instances/${id}/stop`).then(() => {
+          this.$message.success(this.$t('oper.stopSuccess'))
+          this.loadData()
+        }).catch(this.handleError)
       }
-      this.loadData()
     },
     loadStateFromUrl() {
       this.state = Object.keys(this.filterState).includes(this.$route.query.state) ? this.$route.query.state : 'All'
+    },
+    handleError(error) {
+      this.$message.error(error.message || this.$t('error.networkError'))
     },
     handlerFilter() {
       this.displayList = this.instanceList.filter((instance) => {
