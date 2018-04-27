@@ -128,9 +128,9 @@
         </el-table-column>
         <el-table-column prop="clients/max" min-width="150" :label="$t('overview.clientsMax')">
         </el-table-column>
-        <el-table-column prop="clients/count" min-width="150" :label="$t('overview.topicsCount')">
+        <el-table-column prop="topics/count" min-width="150" :label="$t('overview.topicsCount')">
         </el-table-column>
-        <el-table-column prop="clients/max" min-width="150" :label="$t('overview.topicsMax')">
+        <el-table-column prop="topics/max" min-width="150" :label="$t('overview.topicsMax')">
         </el-table-column>
         <el-table-column prop="retained/count" min-width="150" :label="$t('overview.retainedCount')">
         </el-table-column>
@@ -234,20 +234,6 @@ export default {
         }, 1000 * 20)
       })
     },
-    // sort
-    sortByNodeName(data) {
-      let tem = []
-      let tempIndex = 0
-      data.forEach((item, index) => {
-        if (item.name === this.nodeName) {
-          tem = item
-          tempIndex = index
-        }
-      })
-      data.splice(tempIndex, 1)
-      data.unshift(tem)
-      return data
-    },
     refreshInterval() {
       this.loadData()
       clearInterval(this.timer)
@@ -257,7 +243,15 @@ export default {
       this.CURRENT_NODE(this.nodeName)
       // nodes[]
       this.$httpGet('/nodes').then((response) => {
-        this.nodes = this.sortByNodeName(response.data)
+        this.nodes = response.data.sort(($1, $2) => {
+          if ($1.name === this.nodeName) {
+            return -1
+          }
+          if ($1.uptime > $2.uptime) {
+            return -1
+          }
+          return 1
+        })
       })
       // stats[]
       this.$httpGet('/stats').then((response) => {

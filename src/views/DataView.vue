@@ -62,7 +62,7 @@
     <el-table v-show="activeTab ==='sessions'" v-loading="$store.state.loading" border :data="sessions">
       <el-table-column v-if="cluster" prop="node" min-width="160" :label="$t('clients.node')">
         <template slot-scope="props">
-          {{ props.row.node || '0'}}
+          {{ props.row.node || '--'}}
         </template>
       </el-table-column>
       <el-table-column prop="client_id" min-width="160" :label="$t('sessions.clientId')">
@@ -117,7 +117,7 @@
       </el-table-column>
       <el-table-column prop="created_at" min-width="180" :label="$t('sessions.createdAt')">
         <template slot-scope="props">
-          {{ props.row.created_at || '0'}}
+          {{ props.row.created_at || '--'}}
         </template>
       </el-table-column>
     </el-table>

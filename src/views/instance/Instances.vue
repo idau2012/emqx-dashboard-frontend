@@ -110,7 +110,10 @@
         </el-col>
       </el-row>
     </div>
-    <el-dialog width="500px" :title="$t('instances.selectServiceType')" class="service-list" :visible.sync="dialogVisible">
+    <el-dialog
+      width="600px"
+      :title="$t('instances.selectServiceType')"
+      :visible.sync="dialogVisible">
       <el-tabs v-model="initInstance.serviceType">
         <el-tab-pane name="auth" :label="$t('instances.auth')">
           {{ description.auth }}

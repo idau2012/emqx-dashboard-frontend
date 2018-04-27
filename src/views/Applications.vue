@@ -91,7 +91,7 @@
         ref="record"
         size="medium"
         label-position="top"
-        :rules="rules"
+        :rules="oper === 'view' ? {} : rules"
         :model="record">
         <el-row :gutter="20">
           <el-col :span="12">
