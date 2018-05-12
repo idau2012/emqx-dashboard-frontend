@@ -137,6 +137,9 @@
         <el-button class="cache-btn" type="text" @click="$router.go(-1)">
           {{ $t('oper.cancel') }}
         </el-button>
+        <el-button v-if="advance.length > 0" type="text" class="cache-btn" @click="selecting = true">
+          {{ $t('plugins.advancedConfig') }}
+        </el-button>
       </div>
     </el-card>
     <import-config
@@ -161,9 +164,6 @@
         </el-checkbox-group>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button v-if="advance.length > 0" type="text" class="cache-btn" @click="selecting = true">
-          {{ $t('plugins.advancedConfig') }}
-        </el-button>
         <el-button type="text" class="cache-btn" @click="selecting = false">
           {{ $t('oper.cancel') }}
         </el-button>
@@ -316,7 +316,7 @@ export default {
         }
         if (!item.required && !item.value) {
           this.advance.push(item)
-          // this.$delete(this.record, item.selfKey)
+          this.$delete(this.record, item.selfKey)
         }
       })
       if (this.instanceID && !resetDefault) {
@@ -368,6 +368,7 @@ export default {
           this.$delete(this.record, item.selfKey)
         }
       })
+      this.selecting = false
     },
   },
   created() {
@@ -419,6 +420,11 @@ export default {
   }
   .tips {
     cursor: pointer;
+  }
+  .el-checkbox {
+    display: block;
+    margin-bottom: 10px !important;
+    margin-left: 0 !important;
   }
 }
 </style>
