@@ -11,6 +11,7 @@ export default {
   error: {
     networkError: 'Network Error',
     initializationError: 'Initialization Error',
+    blank: 'Not Data',
   },
   // success
   success: {
@@ -36,6 +37,7 @@ export default {
     stop: 'Stop',
     start: 'Start',
     notice: 'Notice',
+    prompt: 'Prompt',
   },
   // leftbar
   leftbar: {
@@ -175,7 +177,7 @@ export default {
     stopped: 'Stopped',
     auth: 'Auth',
     backend: 'Backend',
-    hook: 'hook',
+    hook: 'Hook',
     bridge: 'Bridge',
     other: 'Other',
     select: 'Select',
@@ -318,6 +320,7 @@ export default {
   // importConfig
   config: {
     importConfig: 'Import',
+    importCloud: 'Associated cloud resources',
     selectConfigFile: 'Select a config file',
     configFileMustBeJson: 'Config file must be JSON',
     createBy: 'Create by',
@@ -336,6 +339,10 @@ export default {
     ex: 'Export',
     atLeastThree: 'At least three words',
     importSuccess: 'Import success',
-    notice: 'Use backup configuration files to configure initialization modification. <br/> Notice: configuration files may contain important data, such as database address and authentication information. Please keep good configuration files and use backup function reasonably.',
+    notice: 'Use backup configuration files to configure initialization modification. <br/> Notice: Configuration' +
+    ' files may contain important data, such as database address and authentication information. Please keep good configuration files and use backup function reasonably.',
+    noticeCloud: 'Associated cloud resources to configure initialization modification.<br/>Notice:' +
+    ' The function is available in the cloud vendor collaboration version. If there is no relevant resources, please' +
+    ' initialize the configuration manually.',
   },
 }

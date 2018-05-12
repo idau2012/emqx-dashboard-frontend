@@ -1,3 +1,4 @@
 var EMQ_DASHBOARD_CONFIG = {
-  platform: 'refactor',
+  components: ['refactor', 'qingcloud'],
+  platform: 'qingcloud',
 }

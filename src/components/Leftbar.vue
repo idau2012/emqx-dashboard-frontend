@@ -45,7 +45,7 @@
           <i class="fa fa-plug"></i>
           {{ $t('leftbar.plugins') }}
         </el-menu-item>
-        <el-menu-item v-if="$env.platform === 'refactor'" index="/instances">
+        <el-menu-item v-if="$env.components.includes('refactor')" index="/instances">
           <i class="fa fa-server"></i>
           {{ $t('leftbar.instances') }}
         </el-menu-item>

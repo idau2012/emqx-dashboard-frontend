@@ -58,14 +58,26 @@
       <el-row>
         <el-col class="sub-title" style="font-size: 14px;margin: 30px 0 10px 0">
           <span>{{ instanceID ? $t('instances.configInfo') : $t('instances.initConfig')}}</span>
-          <el-button v-if="!view" type="text" style="padding: 0" size="medium" @click="handleImport">
+          <el-button v-if="!view && $env.components.includes('qingcloud')" type="text" style="padding: 0" size="medium" @click="handleImportCloud">
+            {{ $t('config.importCloud') }}
+          </el-button>
+          <el-popover
+            v-if="!view && $env.components.includes('qingcloud')"
+            placement="right"
+            width="200"
+            :title="$t('oper.prompt')"
+            trigger="hover">
+            <p v-html="$t('config.noticeCloud')" style="text-align: left"></p>
+            <i slot="reference" class="fa fa-question-circle-o tips" aria-hidden="true"></i>
+          </el-popover>
+          <el-button v-if="!view" type="text" style="padding: 0;" size="medium" @click="handleImport">
             {{ $t('config.importConfig') }}
           </el-button>
           <el-popover
             v-if="!view"
             placement="right"
             width="200"
-            :title="$t('oper.notice')"
+            :title="$t('oper.prompt')"
             trigger="hover">
             <p v-html="$t('config.notice')" style="text-align: left"></p>
             <i slot="reference" class="fa fa-question-circle-o tips" aria-hidden="true"></i>
@@ -149,7 +161,12 @@
       @import="handleImported">
     </import-config>
 
-
+    <import-cloud
+      :option="{ serviceName }"
+      :visible="importCloud"
+      @close="importCloud = false"
+      @import="handleImported">
+    </import-cloud>
     <!-- advancedConfig -->
     <el-dialog
       width="500px"
@@ -177,17 +194,20 @@
 
 
 <script>
+import ImportCloud from '~/components/ImportCloud'
 import ImportConfig from '~/components/ImportConfig'
 import { Config } from '~/common/utils'
 
 export default {
   name: 'service-details',
   components: {
+    ImportCloud,
     ImportConfig,
   },
   data() {
     return {
       importConfig: false,
+      importCloud: false,
       selecting: false,
       serviceName: '',
       instanceName: '',
@@ -219,8 +239,12 @@ export default {
       this.configTree = []
       this.importConfig = true
     },
+    handleImportCloud() {
+      this.importCloud = true
+    },
     handleImported(instance = {}) {
       this.importConfig = false
+      this.importCloud = false
       if (instance.conf) {
         Object.keys(instance.conf).forEach((key) => {
           if (instance.conf[key]) {
@@ -406,6 +430,9 @@ export default {
   }
   .sub-title {
     color: #fff !important;
+    .el-button {
+      margin-left: 6px;
+    }
   }
   .el-select {
     width: 100%;

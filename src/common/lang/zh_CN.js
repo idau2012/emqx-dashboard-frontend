@@ -11,6 +11,7 @@ export default {
   error: {
     networkError: '网络错误',
     initializationError: '初始化错误',
+    blank: '暂无数据',
   },
   // success
   success: {
@@ -36,6 +37,7 @@ export default {
     stop: '停止',
     start: '启动',
     notice: '注意',
+    prompt: '说明',
   },
   // leftbar
   leftbar: {
@@ -312,7 +314,8 @@ export default {
   },
   // importConfig
   config: {
-    importConfig: '导入配置',
+    importConfig: '从文件导入',
+    importCloud: '关联云资源',
     selectConfigFile: '选择配置文件',
     configFileMustBeJson: '请确保备份文件为正常 JSON 格式',
     createBy: '由',
@@ -332,5 +335,6 @@ export default {
     atLeastThree: '至少3个字符',
     importSuccess: '导入成功',
     notice: '使用备份的配置文件进行配置初始化/修改。<br/>注意: 配置文件可能包含有重要数据如数据库地址与认证信息，请妥善保管配置文件并合理使用备份功能。',
+    noticeCloud: '关联云资源进行配置初始化/修改。<br/>注意: 该功能在云厂商合作版中可用，若无相关资源，请手动初始化配置。',
   },
 }

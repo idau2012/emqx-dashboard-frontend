@@ -17,120 +17,123 @@
     </div>
     <tabs-head></tabs-head>
 
-    <div class="instances-list">
-      <el-row :gutter="20">
-        <el-col
-          v-for="(instance, index) in displayList"
-          :class="['instance-card', instance.status === 1 ? 'running' : 'stopped']"
-          :xs="24"
-          :sm="12"
-          :lg="8"
-          :xl="4"
-          :key="index">
-          <el-card class="el-card--self" @click.native="$router.push(`/instances/${instance.id}`)">
-            <i class="el-icon-close delete-btn" @click.stop="deleteInstance(instance)"></i>
-            <!-- card body -->
-            <div class="instance-card-top">
-              <!-- card icon -->
-              <div class="instance-card-icon">
-                <i v-if="instance.type === 'auth'" class="fa fa-lock" aria-hidden="true"></i>
-                <i v-else-if="instance.type === 'backend'" class="fa fa-floppy-o" aria-hidden="true"></i>
-                <i v-else-if="instance.type === 'bridge'" class="fa fa-expand" aria-hidden="true"></i>
-                <i v-else-if="instance.type === 'hook'" class="fa fa-toggle-off" aria-hidden="true"></i>
-                <i v-else class="fa fa-plug" aria-hidden="true"></i>
-              </div>
-              <!-- card description -->
-              <div class="instance-card-name">
-                <h3>{{ instance.name }}</h3>
-              </div>
+    <el-row class="instances-list" :gutter="20">
+      <el-col
+        v-if="displayList.length > 0"
+        v-for="(instance, index) in displayList"
+        :class="['instance-card', instance.status === 1 ? 'running' : 'stopped']"
+        :xs="24"
+        :sm="12"
+        :lg="8"
+        :xl="4"
+        :key="index">
+        <el-card class="el-card--self" @click.native="$router.push(`/instances/${instance.id}`)">
+          <i class="el-icon-close delete-btn" @click.stop="deleteInstance(instance)"></i>
+          <!-- card body -->
+          <div class="instance-card-top">
+            <!-- card icon -->
+            <div class="instance-card-icon">
+              <i v-if="instance.type === 'auth'" class="fa fa-lock" aria-hidden="true"></i>
+              <i v-else-if="instance.type === 'backend'" class="fa fa-floppy-o" aria-hidden="true"></i>
+              <i v-else-if="instance.type === 'bridge'" class="fa fa-expand" aria-hidden="true"></i>
+              <i v-else-if="instance.type === 'hook'" class="fa fa-toggle-off" aria-hidden="true"></i>
+              <i v-else class="fa fa-plug" aria-hidden="true"></i>
             </div>
-            <!-- card body -->
-            <div class="instance-card-details">
-              <p>{{ instance.descr }}</p>
-              <!-- service details -->
-              <el-popover
-                placement="top"
-                width="200"
-                trigger="hover"
-                :title="instance.service"
-                :open-delay="100"
-                @show="loadService(instance.service)">
-                <div class="instances-service-details" style="min-height: 50px">
-                  <div v-if="currentService.name">
-                    <p class="desc--text">{{ currentService.descr }}</p>
-                    <el-tag type="success" size="mini">
-                      {{ currentService.instances.running }} {{ $t('instances.running') }}
-                    </el-tag>
-                    <el-tag type="danger" size="mini">
-                      {{ currentService.instances.stopped }} {{ $t('instances.stopped') }}
-                    </el-tag>
-                    <el-tag type="info" size="mini">
-                      {{ currentService.type }}
-                    </el-tag>
-                  </div>
+            <!-- card description -->
+            <div class="instance-card-name">
+              <h3>{{ instance.name }}</h3>
+            </div>
+          </div>
+          <!-- card body -->
+          <div class="instance-card-details">
+            <p>{{ instance.descr }}</p>
+            <!-- service details -->
+            <el-popover
+              placement="top"
+              width="200"
+              trigger="hover"
+              :title="instance.service"
+              :open-delay="100"
+              @show="loadService(instance.service)">
+              <div class="instances-service-details" style="min-height: 50px">
+                <div v-if="currentService.name">
+                  <p class="desc--text">{{ currentService.descr }}</p>
+                  <el-tag type="success" size="mini">
+                    {{ currentService.instances.running }} {{ $t('instances.running') }}
+                  </el-tag>
+                  <el-tag type="danger" size="mini">
+                    {{ currentService.instances.stopped }} {{ $t('instances.stopped') }}
+                  </el-tag>
+                  <el-tag type="info" size="mini">
+                    {{ currentService.type }}
+                  </el-tag>
                 </div>
-                <el-tag slot="reference" type="info" size="mini">
-                  {{ instance.service }}
-                </el-tag>
-              </el-popover>
+              </div>
+              <el-tag slot="reference" type="info" size="mini">
+                {{ instance.service }}
+              </el-tag>
+            </el-popover>
+          </div>
+          <!-- card footer -->
+          <div class="instance-card-footer clear-fix">
+            <div v-if="instance.status === 1" class="instance-instance-status">
+              <el-tag type="success" size="mini">
+                {{ instance.createAt | howLong }}
+              </el-tag>
             </div>
-            <!-- card footer -->
-            <div class="instance-card-footer clear-fix">
-              <div v-if="instance.status === 1" class="instance-instance-status">
-                <el-tag type="success" size="mini">
-                  {{ instance.createAt | howLong }}
-                </el-tag>
-              </div>
-              <div v-else class="instance-instance-status">
-                <el-tag type="info" size="mini">
-                  {{ $t('instances.stopped') }}
-                </el-tag>
-              </div>
-              <div class="instance-active-btn">
-                <div v-if="instance.status === 1" class="stop-area">
-                  <el-popover placement="left" :value="popoverVisible">
-                    <p>{{ $t('oper.confirmStop') }}</p>
-                    <div style="text-align: right; margin: 0">
-                      <el-button type="text" class="cache-btn" size="mini" @click="hidePopover">
-                        {{ $t('oper.cancel') }}
-                      </el-button>
-                      <el-button type="success"  size="mini" @click.native="handleInstance(false, instance.id)">
-                        {{ $t('oper.confirm') }}
-                      </el-button>
-                    </div>
-                    <el-button slot="reference" type="danger" size="mini" @click.stop="">
-                      {{ $t('oper.stop') }}
+            <div v-else class="instance-instance-status">
+              <el-tag type="info" size="mini">
+                {{ $t('instances.stopped') }}
+              </el-tag>
+            </div>
+            <div class="instance-active-btn">
+              <div v-if="instance.status === 1" class="stop-area">
+                <el-popover placement="left" :value="popoverVisible">
+                  <p>{{ $t('oper.confirmStop') }}</p>
+                  <div style="text-align: right; margin: 0">
+                    <el-button type="text" class="cache-btn" size="mini" @click="hidePopover">
+                      {{ $t('oper.cancel') }}
                     </el-button>
-                  </el-popover>
-                </div>
-                <el-button v-else type="success" size="mini" @click.stop="handleInstance(true, instance.id)">
-                  {{ $t('oper.start') }}
-                </el-button>
+                    <el-button type="success" size="mini" @click.native="handleInstance(false, instance.id)">
+                      {{ $t('oper.confirm') }}
+                    </el-button>
+                  </div>
+                  <el-button slot="reference" type="danger" size="mini" @click.stop="">
+                    {{ $t('oper.stop') }}
+                  </el-button>
+                </el-popover>
               </div>
+              <el-button v-else type="success" size="mini" @click.stop="handleInstance(true, instance.id)">
+                {{ $t('oper.start') }}
+              </el-button>
             </div>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
+          </div>
+        </el-card>
+      </el-col>
+      <!-- no list -->
+      <el-col v-if="displayList.length === 0" class="blank-block" :span="24">
+        <p>{{ $t('error.blank') }}</p>
+      </el-col>
+    </el-row>
 
     <el-dialog
       width="600px"
       :title="$t('instances.selectServiceType')"
       :visible.sync="dialogVisible">
       <el-tabs v-model="serviceType" @tab-click="handlerServiceListFilter">
-        <el-tab-pane name="auth" :label="$t('instances.auth')">
+        <el-tab-pane name="auth" :label="`${$t('instances.auth')} ${count.auth ? '(' + count.auth + ')' : ''}`">
           {{ description.auth }}
         </el-tab-pane>
-        <el-tab-pane name="backend" :label="$t('instances.backend')">
+        <el-tab-pane name="backend" :label="`${$t('instances.backend')} ${count.backend ? '(' + count.backend + ')' : ''}`">
           {{ description.backend }}
         </el-tab-pane>
-        <el-tab-pane name="bridge" :label="$t('instances.bridge')">
+        <el-tab-pane name="bridge" :label="`${$t('instances.bridge')} ${count.bridge ? '(' + count.bridge + ')' : ''}`">
           {{ description.bridge }}
         </el-tab-pane>
-        <el-tab-pane name="hook" :label="$t('instances.hook')">
+        <el-tab-pane name="hook" :label="`${$t('instances.hook')} ${count.hook ? '(' + count.hook + ')' : ''}`">
           {{ description.hook }}
         </el-tab-pane>
-        <el-tab-pane name="other" :label="$t('instances.other')">
+        <el-tab-pane name="other" :label="`${$t('instances.other')} ${count.other ? '(' + count.other + ')' : ''}`">
           {{ description.other }}
         </el-tab-pane>
       </el-tabs>
@@ -205,6 +208,13 @@ export default {
         bridge: this.$t('instances.bridgeDesc'),
         hook: this.$t('instances.hookDesc'),
         other: this.$t('instances.otherDesc'),
+      },
+      count: {
+        auth: 0,
+        backend: 0,
+        bridge: 0,
+        hook: 0,
+        other: 0,
       },
     }
   },
@@ -292,11 +302,20 @@ export default {
     // filter services
     handlerServiceListFilter() {
       this.serviceName = ''
+      this.count = {
+        auth: 0,
+        backend: 0,
+        bridge: 0,
+        hook: 0,
+        other: 0,
+      }
       this.displayServiceList = this.serviceList.filter((item) => {
         const other = !this.filterType.includes(item.type)
         if (this.serviceType === 'other') {
+          this.count.other += 1
           return other
         }
+        this.count[item.type] += 1
         return this.serviceType === item.type
       })
     },
@@ -445,6 +464,11 @@ export default {
           color: #606266;
         }
       }
+    }
+    .blank-block {
+      text-align: center;
+      height: 300px;
+      line-height: 300px;
     }
   }
 </style>
