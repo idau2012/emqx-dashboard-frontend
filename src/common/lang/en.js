@@ -321,6 +321,7 @@ export default {
   config: {
     importConfig: 'Import',
     importCloud: 'Associated cloud resources',
+    available: 'available resources',
     selectConfigFile: 'Select a config file',
     configFileMustBeJson: 'Config file must be JSON',
     createBy: 'Create by',

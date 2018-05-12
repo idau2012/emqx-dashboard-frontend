@@ -40,7 +40,7 @@
               <i v-else class="fa fa-plug" aria-hidden="true"></i>
             </div>
             <!-- card description -->
-            <div class="instance-card-name">
+            <div class="handleImportCloud">
               <h3>{{ instance.name }}</h3>
             </div>
           </div>
@@ -311,11 +311,14 @@ export default {
       }
       this.displayServiceList = this.serviceList.filter((item) => {
         const other = !this.filterType.includes(item.type)
-        if (this.serviceType === 'other') {
+        if (other) {
           this.count.other += 1
+        } else {
+          this.count[item.type] += 1
+        }
+        if (this.serviceType === 'other') {
           return other
         }
-        this.count[item.type] += 1
         return this.serviceType === item.type
       })
     },

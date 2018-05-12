@@ -316,6 +316,7 @@ export default {
   config: {
     importConfig: '从文件导入',
     importCloud: '关联云资源',
+    available: '可用资源',
     selectConfigFile: '选择配置文件',
     configFileMustBeJson: '请确保备份文件为正常 JSON 格式',
     createBy: '由',

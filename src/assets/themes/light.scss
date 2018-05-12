@@ -135,7 +135,7 @@
         .el-input__inner {
           //border-color: #37363d !important;
           border-radius: 40px;
-          &:hover,&:focus {
+          &:hover, &:focus {
             border-color: #c0c4cc;
           }
         }
@@ -304,5 +304,60 @@
       background-color: #42d885 !important;
       color: #fff !important;
     }
+  }
+}
+
+.tabs-card-head {
+  border-bottom: 2px solid #d6d9e2;
+  .tab-title {
+    color: #71737d;
+    &:hover {
+      color: #444;
+    }
+  }
+  .tab-title.active {
+    color: #444;
+    border-bottom: 2px solid #42d885;
+  }
+}
+
+
+.instances-view  {
+  .instances-list {
+    .el-card {
+      &:hover {
+        .el-card {
+          box-shadow: 0 15px 30px #c8c8c8 !important;
+        }
+      }
+      &.stopped {
+        .instance-card-name h3 {
+          color: #a7a7a7 !important;
+        }
+      }
+      .instance-card-top {
+        .instance-card-name {
+          h3 {
+            color: #444;
+          }
+        }
+      }
+    }
+  }
+  .service-card {
+    .el-card {
+      h3 {
+        color: #a7a7a7;
+      }
+    }
+  }
+}
+
+.service-details {
+  .sub-title {
+    color: #6e6e75;
+  }
+  .edit-btn {
+    background-color: #a7a7a7;
   }
 }

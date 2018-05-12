@@ -33,21 +33,12 @@ export default {
 
 <style lang="scss">
 .tabs-card-head {
-  border-bottom: 2px solid #37363b;
   .tab-title {
-    color: #a7a7a7;
     display: inline-block;
     line-height: 30px;
     margin: 8px 40px -2px 0;
     min-width: 50px;
     text-align: center;
-    &:hover {
-      color: #fff;
-    }
-  }
-  .tab-title.active {
-    color: #fff;
-    border-bottom: 2px solid #227d51;
   }
 }
 </style>

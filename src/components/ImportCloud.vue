@@ -4,10 +4,10 @@
     <el-dialog
       class="config-config"
       width="500px"
-      :title="`关联云资源`"
+      :title="$t('config.importCloud')"
       :visible="visible"
       @close="$emit('close')">
-      <p>{{ option.serviceName }} 服务可用资源</p>
+      <p>{{ option.serviceName }} {{ $t('config.available') }}</p>
       <el-row class="resource-list" :gutter="10">
         <el-col v-if="resources.length === 0" class="blank-block" :span="24">
           <p>{{ $t('error.blank') }}</p>
@@ -79,7 +79,7 @@ export default {
             $.info = {
               cpu,
               mem,
-              node: $.hosts ? $.host.length : 1,
+              node: $.hosts ? $.hosts.length : 1,
             }
             return $
           })

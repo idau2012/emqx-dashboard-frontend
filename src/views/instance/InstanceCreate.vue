@@ -429,7 +429,6 @@ export default {
     }
   }
   .sub-title {
-    color: #fff !important;
     .el-button {
       margin-left: 6px;
     }

@@ -303,3 +303,57 @@
     }
   }
 }
+
+.tabs-card-head {
+  border-bottom: 2px solid #37363b !important;
+  .tab-title {
+    color: #a7a7a7;
+    &:hover {
+      color: #fff !important;
+    }
+  }
+  .tab-title.active {
+    color: #fff !important;
+    border-bottom: 2px solid #227d51 !important;
+  }
+}
+
+.instances-view  {
+  .instances-list {
+    .el-card {
+      &:hover {
+        .el-card {
+          box-shadow: 0 15px 30px #242327;
+        }
+      }
+      &.stopped {
+        .instance-card-name h3 {
+          color: #a7a7a7 !important;
+        }
+      }
+      .instance-card-top {
+        .instance-card-name {
+          h3 {
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+  .service-card {
+    .el-card {
+      h3 {
+        color: #606266;
+      }
+    }
+  }
+}
+
+.service-details {
+  .sub-title {
+    color: #fff !important;
+  }
+  .edit-btn {
+    background-color: #37363d;
+  }
+}
