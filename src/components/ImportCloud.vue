@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     loadData(load = true) {
-      if (load) {
+      if (load && this.option.serviceName) {
         this.instance = {}
         this.$httpGet(
           `/services/${this.option.serviceName}/available_deps`,

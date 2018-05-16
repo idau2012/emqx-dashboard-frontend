@@ -24,6 +24,7 @@ export default {
     cancel: 'Cancel',
     confirm: 'Confirm',
     delete: 'Delete',
+    add: 'Add',
     oper: 'Oper',
     edit: 'Edit',
     save: 'Save',

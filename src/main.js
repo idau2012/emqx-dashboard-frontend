@@ -31,7 +31,7 @@ Object.keys(filter).forEach((name) => {
 })
 
 const i18n = new VueI18n({
-  locale: getLocalStorage('language') || 'en',
+  locale: getLocalStorage('language') || window.EMQ_DASHBOARD_CONFIG.language || 'en',
   messages: lang,
 })
 ElementLocale.i18n((key, value) => i18n.t(key, value))

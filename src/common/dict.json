@@ -1,0 +1,35 @@
+{
+  "bridge.kafka.hook.message.delivered.$name": {
+    "action": "on_message_delivered",
+    "filter": "#",
+    "topic": "message_delivered"
+  },
+  "bridge.kafka.hook.message.acked.$name": {
+    "action": "on_message_acked",
+    "filter": "#",
+    "topic": "message_acked"
+  },
+  "bridge.kafka.hook.message.publish.$name": {
+    "action": "on_message_publish",
+    "filter": "#",
+    "topic": "message_publish"
+  },
+  "bridge.kafka.hook.session.unsubscribed.$name": {
+    "action": "on_session_unsubscribed",
+    "filter": "#",
+    "topic": "session_unsubscribed"
+  },
+  "bridge.kafka.hook.session.subscribed.$name": {
+    "action": "on_session_subscribed",
+    "filter": "#",
+    "topic": "session_subscribed"
+  },
+  "bridge.kafka.hook.client.disconnected.$name": {
+    "action": "on_client_disconnected",
+    "topic": "client_disconnected"
+  },
+  "bridge.kafka.hook.client.connected.$name": {
+    "action": "on_client_connected",
+    "topic": "client_connected"
+  }
+}

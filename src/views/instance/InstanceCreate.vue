@@ -56,7 +56,7 @@
         </el-row>
       </el-form>
       <el-row>
-        <el-col class="sub-title" style="font-size: 14px;margin: 30px 0 10px 0">
+        <el-col class="sub-title">
           <span>{{ instanceID ? $t('instances.configInfo') : $t('instances.initConfig')}}</span>
           <el-button v-if="!view && $env.components.includes('qingcloud')" type="text" style="padding: 0" size="medium" @click="handleImportCloud">
             {{ $t('config.importCloud') }}
@@ -93,7 +93,9 @@
         size="medium"
         label-position="top">
         <el-row :gutter="20">
-          <el-col v-for="item in items" v-if="record[item.selfKey] !== undefined" :span="12" :key="item.key">
+          <div v-for="item in items" :key="item.key">
+            <!-- 不带高级配置的 -->
+            <el-col v-if="record[item.selfKey] !== undefined && !item.key.includes('.$name')" :span="12">
             <el-form-item :prop="(item.required || rules[item.selfKey]) ? item.selfKey : ''" :label="item.key">
               <!-- Boolean -->
               <el-select
@@ -136,7 +138,28 @@
                 :placeholder="item.desc">
               </el-input>
             </el-form-item>
-          </el-col>
+            </el-col>
+            <el-col v-else-if="record[item.selfKey] !== undefined && item.key.includes('.$name')">
+              <!-- 渲染高级配置的每一项 -->
+              <!-- 高级配置的标题 -->
+              <el-form-item :label="item.key.replace(/\.\$name.*/g, '')">
+                <div v-for="(option, index) in record[item.selfKey]" class="multiple-block" :key="index">
+                  <!-- 渲染每一项的多个字段 -->
+                  <el-col v-for="(key, _index) in Object.keys(option)" v-if="key !== 'action'" class="primary-item" :key="_index" :span="8">
+                    <el-form-item :label="key" :prop="item.selfKey + '.' + index + '.' + key" :rules="view ? [] : [{ required: true, message: $t('alert.required'), trigger: 'change' }]">
+                      <el-input v-model="record[item.selfKey][index][key]"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <!-- 新增或移除按钮 -->
+                  <el-col v-if="!view" :span="8">
+                    <el-form-item label=" ">
+                      <el-button :type="index === 0 ? 'success' : 'danger'" plain @click="handleMultiple(item.selfKey, index)">{{ index === 0 ? $t('oper.add') : $t('oper.delete') }}</el-button>
+                    </el-form-item>
+                  </el-col>
+                </div>
+              </el-form-item>
+            </el-col>
+          </div>
         </el-row>
       </el-form>
       <div v-if="!view" class="operation-area">
@@ -197,6 +220,7 @@
 import ImportCloud from '~/components/ImportCloud'
 import ImportConfig from '~/components/ImportConfig'
 import { Config } from '~/common/utils'
+import _dict from '~/common/dict.json'
 
 export default {
   name: 'service-details',
@@ -215,6 +239,7 @@ export default {
       service: {},
       record: {},
       rules: {},
+      dict: _dict,
       view: true,
       instance: {
         name: '',
@@ -232,9 +257,24 @@ export default {
       },
       items: [],
       advance: [],
+      multiple: [], // { key: 'xxx', value: {} }
     }
   },
   methods: {
+    handleMultiple(key, index) {
+      if (index === 0) {
+        const d = { ...this.record[key][0] }
+        this.record[key].push(d)
+      } else {
+        const item = []
+        this.record[key].forEach((it, i) => {
+          if (i !== index) {
+            item.push(it)
+          }
+        })
+        this.$set(this.record, key, item)
+      }
+    },
     handleImport() {
       this.configTree = []
       this.importConfig = true
@@ -266,10 +306,18 @@ export default {
           const config = {}
           Object.keys(this.record).forEach((item) => {
             const key = item.replace(/__/g, '.')
-            if (!this.record[item]) {
+            const value = this.record[item]
+            if (!value) {
               return
             }
-            config[key] = this.record[item]
+            // 是多项配置的需要转换
+            if (this.dict[key]) {
+              value.forEach((it, index) => {
+                config[`${key}:${index + 1}`] = JSON.stringify(it)
+              })
+            } else {
+              config[key] = this.record[item]
+            }
           })
           if (this.instanceID) {
             this.$httpPut(`/instances/${this.instanceID}`, {
@@ -300,11 +348,31 @@ export default {
     handleError(error) {
       this.$message.error(error.message || this.$t('error.initializationError'))
     },
+    // 转换一次
     initInstanceForm() {
       Object.keys(this.instance.conf).forEach((item) => {
+        const value = this.instance.conf[item]
+        // 未自增的不要
+        if (item.includes('.$name') && !item.includes('.$name:')) {
+          return
+        }
+        item = item.replace(/\.\$name.*/g, '.$name')
         const key = item.replace(/\./g, '__')
-        if (this.instance.conf[item]) {
-          this.$set(this.record, key, this.instance.conf[item])
+        // 有值才处理
+        if (value) {
+          if (this.dict[item]) {
+            let it = {}
+            try {
+              it = JSON.parse(value)
+            } catch (e) {
+              console.log(e)
+            }
+            const data = this.record[key] || []
+            this.$set(this.record, key, [...data, it])
+            console.log('set', it)
+          } else {
+            this.$set(this.record, key, this.instance.conf[item])
+          }
         }
       })
     },
@@ -316,11 +384,17 @@ export default {
         this.loadData()
       }).catch(this.handleError)
     },
+    // 从 schema 渲染
     initForm(resetDefault = false) {
       this.items = []
       this.service.schema.forEach((item) => {
         item.type = typeof item.default
         item.selfKey = item.key.replace(/\./g, '__')
+        // 将 dict 具体的值初始化
+        if (this.dict[item.key]) {
+          // 初始化 dict[0]
+          item.$value = [this.dict[item.key]]
+        }
         if (item.type === 'object') {
           item.type = Array.isArray(item.default) ? 'array' : item.type
         }
@@ -329,16 +403,21 @@ export default {
         } else {
           item.value = item.default || ''
         }
-        // reset to default when you edit it
+        // 编辑时可以恢复默认值，多项配置放入数组
         if (!this.instanceID || resetDefault) {
-          this.$set(this.record, item.selfKey, item.value)
+          if (this.dict[item.key]) {
+            this.$set(this.record, item.selfKey, [this.dict[item]])
+          } else {
+            this.$set(this.record, item.selfKey, item.value)
+          }
         }
         if (item.value.toString().length > 35) {
           this.items.push(item)
         } else {
           this.items.unshift(item)
         }
-        if (!item.required && !item.value) {
+        // dict 中存在就放到高级设置
+        if (this.dict[item.key] || (!item.required && !item.value)) {
           this.advance.push(item)
           this.$delete(this.record, item.selfKey)
         }
@@ -376,17 +455,21 @@ export default {
         this.loadData()
       }
     },
-    moreConfig() {
+    moreConfig() { // 高级配置控制
       const selectedKeyList = []
       // remove cancel select && add selected options
       this.selectedAdvancedConfig.forEach((config) => {
         // add
         if (this.record[config.selfKey] === undefined) {
-          this.$set(this.record, config.selfKey, config.value)
+          if (this.dict[config.key]) {
+            this.$set(this.record, config.selfKey, [this.dict[config.key]])
+          } else {
+            this.$set(this.record, config.selfKey, config.value)
+          }
         }
         selectedKeyList.push(config.selfKey)
-        // remove
       })
+      // remove
       this.advance.forEach((item) => {
         if (!selectedKeyList.includes(item.selfKey)) {
           this.$delete(this.record, item.selfKey)
@@ -429,6 +512,8 @@ export default {
     }
   }
   .sub-title {
+    font-size: 14px;
+    margin: 0 0 10px 0;
     .el-button {
       margin-left: 6px;
     }
@@ -451,6 +536,14 @@ export default {
     display: block;
     margin-bottom: 10px !important;
     margin-left: 0 !important;
+  }
+  .primary-item {
+  }
+  .multiple-block {
+    display: flex;
+    .el-button {
+      float: right;
+    }
   }
 }
 </style>
