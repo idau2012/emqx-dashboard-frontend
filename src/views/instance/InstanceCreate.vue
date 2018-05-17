@@ -162,6 +162,45 @@
           </div>
         </el-row>
       </el-form>
+      <div v-if="multiple.length > 0" class="sub-title">
+        <span>{{ $t('instances.multiple') }}</span>
+        <el-button type="text" style="padding: 0" size="medium" @click="handleImportMultiple">
+          {{ $t('oper.add') }}
+        </el-button>
+      </div>
+      <!-- 多项表单 -->
+      <el-row v-if="multiple.length > 0" v-for="($item, index) in multipleConfig" :key="index" :gutter="20">
+        <el-form :model="$item.default" size="medium">
+          <el-col :span="8">
+            <el-form-item>
+              <el-button class="remove-btn" style="padding: 0" size="medium" @click="handleRemoveOption(index)">
+                {{ $t('oper.remove') }}
+                <i class="el-icon-close"></i>
+              </el-button>
+              <el-select v-model="$item.value" size="medium" @change="handleSelectedOption($item)">
+                <el-option
+                  v-for="item in multiple"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <!-- 小项 -->
+          <el-col v-for="(key, index) in Object.keys($item.default)" v-if="'action' !== key" :key="index" :span="8">
+            <el-form-item :prop="key" :rules="view ? [] : [{ required: true, message: $t('alert.required'), trigger: 'change' }]" :label="key">
+              <el-input v-model="$item.default[key]"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-form>
+      </el-row>
+
+      <div v-if="multiple.length > 0 && multipleConfig.length === 0" class="blank-block">
+        <p>{{ $t('error.blank') }}
+        </p>
+      </div>
+
       <div v-if="!view" class="operation-area">
         <el-button
           class="confirm-btn"
@@ -233,6 +272,7 @@ export default {
       importConfig: false,
       importCloud: false,
       selecting: false,
+      willSelect: '',
       serviceName: '',
       instanceName: '',
       instanceID: '',
@@ -258,6 +298,7 @@ export default {
       items: [],
       advance: [],
       multiple: [], // { key: 'xxx', value: {} }
+      multipleConfig: [],
     }
   },
   methods: {
@@ -275,12 +316,29 @@ export default {
         this.$set(this.record, key, item)
       }
     },
+    handleRemoveOption(index) {
+      const item = []
+      this.multipleConfig.forEach((item, i) => {
+        if (index !== i) {
+          item.push({ ...item })
+        }
+      })
+      this.multipleConfig = item
+    },
     handleImport() {
       this.configTree = []
       this.importConfig = true
     },
     handleImportCloud() {
       this.importCloud = true
+    },
+    handleSelectedOption(item) {
+      console.log(item.value)
+      // 把当前的schema切换为选中的的
+      item.default = this.multiple.find($ => $.value === item.value).default || {}
+    },
+    handleImportMultiple() {
+      this.multipleConfig.push({ ...this.multiple[0] })
     },
     handleImported(instance = {}) {
       this.importConfig = false
@@ -310,14 +368,27 @@ export default {
             if (!value) {
               return
             }
-            // 是多项配置的需要转换
-            if (this.dict[key]) {
-              value.forEach((it, index) => {
-                config[`${key}:${index + 1}`] = JSON.stringify(it)
-              })
-            } else {
-              config[key] = this.record[item]
+            config[key] = this.record[item]
+          })
+          // 是多项配置的需要转换
+          this.multipleConfig.forEach((item) => {
+            if (!item.default) {
+              return
             }
+            const key = `${item.key}:${Math.random().toString(16).slice(2, 8)}`
+            // const value = JSON.stringify(item.default)
+            // 从 config 中来发现自增
+            // Object.keys(config).forEach((_key) => {
+            //   // 如果包含 + 1
+            //   if (_key.includes(key)) {
+            //     const index = /\.\$name:(\d+)/.exec(_key) ? Number(/\.\$name:(\d+)/.exec(_key)[1]) : 1
+            //     key = `${key}:${index}`
+            //   } else {
+            //     key = `${key}:1`
+            //   }
+            // })
+
+            config[key] = JSON.stringify(item.default)
           })
           if (this.instanceID) {
             this.$httpPut(`/instances/${this.instanceID}`, {
@@ -367,9 +438,12 @@ export default {
             } catch (e) {
               console.log(e)
             }
-            const data = this.record[key] || []
-            this.$set(this.record, key, [...data, it])
-            console.log('set', it)
+            // const data = this.record[key] || []
+            this.multipleConfig.push({
+              value: key,
+              default: it,
+            })
+            // this.$set(this.record, key, [...data, it])
           } else {
             this.$set(this.record, key, this.instance.conf[item])
           }
@@ -416,8 +490,17 @@ export default {
         } else {
           this.items.unshift(item)
         }
-        // dict 中存在就放到高级设置
-        if (this.dict[item.key] || (!item.required && !item.value)) {
+        // dict 中存在就放到自定义配置
+        if (this.dict[item.key]) {
+          this.$delete(this.record, item.selfKey)
+          // 转换为名字并push
+          this.multiple.push({
+            label: item.key.replace(/(bridge\.kafka\.hook\.)|(\.\$name)/g, ''),
+            value: item.selfKey,
+            key: item.key,
+            default: this.dict[item.key],
+          })
+        } else if (!item.required && !item.value) {
           this.advance.push(item)
           this.$delete(this.record, item.selfKey)
         }
@@ -513,7 +596,7 @@ export default {
   }
   .sub-title {
     font-size: 14px;
-    margin: 0 0 10px 0;
+    margin: 20px 0 10px 0;
     .el-button {
       margin-left: 6px;
     }
@@ -544,6 +627,23 @@ export default {
     .el-button {
       float: right;
     }
+  }
+  .remove-btn {
+    padding: 0;
+    border-color: transparent;
+    background: transparent;
+    color: #a7a7a7;
+    font-weight: normal;
+    font-size: 14px;
+    &:hover, &:focus {
+      color: #ff6d6d;
+    }
+  }
+  .blank-block {
+    text-align: center;
+    height: 60px;
+    line-height: 60px;
+    font-size: 14px;
   }
 }
 </style>

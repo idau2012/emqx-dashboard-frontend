@@ -142,6 +142,7 @@
         <el-table
           class="el-table--public"
           ref="serviceTable"
+          :empty-text="$t('instances.emptyText')"
           :data="displayServiceList">
           <el-table-column prop="name" min-width="200px"></el-table-column>
           <el-table-column prop="descr" min-width="160px"></el-table-column>

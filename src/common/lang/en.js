@@ -28,6 +28,7 @@ export default {
     oper: 'Oper',
     edit: 'Edit',
     save: 'Save',
+    remove: 'Remove',
     create: 'Create',
     view: 'View',
     editSuccess: 'Edit success',
@@ -54,6 +55,8 @@ export default {
     plugins: 'Plugins',
     listeners: 'Listeners',
     instances: 'Instances',
+    multiple: 'Multiple Config',
+    emptyText: 'Please look forward to it',
     // TOOLS
     tools: 'TOOLS',
     websocket: 'Websocket',

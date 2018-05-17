@@ -28,6 +28,7 @@ export default {
     oper: '操作',
     edit: '编辑',
     save: '保存',
+    remove: '移除',
     create: '创建',
     view: '查看',
     editSuccess: '编辑成功',
@@ -163,6 +164,7 @@ export default {
   // instances
   instances: {
     instances: '服务',
+    emptyText: '即将上线，敬请期待！',
     back: '返回',
     info: '基本信息',
     name: '实例名称',
@@ -173,6 +175,7 @@ export default {
     remarkConfig: '请输入备注信息',
     createInstance: '新建服务',
     selectServiceType: '选择实例类型',
+    multiple: '多项配置',
     all: '全部',
     running: '运行中',
     stopped: '已停止',

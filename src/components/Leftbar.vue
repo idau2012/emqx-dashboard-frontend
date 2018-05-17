@@ -41,10 +41,10 @@
 
       <!-- MANAGEMENT -->
       <el-menu-item-group :title="$t('leftbar.management')">
-        <el-menu-item index="/plugins">
-          <i class="fa fa-plug"></i>
-          {{ $t('leftbar.plugins') }}
-        </el-menu-item>
+        <!--<el-menu-item index="/plugins">-->
+          <!--<i class="fa fa-plug"></i>-->
+          <!--{{ $t('leftbar.plugins') }}-->
+        <!--</el-menu-item>-->
         <el-menu-item v-if="$env.components.includes('refactor')" index="/instances">
           <i class="fa fa-server"></i>
           {{ $t('leftbar.instances') }}
