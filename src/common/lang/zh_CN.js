@@ -15,7 +15,7 @@ export default {
   },
   // success
   success: {
-    createSuccess: 'Create Success',
+    createSuccess: '创建成功',
   },
   // oper
   oper: {
@@ -163,6 +163,8 @@ export default {
   },
   // instances
   instances: {
+    exists: '已有实例',
+    option: '配置项',
     instances: '服务',
     emptyText: '即将上线，敬请期待！',
     back: '返回',
@@ -181,7 +183,7 @@ export default {
     stopped: '已停止',
     auth: '认证',
     backend: '持久化',
-    hook: '回调钩子',
+    hook: 'WebHook',
     bridge: '数据桥接',
     other: '其他',
     select: '选择',

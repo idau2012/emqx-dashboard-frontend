@@ -66,23 +66,28 @@ export default {
     visible: 'loadData',
   },
   methods: {
-    loadData(load = true) {
-      if (load && this.option.serviceName) {
+    loadData(load = true, _serviceName) {
+      const serviceName = _serviceName || this.option.serviceName
+      if (load && serviceName) {
         this.instance = {}
         this.$httpGet(
-          `/services/${this.option.serviceName}/available_deps`,
+          `/services/${serviceName}/available_deps`,
           { platform: this.option.platform || this.$env.platform },
         ).then((response) => {
-          this.resources = response.data.map(($) => {
-            const server = $.hosts ? $.hosts[0] || {} : {}
-            const { cpu = 1, mem = 1 } = server
-            $.info = {
-              cpu,
-              mem,
-              node: $.hosts ? $.hosts.length : 1,
-            }
-            return $
-          })
+          const { enable, clusters } = response.data
+          if (enable) {
+            this.resources = clusters.map(($) => {
+              const server = $.hosts ? $.hosts[0] || {} : {}
+              const { cpu = 1, mem = 1 } = server
+              $.info = {
+                cpu,
+                mem,
+                node: $.hosts ? $.hosts.length : 1,
+              }
+              return $
+            })
+            return this.$emit('ready')
+          }
         })
       }
     },

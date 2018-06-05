@@ -78,7 +78,7 @@
           <div class="instance-card-footer clear-fix">
             <div v-if="instance.status === 1" class="instance-instance-status">
               <el-tag type="success" size="mini">
-                {{ instance.createAt | howLong }}
+                {{ instance.uptime | howLong }}
               </el-tag>
             </div>
             <div v-else class="instance-instance-status">
@@ -146,9 +146,14 @@
           :data="displayServiceList">
           <el-table-column prop="name" min-width="200px"></el-table-column>
           <el-table-column prop="descr" min-width="160px"></el-table-column>
-          <el-table-column width="55">
+          <el-table-column>
             <template slot-scope="props">
-              <el-radio v-model="serviceName" :label="props.row.name" @change="handleCurrentChange(props.row)"></el-radio>
+              <!-- v-if="props.row.instances.running === 0 && props.row.instances.stopped === 0" -->
+              <el-radio v-model="serviceName" :disabled="props.row.instances.running > 0 || props.row.instances.stopped > 0" :label="props.row.name" @change="handleCurrentChange(props.row)"></el-radio>
+              <!--<el-tag size="mini" type="primary"></el-tag>-->
+              <!--<div v-else style="cursor: not-allowed">-->
+                <!--{{ $t('instances.exists') }}-->
+              <!--</div>-->
             </template>
           </el-table-column>
         </el-table>

@@ -56,7 +56,6 @@ export default {
     listeners: 'Listeners',
     instances: 'Instances',
     multiple: 'Multiple Config',
-    emptyText: 'Please look forward to it',
     // TOOLS
     tools: 'TOOLS',
     websocket: 'Websocket',
@@ -165,9 +164,12 @@ export default {
   },
   // instances
   instances: {
+    exists: 'Already exist instance',
+    option: 'Option',
     instances: 'Instances',
     back: 'Back',
     info: 'Basic Info',
+    emptyText: 'Wait a moment',
     name: 'instance name',
     descr: 'description',
     service: 'service',
@@ -181,7 +183,7 @@ export default {
     stopped: 'Stopped',
     auth: 'Auth',
     backend: 'Backend',
-    hook: 'Hook',
+    hook: 'WebHook',
     bridge: 'Bridge',
     other: 'Other',
     select: 'Select',

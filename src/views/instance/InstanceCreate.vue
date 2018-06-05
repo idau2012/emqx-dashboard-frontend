@@ -58,11 +58,11 @@
       <el-row>
         <el-col class="sub-title">
           <span>{{ instanceID ? $t('instances.configInfo') : $t('instances.initConfig')}}</span>
-          <el-button v-if="!view && $env.components.includes('qingcloud')" type="text" style="padding: 0" size="medium" @click="handleImportCloud">
+          <el-button v-if="!view && $env.components.includes('qingcloud') && cloudAvailable" type="text" style="padding: 0" size="medium" @click="handleImportCloud">
             {{ $t('config.importCloud') }}
           </el-button>
           <el-popover
-            v-if="!view && $env.components.includes('qingcloud')"
+            v-if="!view && $env.components.includes('qingcloud') && cloudAvailable"
             placement="right"
             width="200"
             :title="$t('oper.prompt')"
@@ -96,7 +96,21 @@
           <div v-for="item in items" :key="item.key">
             <!-- 不带高级配置的 -->
             <el-col v-if="record[item.selfKey] !== undefined && !item.key.includes('.$name')" :span="12">
-            <el-form-item :prop="(item.required || rules[item.selfKey]) ? item.selfKey : ''" :label="item.key">
+            <el-form-item :prop="(item.required || rules[item.selfKey]) ? item.selfKey : ''">
+              <template slot="label">
+                {{ item.key }}
+                <el-popover
+                  v-if="item.descr"
+                  placement="right"
+                  width="200"
+                  :title="$t('oper.prompt')"
+                  trigger="hover">
+                  <p style="text-align: left">
+                    {{ item.descr }}
+                  </p>
+                  <i slot="reference" class="fa fa-question-circle-o tips" style="margin-left: 12px" aria-hidden="true"></i>
+                </el-popover>
+              </template>
               <!-- Boolean -->
               <el-select
                 v-if="item.type === 'boolean'"
@@ -162,9 +176,9 @@
           </div>
         </el-row>
       </el-form>
-      <div v-if="multiple.length > 0" class="sub-title">
+      <div v-if="moreConfigShow" class="sub-title">
         <span>{{ $t('instances.multiple') }}</span>
-        <el-button type="text" style="padding: 0" size="medium" @click="handleImportMultiple">
+        <el-button v-if="!view" type="text" style="padding: 0" size="medium" @click="handleImportMultiple">
           {{ $t('oper.add') }}
         </el-button>
       </div>
@@ -172,12 +186,23 @@
       <el-row v-if="multiple.length > 0" v-for="($item, index) in multipleConfig" :key="index" :gutter="20">
         <el-form :model="$item.default" size="medium">
           <el-col :span="8">
-            <el-form-item>
-              <el-button class="remove-btn" style="padding: 0" size="medium" @click="handleRemoveOption(index)">
+            <el-form-item :label="view ? `${$t('instances.option')} ${index + 1}` : ''">
+              <el-button v-if="!view" class="remove-btn" style="padding: 0" size="medium" @click="handleRemoveOption(index)">
                 {{ $t('oper.remove') }}
                 <i class="el-icon-close"></i>
               </el-button>
-              <el-select v-model="$item.value" size="medium" @change="handleSelectedOption($item)">
+              <el-popover
+                v-if="$item.descr"
+                placement="right"
+                width="200"
+                :title="$t('oper.prompt')"
+                trigger="hover">
+                <p style="text-align: left">
+                  {{ $item.descr || $t('error.blank')}}
+                </p>
+                <i slot="reference" class="fa fa-question-circle-o tips" aria-hidden="true"></i>
+              </el-popover>
+              <el-select v-model="$item.value" :disabled="view" size="medium" @change="handleSelectedOption($item)">
                 <el-option
                   v-for="item in multiple"
                   :key="item.value"
@@ -190,13 +215,12 @@
           <!-- 小项 -->
           <el-col v-for="(key, index) in Object.keys($item.default)" v-if="'action' !== key" :key="index" :span="8">
             <el-form-item :prop="key" :rules="view ? [] : [{ required: true, message: $t('alert.required'), trigger: 'change' }]" :label="key">
-              <el-input v-model="$item.default[key]"></el-input>
+              <el-input v-model="$item.default[key]" :disabled="view"></el-input>
             </el-form-item>
           </el-col>
         </el-form>
       </el-row>
-
-      <div v-if="multiple.length > 0 && multipleConfig.length === 0" class="blank-block">
+      <div v-if="multiple.length > 0 && multipleConfig.length === 0 && !view" class="blank-block">
         <p>{{ $t('error.blank') }}
         </p>
       </div>
@@ -224,10 +248,12 @@
     </import-config>
 
     <import-cloud
+      ref="cloud"
       :option="{ serviceName }"
       :visible="importCloud"
       @close="importCloud = false"
-      @import="handleImported">
+      @import="handleImported"
+      @ready="cloudAvailable = true">
     </import-cloud>
     <!-- advancedConfig -->
     <el-dialog
@@ -269,6 +295,7 @@ export default {
   },
   data() {
     return {
+      cloudAvailable: false,
       importConfig: false,
       importCloud: false,
       selecting: false,
@@ -286,6 +313,7 @@ export default {
         descr: '',
         serviceName: '',
       },
+      textAreaList: [],
       selectedAdvancedConfig: [],
       instanceRules: {
         name: [
@@ -318,9 +346,9 @@ export default {
     },
     handleRemoveOption(index) {
       const item = []
-      this.multipleConfig.forEach((item, i) => {
+      this.multipleConfig.forEach((_item, i) => {
         if (index !== i) {
-          item.push({ ...item })
+          item.push({ ..._item })
         }
       })
       this.multipleConfig = item
@@ -333,12 +361,15 @@ export default {
       this.importCloud = true
     },
     handleSelectedOption(item) {
-      console.log(item.value)
       // 把当前的schema切换为选中的的
-      item.default = this.multiple.find($ => $.value === item.value).default || {}
+      const model = this.multiple.find($ => $.value === item.value)
+      if (model) {
+        item.default = { ...model.default }
+        item.descr = model.descr
+      }
     },
     handleImportMultiple() {
-      this.multipleConfig.push({ ...this.multiple[0] })
+      this.multipleConfig.push(JSON.parse(JSON.stringify(this.multiple[0])))
     },
     handleImported(instance = {}) {
       this.importConfig = false
@@ -375,6 +406,7 @@ export default {
             if (!item.default) {
               return
             }
+            item.key = item.value.replace(/__/g, '.')
             const key = `${item.key}:${Math.random().toString(16).slice(2, 8)}`
             // const value = JSON.stringify(item.default)
             // 从 config 中来发现自增
@@ -402,7 +434,7 @@ export default {
           } else {
             this.instance.serviceName = this.serviceName
             this.$httpPost('/instances', { ...this.instance, config }).then(() => {
-              this.$message.success(this.$t('success.success'))
+              this.$message.success(this.$t('success.createSuccess'))
               this.$router.push('/instances')
             }).catch(this.handleError)
           }
@@ -421,12 +453,17 @@ export default {
     },
     // 转换一次
     initInstanceForm() {
+      const serviceDict = {}
+      this.service.schema.forEach((value) => {
+        serviceDict[value.key] = value
+      })
       Object.keys(this.instance.conf).forEach((item) => {
         const value = this.instance.conf[item]
         // 未自增的不要
         if (item.includes('.$name') && !item.includes('.$name:')) {
           return
         }
+        const hash = /\.\$name:(.+)/g.exec(item) ? /\.\$name:(.+)/g.exec(item)[1] : null
         item = item.replace(/\.\$name.*/g, '.$name')
         const key = item.replace(/\./g, '__')
         // 有值才处理
@@ -442,6 +479,8 @@ export default {
             this.multipleConfig.push({
               value: key,
               default: it,
+              hash,
+              descr: serviceDict[item] ? serviceDict[item].descr : '',
             })
             // this.$set(this.record, key, [...data, it])
           } else {
@@ -455,12 +494,14 @@ export default {
         this.instance = response.data
         this.instanceName = response.data.name
         this.serviceName = response.data.service
+        this.$refs.cloud.loadData(true, this.serviceName)
         this.loadData()
       }).catch(this.handleError)
     },
     // 从 schema 渲染
     initForm(resetDefault = false) {
       this.items = []
+      this.textAreaList = []
       this.service.schema.forEach((item) => {
         item.type = typeof item.default
         item.selfKey = item.key.replace(/\./g, '__')
@@ -486,9 +527,9 @@ export default {
           }
         }
         if (item.value.toString().length > 35) {
-          this.items.push(item)
+          this.textAreaList.push(item)
         } else {
-          this.items.unshift(item)
+          this.items.push(item)
         }
         // dict 中存在就放到自定义配置
         if (this.dict[item.key]) {
@@ -498,6 +539,7 @@ export default {
             label: item.key.replace(/(bridge\.kafka\.hook\.)|(\.\$name)/g, ''),
             value: item.selfKey,
             key: item.key,
+            descr: item.descr,
             default: this.dict[item.key],
           })
         } else if (!item.required && !item.value) {
@@ -505,6 +547,7 @@ export default {
           this.$delete(this.record, item.selfKey)
         }
       })
+      this.items = [...this.items, ...this.textAreaList]
       if (this.instanceID && !resetDefault) {
         this.initInstanceForm()
       }
@@ -563,6 +606,19 @@ export default {
   },
   created() {
     this.handleRouter()
+  },
+  computed: {
+    moreConfigShow() {
+      if (this.multipleConfig.length > 0) {
+        return true
+      }
+      if (this.multiple.length > 0 && !this.view) {
+        return true
+      }
+      if (this.multipleConfig.length === 0 && this.view) {
+        return false
+      }
+    },
   },
   beforeRouteLeave(to, from, next) {
     if (to.path === '') {
@@ -635,7 +691,7 @@ export default {
     color: #a7a7a7;
     font-weight: normal;
     font-size: 14px;
-    &:hover, &:focus {
+    &:hover {
       color: #ff6d6d;
     }
   }
@@ -645,5 +701,11 @@ export default {
     line-height: 60px;
     font-size: 14px;
   }
+}
+.el-popper[x-placement^="top"] .popper__arrow::after {
+  border-top-color: #373737;
+}
+.el-popper[x-placement^="top"] .popper__arrow {
+  border-top-color: #373737;
 }
 </style>
