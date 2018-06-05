@@ -184,7 +184,7 @@
       </div>
       <!-- 多项表单 -->
       <el-row v-if="multiple.length > 0" v-for="($item, index) in multipleConfig" :key="index" :gutter="20">
-        <el-form :model="$item.default" size="medium">
+        <el-form size="medium" class="row-form" :model="$item.default" :disabled="view">
           <el-col :span="8">
             <el-form-item :label="view ? `${$t('instances.option')} ${index + 1}` : ''">
               <el-button v-if="!view" class="remove-btn" style="padding: 0" size="medium" @click="handleRemoveOption(index)">
@@ -214,8 +214,25 @@
           </el-col>
           <!-- 小项 -->
           <el-col v-for="(key, index) in Object.keys($item.default)" v-if="'action' !== key" :key="index" :span="8">
-            <el-form-item :prop="key" :rules="view ? [] : [{ required: true, message: $t('alert.required'), trigger: 'change' }]" :label="key">
-              <el-input v-model="$item.default[key]" :disabled="view"></el-input>
+            <!-- 三种默模式 -->
+            <el-form-item
+              v-if="key === 'strategy'" prop="strategy" label="strategy"
+              :rules="view ? [] : [{ required: true, message: $t('alert.required'), trigger: 'change' }]">
+              <el-select v-model="$item.default.strategy">
+                <el-option value="random" label="random"></el-option>
+                <el-option value="strict_round_robin" label="strict_round_robin"></el-option>
+                <el-option value="custom" label="custom"></el-option>
+              </el-select>
+            </el-form-item>
+            <!-- 自定义 key -->
+            <el-form-item
+              v-else-if="key === 'key' && $item.default.strategy === 'custom'"
+              :rules="view ? [] : [{ required: true, message: $t('alert.required'), trigger: 'change' }]"
+              label="partition key">
+              <el-input v-model="$item.default.key"></el-input>
+            </el-form-item>
+            <el-form-item v-if="key !== 'key' && key !== 'strategy'" :prop="key" :rules="view ? [] : [{ required: true, message: $t('alert.required'), trigger: 'change' }]" :label="key">
+              <el-input v-model="$item.default[key]"></el-input>
             </el-form-item>
           </el-col>
         </el-form>
@@ -419,7 +436,9 @@ export default {
             //     key = `${key}:1`
             //   }
             // })
-
+            if (item.default.strategy !== 'custom' || !item.default.key) {
+              delete item.default.key
+            }
             config[key] = JSON.stringify(item.default)
           })
           if (this.instanceID) {
@@ -693,6 +712,8 @@ export default {
     font-size: 14px;
     &:hover {
       color: #ff6d6d;
+      background-color: transparent;
+      border-color: transparent;
     }
   }
   .blank-block {
@@ -700,6 +721,8 @@ export default {
     height: 60px;
     line-height: 60px;
     font-size: 14px;
+  }
+  .row-form {
   }
 }
 .el-popper[x-placement^="top"] .popper__arrow::after {

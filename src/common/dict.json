@@ -2,34 +2,48 @@
   "bridge.kafka.hook.message.delivered.$name": {
     "action": "on_message_delivered",
     "filter": "#",
-    "topic": "message_delivered"
+    "topic": "message_delivered",
+    "strategy": "random",
+    "key": ""
   },
   "bridge.kafka.hook.message.acked.$name": {
     "action": "on_message_acked",
     "filter": "#",
-    "topic": "message_acked"
+    "topic": "message_acked",
+    "strategy": "random",
+    "key": ""
   },
   "bridge.kafka.hook.message.publish.$name": {
     "action": "on_message_publish",
     "filter": "#",
-    "topic": "message_publish"
+    "topic": "message_publish",
+    "strategy": "random",
+    "key": ""
   },
   "bridge.kafka.hook.session.unsubscribed.$name": {
     "action": "on_session_unsubscribed",
     "filter": "#",
-    "topic": "session_unsubscribed"
+    "topic": "session_unsubscribed",
+    "strategy": "random",
+    "key": ""
   },
   "bridge.kafka.hook.session.subscribed.$name": {
     "action": "on_session_subscribed",
     "filter": "#",
-    "topic": "session_subscribed"
+    "topic": "session_subscribed",
+    "strategy": "random",
+    "key": ""
   },
   "bridge.kafka.hook.client.disconnected.$name": {
     "action": "on_client_disconnected",
-    "topic": "client_disconnected"
+    "topic": "client_disconnected",
+    "strategy": "random",
+    "key": ""
   },
   "bridge.kafka.hook.client.connected.$name": {
     "action": "on_client_connected",
-    "topic": "client_connected"
+    "topic": "client_connected",
+    "strategy": "random",
+    "key": ""
   }
 }
