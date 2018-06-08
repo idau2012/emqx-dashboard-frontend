@@ -221,18 +221,22 @@
               <el-select v-model="$item.default.strategy">
                 <el-option value="random" label="random"></el-option>
                 <el-option value="strict_round_robin" label="strict_round_robin"></el-option>
+                <el-option value="sticky_round_robin" label="sticky_round_robin"></el-option>
                 <el-option value="custom" label="custom"></el-option>
               </el-select>
             </el-form-item>
-            <!-- 自定义 key -->
-            <el-form-item
-              v-else-if="key === 'key' && $item.default.strategy === 'custom'"
-              :rules="view ? [] : [{ required: true, message: $t('alert.required'), trigger: 'change' }]"
-              label="partition key">
-              <el-input v-model="$item.default.key"></el-input>
-            </el-form-item>
             <el-form-item v-if="key !== 'key' && key !== 'strategy'" :prop="key" :rules="view ? [] : [{ required: true, message: $t('alert.required'), trigger: 'change' }]" :label="key">
               <el-input v-model="$item.default[key]"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <!-- 自定义 key -->
+            <el-form-item
+              v-if="$item.default.strategy === 'custom'"
+              :rules="view ? [] : [{ required: true, message: $t('alert.required') }]"
+              prop="key"
+              label="partition key">
+              <el-input v-model="$item.default.key"></el-input>
             </el-form-item>
           </el-col>
         </el-form>

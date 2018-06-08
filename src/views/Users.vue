@@ -268,12 +268,11 @@ export default {
             old_pwd: this.record.password,
             new_pwd: this.record.newPassword,
           }
-          this.$httpPut(`/change_pwd/${this.record.username}`, user).then(() => {
-            this.$httpPut(`/users/${this.record.username}`, this.record).then(() => {
-              // change password
+          this.$httpPut(`/users/${this.record.username}`, this.record).then(() => {
+            // change password
+            this.$httpPut(`/change_pwd/${this.record.username}`, user).then(() => {
               // re login
-              if (this.$store.state.user.username === this.record.username &&
-                this.record.password !== this.record.newPassword) {
+              if (this.$store.state.user.username === this.record.username && this.record.password !== this.record.newPassword) {
                 this.$message.error(this.$t('users.authenticate'))
                 this.USER_LOGIN({ isLogOut: true })
                 this.$router.push('/login')
@@ -282,9 +281,9 @@ export default {
                 this.dialogVisible = false
                 this.loadData()
               }
-            })
-          }).catch((error) => {
-            this.$message.error(error || this.$t('error.networkError'))
+            }).catch((error) => {
+              this.$message.error(error || this.$t('error.networkError'))
+            }).catch(() => {})
           })
         } else {
           this.$httpPut(`/users/${this.record.username}`, this.record).then(() => {
