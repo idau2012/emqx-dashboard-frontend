@@ -112,7 +112,7 @@
           <el-col :span="12"></el-col>
           <el-col :span="12">
             <el-form-item prop="status" :label="$t('app.status')">
-              <el-select v-model="record.status" class="el-select--public" :disabled="oper === 'view'">
+              <el-select v-model="record.status" class="el-select--public" popper-class="el-select--public" :disabled="oper === 'view'">
                 <el-option :label="$t('app.enable')" :value="true"></el-option>
                 <el-option :label="$t('app.disable')" :value="false"></el-option>
               </el-select>
@@ -370,6 +370,9 @@ export default {
   }
   .el-date-picker {
     max-width: 600px !important;
+  }
+  .el-form-item--medium .el-form-item__content {
+    line-height: 38px;
   }
 }
 </style>

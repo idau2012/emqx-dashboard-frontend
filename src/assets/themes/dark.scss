@@ -32,7 +32,7 @@
     .el-table__body-wrapper {
       .el-table__body {
         tr.current-row > td {
-          background-color: #393a3e;
+          background-color: transparent;
         }
         tr {
           &:hover td {
@@ -81,7 +81,7 @@
     }
   }
 
-  .el-select-dropdown {
+  .el-select-dropdown:not(.el-select--public) {
     border-color: #373737;
     background-color: #373737;
     border-left: none;
@@ -95,11 +95,11 @@
         background-color: #282828;
       }
     }
-  }
-  .el-popper[x-placement^=bottom] .popper__arrow {
-    border-bottom-color: #373737 !important;
-    &:after {
-      border-bottom-color: #373737 !important;
+    .popper__arrow {
+      border-bottom-color: #373737;
+      &:after {
+        border-bottom-color: #373737;
+      }
     }
   }
   .el-date-picker {

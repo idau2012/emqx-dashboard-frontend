@@ -112,7 +112,7 @@
             <el-form-item>
               <el-button
                 v-if="oper === 'edit'"
-                class="cache-btn"
+                class="cache-btn change-password"
                 type="text"
                 @click="changePassword = !changePassword">
                 {{ changePassword ? $t('users.dontChangePassword') : $t('users.changePassword')}}
@@ -319,6 +319,9 @@ export default {
 .users-view {
   .el-table {
     margin-top: 24px;
+  }
+  .change-password {
+    text-align: left;
   }
 }
 </style>

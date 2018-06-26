@@ -130,3 +130,11 @@
     border-bottom: 1px solid #f1f1f1 !important;
   }
 }
+
+// 修复 Chrome 下 input 问题
+
+.el-input {
+  &.el-input--medium {
+    .el-input__inner {}
+  }
+}
