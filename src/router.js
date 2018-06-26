@@ -48,18 +48,6 @@ const routes = [
         component: () => import('~/views/Listeners'),
       },
       {
-        path: '/instances',
-        component: () => import('~/views/instance/Instances'),
-      },
-      {
-        path: '/instances/:instanceID',
-        component: () => import('~/views/instance/InstanceCreate'),
-      },
-      {
-        path: '/instances/:serviceName/create',
-        component: () => import('~/views/instance/InstanceCreate'),
-      },
-      {
         path: '/websocket',
         component: () => import('~/views/WebSocket'),
       },
@@ -80,10 +68,6 @@ const routes = [
         component: () => import('~/views/Settings'),
       },
     ],
-  },
-  {
-    path: '/test',
-    component: () => import('~/views/Test'),
   },
   {
     path: '*',

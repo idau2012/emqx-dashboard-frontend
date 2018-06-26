@@ -45,10 +45,6 @@
           <i class="fa fa-plug"></i>
           {{ $t('leftbar.plugins') }}
         </el-menu-item>
-        <el-menu-item v-if="$env.platform === 'refactor'" index="/instances">
-          <i class="fa fa-server"></i>
-          {{ $t('leftbar.instances') }}
-        </el-menu-item>
         <el-menu-item index="/listeners">
           <i class="fa fa-superpowers"></i>
           {{ $t('leftbar.listeners') }}
