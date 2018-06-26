@@ -15,17 +15,29 @@ const events = {
     en: 'On Client Disconnected',
     zh: '客户端断开连接',
   },
+  on_client_subscribed: {
+    label: 'on_client_subscribed',
+    value: 'on_client_subscribed',
+    en: 'On Client Subscribed',
+    zh: 'client 订阅',
+  },
+  on_client_unsubscribed: {
+    label: 'on_client_unsubscribed',
+    value: 'on_client_unsubscribed',
+    en: 'On Client UnSubscribed',
+    zh: 'client 取消订阅',
+  },
   on_session_subscribed: {
     label: 'on_session_subscribed',
     value: 'on_session_subscribed',
-    en: 'On Subscribed',
-    zh: '客户端订阅',
+    en: 'On Session Subscribed',
+    zh: 'Session 订阅',
   },
   on_session_unsubscribed: {
     label: 'on_session_unsubscribed',
     value: 'on_session_unsubscribed',
-    en: 'On UnSubscribed',
-    zh: '客户端取消订阅',
+    en: 'On Session UnSubscribed',
+    zh: 'Session 取消订阅',
   },
   on_message_publish: {
     label: 'on_message_publish',
@@ -60,4 +72,65 @@ const events = {
   },
 }
 
-export default events
+const dict = {
+  auth: ['on_client_connected'],
+  acl: ['on_client_subscribed', 'on_client_publish', 'on_session_subscribed', 'on_message_publish'],
+  webhook: [
+    'on_client_connected',
+    'on_client_disconnected',
+    'on_client_subscribe',
+    'on_client_unsubscribe',
+    'on_session_created',
+    'on_session_subscribed',
+    'on_session_unsubscribed',
+    'on_session_terminated',
+    'on_message_publish',
+    'on_message_delivered',
+    'on_message_acked',
+  ],
+  kafka: [
+    'on_client_connected',
+    'on_client_disconnected',
+    'on_session_subscribed',
+    'on_session_unsubscribed',
+    'on_message_publish',
+    'on_message_delivered',
+    'on_message_acked',
+  ],
+}
+
+const lang = window.localStorage.getItem('language') || window.EMQ_DASHBOARD_CONFIG.lang || 'en'
+
+function getter(key = 'all') {
+  const list = dict[key]
+  if (!list) {
+    return Object.values(events).map(($) => {
+      // eslint-disable-next-line no-underscore-dangle
+      $._label = $.label
+      $.label = $[lang]
+      return $
+    })
+  }
+  const data = []
+  list.forEach((key) => {
+    if (events[key]) {
+      data.push({
+        value: events[key].value,
+        label: events[key][lang],
+        _label: events[key].label,
+      })
+    }
+  })
+  return data
+}
+
+export { getter }
+
+export default {
+  events,
+  all: getter(),
+  auth: getter('auth'),
+  webhook: getter('webhook'),
+  kafka: getter('kafka'),
+  backend: getter('backend'),
+}

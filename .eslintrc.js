@@ -43,5 +43,6 @@ module.exports = {
     'no-shadow': 0,
     'no-param-reassign': 0,
     'no-trailing-spaces': 0,
+    'import/no-duplicates': 0,
   },
 }

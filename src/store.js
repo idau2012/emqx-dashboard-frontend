@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import dictCode from '~/template'
+
 Vue.use(Vuex)
 
 function safeParse(jsonText) {
@@ -15,6 +17,7 @@ const state = {
   loading: false,
   user: safeParse(sessionStorage.getItem('user')) || safeParse(localStorage.getItem('user')) || {},
   nodeName: '',
+  dictCode,
 }
 
 // login & logout
@@ -23,6 +26,7 @@ const USER_LOGIN = 'USER_LOGIN'
 const LOADING = 'LOADING'
 // current node name in cluster
 const CURRENT_NODE = 'CURRENT_NODE'
+const SET_DICT_CODE = 'SET_DICT_CODE'
 
 const actions = {
   [USER_LOGIN]({ commit }, payload) {
@@ -45,6 +49,11 @@ const actions = {
   [LOADING]({ commit }, loading = false) {
     commit(LOADING, loading)
   },
+  [SET_DICT_CODE]({ commit }, _dictCode = {}) {
+    const data = { ...dictCode, ..._dictCode }
+    localStorage.setItem('dictCode', JSON.stringify(data))
+    commit(SET_DICT_CODE, data)
+  },
 }
 
 const mutations = {
@@ -60,6 +69,9 @@ const mutations = {
   },
   [LOADING](state, loading) {
     state.loading = loading
+  },
+  [SET_DICT_CODE](state, dictCode) {
+    Vue.set(state, 'dictCode', dictCode)
   },
 }
 
