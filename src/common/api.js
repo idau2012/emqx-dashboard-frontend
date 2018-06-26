@@ -10,6 +10,7 @@ NProgress.configure({ showSpinner: false })
 Object.assign(Axios.defaults, {
   headers: {
     'Content-Type': 'application/json',
+    'Cache-Control': 'no-cache',
   },
   baseURL: '/api/v2',
 })

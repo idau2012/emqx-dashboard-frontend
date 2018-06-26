@@ -111,22 +111,15 @@ export default {
     .el-card__header {
       font-size: 16px;
     }
-    .el-card__body {
-      /*padding: 10px 20px;*/
-    }
   }
   .error input {
     border:2px solid #e0b4b4;
   }
   .login-footer {
-    padding: 40px 0 0 0;
-    .el-checkbox {
-      float: left;
-      margin-top: 6px;
-    }
-    .el-button {
-      float: right;
-    }
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 </style>

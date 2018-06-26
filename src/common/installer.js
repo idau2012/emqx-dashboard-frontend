@@ -1,7 +1,11 @@
 import API from './api'
 
 export default (Vue) => {
-  Vue.prototype.$httpGet = (url, params) => API.get(url, { params })
+  Vue.prototype.$httpGet = (url, params = {}) => {
+    // fix IE cache application/json response
+    params.ts = Date.now()
+    return API.get(url, { params })
+  }
   Vue.prototype.$httpPost = API.post
   Vue.prototype.$httpPut = API.put
   Vue.prototype.$httpDelete = API.delete

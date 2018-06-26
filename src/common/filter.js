@@ -1,5 +1,5 @@
 import dateformat from 'dateformat'
-import _howLong from 'how-long'
+import HowLong from 'how-long'
 
 function howLong(createAt, size = 3) {
   if (!createAt) {
@@ -8,7 +8,7 @@ function howLong(createAt, size = 3) {
   if (createAt.toString().length === 10) {
     createAt *= 1000
   }
-  const time = _howLong(Date.now(), createAt, ['years', 'months', 'days', 'hours', 'minutes', 'seconds'])
+  const time = HowLong(Date.now(), createAt, ['years', 'months', 'days', 'hours', 'minutes', 'seconds'])
   const date = []
   // 0 hours 20 minutes 12 seconds or 0 days 20 h 12 minutes
   Object.keys(time).forEach((key, index) => {

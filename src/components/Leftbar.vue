@@ -124,6 +124,7 @@ export default {
   width: 200px;
   z-index: 1002;
   overflow-y: auto;
+  overflow-x: hidden;
   padding-top: 56px;
   background-color: #242327;
   .el-menu {
