@@ -31,6 +31,9 @@
     }
     .el-table__body-wrapper {
       .el-table__body {
+        tr.current-row > td {
+          background-color: #f5f5f5;
+        }
         tr {
           &:hover td {
             background-color: #f5f5f5 !important;
@@ -135,7 +138,7 @@
         .el-input__inner {
           //border-color: #37363d !important;
           border-radius: 40px;
-          &:hover,&:focus {
+          &:hover, &:focus {
             border-color: #c0c4cc;
           }
         }

@@ -220,7 +220,7 @@ export default {
     messagesAlreadySent: '发布消息列表',
     messagesReceived: '订阅消息列表',
     time: '时间',
-    connectError: '错误: 尝试向非法主题发布消息',
+    connectError: '消息发送错误',
     connectFailure: '连接失败',
     connectLeave: '尚未连接到服务器',
     subscribeSuccess: '订阅成功',

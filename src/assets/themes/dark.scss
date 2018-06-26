@@ -31,6 +31,9 @@
     }
     .el-table__body-wrapper {
       .el-table__body {
+        tr.current-row > td {
+          background-color: #393a3e;
+        }
         tr {
           &:hover td {
             background-color: #393a3e !important;

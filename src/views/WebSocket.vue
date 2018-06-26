@@ -350,6 +350,7 @@ export default {
         })
       } catch (error) {
         this.loading = false
+        NProgress.done()
         this.$message.error(error.toString())
       }
     },

@@ -220,7 +220,7 @@ export default {
     messagesAlreadySent: 'Messages already sent',
     messagesReceived: 'Messages received',
     time: 'Time',
-    connectError: 'Error: Disconnect due to the illegal topic',
+    connectError: 'Message send error',
     connectFailure: 'Connect failed on',
     connectLeave: 'The client does not connect to the broker',
     subscribeSuccess: 'Subscribe success',
