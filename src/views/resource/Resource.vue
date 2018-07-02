@@ -71,15 +71,22 @@
         <el-button type="success" @click="list.push(1)">新建资源</el-button>
       </div>
     </el-row>
+
+    <!-- 创建 card -->
+    <emq-resource-dialog :visible.sync="dialogVisible"></emq-resource-dialog>
   </div>
 </template>
 
 
 <script>
+import EmqResourceDialog from './components/EmqResourceDialog'
+
 export default {
   name: 'emq-resource',
+  components: { EmqResourceDialog },
   data() {
     return {
+      dialogVisible: true,
       typeIcon: {
         mysql: 'fa-database',
         pgsql: 'fa-database',
