@@ -4311,18 +4311,18 @@ move-concurrently@^1.0.1:
     rimraf "^2.5.4"
     run-queue "^1.0.3"
 
-mqtt-packet@^5.5.0:
-  version "5.5.0"
-  resolved "http://registry.npm.taobao.org/mqtt-packet/download/mqtt-packet-5.5.0.tgz#7f53244ba49fdecf795e950c14a9432dbf33bc63"
+mqtt-packet@^5.6.0:
+  version "5.6.0"
+  resolved "http://registry.npm.taobao.org/mqtt-packet/download/mqtt-packet-5.6.0.tgz#923fb704d0ce0bd6ac81c7e1cc09469b1512d2fd"
   dependencies:
     bl "^1.2.1"
     inherits "^2.0.3"
     process-nextick-args "^2.0.0"
     safe-buffer "^5.1.0"
 
-mqtt@^2.17.0:
-  version "2.17.0"
-  resolved "http://registry.npm.taobao.org/mqtt/download/mqtt-2.17.0.tgz#5630718a6bfe297e768ea1966df5b55fb0eb414b"
+mqtt@^2.18.2:
+  version "2.18.2"
+  resolved "http://registry.npm.taobao.org/mqtt/download/mqtt-2.18.2.tgz#5c01b412d23db399aa5230e7d4e71a3fcef3e64a"
   dependencies:
     commist "^1.0.0"
     concat-stream "^1.6.2"
@@ -4330,9 +4330,9 @@ mqtt@^2.17.0:
     help-me "^1.0.1"
     inherits "^2.0.3"
     minimist "^1.2.0"
-    mqtt-packet "^5.5.0"
+    mqtt-packet "^5.6.0"
     pump "^3.0.0"
-    readable-stream "^2.3.5"
+    readable-stream "^2.3.6"
     reinterval "^1.1.0"
     split2 "^2.1.1"
     websocket-stream "^5.1.2"
@@ -5462,6 +5462,18 @@ readable-stream@1.0:
     isarray "0.0.1"
     string_decoder "~0.10.x"
 
+readable-stream@^2.3.6:
+  version "2.3.6"
+  resolved "http://registry.npm.taobao.org/readable-stream/download/readable-stream-2.3.6.tgz#b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
+  dependencies:
+    core-util-is "~1.0.0"
+    inherits "~2.0.3"
+    isarray "~1.0.0"
+    process-nextick-args "~2.0.0"
+    safe-buffer "~5.1.1"
+    string_decoder "~1.1.1"
+    util-deprecate "~1.0.1"
+
 readdirp@^2.0.0:
   version "2.1.0"
   resolved "http://registry.npm.taobao.org/readdirp/download/readdirp-2.1.0.tgz#4ed0ad060df3073300c48440373f72d1cc642d78"
@@ -6242,7 +6254,7 @@ string-width@^2.0.0, string-width@^2.1.0, string-width@^2.1.1:
     is-fullwidth-code-point "^2.0.0"
     strip-ansi "^4.0.0"
 
-string_decoder@^1.0.0:
+string_decoder@^1.0.0, string_decoder@~1.1.1:
   version "1.1.1"
   resolved "http://registry.npm.taobao.org/string_decoder/download/string_decoder-1.1.1.tgz#9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
   dependencies:

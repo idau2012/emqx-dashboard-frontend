@@ -49,6 +49,11 @@
           <i class="fa fa-superpowers"></i>
           {{ $t('leftbar.listeners') }}
         </el-menu-item>
+        <!-- 资源 -->
+        <el-menu-item index="/resource">
+          <i class="fa fa-server"></i>
+          资源
+        </el-menu-item>
       </el-menu-item-group>
 
       <!-- TOOLS -->

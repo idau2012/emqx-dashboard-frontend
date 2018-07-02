@@ -35,6 +35,7 @@ const routes = [
         path: '/subscriptions',
         component: () => import('~/views/DataView'),
       },
+      // Manager
       {
         path: '/plugins',
         component: () => import('~/views/Plugins'),
@@ -46,6 +47,10 @@ const routes = [
       {
         path: '/listeners',
         component: () => import('~/views/Listeners'),
+      },
+      {
+        path: '/resource',
+        component: () => import('~/views/resource/Resource'),
       },
       {
         path: '/websocket',

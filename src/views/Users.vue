@@ -2,20 +2,18 @@
   <div class="users-view">
     <div class="page-title">
       {{ $t('leftbar.users') }}
-      <!--<el-button-->
-        <!--class="confirm-btn"-->
-        <!--round-->
-        <!--plain-->
-        <!--type="success"-->
-        <!--icon="el-icon-plus"-->
-        <!--size="medium"-->
-        <!--style="float: right"-->
-        <!--:disabled="$store.state.loading"-->
-        <!--@click="handleOperation(true)">-->
-        <!--{{ $t('users.newUser') }}-->
-      <!--</el-button>-->
-
-      <emq-select :field="{ key: 'auth' }" :record="{}" value="1"></emq-select>
+      <el-button
+        class="confirm-btn"
+        round
+        plain
+        type="success"
+        icon="el-icon-plus"
+        size="medium"
+        style="float: right"
+        :disabled="$store.state.loading"
+        @click="handleOperation(true)">
+        {{ $t('users.newUser') }}
+      </el-button>
     </div>
 
     <el-table v-loading="$store.state.loading" border :data="users">
