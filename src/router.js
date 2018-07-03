@@ -53,6 +53,10 @@ const routes = [
         component: () => import('~/views/resource/Resource'),
       },
       {
+        path: '/rule',
+        component: () => import('~/views/rule/Rule'),
+      },
+      {
         path: '/websocket',
         component: () => import('~/views/WebSocket'),
       },

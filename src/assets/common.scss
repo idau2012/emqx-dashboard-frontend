@@ -124,6 +124,30 @@ input {
   cursor: pointer;
 }
 
+.a-line {
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.blank {
+  max-width: 500px;
+  width: 100%;
+  margin: 100px auto;
+  text-align: center;
+  height: 200px;
+  .icon {
+    width: 80px;
+    height: 80px;
+    margin: 4px auto;
+    border: 2px solid #42d885;
+    border-radius: 50%;
+    font-size: 36px;
+    color: #42d885;
+    line-height: 80px;
+  }
+}
+
 /* reset themes color */
 $--color-success: $themes-color-native;
 $--color-primary: $themes-color-native;

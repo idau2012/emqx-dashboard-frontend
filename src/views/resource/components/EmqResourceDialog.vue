@@ -7,7 +7,7 @@
     @open="handleOpen"
     @close="handleClose">
     <!-- body -->
-    <el-form v-loading="loading" ref="record" :model="record" :rules="rules" :disabled="disabled">
+    <el-form v-loading="loading" ref="record" :model="record" :rules="disabled ? {} : rules" :disabled="disabled">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item prop="name" label="资源名称">
@@ -292,7 +292,7 @@
       </el-row>
     </el-form>
     <!-- 操作按钮 -->
-    <div class="operation-area" slot="footer">
+    <div v-if="!disabled" class="operation-area" slot="footer">
       <el-button type="text" @click="close">取消</el-button>
       <el-button type="success" @click="handleConfirm">确定</el-button>
     </div>
@@ -323,7 +323,6 @@ export default {
     }
     return {
       loading: false,
-      disabled: false,
       title: '资源',
       resourceID: '',
       record: {
@@ -385,7 +384,7 @@ export default {
       operatorDict: {
         create: '新建资源',
         edit: '编辑资源',
-        view: '详情',
+        view: '资源详情',
       },
       rules: {
         type: { required: true, message: '请选择' },
@@ -489,6 +488,11 @@ export default {
   },
   created() {
     this.recordStash = { ...this.record }
+  },
+  computed: {
+    disabled() {
+      return this.operator === 'view'
+    },
   },
 }
 </script>

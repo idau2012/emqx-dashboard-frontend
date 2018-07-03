@@ -24,7 +24,9 @@ const method = ['GET', 'POST', 'PUT', 'DELETE'].map($ => ({ value: $, label: $ }
 
 const resource = Object.entries(resourceDcit).map($ => ({ value: $[0], label: $[1] }))
 
-const dict = { ...events, method, resource, kafkaProduce, booleanType, redisDatabase }
+const qos = [0, 1, 2].map($ => ({ label: $, value: $ })).push({ label: -1, value: '全部' })
+
+const dict = { ...events, method, resource, kafkaProduce, booleanType, redisDatabase, qos }
 
 export { events, eventGetter, resGetter }
 

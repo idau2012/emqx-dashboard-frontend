@@ -1,30 +1,29 @@
-import resource from 'src/template/resource'
 <template>
-  <div class="emq-resource">
+  <div class="emq-rule">
     <div class="page-title">
-      资源
+      消息规则
+
       <el-button
         class="confirm-btn"
         round
         plain
         type="success"
-        style="float: right"
         icon="el-icon-plus"
-        size="medium"
-        :disabled="$store.state.loading"
+        style="float: right"
+        :disable="$store.state.loading"
         @click="handleCommand">
         新建
       </el-button>
     </div>
 
-    <el-row class="emq-resource-list card-list" :gutter="40">
+    <el-row class="emq-rule-list cards-lit" :gutter="40">
+      <!-- 卡片列表 -->
       <div v-if="list.length > 0">
         <el-col v-for="(item, index) in 6" :xs="12" :sm="8" :key="index">
           <el-card class="list-card el-card--self btn" shadow="hover">
             <div slot="header">
             <span>
-              <!--<i class="fa" :class="[typeIcon[item.type] || 'fa-database', item.running ? 'running' : '']"></i>-->
-              {{ item.name || '资源名称' }}
+              {{ item.name || '规则名称' }}
             </span>
               <!-- 操作 -->
               <el-dropdown placement="bottom" @command="handleCommand">
@@ -38,25 +37,36 @@ import resource from 'src/template/resource'
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
-            <div class="item btn" @click.native="handleCommand({ command: 'view', item })">
+            <div class="item btn" @click.stop @click="handleCommand({ command: 'view', item })">
               <ul>
                 <li>
-                  服务状态：
-                  <i class="status" :class="{ running: item.running }"></i>
-                  {{ item.running ? '运行中' : '已停止' }}
+                  使用资源：
+                  <i class="status btn a-line" :class="{ running: item.running }" @click.stop @click.self="handleResourceView(item)">
+                    {{ item.server || 'qingcloud-kafka-3core' }}
+                    <span v-show="!item.running" @click.self="handleResourceView(item)">(已停止)</span>
+                  </i>
                 </li>
                 <li>
-                  服务类型：
-                  <!--<i class="fa" :class="typeIcon[item.type] || 'fa-database'"></i>-->
-                  {{ typeName[item.type] || '其他' }}
+                  适用主题：
+                  <el-tag size="mini" type="info">{{ item.topic || '#' }}</el-tag>
                 </li>
                 <li>
-                  服务器地址：
-                  {{ item.server || '127.0.0.1:3306' }}
+                  适用 QoS：
+                  <el-tag size="mini" type="info">
+                    {{ item.qos || '任意 QoS' }}
+                  </el-tag>
+                </li>
+                <li>
+                  启用时间：
+                  {{ item.createAt || '3h 44 min' }}
+                </li>
+                <li>
+                  命中条数：
+                  {{ item.number || '20' }}
                 </li>
                 <li>
                   备注：
-                  {{ item.description || 'EMQ 资源测试服务器' }}
+                  {{ item.description || '全部消息' }}
                 </li>
               </ul>
             </div>
@@ -66,29 +76,29 @@ import resource from 'src/template/resource'
       <!-- 空 -->
       <div v-else class="blank">
         <div class="icon">
-          <i class="fa fa-server"></i>
+          <i class="fa fa-random"></i>
         </div>
-        <h2>资源</h2>
-        <p>配置 EMQ 连接到消息存储、设备认证等外部资源。</p>
-        <el-button type="success" @click="list.push(1)">新建资源</el-button>
+        <h2>消息规则</h2>
+        <p>配置 EMQ 设备消息持久化规则。</p>
+        <el-button type="success" @click="list.push(1)">新建规则</el-button>
       </div>
     </el-row>
 
-    <!-- 创建 card -->
     <emq-resource-dialog ref="resourceDialog" :visible.sync="dialogVisible"></emq-resource-dialog>
   </div>
 </template>
 
 
 <script>
-import EmqResourceDialog from './components/EmqResourceDialog'
+import EmqResourceDialog from '~/views/resource/components/EmqResourceDialog'
 
 export default {
-  name: 'emq-resource',
+  name: 'emq-rule',
   components: { EmqResourceDialog },
   data() {
     return {
       dialogVisible: false,
+      list: [],
       typeIcon: {
         mysql: 'fa-database',
         pgsql: 'fa-database',
@@ -107,68 +117,63 @@ export default {
         redis: 'Redis',
         rabbitmq: 'RabbitMQ',
       },
-      list: [],
     }
   },
   methods: {
     loadData() {},
     handleCommand({ command = 'create', item = {} }) {
-      const dialog = this.$refs.resourceDialog
+      console.log('command', command)
       if (command === 'create') {
-        dialog.operator = 'create'
-        this.dialogVisible = true
+        this.$router.push('/rule/0?oper=create')
       } else if (command === 'edit') {
-        const { id, type } = item
-        dialog.record.type = type
-        dialog.resourceID = id
-        dialog.type = type
-        dialog.operator = 'edit'
-        this.dialogVisible = true
+        this.$router.push(`/rule/${item.id}?oper=edit`)
       } else if (command === 'start') {
-        this.$httpPut(`/resource/${item.id}/${item.running ? 'load' : 'unload'}`).then(() => {
+        this.$httpPut(`/rule/${item.id}/${item.running ? 'load' : 'unload'}`).then(() => {
           this.$message.success('操作成功')
           this.loadData()
         })
       } else if (command === 'delete') {
-        this.$confirm('此操作将停用并删除该资源, 是否继续?', '提示', {
+        this.$confirm('此操作将停用并删除该规则, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
         }).then(() => {
-          this.$httpDelete(`/resource/${item.id}`).then(() => {
+          this.$httpDelete(`/rule/${item.id}`).then(() => {
             this.$message.success('删除成功')
             this.loadData()
           })
         }).catch(() => {})
       } else if (command === 'view') {
-        dialog.resourceID = item.id
-        dialog.operator = 'view'
-        this.dialogVisible = true
+        this.$router.push(`/rule/${item.id}`)
       }
     },
+    handleResourceView(item) {
+      const dialog = this.$refs.resourceDialog
+      dialog.resourceID = item.id
+      dialog.operator = 'view'
+      this.dialogVisible = true
+      console.log(item)
+
+    },
+  },
+  created() {
+    this.loadData()
   },
 }
 </script>
 
 
 <style lang="scss">
-.emq-resource {
-  .emq-resource-list {
+.emq-rule {
+  .emq-rule-list {
     margin-top: 24px;
     .el-card.list-card {
       margin-bottom: 40px;
       .el-card__header {
         border-bottom: none;
-        .fa {
-          margin-right: 4px;
-          color: #42d885;
-          &.running {
-            color: #42d885;
-          }
-        }
-        .el-dropdown {
-          float: right;
-        }
+      }
+      .el-dropdown {
+        float: right;
       }
       .el-card__body {
         padding-top: 0;
