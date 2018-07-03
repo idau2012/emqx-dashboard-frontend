@@ -1,3 +1,4 @@
+import resource from 'src/template/resource'
 <template>
   <div class="emq-resource">
     <div class="page-title">
@@ -10,7 +11,8 @@
         style="float: right"
         icon="el-icon-plus"
         size="medium"
-        :disabled="$store.state.loading">
+        :disabled="$store.state.loading"
+        @click="handleCommand">
         新建
       </el-button>
     </div>
@@ -36,7 +38,7 @@
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
-            <div class="item btn">
+            <div class="item btn" @click.stop @click.native="handleCommand({ command: 'view', item })">
               <ul>
                 <li>
                   服务状态：
@@ -73,7 +75,7 @@
     </el-row>
 
     <!-- 创建 card -->
-    <emq-resource-dialog :visible.sync="dialogVisible"></emq-resource-dialog>
+    <emq-resource-dialog ref="resourceDialog" :visible.sync="dialogVisible"></emq-resource-dialog>
   </div>
 </template>
 
@@ -86,7 +88,7 @@ export default {
   components: { EmqResourceDialog },
   data() {
     return {
-      dialogVisible: true,
+      dialogVisible: false,
       typeIcon: {
         mysql: 'fa-database',
         pgsql: 'fa-database',
@@ -110,9 +112,18 @@ export default {
   },
   methods: {
     loadData() {},
-    handleCommand({ command, item }) {
-      if (command === 'edit') {
-        console.log(command, item)
+    handleCommand({ command = 'create', item = {} }) {
+      const dialog = this.$refs.resourceDialog
+      if (command === 'create') {
+        dialog.operator = 'create'
+        this.dialogVisible = true
+      } else if (command === 'edit') {
+        const { id, type } = item
+        dialog.record.type = type
+        dialog.resourceID = id
+        dialog.type = type
+        dialog.operator = 'edit'
+        this.dialogVisible = true
       } else if (command === 'start') {
         this.$httpPut(`/resource/${item.id}/${item.running ? 'load' : 'unload'}`).then(() => {
           this.$message.success('操作成功')
@@ -129,10 +140,12 @@ export default {
             this.loadData()
           })
         }).catch(() => {})
+      } else if (command === 'view') {
+        dialog.resourceID = item.id
+        this.dialogVisible = true
       }
     },
   },
-  created() {},
 }
 </script>
 

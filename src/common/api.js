@@ -1,6 +1,7 @@
 import Axios from 'axios'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import { Message } from 'element-ui'
 
 import router from '../router'
 import store from '../store'
@@ -37,14 +38,17 @@ function handleError(error) {
   NProgress.done()
   store.dispatch('LOADING', false)
   const status = error.response && error.response.status
+  if (error.response && error.response.data.message) {
+    error.message = error.response.data.message
+  }
   if (status === 401) {
     store.dispatch('USER_LOGIN', { isLogOut: true })
     router.push({ path: '/login', query: { to: router.fullPath } })
+  } else if (status === 404) {
+    error.message = '操作失败，资源不存在'
   }
-  if (error.response && error.response.data.message) {
-    error.message = error.response.data.message
-  } else {
-    error.message = ''
+  if (status !== 401) {
+    Message.error(error.message)
   }
   return Promise.reject(error.message)
 }

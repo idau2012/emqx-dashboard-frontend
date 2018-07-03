@@ -1,8 +1,7 @@
 <template>
   <el-dialog
     class="emq-resource-dialog"
-    width="700px"
-    top="5vh"
+    width="500px"
     :title="operatorDict[operator]"
     :visible="visible"
     @open="handleOpen"
@@ -262,7 +261,7 @@
           <!-- 数据库密码 -->
           <el-col :span="12">
             <el-form-item prop="redis.password" label="数据库密码">
-              <el-input v-model="record.redis.password" placeholder="password:root"></el-input>
+              <el-input v-model="record.redis.password"></el-input>
             </el-form-item>
           </el-col>
 
@@ -380,6 +379,7 @@ export default {
         },
         // rabbitmq: {},
       },
+      recordStash: {},
       // 当前操作 view edit create
       operator: 'create',
       operatorDict: {
@@ -398,7 +398,7 @@ export default {
         pgsql: {
           server: required,
           user: required,
-          password: required,
+          // password: required,
           database: required,
           pool: numberRange,
           keyfile: required,
@@ -407,7 +407,7 @@ export default {
         mysql: {
           server: required,
           user: required,
-          password: required,
+          // password: required,
           database: required,
           pool: numberRange,
           keyfile: required,
@@ -436,18 +436,42 @@ export default {
       this.$emit('update:visible', false)
     },
     handleOpen() {
+      // 恢复
+      if (this.operator === 'create') {
+        this.record = { ...this.recordStash }
+      }
       this.loadData()
     },
     handleClose() {
       this.$emit('close')
+      this.close()
     },
     handleConfirm() {
       this.$refs.record.validate((valid) => {
         if (!valid) {
           return
         }
-        this.$emit('confirm', this.record)
-        this.close()
+        const record = { ...this.record[this.record.type] }
+        record.name = this.record.name
+        record.description = this.record.description
+        record.type = this.record.type
+        // update
+        if (this.operator === 'edit') {
+          this.$httpPut(`/resource/${this.resourceID}`, record).then(() => {
+            this.$message.success('编辑成功')
+            this.$emit('confirm', record)
+            this.handleClose()
+          })
+        } else if (this.operator === 'create') {
+          this.$httpPost(`/resource/${this.resourceID}`, record).then(() => {
+            this.$message.success('新建成功')
+            this.$emit('confirm', record)
+            this.handleClose()
+          })
+        } else {
+          this.$emit('confirm', record)
+          this.handleClose()
+        }
       })
     },
     // 加载信息
@@ -462,6 +486,9 @@ export default {
         })
       }
     },
+  },
+  created() {
+    this.recordStash = { ...this.record }
   },
 }
 </script>
