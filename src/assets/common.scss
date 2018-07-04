@@ -101,7 +101,13 @@ input {
   &.thin__body {
     .el-card__body {
       padding: 0 20px;
+      font-size: 16px;
     }
+  }
+
+  .card-header--like {
+    padding: 18px 0;
+    color: #6e6e75;
   }
 }
 
@@ -147,6 +153,8 @@ input {
     line-height: 80px;
   }
 }
+
+
 
 /* reset themes color */
 $--color-success: $themes-color-native;

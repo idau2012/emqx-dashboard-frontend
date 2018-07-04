@@ -48,21 +48,20 @@
                 </li>
                 <li>
                   适用主题：
-                  <el-tag size="mini" type="info">{{ item.topic || '#' }}</el-tag>
+                  {{ item.topic || '#' }}
                 </li>
                 <li>
                   适用 QoS：
-                  <el-tag size="mini" type="info">
-                    {{ item.qos || '任意 QoS' }}
-                  </el-tag>
+                  {{ item.qos || '任意 QoS' }}
                 </li>
                 <li>
                   启用时间：
                   {{ item.createAt || '3h 44 min' }}
                 </li>
                 <li>
-                  命中条数：
-                  {{ item.number || '20' }}
+                  状态：
+                  <el-tag type="success" plain size="mini" style="margin-right: 8px;">{{ item.number || '20' }} 成功</el-tag>
+                  <el-tag type="danger" plain size="mini">{{ item.number || 1 }} 失败</el-tag>
                 </li>
                 <li>
                   备注：
@@ -144,7 +143,7 @@ export default {
           })
         }).catch(() => {})
       } else if (command === 'view') {
-        this.$router.push(`/rule/${item.id}`)
+        this.$router.push(`/rule/${item.id}?oper=view`)
       }
     },
     handleResourceView(item) {
@@ -153,7 +152,6 @@ export default {
       dialog.operator = 'view'
       this.dialogVisible = true
       console.log(item)
-
     },
   },
   created() {

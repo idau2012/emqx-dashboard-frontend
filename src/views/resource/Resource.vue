@@ -38,7 +38,7 @@ import resource from 'src/template/resource'
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
-            <div class="item btn" @click.native="handleCommand({ command: 'view', item })">
+            <div class="item btn" @click="handleCommand({ command: 'view', item })">
               <ul>
                 <li>
                   服务状态：

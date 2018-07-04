@@ -57,6 +57,10 @@ const routes = [
         component: () => import('~/views/rule/Rule'),
       },
       {
+        path: '/rule/:id',
+        component: () => import('~/views/rule/RuleDetails'),
+      },
+      {
         path: '/websocket',
         component: () => import('~/views/WebSocket'),
       },

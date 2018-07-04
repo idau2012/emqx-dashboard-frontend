@@ -24,9 +24,14 @@ const method = ['GET', 'POST', 'PUT', 'DELETE'].map($ => ({ value: $, label: $ }
 
 const resource = Object.entries(resourceDcit).map($ => ({ value: $[0], label: $[1] }))
 
-const qos = [0, 1, 2].map($ => ({ label: $, value: $ })).push({ label: -1, value: '全部' })
+const qos = [{ label: '任意 QoS', value: null }, ...[0, 1, 2].map($ => ({ label: $, value: $ }))]
 
-const dict = { ...events, method, resource, kafkaProduce, booleanType, redisDatabase, qos }
+const messageEvents = [{ value: 'on_message_published', label: '消息发布时' }, { value: 'on_message_acked', label: '消息确认时' }]
+
+
+const paritionStrategy = ['random', 'strict_round_robin', 'sticky_round_robin', 'custom'].map($ => ({ value: $, label: $ }))
+
+const dict = { ...events, method, resource, kafkaProduce, booleanType, redisDatabase, qos, messageEvents, paritionStrategy }
 
 export { events, eventGetter, resGetter }
 

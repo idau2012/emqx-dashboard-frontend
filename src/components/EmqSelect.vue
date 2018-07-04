@@ -140,6 +140,10 @@ export default {
       }
       if (!this.field.url) {
         this.options = dictCode[this.field.key] || []
+        // 有排除值要排除
+        if (this.field.execute) {
+          this.options = this.options.filter($ => !this.field.execute.includes($.value))
+        }
         // 单选默认选中第一个
         if (this.autoSelect && !this.multiple && !this.value && this.options[0]) {
           this.$emit('input', this.options[0].value)
