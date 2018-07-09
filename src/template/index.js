@@ -24,7 +24,7 @@ const method = ['GET', 'POST', 'PUT', 'DELETE'].map($ => ({ value: $, label: $ }
 
 const resource = Object.entries(resourceDcit).map($ => ({ value: $[0], label: $[1] }))
 
-const qos = [{ label: '任意 QoS', value: null }, ...[0, 1, 2].map($ => ({ label: $, value: $ }))]
+const qos = [...[0, 1, 2].map($ => ({ label: `QoS ${$}`, value: $ }))]
 
 const messageEvents = [{ value: 'on_message_published', label: '消息发布时' }, { value: 'on_message_acked', label: '消息确认时' }]
 

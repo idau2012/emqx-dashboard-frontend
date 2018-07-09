@@ -45,7 +45,7 @@ function handleError(error) {
     store.dispatch('USER_LOGIN', { isLogOut: true })
     router.push({ path: '/login', query: { to: router.fullPath } })
   } else if (status === 404) {
-    error.message = '操作失败，资源不存在'
+    error.message = '操作失败，URL 不存在'
   }
   if (status !== 401) {
     Message.error(error.message)

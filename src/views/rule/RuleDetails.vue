@@ -36,10 +36,11 @@
           <el-col :span="12">
             <el-form-item prop="qos" label="QoS">
               <emq-select
-                v-model.number="record.qos"
+                v-model="record.qos"
+                multiple
                 :record="record"
                 :field="{ key: 'qos' }"
-                placeholder="全部">
+                placeholder="任意 QoS">
               </emq-select>
             </el-form-item>
           </el-col>
@@ -304,7 +305,7 @@ export default {
         resource: 1,
         type: 'kafka',
         filter: '#',
-        qos: null,
+        qos: [],
         kafka: {
           action: 'on_message_publish',
           strategy: 'random',
@@ -365,7 +366,7 @@ VALUES ( \`{{client_id}}\`, \`{{topic}}\`, \`{{qos}}\`, \`{{payload}}\` )
         events: required,
         type: required,
         resource: required,
-        qos: required,
+        // qos: required,
         filter: required,
         kafka: {
           action: required,
@@ -427,6 +428,7 @@ VALUES ( \`{{client_id}}\`, \`{{topic}}\`, \`{{qos}}\`, \`{{payload}}\` )
           return
         }
         console.log(this.record.type)
+        window.a = this.record[this.record.type]
         this.$message.success('新建成功')
         this.$router.push('/rule')
       })

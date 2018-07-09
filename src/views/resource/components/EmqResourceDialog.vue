@@ -2,27 +2,34 @@
   <el-dialog
     class="emq-resource-dialog"
     width="500px"
-    :title="operatorDict[operator]"
+    :title="step === 1 ? '选择资源类型' : operatorDict[operator]"
     :visible="visible"
     @open="handleOpen"
     @close="handleClose">
+    <!-- type -->
+    <el-row v-if="step === 1" class="card-list" style="margin-top: 18px" :gutter="20">
+      <el-col v-for="(item, index) in list" :span="12" :key="index">
+        <div class="item-card btn" :class="{ active: record.type === item.type }" @click="handleNext(item)">
+          <i class="fa card-icon" :class="item.icon"></i>
+          <h4>{{ item.name }}</h4>
+          <!--<p>{{ item.description }}</p>-->
+        </div>
+      </el-col>
+    </el-row>
     <!-- body -->
-    <el-form v-loading="loading" ref="record" :model="record" :rules="disabled ? {} : rules" :disabled="disabled">
+    <el-form v-else v-loading="loading" ref="record" :model="record" :rules="disabled ? {} : rules" :disabled="disabled">
+      <!-- 基本操作 -->
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item prop="name" label="资源名称">
             <el-input v-model="record.name"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item prop="type" label="资源类型">
-            <emq-select v-model="record.type" :record="record" :field="{ key: 'resource' }"></emq-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <!-- 基本操作 -->
-      <el-row :gutter="20">
+        <!--<el-col :span="12">-->
+        <!--<el-form-item prop="type" label="资源类型">-->
+        <!--<emq-select v-model="record.type" :record="record" :field="{ key: 'resource' }"></emq-select>-->
+        <!--</el-form-item>-->
+        <!--</el-col>-->
         <!-- Kafka -->
         <div v-if="record.type === 'kafka'">
           <!-- 连接地址 -->
@@ -284,17 +291,21 @@
         <div v-if="record.type === 'rabbitmq'"></div>
 
 
-        <el-col>
+        <el-col :span="12">
           <el-form-item label="备注">
-            <el-input v-model="record.description" type="textarea"></el-input>
+            <el-input v-model="record.description"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
     <!-- 操作按钮 -->
-    <div v-if="!disabled" class="operation-area" slot="footer">
-      <el-button type="text" @click="close">取消</el-button>
-      <el-button type="success" @click="handleConfirm">确定</el-button>
+    <div class="operation-area" slot="footer">
+      <div v-if="step === 2 && !disabled">
+        <el-button v-if="operator !== 'edit'" type="text" @click="handleLast" icon="el-icon-arrow-left" style="float: left">上一步</el-button>
+        <el-button v-if="operator !== 'edit'" type="text" @click="handlePreConnect">测试连接</el-button>
+        <el-button type="text" @click="close">取消</el-button>
+        <el-button v-if="step === 2 && !disabled" type="success" @click="handleConfirm">确定</el-button>
+      </div>
     </div>
   </el-dialog>
 </template>
@@ -307,10 +318,6 @@ export default {
     visible: {
       type: Boolean,
       required: true,
-    },
-    type: {
-      type: String,
-      default: 'kafka',
     },
   },
   data() {
@@ -325,8 +332,47 @@ export default {
       loading: false,
       title: '资源',
       resourceID: '',
+      step: 1,
+      list: [
+        {
+          icon: 'fa-expand',
+          name: 'Kafka',
+          type: 'kafka',
+          description: '',
+        },
+        {
+          icon: 'fa-database',
+          name: 'PostgreSQL',
+          type: 'pgsql',
+          description: '',
+        },
+        {
+          icon: 'fa-database',
+          name: 'MySQL',
+          type: 'mysql',
+          description: '',
+        },
+        {
+          icon: 'fa-floppy-o',
+          name: 'Redis',
+          type: 'redis',
+          description: '',
+        },
+        {
+          icon: 'fa-database',
+          name: 'MongoDB',
+          type: 'mongo',
+          description: '',
+        },
+        {
+          icon: 'fa-toggle-off',
+          name: 'WebHook',
+          type: 'http',
+          description: '',
+        },
+      ],
       record: {
-        type: 'kafka',
+        type: '',
         kafka: {
           servers: '127.0.0.1:9092',
           produce: 'sync',
@@ -374,7 +420,7 @@ export default {
           pool: 8,
           database: 0,
           password: '',
-          sentinel: 'mymaster',
+          sentinel: '',
         },
         // rabbitmq: {},
       },
@@ -382,7 +428,7 @@ export default {
       // 当前操作 view edit create
       operator: 'create',
       operatorDict: {
-        create: '新建资源',
+        create: '初始化配置',
         edit: '编辑资源',
         view: '资源详情',
       },
@@ -431,6 +477,29 @@ export default {
     }
   },
   methods: {
+    handleNext({ type }) {
+      if (type) {
+        this.record.type = type
+        this.step = 2
+      }
+    },
+    handlePreConnect() {
+      this.$refs.record.validate((valid) => {
+        if (!valid) {
+          return
+        }
+        const record = { ...this.record[this.record.type] }
+        record.name = this.record.name
+        record.description = this.record.description
+        record.type = this.record.type
+        this.$httpPut('/resource/status', record).then(() => {
+          this.$message.success('资源可以成功连接！')
+        }).catch(() => {})
+      })
+    },
+    handleLast() {
+      this.step = 1
+    },
     close() {
       this.$emit('update:visible', false)
     },
@@ -438,10 +507,14 @@ export default {
       // 恢复
       if (this.operator === 'create') {
         this.record = { ...this.recordStash }
+        this.step = 1
+        return
       }
       this.loadData()
     },
     handleClose() {
+      this.record.type = ''
+      this.step = 1
       this.$emit('close')
       this.close()
     },
@@ -475,10 +548,12 @@ export default {
     },
     // 加载信息
     loadData() {
-      if (this.operator === 'view' && this.resourceID) {
+      // 编辑 查看
+      if (['view', 'edit'].includes(this.operator) && this.resourceID) {
+        this.step = 2
         this.loading = true
         this.$httpGet(`/resource/${this.resourceID}`).then((response) => {
-          this.record[this.type] = response.data
+          this.record[this.record.type] = response.data
           this.loading = false
         }).catch(() => {
           this.loading = false
@@ -500,6 +575,43 @@ export default {
 
 <style lang="scss">
 .emq-resource-dialog {
+  .card-list {
+    .item-card {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border: 2px solid #f5f5f5;
+      border-radius: 4px;
+      transition: all .3s;
+      .card-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 2px solid #d8d8d8;
+        color: #c9c9c9;
+        margin-right: 20px;
+        text-align: center;
+        line-height: 50px;
+        font-size: 24px;
+        display: inline-block;
+        transition: all .3s;
+      }
+      h4 {
+        transition: all .3s;
+      }
+      &:hover, &.active {
+        border-color: #42d885;
+        h4 {
+          color: #303133;
+        }
+        .card-icon {
+          border-color: #42d885;
+          color: #42d885;
+        }
+      }
+    }
+  }
   .el-form {
     min-height: 240px;
   }

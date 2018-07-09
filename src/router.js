@@ -53,6 +53,14 @@ const routes = [
         component: () => import('~/views/resource/Resource'),
       },
       {
+        path: '/auth',
+        component: () => import('~/views/rule/AuthRule'),
+      },
+      // {
+      //   path: '/auth/:id',
+      //   component: () => import('~/views/rule/AuthRuleDestass'),
+      // },
+      {
         path: '/rule',
         component: () => import('~/views/rule/Rule'),
       },

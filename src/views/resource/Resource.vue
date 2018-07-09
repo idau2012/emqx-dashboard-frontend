@@ -121,7 +121,7 @@ export default {
         const { id, type } = item
         dialog.record.type = type
         dialog.resourceID = id
-        dialog.type = type
+        dialog.step = 2
         dialog.operator = 'edit'
         this.dialogVisible = true
       } else if (command === 'start') {
@@ -143,6 +143,8 @@ export default {
       } else if (command === 'view') {
         dialog.resourceID = item.id
         dialog.operator = 'view'
+        dialog.record.type = item.type
+        dialog.step = 2
         this.dialogVisible = true
       }
     },

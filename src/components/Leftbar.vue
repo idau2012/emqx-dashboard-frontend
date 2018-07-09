@@ -54,10 +54,21 @@
           <i class="fa fa-server"></i>
           资源
         </el-menu-item>
+
+        <el-menu-item index="/auth">
+          <i class="fa fa-universal-access"></i>
+          认证规则
+        </el-menu-item>
+
         <!-- 消息规则 -->
         <el-menu-item index="/rule">
           <i class="fa fa-random"></i>
           消息规则
+        </el-menu-item>
+
+        <el-menu-item index="/trigger">
+          <i class="fa fa-level-down"></i>
+          触发器
         </el-menu-item>
       </el-menu-item-group>
 
