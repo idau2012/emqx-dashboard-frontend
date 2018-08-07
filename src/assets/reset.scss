@@ -8,6 +8,7 @@
 }
 
 .el-table {
+  border-radius: 4px;
   &.el-table--small {
     font-size: 14px;
   }
@@ -137,4 +138,8 @@
   &.el-input--medium {
     .el-input__inner {}
   }
+}
+
+.el-loading-mask {
+  opacity: .8;
 }

@@ -11,7 +11,7 @@
   }
   /* Table */
   .el-table:not(.el-table--public) {
-    color: #71737d !important;
+    color: #71737d;
     border: 1px solid #f1f1f1;
     background-color: transparent !important;
     th, tr, .el-table__empty-block {
@@ -251,7 +251,7 @@
     }
     .card-item {
       background-color: #fff !important;
-      border: 1px solid #fff;
+      border: 1px solid #f1f1f1;
       .icon {
         color: #34c388;
         border-color: #34c388;

@@ -340,6 +340,7 @@ export default {
           min-width: 250px;
           line-height: 90px;
           padding: 18px 20px 0 20px;
+          border-radius: 4px;
           .icon {
             float: left;
             width: 54px;

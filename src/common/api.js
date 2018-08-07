@@ -14,7 +14,10 @@ Object.assign(Axios.defaults, {
     'Cache-Control': 'no-cache',
   },
   baseURL: '/api/v2',
+  timeout: 10 * 1000,
 })
+
+let timer = 0
 
 // 请求拦截器添加 headers
 Axios.interceptors.request.use((config) => {
@@ -27,7 +30,7 @@ Axios.interceptors.request.use((config) => {
     router.push({ path: '/login', query: { to: router.fullPath } })
   }
   NProgress.start()
-  store.dispatch('LOADING', true)
+  timer = setTimeout(() => { store.dispatch('LOADING', true) }, 100)
   return config
 }, (error) => {
   console.warn('Request Error: ', error)
@@ -56,6 +59,10 @@ function handleError(error) {
 // Response interceptors
 Axios.interceptors.response.use((response) => {
   NProgress.done()
+  if (!store.state.LOADING) {
+    clearTimeout(timer)
+  }
+  timer = 0
   store.dispatch('LOADING', false)
   return response
 }, handleError)
