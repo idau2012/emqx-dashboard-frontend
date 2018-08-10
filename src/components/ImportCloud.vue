@@ -104,7 +104,9 @@ export default {
     },
   },
   created() {
-    this.loadData()
+    if (this.$env.components.includes('qingcloud')) {
+      this.loadData()
+    }
   },
 }
 </script>
