@@ -112,7 +112,8 @@
           <el-col :span="12"></el-col>
           <el-col :span="12">
             <el-form-item prop="status" :label="$t('app.status')">
-              <el-select v-model="record.status" class="el-select--public" popper-class="el-select--public" :disabled="oper === 'view'">
+              <el-select v-model="record.status" class="el-select--public" popper-class="el-select--public"
+                         :disabled="oper === 'view'">
                 <el-option :label="$t('app.enable')" :value="true"></el-option>
                 <el-option :label="$t('app.disable')" :value="false"></el-option>
               </el-select>
@@ -238,7 +239,7 @@ export default {
         if (new Date(record.expired).getTime().toString().length === 13) {
           record.expired /= 1000
         } else {
-          record.expired = 'undefined'
+          record.expired = undefined
         }
         this.$httpPost('/apps', record).then(() => {
           this.loadData()
@@ -256,7 +257,7 @@ export default {
         if (new Date(record.expired).getTime().toString().length === 13) {
           record.expired /= 1000
         } else {
-          record.expired = 'undefined'
+          record.expired = undefined
         }
         this.$httpPut(`/apps/${record.app_id}`, record).then(() => {
           this.$message.success(this.$t('oper.editSuccess'))
@@ -273,7 +274,7 @@ export default {
           if (new Date(record.expired).getTime().toString().length === 13) {
             record.expired /= 1000
           } else {
-            record.expired = 'undefined'
+            record.expired = undefined
           }
           this.$httpPut(`/apps/${record.app_id}`, record).then(() => {
             this.displayDialog = false
@@ -291,7 +292,7 @@ export default {
         this.displayDialog = true
         this.record = response.data
         if (this.record.expired.toString().length === 10) {
-          this.record.expired = this.record.expired * 1000
+          this.record.expired = new Date(this.record.expired * 1000)
         }
         this.displayDialog = true
       }).catch((error) => {
@@ -322,7 +323,7 @@ export default {
         } else {
           this.oper = 'edit'
           this.record = { ...row }
-          this.record.expired = this.record.expired.toString().length === 10 ? this.record.expired * 1000 : ''
+          this.record.expired = this.record.expired && this.record.expired.toString().length === 10 ? new Date(this.record.expired * 1000) : ''
         }
         this.$refs.record.resetFields()
       }, 10)
