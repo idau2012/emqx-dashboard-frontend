@@ -49,27 +49,27 @@
           <i class="fa fa-superpowers"></i>
           {{ $t('leftbar.listeners') }}
         </el-menu-item>
-        <!-- 资源 -->
-        <el-menu-item index="/resource">
-          <i class="fa fa-server"></i>
-          资源
-        </el-menu-item>
+        <!--&lt;!&ndash; 资源 &ndash;&gt;-->
+        <!--<el-menu-item index="/resource">-->
+        <!--<i class="fa fa-server"></i>-->
+        <!--资源-->
+        <!--</el-menu-item>-->
 
-        <el-menu-item index="/auth">
-          <i class="fa fa-universal-access"></i>
-          认证规则
-        </el-menu-item>
+        <!--<el-menu-item index="/auth">-->
+        <!--<i class="fa fa-universal-access"></i>-->
+        <!--认证规则-->
+        <!--</el-menu-item>-->
 
-        <!-- 消息规则 -->
-        <el-menu-item index="/rule">
-          <i class="fa fa-random"></i>
-          消息规则
-        </el-menu-item>
+        <!--&lt;!&ndash; 消息规则 &ndash;&gt;-->
+        <!--<el-menu-item index="/rule">-->
+        <!--<i class="fa fa-random"></i>-->
+        <!--消息规则-->
+        <!--</el-menu-item>-->
 
-        <el-menu-item index="/trigger">
-          <i class="fa fa-level-down"></i>
-          触发器
-        </el-menu-item>
+        <!--<el-menu-item index="/trigger">-->
+        <!--<i class="fa fa-level-down"></i>-->
+        <!--触发器-->
+        <!--</el-menu-item>-->
       </el-menu-item-group>
 
       <!-- TOOLS -->
@@ -189,7 +189,7 @@ export default {
       font-size: 16px;
       font-weight: bolder;
       margin-right: 12px;
-      vertical-align:middle;
+      vertical-align: middle;
     }
     a {
       font-weight: bold;
@@ -205,7 +205,7 @@ export default {
     height: 40px;
     line-height: 40px;
     i {
-      color: #6e6e75!important;
+      color: #6e6e75 !important;
     }
     &:hover, &.is-active {
       color: #227d51 !important;

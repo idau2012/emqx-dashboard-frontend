@@ -7,7 +7,7 @@ import JsonEditor from '../components/JsonEditor'
 export default (Vue) => {
   Vue.prototype.$httpGet = (url, params = {}) => {
     // fix IE cache application/json response
-    params.ts = Date.now()
+    params._ = Date.now()
     return API.get(url, { params })
   }
   Vue.prototype.$httpPost = API.post

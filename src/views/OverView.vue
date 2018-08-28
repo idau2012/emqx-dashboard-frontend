@@ -18,58 +18,58 @@
     </div>
 
     <!-- Broker -->
-     <div class="card-box" style="margin-top: 54px">
-       <div class="card-title">{{ $t('overview.broker') }}</div>
-       <el-row class="broker-card" :gutter="10">
-         <el-col :span="6">
-           <div class="card-item">
-             <div class="icon">
-               <i class="iconfont icon-wendang"></i>
-             </div>
-             <div class="desc">
-               <h3>{{ $t('overview.systemName') }}</h3>
-               <p>{{ brokers.sysdescr }}</p>
-             </div>
-           </div>
-         </el-col>
+    <div class="card-box" style="margin-top: 54px">
+      <div class="card-title">{{ $t('overview.broker') }}</div>
+      <el-row class="broker-card" :gutter="10">
+        <el-col :span="6">
+          <div class="card-item">
+            <div class="icon">
+              <i class="iconfont icon-wendang"></i>
+            </div>
+            <div class="desc">
+              <h3>{{ $t('overview.systemName') }}</h3>
+              <p>{{ brokers.sysdescr }}</p>
+            </div>
+          </div>
+        </el-col>
 
-         <el-col :span="6">
-           <div class="card-item">
-             <div class="icon">
-               <i class="iconfont icon-banben" style="font-weight: 600"></i>
-             </div>
-             <div class="desc">
-               <h3>{{ $t('overview.version') }}</h3>
-               <p>{{ brokers.version }}</p>
-             </div>
-           </div>
-         </el-col>
+        <el-col :span="6">
+          <div class="card-item">
+            <div class="icon">
+              <i class="iconfont icon-banben" style="font-weight: 600"></i>
+            </div>
+            <div class="desc">
+              <h3>{{ $t('overview.version') }}</h3>
+              <p>{{ brokers.version }}</p>
+            </div>
+          </div>
+        </el-col>
 
-         <el-col :span="6">
-           <div class="card-item">
-             <div class="icon">
-               <i class="iconfont icon-shalou"></i>
-             </div>
-             <div class="desc">
-               <h3>{{ $t('overview.uptime') }}</h3>
-               <p>{{ brokers.uptime }}</p>
-             </div>
-           </div>
-         </el-col>
+        <el-col :span="6">
+          <div class="card-item">
+            <div class="icon">
+              <i class="iconfont icon-shalou"></i>
+            </div>
+            <div class="desc">
+              <h3>{{ $t('overview.uptime') }}</h3>
+              <p>{{ brokers.uptime }}</p>
+            </div>
+          </div>
+        </el-col>
 
-         <el-col :span="6">
-           <div class="card-item">
-             <div class="icon" style="line-height: 46px">
-               <i class="iconfont icon-zhongbiao" style="font-size: 36px;margin-left: 2px"></i>
-             </div>
-             <div class="desc">
-               <h3>{{ $t('overview.systemTime') }}</h3>
-               <p>{{ brokers.datetime }}</p>
-             </div>
-           </div>
-         </el-col>
-       </el-row>
-     </div>
+        <el-col :span="6">
+          <div class="card-item">
+            <div class="icon" style="line-height: 46px">
+              <i class="iconfont icon-zhongbiao" style="font-size: 36px;margin-left: 2px"></i>
+            </div>
+            <div class="desc">
+              <h3>{{ $t('overview.systemTime') }}</h3>
+              <p>{{ brokers.datetime }}</p>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
 
     <!-- Nodes -->
     <div class="card-box">
@@ -124,9 +124,9 @@
       <el-table :data="stats" border>
         <el-table-column prop="node" min-width="150" :label="$t('overview.name')">
         </el-table-column>
-        <el-table-column prop="clients/count" min-width="150" :label="$t('overview.clientsCount')">
+        <el-table-column prop="connections/count" min-width="150" :label="$t('overview.connectionsCount')">
         </el-table-column>
-        <el-table-column prop="clients/max" min-width="150" :label="$t('overview.clientsMax')">
+        <el-table-column prop="connections/max" min-width="150" :label="$t('overview.connectionsMax')">
         </el-table-column>
         <el-table-column prop="topics/count" min-width="150" :label="$t('overview.topicsCount')">
         </el-table-column>
@@ -140,9 +140,13 @@
         </el-table-column>
         <el-table-column prop="sessions/max" min-width="150" :label="$t('overview.sessionsMax')">
         </el-table-column>
-        <el-table-column prop="subscriptions/count" min-width="160" :label="$t('overview.subscribersCount')">
+        <el-table-column prop="subscriptions/count" min-width="160" :label="$t('overview.subscriptionsCount')">
         </el-table-column>
-        <el-table-column prop="subscriptions/max" min-width="160" :label="$t('overview.subscribersMax')">
+        <el-table-column prop="subscriptions/max" min-width="160" :label="$t('overview.subscriptionsMax')">
+        </el-table-column>
+        <el-table-column prop="subscriptions/shared/count" min-width="160" :label="$t('overview.subscriptionsSharedCount')">
+        </el-table-column>
+        <el-table-column prop="subscriptions/shared/max" min-width="160" :label="$t('overview.subscriptionsSharedMax')">
         </el-table-column>
       </el-table>
     </div>
@@ -378,7 +382,7 @@ export default {
     margin-top: 20px;
   }
   .el-row {
-   margin-top: 20px;
+    margin-top: 20px;
   }
 }
 </style>
