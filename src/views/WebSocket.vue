@@ -445,10 +445,19 @@ export default {
     },
     handleReconnect() {
       if (this.retryTimes > 1) {
-        if (this.sending) {
-          this.$message.error(this.$t('websocket.connectError'))
-        } else {
-          this.$message.error(`${this.$t('websocket.connectFailure')} ${this.host}:${this.port}`)
+        try {
+          if (this.sending) {
+            this.$message.error(this.$t('websocket.connectError'))
+          } else {
+            this.$message.error(`${this.$t('websocket.connectFailure')} ${this.host}:${this.port}`)
+          }
+        } catch (e) {
+          this.retryTimes = 0
+          this.sending = false
+          this.loading = false
+          NProgress.done()
+          this.client.end()
+          this.client = {}
         }
         this.retryTimes = 0
         this.sending = false

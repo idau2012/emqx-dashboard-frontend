@@ -21,9 +21,9 @@
       </el-table-column>
       <el-table-column prop="listen_on" min-width="240" :label="$t('listeners.listenOn')">
       </el-table-column>
-      <el-table-column prop="max_clients" min-width="180" :label="$t('listeners.maxClients')">
+      <el-table-column prop="max_conns" min-width="180" :label="$t('listeners.maxConnections')">
       </el-table-column>
-      <el-table-column prop="current_clients" min-width="120" :label="$t('listeners.currentClients')">
+      <el-table-column prop="current_conns" min-width="120" :label="$t('listeners.currentConnections')">
       </el-table-column>
     </el-table>
   </div>

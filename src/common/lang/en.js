@@ -195,8 +195,8 @@ export default {
   listeners: {
     protocol: 'Protocol',
     listenOn: 'Listen On',
-    maxClients: 'Max Clients',
-    currentClients: 'Current Clients',
+    maxConnections: 'Max Connections',
+    currentConnections: 'Current Connections',
   },
   // websocket
   websocket: {

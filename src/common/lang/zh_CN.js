@@ -195,8 +195,8 @@ export default {
   listeners: {
     protocol: '协议',
     listenOn: '监听地址',
-    maxClients: '最大客户端连接数',
-    currentClients: '当前客户端连接数',
+    maxConnections: '最大连接数',
+    currentConnections: '当前连接数',
   },
   // websocket
   websocket: {
