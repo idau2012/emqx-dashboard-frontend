@@ -33,34 +33,34 @@
       </div>
     </div>
 
-    <!-- clients -->
-    <el-table v-show="activeTab==='clients'" v-loading="$store.state.loading" border :data="clients">
-      <el-table-column v-if="cluster" prop="node" min-width="160" :label="$t('clients.node')">
+    <!-- connections -->
+    <el-table v-show="activeTab==='connections'" v-loading="$store.state.loading" border :data="connections">
+      <el-table-column v-if="cluster" prop="node" min-width="160" :label="$t('connections.node')">
       </el-table-column>
-      <el-table-column prop="client_id" min-width="160" :label="$t('clients.clientId')">
+      <el-table-column prop="client_id" min-width="160" :label="$t('connections.clientId')">
       </el-table-column>
-      <el-table-column prop="username" min-width="130" :label="$t('clients.username')">
+      <el-table-column prop="username" min-width="130" :label="$t('connections.username')">
       </el-table-column>
-      <el-table-column prop="ipaddress" min-width="150" :label="$t('clients.ipAddr')">
+      <el-table-column prop="ipaddress" min-width="150" :label="$t('connections.ipAddr')">
       </el-table-column>
-      <el-table-column prop="port" min-width="80" :label="$t('clients.port')">
+      <el-table-column prop="port" min-width="80" :label="$t('connections.port')">
       </el-table-column>
-      <el-table-column prop="clean_start" min-width="110" :label="$t('clients.cleanStart')">
+      <el-table-column prop="clean_start" min-width="110" :label="$t('connections.cleanStart')">
         <template slot-scope="scope">
           <span>{{ scope.row.clean_start }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="proto_ver" width="120" :label="$t('clients.protoVer')">
+      <el-table-column prop="proto_ver" width="120" :label="$t('connections.protoVer')">
       </el-table-column>
-      <el-table-column prop="keepalive" width="120" :label="$t('clients.keepalive')">
+      <el-table-column prop="keepalive" width="120" :label="$t('connections.keepalive')">
       </el-table-column>
-      <el-table-column prop="connected_at" width="180" :label="$t('clients.connectedAt')">
+      <el-table-column prop="connected_at" width="180" :label="$t('connections.connectedAt')">
       </el-table-column>
     </el-table>
 
     <!-- sessions -->
     <el-table v-show="activeTab ==='sessions'" v-loading="$store.state.loading" border :data="sessions">
-      <el-table-column v-if="cluster" prop="node" min-width="160" :label="$t('clients.node')">
+      <el-table-column v-if="cluster" prop="node" min-width="160" :label="$t('connections.node')">
         <template slot-scope="props">
           {{ props.row.node || '--'}}
         </template>
@@ -78,6 +78,11 @@
       <el-table-column prop="subscriptions_count" min-width="160" :label="$t('sessions.subscriptionsCount')">
         <template slot-scope="props">
           {{ props.row.subscriptions_count || '0'}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="expiry_interval" min-width="120" :label="$t('sessions.expiryInterval')">
+        <template slot-scope="props">
+          {{ props.row.expiry_interval}}
         </template>
       </el-table-column>
       <el-table-column prop="max_inflight" min-width="150" :label="$t('sessions.maxInflight')">
@@ -130,7 +135,7 @@
 
     <!-- subscriptions -->
     <el-table v-show="activeTab==='subscriptions'" v-loading="$store.state.loading" border :data="subscriptions">
-      <el-table-column v-if="cluster" prop="node" min-width="160" :label="$t('clients.node')">
+      <el-table-column v-if="cluster" prop="node" min-width="160" :label="$t('connections.node')">
       </el-table-column>
       <el-table-column prop="client_id" :label="$t('subscriptions.clientId')"></el-table-column>
       <el-table-column prop="topic" :label="$t('subscriptions.topic')"></el-table-column>
@@ -178,11 +183,11 @@ export default {
       },
       nodeName: '',
       nodes: [],
-      activeTab: 'clients',
+      activeTab: 'connections',
       searchKey: '',
       searchValue: '',
       searchPlaceholder: 'ClientId',
-      clients: [],
+      connections: [],
       sessions: [],
       topics: [],
       subscriptions: [],

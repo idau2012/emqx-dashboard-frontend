@@ -42,7 +42,7 @@ export default {
     // MONITORING
     monitoring: 'MONITORING',
     overview: 'Overview',
-    clients: 'Connections',
+    connections: 'Connections',
     sessions: 'Sessions',
     topics: 'Topics',
     subscriptions: 'Subscriptions',
@@ -100,8 +100,8 @@ export default {
     messagesData: 'The messages data',
     bytesData: 'The bytes data',
   },
-  // Clients
-  clients: {
+  // Connections
+  connections: {
     node: 'Node',
     clientId: 'ClientId',
     username: 'Username',

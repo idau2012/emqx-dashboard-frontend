@@ -42,7 +42,7 @@ export default {
     // MONITORING
     monitoring: '监控',
     overview: '控制台',
-    clients: '连接',
+    connections: '连接',
     sessions: '会话',
     topics: '主题',
     subscriptions: '订阅',
@@ -101,8 +101,8 @@ export default {
     messagesData: '消息(数)',
     bytesData: '流量收发统计(字节)',
   },
-  // Clients
-  clients: {
+  // Connections
+  connections: {
     node: '节点',
     clientId: '客户端ID',
     username: '用户名',
@@ -119,7 +119,7 @@ export default {
     clientId: '客户端ID',
     cleanStart: '清除会话',
     subscriptionsCount: '订阅数',
-    expiryInterval: 'Expiry Interval',
+    expiryInterval: 'ExpiryInterval',
     maxInflight: '最大拥塞',
     inflightLen: '当前拥塞',
     mqueueLen: '当前缓存消息',

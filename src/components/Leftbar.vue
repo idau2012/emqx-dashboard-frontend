@@ -18,9 +18,9 @@
           <i class="fa fa-bar-chart"></i>
           {{ $t('leftbar.overview') }}
         </el-menu-item>
-        <el-menu-item index="/clients">
+        <el-menu-item index="/connections">
           <i class="fa fa-microchip"></i>
-          {{ $t('leftbar.clients') }}
+          {{ $t('leftbar.connections') }}
         </el-menu-item>
         <el-menu-item index="/sessions">
           <i class="fa fa-exchange"></i>

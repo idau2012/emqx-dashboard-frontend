@@ -20,7 +20,7 @@ const routes = [
         component: () => import('~/views/OverView'),
       },
       {
-        path: '/clients',
+        path: '/connections',
         component: () => import('~/views/DataView'),
       },
       {
