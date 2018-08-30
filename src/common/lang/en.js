@@ -42,7 +42,7 @@ export default {
     // MONITORING
     monitoring: 'MONITORING',
     overview: 'Overview',
-    clients: 'Clients',
+    clients: 'Connections',
     sessions: 'Sessions',
     topics: 'Topics',
     subscriptions: 'Subscriptions',
@@ -92,8 +92,8 @@ export default {
     subscribersMax: 'subscribers/Max',
     subscriptionsCount: 'Subscription/Count',
     subscriptionsMax: 'Subscription/Max',
-    subscriptionsSharedCount: 'subscriptions Shared/Count',
-    subscriptionsSharedMax: 'subscriptions Shared/Max',
+    subscriptionsSharedCount: 'Subscriptions Shared/Count',
+    subscriptionsSharedMax: 'Subscriptions Shared/Max',
     // Metrics
     metrics: 'Metrics',
     packetsData: 'The packets data',
@@ -107,7 +107,7 @@ export default {
     username: 'Username',
     ipAddr: 'IPAddr',
     port: 'Port',
-    cleanSess: 'CleanSess',
+    cleanStart: 'CleanStart',
     protoVer: 'ProtoVer',
     keepalive: 'Keepalive(s)',
     connectedAt: 'ConnectedAt',
@@ -116,8 +116,9 @@ export default {
   // sessions
   sessions: {
     clientId: 'ClientId',
-    cleanSess: 'CleanSess',
-    subscriptions: 'Subscriptions',
+    cleanStart: 'CleanStart',
+    subscriptionsCount: 'Subscriptions/Count',
+    expiryInterval: 'Expiry Interval',
     maxInflight: 'MaxInflight',
     inflightLen: 'Inflight Len',
     mqueueLen: 'MqueueLen',

@@ -6,7 +6,6 @@
         v-model="nodeName"
         class="select-radius"
         :placeholder="$t('select.placeholder')"
-        :disabled="$store.state.loading"
         @change="loadData">
         <el-option
           v-for="node in nodes"

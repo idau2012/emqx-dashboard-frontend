@@ -108,7 +108,7 @@ export default {
     username: '用户名',
     ipAddr: 'IP地址',
     port: '端口',
-    cleanSess: '清除会话',
+    cleanStart: '清除会话',
     protoVer: '协议版本',
     keepalive: '心跳(秒)',
     connectedAt: '连接时间',
@@ -117,8 +117,9 @@ export default {
   // sessions
   sessions: {
     clientId: '客户端ID',
-    cleanSess: '清除会话',
-    subscriptions: '订阅数',
+    cleanStart: '清除会话',
+    subscriptionsCount: '订阅数',
+    expiryInterval: 'Expiry Interval',
     maxInflight: '最大拥塞',
     inflightLen: '当前拥塞',
     mqueueLen: '当前缓存消息',

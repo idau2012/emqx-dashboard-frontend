@@ -45,9 +45,9 @@
       </el-table-column>
       <el-table-column prop="port" min-width="80" :label="$t('clients.port')">
       </el-table-column>
-      <el-table-column prop="clean_sess" min-width="110" :label="$t('clients.cleanSess')">
+      <el-table-column prop="clean_start" min-width="110" :label="$t('clients.cleanStart')">
         <template slot-scope="scope">
-          <span>{{ scope.row.clean_sess ? 'true' : 'false' }}</span>
+          <span>{{ scope.row.clean_start }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="proto_ver" width="120" :label="$t('clients.protoVer')">
@@ -70,14 +70,14 @@
           {{ props.row.client_id || '0'}}
         </template>
       </el-table-column>
-      <el-table-column prop="clean_sess" width="120" :label="$t('sessions.cleanSess')">
+      <el-table-column prop="clean_start" width="120" :label="$t('sessions.cleanStart')">
         <template slot-scope="scope">
-          <span>{{ scope.row.clean_sess ? 'true' : 'false' }}</span>
+          <span>{{ scope.row.clean_start }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="subscriptions" min-width="120" :label="$t('sessions.subscriptions')">
+      <el-table-column prop="subscriptions_count" min-width="160" :label="$t('sessions.subscriptionsCount')">
         <template slot-scope="props">
-          {{ props.row.subscriptions || '0'}}
+          {{ props.row.subscriptions_count || '0'}}
         </template>
       </el-table-column>
       <el-table-column prop="max_inflight" min-width="150" :label="$t('sessions.maxInflight')">

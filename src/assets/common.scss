@@ -1,5 +1,22 @@
 @import "color";
 
+/* reset themes color */
+$--color-success: $themes-color-native;
+$--color-primary: $themes-color-native;
+$--color-warning: $themes-color-waring;
+$--color-danger: $themes-color-danger;
+//$--color-text-regular: $color;
+
+/* reset default size */
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+@import "~element-ui/packages/theme-chalk/src/index";
+
+@import "themes/dark";
+@import "themes/light";
+
+/* reset global style */
+@import "reset";
+
 html, body, #app {
   height: 100%;
   margin: 0;
@@ -46,6 +63,9 @@ a {
   text-transform: capitalize;
   padding: 30px 0 10px 0 !important;
   .el-select {
+    input {
+      height: 40px !important;
+    }
     float: right;
   }
   .el-breadcrumb {
@@ -97,6 +117,7 @@ input {
   margin: 20px 0;
   float: right;
 }
+
 .el-card {
   &.thin__body {
     .el-card__body {
@@ -154,21 +175,3 @@ input {
   }
 }
 
-
-
-/* reset themes color */
-$--color-success: $themes-color-native;
-$--color-primary: $themes-color-native;
-$--color-warning: $themes-color-waring;
-$--color-danger: $themes-color-danger;
-//$--color-text-regular: $color;
-
-/* reset default size */
-$--font-path: '~element-ui/lib/theme-chalk/fonts';
-@import "~element-ui/packages/theme-chalk/src/index";
-
-@import "themes/dark";
-@import "themes/light";
-
-/* reset global style */
-@import "reset";
