@@ -143,7 +143,8 @@
         </el-table-column>
         <el-table-column prop="subscriptions/max" min-width="160" :label="$t('overview.subscriptionsMax')">
         </el-table-column>
-        <el-table-column prop="subscriptions/shared/count" min-width="160" :label="$t('overview.subscriptionsSharedCount')">
+        <el-table-column prop="subscriptions/shared/count" min-width="160"
+                         :label="$t('overview.subscriptionsSharedCount')">
         </el-table-column>
         <el-table-column prop="subscriptions/shared/max" min-width="160" :label="$t('overview.subscriptionsSharedMax')">
         </el-table-column>
@@ -291,6 +292,9 @@ export default {
   beforeRouteLeave(to, from, next) {
     clearInterval(this.timer)
     next()
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
   },
 }
 </script>

@@ -13,7 +13,7 @@ Object.assign(Axios.defaults, {
     'Content-Type': 'application/json',
     'Cache-Control': 'no-cache',
   },
-  baseURL: '/api/v2',
+  baseURL: '/api/v3',
   timeout: 10 * 1000,
 })
 

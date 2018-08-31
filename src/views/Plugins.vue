@@ -44,7 +44,7 @@
           <el-button
             slot="reference"
             size="mini"
-            :disabled="props.row.name.indexOf('dashboard') !== -1"
+            :disabled="props.row.name.indexOf('dashboard') !== -1 || props.row.name.includes('management')"
             :type="props.row.active ? 'warning' : 'success'"
             @click="update(props.row)" :plain="true">
             {{ props.row.active ? $t('plugins.stop') : $t('plugins.start') }}
@@ -52,7 +52,7 @@
           <el-button
             type="success"
             size="mini"
-            :disabled="props.row.name.includes('dashboard')"
+            :disabled="props.row.name.includes('dashboard') || props.row.name.includes('management')"
             :plain="true"
             @click="config(props.row)">
             {{ $t('plugins.config') }}
