@@ -112,17 +112,21 @@ export default {
       if (!this.isLink(props)) {
         return
       }
-      this.uri = `/api/v2${props.target}`
+      this.uri = `/api/v3${props.target}`
       this.scrollTop = document.documentElement.scrollTop
       document.documentElement.scrollTop = 0
       switch (props.method) {
-        case 'GET': this.$httpGet(props.target).then(this.handleSuccess).catch(this.handleError)
+        case 'GET':
+          this.$httpGet(props.target).then(this.handleSuccess).catch(this.handleError)
           break
-        case 'POST': this.$httpPost(props.target).then(this.handleSuccess).catch(this.handleError)
+        case 'POST':
+          this.$httpPost(props.target).then(this.handleSuccess).catch(this.handleError)
           break
-        case 'PUT': this.$httpPut(props.target).then(this.handleSuccess).catch(this.handleError)
+        case 'PUT':
+          this.$httpPut(props.target).then(this.handleSuccess).catch(this.handleError)
           break
-        default: this.responseDate = null
+        default:
+          this.responseDate = null
           break
       }
     },
@@ -141,7 +145,7 @@ export default {
         Object.keys(data).forEach((item) => {
           this.tableData.push({
             method: data[item].method,
-            path: `/api/v2${data[item].path}`,
+            path: `/api/v3${data[item].path.startsWith('/') ? data[item].path : `/${data[item].path}`}`,
             target: data[item].path,
             description: data[item].descr,
           })

@@ -34,11 +34,13 @@ Axios.interceptors.request.use((config) => {
   return config
 }, (error) => {
   console.warn('Request Error: ', error)
+  store.dispatch('LOADING', false)
 })
 
 // handleError
 function handleError(error) {
   NProgress.done()
+  clearTimeout(timer)
   store.dispatch('LOADING', false)
   const status = error.response && error.response.status
   if (error.response && error.response.data.message) {
@@ -48,7 +50,7 @@ function handleError(error) {
     store.dispatch('USER_LOGIN', { isLogOut: true })
     router.push({ path: '/login', query: { to: router.fullPath } })
   } else if (status === 404) {
-    error.message = '操作失败，URL 不存在'
+    error.message = 'URL Not Found'
   }
   if (status !== 401) {
     Message.error(error.message)
@@ -59,9 +61,7 @@ function handleError(error) {
 // Response interceptors
 Axios.interceptors.response.use((response) => {
   NProgress.done()
-  if (!store.state.LOADING) {
-    clearTimeout(timer)
-  }
+  clearTimeout(timer)
   timer = 0
   store.dispatch('LOADING', false)
   return response
