@@ -11,7 +11,6 @@ import './assets/common.scss'
 import lang from './common/lang'
 import Mount from './common/installer'
 import { initThemes } from './common/themes'
-import { getLocalStorage } from './common/storage'
 import filter from './common/filter'
 
 Vue.config.productionTip = false
@@ -26,10 +25,12 @@ Object.keys(filter).forEach((name) => {
 })
 
 const i18n = new VueI18n({
-  locale: getLocalStorage('language') || window.EMQ_DASHBOARD_CONFIG.lang || 'en',
+  locale: window.localStorage.language || window.EMQ_DASHBOARD_CONFIG.lang || 'en',
   messages: lang,
 })
+
 ElementLocale.i18n((key, value) => i18n.t(key, value))
+
 initThemes()
 
 sync(store, router)

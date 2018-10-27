@@ -287,13 +287,13 @@ export default {
     confirmDelete: 'Confirm Delete ?',
     usernameRequired: 'Username required',
     remarkRequired: 'Remark required',
-    usernameIllegal: 'Username illegal',
+    usernameIllegal: 'Username length: 3~32',
     passwordRequired: 'Password required',
     newPasswordRequired: 'new password required',
     passwordInconsistent: 'Password is inconsistent',
     authenticate: 'You have changed your password. Please re authenticate',
     createUser: 'Create user success',
-    passwordIllegal: 'Password Illegal',
+    passwordIllegal: 'Password length: 3~255',
   },
   // alert
   alert: {

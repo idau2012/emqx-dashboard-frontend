@@ -282,13 +282,13 @@ export default {
     dontChangePassword: '不修改密码',
     usernameRequired: '请填写用户名',
     remarkRequired: '请填写备注',
-    usernameIllegal: '用户名长度非法',
+    usernameIllegal: '用户名长度: 3~32',
     passwordRequired: '请填写密码',
     newPasswordRequired: '请填写新密码',
     passwordInconsistent: '密码不一致',
     authenticate: '你已成功修改已登录用户密码，请重新登录',
     createUser: '新建用户成功',
-    passwordIllegal: '密码长度非法',
+    passwordIllegal: '密码长度: 3~255',
   },
   // alert
   alert: {

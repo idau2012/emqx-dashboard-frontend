@@ -183,18 +183,18 @@ export default {
       rules: {
         username: [
           { required: true, message: this.$t('users.usernameRequired') },
-          { min: 2, max: 12, message: this.$t('users.usernameIllegal'), trigger: 'change' },
+          { min: 2, max: 32, message: this.$t('users.usernameIllegal'), trigger: 'change' },
         ],
         tags: [
           { required: true, message: this.$t('users.remarkRequired') },
         ],
         password: [
           { required: true, message: this.$t('users.passwordRequired') },
-          { min: 3, max: 20, message: this.$t('users.passwordIllegal'), trigger: 'change' },
+          { min: 3, max: 255, message: this.$t('users.passwordIllegal'), trigger: 'change' },
         ],
         newPassword: [
           { required: true, message: this.$t('users.passwordRequired') },
-          { min: 3, max: 20, message: this.$t('users.passwordIllegal'), trigger: 'change' },
+          { min: 3, max: 255, message: this.$t('users.passwordIllegal'), trigger: 'change' },
         ],
         repeatPassword: [
           { required: true, message: this.$t('users.passwordRequired') },

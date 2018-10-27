@@ -12,31 +12,42 @@
               <el-input v-model="host"></el-input>
             </el-form-item>
           </el-col>
+
           <el-col :span="8">
             <el-form-item :label="$t('websocket.port')">
               <el-input v-model.number="port"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
+            <el-form-item label="path">
+              <el-input v-model="path"></el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
             <el-form-item :label="$t('websocket.clientID')">
               <el-input v-model="clientId"></el-input>
             </el-form-item>
           </el-col>
+
           <el-col :span="8">
             <el-form-item :label="$t('websocket.username')">
               <el-input v-model="username"></el-input>
             </el-form-item>
           </el-col>
+
           <el-col :span="8">
             <el-form-item :label="$t('websocket.password')">
               <el-input v-model="password"></el-input>
             </el-form-item>
           </el-col>
+
           <el-col :span="8">
             <el-form-item :label="$t('websocket.keepAlive')">
               <el-input v-model.number="keepalive"></el-input>
             </el-form-item>
           </el-col>
+
           <el-col :span="24">
             <el-form-item class="check-area">
               <el-checkbox v-model="clean">
@@ -48,6 +59,7 @@
                 @change="handleSSL">
                 SSL
               </el-checkbox>
+              <span style="margin: 5px 0 20px 50px;color: #42d885">{{ connectURL }}</span>
             </el-form-item>
           </el-col>
         </el-row>
@@ -89,10 +101,10 @@
         <el-row :gutter="20" @keyup.enter.native="mqttSubscribe">
           <el-col :span="12">
             <el-form-item :label="$t('websocket.topic')">
-              <el-input v-model="subTopic" ></el-input>
+              <el-input v-model="subTopic"></el-input>
             </el-form-item>
             <el-form-item :label="$t('websocket.qoS')">
-              <el-select v-model.number="subQos" >
+              <el-select v-model.number="subQos">
                 <el-option :value="0"></el-option>
                 <el-option :value="1"></el-option>
                 <el-option :value="2"></el-option>
@@ -141,12 +153,12 @@
         <el-row :gutter="20" @keyup.enter.native="mqttPublish">
           <el-col :span="6">
             <el-form-item :label="$t('websocket.topic')">
-              <el-input v-model="publishTopic" ></el-input>
+              <el-input v-model="publishTopic"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item :label="$t('websocket.messages')">
-              <el-input v-model="publishMessage" ></el-input>
+              <el-input v-model="publishMessage"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -256,6 +268,7 @@ export default {
       sending: false,
       host: window.location.hostname,
       port: 8083,
+      path: '/mqtt',
       username: '',
       isSSL: false,
       password: '',
@@ -283,6 +296,10 @@ export default {
         return this.$t('websocket.connecting')
       }
       return this.$t('websocket.disconnected')
+    },
+    connectURL() {
+      const path = this.path && this.path.startsWith('/') ? this.path : `/${this.path}`
+      return `${this.isSSL ? 'wss' : 'ws'}://${this.host}:${this.port}${path}`
     },
   },
   methods: {
@@ -321,11 +338,10 @@ export default {
         password: this.password,
         clientId: this.clientId,
         clean: this.clean,
-        connectTimeout: 4000,
+        connectTimeout: 10 * 1000,
       }
-      const protocol = this.isSSL ? 'wss' : 'ws'
       try {
-        this.client = mqtt.connect(`${protocol}://${this.host}:${this.port}/mqtt`, options)
+        this.client = mqtt.connect(this.connectURL, options)
         this.client.on('connect', () => {
           this.loading = false
           NProgress.done()

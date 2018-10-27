@@ -19,7 +19,7 @@ Object.assign(Axios.defaults, {
 
 let timer = 0
 
-// 请求拦截器添加 headers
+// Add auth headers
 Axios.interceptors.request.use((config) => {
   if (store.state.user.username) {
     config.auth = {
@@ -37,7 +37,6 @@ Axios.interceptors.request.use((config) => {
   store.dispatch('LOADING', false)
 })
 
-// handleError
 function handleError(error) {
   NProgress.done()
   clearTimeout(timer)
