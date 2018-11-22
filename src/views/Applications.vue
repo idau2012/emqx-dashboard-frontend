@@ -82,60 +82,124 @@
         </template>
       </el-table-column>
     </el-table>
+
     <el-dialog
-      width="500px"
+      :width="oper === 'view' ? '660px' : '500px'"
       :visible.sync="displayDialog"
       :title="$t(`app.${oper}App`)">
       <el-form
-        class="el-form--public"
+        class="el-form--public app-info"
         ref="record"
         size="medium"
-        label-position="top"
+        :label-position="oper === 'view' ? 'left' : 'top'"
         :rules="oper === 'view' ? {} : rules"
         :model="record">
         <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item prop="app_id" :label="$t('app.appId')">
-              <el-input v-model="record.app_id" :disabled="['view', 'edit'].includes(oper)"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item v-if="oper === 'view'" :label="$t('app.secret')">
-              <el-input v-model="record.secret" disabled></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item prop="name" :label="$t('app.name')">
-              <el-input v-model="record.name" :disabled="['view', 'edit'].includes(oper)"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12"></el-col>
-          <el-col :span="12">
-            <el-form-item prop="status" :label="$t('app.status')">
-              <el-select v-model="record.status" class="el-select--public" popper-class="el-select--public"
-                         :disabled="oper === 'view'">
-                <el-option :label="$t('app.enable')" :value="true"></el-option>
-                <el-option :label="$t('app.disable')" :value="false"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item :label="$t('app.expired')">
-              <el-date-picker
-                v-model="record.expired"
-                :picker-options="pickerDisable"
-                :placeholder="$t('app.expiredText')"
-                :disabled="oper === 'view'">
-              </el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item prop="desc" :label="$t('app.desc')">
-              <el-input v-model="record.desc" :disabled="['view'].includes(oper)"></el-input>
-            </el-form-item>
-          </el-col>
+          <template v-if="oper === 'view'">
+            <el-col :span="12">
+              <el-form-item prop="app_id" :label="$t('app.appId')">
+                <el-input v-model="record.app_id" class="is-disabled" :readonly="true"></el-input>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="12">
+              <el-form-item :label="$t('app.secret')">
+                <el-input v-model="record.secret" class="is-disabled" :readonly="true"></el-input>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="12">
+              <el-form-item prop="name" :label="$t('app.name')">
+                <el-input v-model="record.name" class="is-disabled" :readonly="true"></el-input>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="12">
+              <el-form-item prop="status" :label="$t('app.status')">
+                <el-select
+                  v-model="record.status"
+                  class="el-select--public"
+                  popper-class="el-select--public"
+                  :disabled="oper === 'view'">
+                  <el-option :label="$t('app.enable')" :value="true"></el-option>
+                  <el-option :label="$t('app.disable')" :value="false"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="12">
+              <el-form-item :label="$t('app.expired')">
+                <el-date-picker
+                  v-model="record.expired"
+                  :picker-options="pickerDisable"
+                  :placeholder="$t('app.expiredText')"
+                  :disabled="oper === 'view'">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="12">
+              <el-form-item prop="desc" :label="$t('app.desc')">
+                <el-input v-model="record.desc" class="is-disabled" :readonly="true"></el-input>
+              </el-form-item>
+            </el-col>
+          </template>
+
+          <template v-else>
+            <el-col :span="12">
+              <el-form-item prop="app_id" :label="$t('app.appId')">
+                <el-input v-model="record.app_id" :disabled="['view', 'edit'].includes(oper)"></el-input>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="12">
+              <el-form-item v-if="oper === 'view'" :label="$t('app.secret')">
+                <el-input v-model="record.secret" disabled></el-input>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="12">
+              <el-form-item prop="name" :label="$t('app.name')">
+                <el-input v-model="record.name" :disabled="['view', 'edit'].includes(oper)"></el-input>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="12"></el-col>
+
+            <el-col :span="12">
+              <el-form-item prop="status" :label="$t('app.status')">
+                <el-select
+                  v-model="record.status"
+                  class="el-select--public"
+                  popper-class="el-select--public"
+                  :disabled="oper === 'view'">
+                  <el-option :label="$t('app.enable')" :value="true"></el-option>
+                  <el-option :label="$t('app.disable')" :value="false"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="12">
+              <el-form-item :label="$t('app.expired')">
+                <el-date-picker
+                  v-model="record.expired"
+                  :picker-options="pickerDisable"
+                  :placeholder="$t('app.expiredText')"
+                  :disabled="oper === 'view'">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="12">
+              <el-form-item prop="desc" :label="$t('app.desc')">
+                <el-input v-model="record.desc" :disabled="['view'].includes(oper)"></el-input>
+              </el-form-item>
+            </el-col>
+          </template>
         </el-row>
       </el-form>
+
+      <!-- create & edit footer -->
       <div v-if="oper !== 'view'" slot="footer">
         <el-button
           type="text"
@@ -161,6 +225,15 @@
           @click="createApp">
           {{ $t('oper.save') }}
         </el-button>
+      </div>
+
+      <div v-else slot="footer">
+        <div class="guide-doc">
+          {{ this.$t('app.guide') }}
+          <a href="https://developer.emqx.io/docs/emq/v3/en/rest.html" target="_blank">
+            {{ $t('app.docs') }}
+          </a>
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -374,6 +447,16 @@ export default {
   }
   .el-form-item--medium .el-form-item__content {
     line-height: 38px;
+  }
+}
+
+.app-info {
+  .el-input {
+    &.is-disabled {
+      .el-input__inner {
+        cursor: text;
+      }
+    }
   }
 }
 </style>

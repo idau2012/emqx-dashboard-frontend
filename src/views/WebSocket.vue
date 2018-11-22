@@ -19,7 +19,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="path">
+            <el-form-item label="Path">
               <el-input v-model="path"></el-input>
             </el-form-item>
           </el-col>
@@ -277,9 +277,9 @@ export default {
       clientId: `mqttjs_${Math.random().toString(16).substr(2, 10)}`,
       subQos: 0,
       publishQos: 0,
-      publishMessage: 'Hello world!',
-      subTopic: '/World',
-      publishTopic: '/World',
+      publishMessage: '{ "msg": "Hello, World!" }',
+      subTopic: 'testtopic/#',
+      publishTopic: 'testtopic',
       publishRetain: false,
       receivedMessages: [],
       publishedMessages: [],

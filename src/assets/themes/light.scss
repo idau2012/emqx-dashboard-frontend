@@ -279,6 +279,10 @@
       background-color: #34c388 !important;
     }
   }
+
+  .el-pagination .el-select .el-input .el-input__inner {
+    border-color: #c0c4cc;
+  }
 }
 
 .el-pagination.is-background {
@@ -301,3 +305,4 @@
     }
   }
 }
+

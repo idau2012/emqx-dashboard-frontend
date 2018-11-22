@@ -275,7 +275,7 @@ export default {
         const dict = { ...response.data }
         const indexTable = {
           packets: ['received', 'sent', 'connect', 'connack', 'auth', 'disconnect/sent', 'disconnect/received', 'pingreq', 'pingresp', 'publish/received', 'publish/sent', 'puback/received', 'puback/sent', 'puback/missed', 'pubcomp/received', 'pubcomp/sent', 'pubcomp/missed', 'pubrec/received', 'pubrec/sent', 'pubrec/missed', 'pubrel/received', 'pubrel/sent', 'pubrel/missed', 'subscribe', 'suback', 'unsubscribe', 'unsuback'],
-          messages: ['received', 'sent', 'dropped', 'retained', 'qos0/received', 'qos0/sent', 'qos1/received', 'qos1/sent', 'qos2/received', 'qos2/expired', 'qos2/sent', 'qos2/dropped'],
+          messages: ['received', 'sent', 'dropped', 'retained', 'qos0/received', 'qos0/sent', 'qos1/received', 'qos1/sent', 'qos2/received', 'qos2/expired', 'qos2/sent', 'qos2/dropped', 'qos2/forward'],
           bytes: ['received', 'sent'],
         }
         Object.keys(indexTable).forEach((item) => {

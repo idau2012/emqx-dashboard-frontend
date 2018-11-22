@@ -269,6 +269,8 @@ export default {
     enableText: 'Access allowed',
     disableText: 'Access barred',
     expiredText: 'Never expired',
+    guide: 'Application for authentication of EMQ X Management API (REST API)',
+    docs: 'Documentation',
   },
   // users
   users: {

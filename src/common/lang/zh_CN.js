@@ -266,6 +266,8 @@ export default {
     enableText: '允许访问',
     disableText: '拒绝访问',
     expiredText: '永不过期',
+    guide: '应用用于 EMQ X 管理监控 API (REST API) 连接认证，详见',
+    docs: '文档',
   },
   // users
   users: {

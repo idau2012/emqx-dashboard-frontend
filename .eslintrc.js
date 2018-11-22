@@ -44,5 +44,6 @@ module.exports = {
     'no-param-reassign': 0,
     'no-trailing-spaces': 0,
     'import/no-duplicates': 0,
+    'no-underscore-dangle': 0
   },
 }

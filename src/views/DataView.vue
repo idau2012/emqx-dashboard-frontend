@@ -144,13 +144,15 @@
 
     <!-- pagination -->
     <el-pagination
-      v-if="count > params._limit"
+      v-if="count > 10"
       background
       small
-      layout="prev, pager, next"
+      layout="total, sizes, prev, pager, next"
+      :page-sizes="[10, 50, 100, 300, 500]"
       :current-page.sync="params._page"
       :page-size="params._limit"
       :total="count"
+      @size-change="handleSizeChange"
       @current-change="loadChild">
     </el-pagination>
   </div>
@@ -289,6 +291,10 @@ export default {
         this.$message.error(error || this.$t('error.networkError'))
       })
     },
+    handleSizeChange(val) {
+      this.params._limit = val
+      this.loadChild(true)
+    },
   },
   created() {
     this.init()
@@ -314,6 +320,12 @@ export default {
   .el-breadcrumb {
     margin-top: 10px;
     margin-bottom: 20px;
+  }
+  .el-pagination .el-select .el-input .el-input__inner {
+    height: 22px;
+  }
+  .el-select .el-input .el-select__caret {
+    line-height: 12px;
   }
 }
 </style>

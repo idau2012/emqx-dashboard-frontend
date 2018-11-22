@@ -284,6 +284,10 @@
       background-color: #227d51 !important;
     }
   }
+
+  .el-pagination .el-select .el-input .el-input__inner {
+    border-color: #37363d;
+  }
 }
 
 .el-pagination.is-background {
@@ -306,3 +310,4 @@
     }
   }
 }
+
