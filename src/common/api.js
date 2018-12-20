@@ -5,6 +5,12 @@ import { Message } from 'element-ui'
 
 import router from '../router'
 import store from '../store'
+import lang from '../common/lang'
+
+const i18nLanguage = ['zh', 'en'].includes(localStorage.language)
+  ? localStorage.language
+  : window.EMQX_DASHBOARD_CONFIG.lang || 'en'
+const { httpCode } = lang[i18nLanguage] || lang.en
 
 NProgress.configure({ showSpinner: false })
 
@@ -38,6 +44,7 @@ Axios.interceptors.request.use((config) => {
 })
 
 function handleError(error) {
+  console.log(error)
   NProgress.done()
   clearTimeout(timer)
   store.dispatch('LOADING', false)
@@ -50,8 +57,7 @@ function handleError(error) {
     router.push({ path: '/login', query: { to: router.fullPath } })
   } else if (status === 404) {
     error.message = 'URL Not Found'
-  }
-  if (status !== 401) {
+  } else {
     Message.error(error.message)
   }
   return Promise.reject(error.message)
@@ -59,11 +65,31 @@ function handleError(error) {
 
 // Response interceptors
 Axios.interceptors.response.use((response) => {
+  let res = {}
+  let error = ''
+  if (typeof response.data === 'object') {
+    const { status } = response
+    const { code, meta, message } = response.data
+    let { data } = response.data
+    if (code !== 0) {
+      error = httpCode[code] || message
+    }
+    // 分页
+    if (meta) {
+      data = { items: data, meta }
+    }
+    res = { data, status }
+  }
   NProgress.done()
   clearTimeout(timer)
   timer = 0
   store.dispatch('LOADING', false)
-  return response
+  if (error) {
+    const dataError = new Error(error)
+    handleError(dataError)
+    throw dataError
+  }
+  return res
 }, handleError)
 
 export default Axios

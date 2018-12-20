@@ -10,5 +10,5 @@ export default (Vue) => {
   Vue.prototype.$httpPut = API.put
   Vue.prototype.$httpDelete = API.delete
   Vue.prototype.$axios = API
-  Vue.prototype.$env = window.EMQ_DASHBOARD_CONFIG || {}
+  Vue.prototype.$env = window.EMQX_DASHBOARD_CONFIG || {}
 }

@@ -25,7 +25,7 @@ Object.keys(filter).forEach((name) => {
 })
 
 const i18n = new VueI18n({
-  locale: window.localStorage.language || window.EMQ_DASHBOARD_CONFIG.lang || 'en',
+  locale: window.localStorage.language || window.EMQX_DASHBOARD_CONFIG.lang || 'en',
   messages: lang,
 })
 

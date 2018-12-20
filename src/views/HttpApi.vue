@@ -69,7 +69,7 @@ export default {
   data() {
     return {
       popoverVisible: false,
-      nodeName: 'emq@127.0.0.1',
+      nodeName: 'emqx@127.0.0.1',
       tableData: [],
       nodes: [],
       responseDate: null,

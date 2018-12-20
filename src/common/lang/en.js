@@ -241,8 +241,8 @@ export default {
   httpApi: {
     introduction: 'Introduction',
     desc: 'Apart from this help page, all URIs will serve only resources of type application/json, and will require HTTP basic authentication. The default user is admin / public.\n' +
-    '<br/>' +
-    'The emqx_dashboard plugin provides a web management console. The Dashboard helps monitor broker\'s running status, statistics and metrics of MQTT packets.',
+      '<br/>' +
+      'The emqx_dashboard plugin provides a web management console. The Dashboard helps monitor broker\'s running status, statistics and metrics of MQTT packets.',
     reference: 'Reference',
     method: 'Method',
     path: 'Path',
@@ -344,5 +344,23 @@ export default {
     atLeastThree: 'At least three words',
     importSuccess: 'Import success',
     notice: 'Use backup configuration files to configure initialization modification. <br/> Notice: configuration files may contain important data, such as database address and authentication information. Please keep good configuration files and use backup function reasonably.',
+  },
+  httpCode: {
+    0: 'Success',
+    101: 'Bad RPC',
+    102: 'Unknown Error',
+    103: 'Username or password error',
+    104: 'Empty username or password',
+    105: 'User does not exist',
+    106: 'Admin can not be deleted',
+    107: 'Missing request parameter',
+    108: 'Request parameter type error',
+    109: 'Request parameter is not a json',
+    110: 'Plugin has been loaded',
+    111: 'Plugin has been unloaded',
+    112: 'Client not online',
+    113: 'User already exist',
+    114: 'Old password error',
+    115: 'Bad topic',
   },
 }
