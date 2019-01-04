@@ -493,9 +493,9 @@ export default {
       this.subscriptions = []
       this.receivedMessages = []
       this.publishedMessages = []
-      this.publishMessage = 'Hello world!'
-      this.subTopic = '/World'
-      this.publishTopic = '/World'
+      this.publishMessage = '{ "msg": "Hello, World!" }'
+      this.subTopic = 'testtopic/#'
+      this.publishTopic = 'testtopic'
     },
     clearMessage(received = true) {
       if (received) {

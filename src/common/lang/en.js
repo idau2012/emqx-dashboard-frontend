@@ -90,8 +90,8 @@ export default {
     sessionsMax: 'Sessions/Max',
     subscribersCount: 'Subscribers/Count',
     subscribersMax: 'subscribers/Max',
-    subscriptionsCount: 'Subscription/Count',
-    subscriptionsMax: 'Subscription/Max',
+    subscriptionsCount: 'Subscriptions/Count',
+    subscriptionsMax: 'Subscriptions/Max',
     subscriptionsSharedCount: 'Subscriptions Shared/Count',
     subscriptionsSharedMax: 'Subscriptions Shared/Max',
     // Metrics
