@@ -307,7 +307,7 @@ export default {
       this.port = this.isSSL ? 8084 : 8083
     },
     now() {
-      return dateformat(new Date(), 'yyyy-mm-dd hh:MM:ss')
+      return dateformat(new Date(), 'yyyy-mm-dd HH:MM:ss')
     },
     disconnectSwitch() {
       // connecting
