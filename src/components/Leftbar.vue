@@ -39,6 +39,24 @@
         </el-menu-item>
       </el-menu-item-group>
 
+      <!-- 规则引擎 -->
+      <el-menu-item-group title="规则引擎">
+        <!-- 消息规则 -->
+        <el-menu-item index="/rules">
+          <i class="fa fa-random"></i>
+          消息规则
+        </el-menu-item>
+        <!--<el-menu-item index="/trigger">-->
+        <!--<i class="fa fa-level-down"></i>-->
+        <!--触发器-->
+        <!--</el-menu-item>-->
+        <!-- 资源 -->
+        <el-menu-item index="/resources">
+          <i class="fa fa-server"></i>
+          资源
+        </el-menu-item>
+      </el-menu-item-group>
+
       <!-- MANAGEMENT -->
       <el-menu-item-group :title="$t('leftbar.management')">
         <el-menu-item index="/plugins">
@@ -49,27 +67,6 @@
           <i class="fa fa-superpowers"></i>
           {{ $t('leftbar.listeners') }}
         </el-menu-item>
-        <!--&lt;!&ndash; 资源 &ndash;&gt;-->
-        <!--<el-menu-item index="/resource">-->
-        <!--<i class="fa fa-server"></i>-->
-        <!--资源-->
-        <!--</el-menu-item>-->
-
-        <!--<el-menu-item index="/auth">-->
-        <!--<i class="fa fa-universal-access"></i>-->
-        <!--认证规则-->
-        <!--</el-menu-item>-->
-
-        <!--&lt;!&ndash; 消息规则 &ndash;&gt;-->
-        <!--<el-menu-item index="/rule">-->
-        <!--<i class="fa fa-random"></i>-->
-        <!--消息规则-->
-        <!--</el-menu-item>-->
-
-        <!--<el-menu-item index="/trigger">-->
-        <!--<i class="fa fa-level-down"></i>-->
-        <!--触发器-->
-        <!--</el-menu-item>-->
       </el-menu-item-group>
 
       <!-- TOOLS -->

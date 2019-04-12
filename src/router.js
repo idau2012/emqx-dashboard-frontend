@@ -36,6 +36,22 @@ const routes = [
         component: () => import('~/views/DataView'),
       },
       {
+        path: '/rules',
+        component: () => import('~/views/RuleEngine/Rules'),
+      },
+      {
+        path: '/rules/:id',
+        component: () => import('~/views/RuleEngine/RuleView'),
+      },
+      {
+        path: '/resources',
+        component: () => import('~/views/RuleEngine/Resources'),
+      },
+      {
+        path: '/subscriptions',
+        component: () => import('~/views/DataView'),
+      },
+      {
         path: '/plugins',
         component: () => import('~/views/Plugins'),
       },
