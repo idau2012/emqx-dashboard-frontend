@@ -17,19 +17,12 @@
     </div>
 
     <!-- rules list -->
-    <el-table v-loading="$store.state.loading" border :data="tableData">
+    <el-table border :data="tableData">
 
       <!-- rule name -->
-      <el-table-column prop="name" label="资源名称">
-        <template slot-scope="{ row }">
-          <div class="emq-link" @click="viewResource(row)">
-            {{ row.name }}
-          </div>
-        </template>
-      </el-table-column>
+      <el-table-column prop="name" label="资源名称"></el-table-column>
 
-
-      <el-table-column prop="provider" label="提供者"></el-table-column>
+      <el-table-column prop="type" label="资源类型"></el-table-column>
 
       <el-table-column prop="description" label="描述"></el-table-column>
 
@@ -39,7 +32,7 @@
             type="success"
             size="mini"
             :plain="true">
-            编辑
+            查看
           </el-button>
           <el-button
             size="mini"
@@ -75,7 +68,6 @@ export default {
 
   methods: {
     viewResource(row) {
-      console.log(row)
     },
     handleOperation() {
       this.dialogVisible = true

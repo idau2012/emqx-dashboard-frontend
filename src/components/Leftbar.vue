@@ -40,21 +40,21 @@
       </el-menu-item-group>
 
       <!-- 规则引擎 -->
-      <el-menu-item-group title="规则引擎">
+      <el-menu-item-group :title="$t('rule.rule_engine')">
         <!-- 消息规则 -->
         <el-menu-item index="/rules">
           <i class="fa fa-random"></i>
-          消息规则
+          {{ $t('rule.message_rule') }}
         </el-menu-item>
         <!--<el-menu-item index="/trigger">-->
         <!--<i class="fa fa-level-down"></i>-->
         <!--触发器-->
         <!--</el-menu-item>-->
         <!-- 资源 -->
-        <el-menu-item index="/resources">
-          <i class="fa fa-server"></i>
-          资源
-        </el-menu-item>
+        <!--<el-menu-item index="/resources">-->
+          <!--<i class="fa fa-server"></i>-->
+          <!--资源-->
+        <!--</el-menu-item>-->
       </el-menu-item-group>
 
       <!-- MANAGEMENT -->
@@ -66,6 +66,10 @@
         <el-menu-item index="/listeners">
           <i class="fa fa-superpowers"></i>
           {{ $t('leftbar.listeners') }}
+        </el-menu-item>
+        <el-menu-item index="/applications">
+          <i class="fa fa-archive"></i>
+          {{ $t('leftbar.applications') }}
         </el-menu-item>
       </el-menu-item-group>
 
@@ -82,12 +86,12 @@
       </el-menu-item-group>
 
       <!-- APPLICATIONS -->
-      <el-menu-item-group :title="$t('leftbar.applications')">
-        <el-menu-item index="/applications">
-          <i class="fa fa-archive"></i>
-          {{ $t('leftbar.applications') }}
-        </el-menu-item>
-      </el-menu-item-group>
+      <!--<el-menu-item-group :title="$t('leftbar.applications')">-->
+        <!--<el-menu-item index="/applications">-->
+          <!--<i class="fa fa-archive"></i>-->
+          <!--{{ $t('leftbar.applications') }}-->
+        <!--</el-menu-item>-->
+      <!--</el-menu-item-group>-->
 
       <!-- ADMIN -->
       <el-menu-item-group :title="$t('leftbar.admin')">

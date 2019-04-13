@@ -11,8 +11,13 @@ $--color-danger: $themes-color-danger;
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import "~element-ui/packages/theme-chalk/src/index";
 
-@import "themes/dark";
-@import "themes/light";
+.dark-themes {
+  @import "themes/dark";
+}
+
+.light-themes {
+  @import "themes/light";
+}
 
 /* reset global style */
 @import "reset";

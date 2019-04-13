@@ -2,11 +2,11 @@
 <template>
   <el-dialog
     v-bind="$attrs"
-    title="触发动作"
     width="500px"
     append-to-body
     class="action-dialog"
     :visible.sync="dialogVisible"
+    :title="$t('rule.actions')"
     @close="close">
     <el-form
       class="el-form--public"
@@ -15,8 +15,13 @@
       :rules="rules">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item prop="action" label="动作">
-            <el-select v-model="record.action" @change="handleActionChange" style="width: 100%">
+          <el-form-item prop="action" :label="$t('rule.action')">
+            <el-select
+              v-model="record.action"
+              class="el-select--public"
+              popper-class="el-select--public"
+              @change="handleActionChange"
+              style="width: 100%">
               <el-option
                 v-for="(item, index) in actionsList"
                 :key="index"
@@ -31,9 +36,13 @@
           </el-form-item>
         </el-col>
 
-        <el-col v-if="action.resource_type" :span="12">
-          <el-form-item prop="resource" label="资源类型">
-            <el-select v-model="record.resource" style="width: 100%">
+        <el-col v-if="action.params && action.params.$resource" :span="12">
+          <el-form-item prop="resource" :label="$t('rule.resource')">
+            <el-select
+              v-model="record.resource"
+              class="el-select--public"
+              popper-class="el-select--public"
+              style="width: 100%">
               <el-option
                 v-for="(item, index) in options"
                 :key="index"
@@ -46,7 +55,7 @@
 
         <el-col v-for="(item, index) in paramsList" :span="12" :key="index">
           <el-form-item
-            :prop="`params.${item.key}`"
+            :prop="`params.${item.prop}`"
             :label="item.label"
             :rules="item.rules">
             <el-input
@@ -60,14 +69,20 @@
     </el-form>
 
     <div slot="footer">
-      <el-button class="cache-btn" type="text" @click="dialogVisible = false">取消</el-button>
-      <el-button class="confirm-btn" type="success" @click="handleAdd">确定</el-button>
+      <el-button class="cache-btn" type="text" @click="dialogVisible = false">
+        {{ $t('rule.cancel') }}
+      </el-button>
+      <el-button class="confirm-btn" type="success" @click="handleAdd">
+        {{ $t('rule.confirm') }}
+      </el-button>
     </div>
   </el-dialog>
 </template>
 
 
 <script>
+import { params2Form } from '~/common/utils'
+
 export default {
   name: 'action-dialog',
 
@@ -79,6 +94,13 @@ export default {
     visible: {
       type: Boolean,
       required: true,
+    },
+    formData: {
+      type: Object,
+    },
+    currentActions: {
+      type: Array,
+      default: () => [],
     },
   },
 
@@ -101,11 +123,20 @@ export default {
   },
 
   methods: {
+    _isEmpty(val) {
+      if (!val) {
+        return true
+      }
+      if (Array.isArray(val) && val.length === 0) {
+        return true
+      }
+      if (typeof val === 'object') {
+        return Object.keys(val).length === 0
+      }
+      return !!val
+    },
     close() {
       if (this.$refs.record) {
-        // this.record = {
-        //   params: {},
-        // }
         this.options = {}
         this.action = {}
         this.paramsList = []
@@ -117,20 +148,16 @@ export default {
         if (!valid) {
           return
         }
-        this.$message.success('创建成功')
-      })
-    },
-    // 渲染 params 列
-    initParams(params = {}) {
-      Object.entries(params).forEach((item) => {
-        const [key, value] = item
-        this.paramsList.push({
-          key,
-          label: key,
-          prop: key,
-          placeholder: value,
-          rules: { required: true, message: `${key} is required` },
-        })
+        const { params, action: name } = this.record
+        // 资源类型 资源参数
+        const action = { name, params: { ...params } }
+        const hash = JSON.stringify(action)
+        if (this.currentActionsMap[hash]) {
+          this.$message.error(this.$t('rule.action_exists'))
+          return
+        }
+        this.$emit('confirm', action)
+        this.dialogVisible = false
       })
     },
     handleActionChange(val) {
@@ -139,31 +166,65 @@ export default {
       if (!this.action) {
         return
       }
-      this.loadResource()
-      this.initParams(this.action.params)
+      // TODO: resource_type to action layout
+      const { model = [] } = params2Form(this.action.params)
+      this.paramsList = model
+
+      // fillData
+      model.forEach((item) => {
+        const { key } = item
+        this.$set(this.record, `params.${key}`, undefined)
+      })
+
+      return this.loadResource()
     },
+
     // 加载 resource 列表
     loadResource() {
-      if (!this.action || !this.action.resource_type) {
+      if (!this.action || !this.action.params || !this.action.params.$resource) {
         return
       }
-      const { resource_type: resourceType } = this.action
-      this.$httpGet('/resources').then((response) => {
+      const { $resource: resource } = this.action.params
+      return this.$httpGet('/resources').then((response) => {
         const { data } = response
-        this.options = data.filter($ => $.name === resourceType)
+        this.options = data.filter($ => $.type === resource)
+        // 清空 待选择
+        this.$set(this.record, 'resource', undefined)
       })
     },
+
     loadActions() {
-      this.$httpGet('/actions').then((response) => {
+      return this.$httpGet('/actions').then((response) => {
         this.actionsList = response.data
       })
     },
     // 使用配置绘制
-    renderForm() {},
+    async renderForm(formData) {
+      if (!this.formData) {
+        return
+      }
+      const { name, params = {} } = this.formData || formData
+
+      // 加载资源
+      await this.handleActionChange(name)
+      // 填充数据
+      this.fillData(params)
+    },
+    fillData(data) {
+      Object.entries(data).forEach((item) => {
+        const [key, value] = item
+        this.$set(this.record, key, value)
+      })
+    },
+    open(formData) {
+      this.dialogVisible = true
+      this.renderForm(formData)
+    },
   },
 
-  created() {
-    this.loadActions()
+  async created() {
+    await this.loadActions()
+    await this.renderForm()
   },
 
   computed: {
@@ -174,6 +235,14 @@ export default {
       set(val) {
         this.$emit('update:visible', val)
       },
+    },
+    currentActionsMap() {
+      const dict = {}
+      this.currentActions.forEach((item) => {
+        const hash = JSON.stringify(item)
+        dict[hash] = true
+      })
+      return dict
     },
   },
 }

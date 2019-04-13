@@ -1,29 +1,34 @@
 <template>
   <el-dialog
     v-bind="$attrs"
-    title="资源管理"
     width="700px"
-    append-to-body
     class="resource-dialog"
     :visible.sync="dialogVisible"
+    :title="$t('rule.resource_mgmt')"
     @close="close">
     <el-form
       class="el-form--public"
+      ref="record"
       :model="record"
       :rules="rules">
       <el-row :gutter="20">
 
-        <div class="block__title">资源信息</div>
+        <!--<div class="block__title">资源信息</div>-->
 
         <el-col :span="12">
-          <el-form-item prop="name" label="名称">
+          <el-form-item prop="name" :label="$t('rule.name')">
             <el-input v-model="record.name"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item prop="type" label="资源类型">
-            <el-select v-model="record.type" style="width: 100%" @change="handleTypeChange">
+          <el-form-item prop="type" :label="$t('rule.resource_type')">
+            <el-select
+              v-model="record.type"
+              class="el-select--public"
+              popper-class="el-select--public"
+              style="width: 100%"
+              @change="handleTypeChange">
               <el-option
                 v-for="(item, index) in resourceTypes"
                 :key="index"
@@ -35,14 +40,14 @@
         </el-col>
 
         <el-col :span="12">
-          <el-form-item prop="description" label="备注">
-            <el-input v-model="record.description" type="textarea"></el-input>
+          <el-form-item prop="description" :label="$t('rule.description')">
+            <el-input v-model="record.description"></el-input>
           </el-form-item>
         </el-col>
 
-        <div class="divide"></div>
+        <!--<div class="divide"></div>-->
 
-        <div class="block__title">资源配置</div>
+        <!--<div class="block__title">资源配置</div>-->
 
         <el-col v-for="(item, index) in paramsList" :span="12" :key="index">
           <el-form-item :prop="item.prop" :label="item.label">
@@ -55,8 +60,12 @@
     </el-form>
 
     <div slot="footer">
-      <el-button class="cache-btn" type="text" @click="dialogVisible = false">取消</el-button>
-      <el-button class="confirm-btn" type="success" @click="handleCreate">创建</el-button>
+      <el-button class="cache-btn" type="text" @click="dialogVisible = false">
+        {{ $t('rule.cancel') }}
+      </el-button>
+      <el-button class="confirm-btn" type="success" @click="handleCreate">
+        {{ $t('rule.confirm') }}
+      </el-button>
     </div>
 
   </el-dialog>
@@ -110,22 +119,14 @@ export default {
           return
         }
         this.$httpPost('/resources', this.record).then(() => {
-          this.$message.success('创建成功')
+          this.$message.success(this.$t('rule.create_success'))
           this.dialogVisible = false
         })
       })
     },
-    initParams(params) {
-      console.log(params)
-      this.paramsList = []
-    },
     handleTypeChange(val) {
       this.paramsList = []
       const resourceType = this.paramsList.find($ => $.type === val)
-      if (!resourceType) {
-        return
-      }
-      this.initParams(resourceType.params)
     },
     loadResourceTypes() {
       this.$httpGet('/resource_types').then((response) => {

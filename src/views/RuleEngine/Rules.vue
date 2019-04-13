@@ -1,7 +1,7 @@
 <template>
   <div class="rules-view">
     <div class="page-title">
-      规则引擎
+      {{ $t('rule.message_rule') }}
       <el-button
         class="confirm-btn"
         round
@@ -12,7 +12,7 @@
         style="float: right"
         :disable="$store.state.loading"
         @click="handleOperation">
-        新建
+        {{ $t('rule.create') }}
       </el-button>
     </div>
 
@@ -20,56 +20,125 @@
     <el-table v-loading="$store.state.loading" border :data="tableData">
 
       <!-- rule name -->
-      <el-table-column prop="name" label="规则名称">
-        <template slot-scope="{ row }">
-          <router-link :to="`/rules/${row.id}`">
-            {{ row.name }}
-          </router-link>
-        </template>
+      <el-table-column prop="name" :label="$t('rule.rule_name')">
+        <!--<template slot-scope="{ row }">-->
+        <!--<router-link :to="`/rules/${row.id}`">-->
+        <!--{{ row.name }}-->
+        <!--</router-link>-->
+        <!--</template>-->
       </el-table-column>
 
+      <!--<el-table-column prop="for" label="响应事件"></el-table-column>-->
 
-      <el-table-column prop="actions" label="响应动作"></el-table-column>
-
-      <el-table-column prop="enabled" label="是否启用"></el-table-column>
-      <el-table-column prop="rawsql" label="SQL"></el-table-column>
-      <el-table-column prop="description" label="规则描述"></el-table-column>
-      <el-table-column label="操作">
-        <template slor-scope="{ row }">
+      <!--<el-table-column prop="enabled" label="是否启用">-->
+      <!--<template slot-scope="{ row }">-->
+      <!--{{ row.enabled }}-->
+      <!--</template>-->
+      <!--</el-table-column>-->
+      <el-table-column prop="rawsql" min-width="120px" label="SQL"></el-table-column>
+      <!--<el-table-column prop="description" label="描述"></el-table-column>-->
+      <el-table-column prop="actions" :label="$t('rule.actions')">
+        <template slot-scope="{ row }">
+          <div v-for="(item, i) in row.actions" class="action-item" :key="i">
+            {{ item.name }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('rule.oper')">
+        <template slot-scope="{ row }">
           <el-button
             type="success"
             size="mini"
-            :plain="true">
-            编辑
+            plain
+            @click="viewRule(row)">
+            {{ $t('rule.view') }}
           </el-button>
           <el-button
             size="mini"
-            type="warning">
-            删除
+            type="danger"
+            plain
+            @click="handleDelete(row)">
+            {{ $t('rule.delete') }}
           </el-button>
         </template>
       </el-table-column>
 
     </el-table>
+
+
+    <el-dialog :title="$t('rule.rule_details')" :visible.sync="dialogVisible">
+      <div class="rule-preview">
+        <div class="option-item">
+          <div class="option-title">{{ $t('rule.rule_name') }}</div>
+          <div class="option-value">{{ rule.name }}</div>
+        </div>
+        <div class="option-item">
+          <div class="option-title">{{ $t('rule.rule_desc') }}</div>
+          <div class="option-value">{{ rule.description }}</div>
+        </div>
+        <div class="option-item">
+          <div class="option-title">SQL</div>
+          <div class="option-value">{{ rule.rawsql }}</div>
+        </div>
+        <div class="option-item">
+          <div class="option-title">{{ $t('rule.actions') }}</div>
+          <div class="option-all">
+            <rule-actions
+              in-dialog
+              :record="rule"
+              :operations="[]">
+            </rule-actions>
+          </div>
+        </div>
+      </div>
+
+      <div slot="footer">
+        <el-button class="confirm-btn" type="success" @click="dialogVisible = false">
+          {{ $t('rule.confirm') }}
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 
 <script>
+import RuleActions from '~/views/RuleEngine/components/RuleActions'
+
 export default {
   name: 'rules-view',
 
-  components: {},
+  components: { RuleActions },
 
   props: {},
 
   data() {
     return {
+      rule: {},
+      dialogVisible: false,
       tableData: [],
     }
   },
 
   methods: {
+    viewRule(row) {
+      this.rule = row
+      this.dialogVisible = true
+    },
+    handleDelete(row) {
+      this.$confirm(this.$t('rule.confirm_stop_delete'), 'Notice', {
+        confirmButtonClass: 'confirm-btn',
+        confirmButtonText: this.$t('oper.confirm'),
+        cancelButtonClass: 'cache-btn el-button--text',
+        cancelButtonText: this.$t('oper.cancel'),
+        type: 'warning',
+      }).then(() => {
+        this.$httpDelete(`/rules/${row.id}`).then(() => {
+          this.$message.success(this.$t('rule.delete_success'))
+          this.loadData()
+        })
+      }).catch()
+    },
     handleOperation() {
       this.$router.push('/rules/0?oper=create')
     },
@@ -77,6 +146,12 @@ export default {
       this.$httpGet('/rules').then((response) => {
         this.tableData = response.data
       })
+    },
+  },
+
+  filters: {
+    actionsFilter(actions) {
+      return actions.map($ => $.name).join(',  ')
     },
   },
 
@@ -91,6 +166,31 @@ export default {
 .rules-view {
   .el-table {
     margin-top: 24px;
+  }
+  .rule-preview {
+    .option-item {
+      margin: 0 auto;
+      padding: 6px;
+      min-height: 32px;
+      line-height: 32px;
+      /*&:nth-child(odd) {*/
+      /*background-color: #f1f1f1;*/
+      /*}*/
+      .option-title {
+        width: 48%;
+        float: left;
+      }
+      .option-value {
+        width: 48%;
+        float: left;
+      }
+      .option-all {
+        clear: both;
+        width: 100%;
+        /*background-color: #f1f1f1;*/
+        /*padding: 6px;*/
+      }
+    }
   }
 }
 </style>
