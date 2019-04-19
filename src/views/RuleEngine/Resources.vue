@@ -49,9 +49,56 @@
     <resource-dialog
       ref="resourceDialog"
       :visible.sync="dialogVisible"
-      :record="resourceRecord"
       @confirm="loadData">
     </resource-dialog>
+
+    <el-dialog title="资源详情" :visible.sync="viewDialogVisible">
+      <div class="dialog-preview">
+        <div class="option-item">
+          <div class="option-title">资源名称</div>
+          <div class="option-value">{{ res.name }}</div>
+        </div>
+        <div class="option-item">
+          <div class="option-title">资源类型</div>
+          <div class="option-value">{{ res.type }}</div>
+        </div>
+        <div class="option-item">
+          <div class="option-title">资源描述</div>
+          <div class="option-value">{{ res.description }}</div>
+        </div>
+
+        <!-- 这里是参数 -->
+        <div
+          v-if="res.config && Object.keys(res.config).length > 0"
+          class="option-item">
+          <div class="option-title">参数信息</div>
+          <div class="option-all">
+
+
+            <div
+              v-for="(item, index) in Object.entries(res.config)"
+              :key="index"
+              class="option-item">
+              <div class="option-title">
+                {{ item[0] }}
+              </div>
+              <div class="option-value">
+                {{ item[1] }}
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div slot="footer">
+        <el-button class="confirm-btn" type="success" @click="viewDialogVisible = false">
+          {{ $t('rule.confirm') }}
+        </el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -69,11 +116,9 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      viewDialogVisible: false,
       tableData: [],
-      resourceRecord: {
-        config: {},
-        description: '',
-      },
+      res: {},
     }
   },
 
@@ -93,15 +138,10 @@ export default {
       }).catch()
     },
     viewResource(row) {
-      this.resourceRecord = { config: {}, ...row, disabled: true }
-      this.dialogVisible = true
+      this.res = { ...row }
+      this.viewDialogVisible = true
     },
     handleOperation() {
-      this.resourceRecord = {
-        disabled: false,
-        config: {},
-        description: '',
-      }
       this.dialogVisible = true
     },
     loadData() {

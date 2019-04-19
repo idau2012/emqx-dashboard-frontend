@@ -3,7 +3,7 @@
     v-model="sourceValue"
     class="json-input"
     type="textarea"
-    :placeholder="objectPlaceholder"
+    :placeholder="$attrs.placeholder || objectPlaceholder"
     :rows="5">
   </el-input>
 </template>
@@ -14,6 +14,8 @@ export default {
   name: 'json-input',
 
   components: {},
+
+  inheritAttrs: false,
 
   props: {
     value: [Array, Object, String],

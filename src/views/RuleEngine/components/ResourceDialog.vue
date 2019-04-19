@@ -10,7 +10,6 @@
     <el-form
       class="el-form--public"
       ref="record"
-      :disabled="record.disabled === true"
       :model="record"
       :rules="rules">
       <el-row :gutter="20">
@@ -45,7 +44,10 @@
 
         <!--<div class="block__title">资源配置</div>-->
 
-        <el-col v-for="(item, index) in paramsList" :span="item.type === 'object' ? 24 : 12" :key="index">
+        <el-col
+          v-for="(item, index) in paramsList"
+          :span="item.type === 'object' ? 24 : 12"
+          :key="index">
           <el-form-item :prop="`config.${item.prop}`" :label="item.label">
 
 
@@ -81,12 +83,12 @@
       </el-row>
     </el-form>
 
-    <div v-if="record.disabled !== true" slot="footer">
+    <div slot="footer">
       <el-button class="cache-btn" type="text" @click="dialogVisible = false">
         {{ $t('rule.cancel') }}
       </el-button>
       <el-button class="confirm-btn" type="success" @click="handleCreate">
-        {{ $t('rule.confirm') }}
+        {{ $t('rule.create') }}
       </el-button>
     </div>
 
@@ -107,16 +109,6 @@ export default {
       type: Boolean,
       required: true,
     },
-    record: {
-      type: Object,
-      default: () => ({
-        disabled: false,
-        name: '',
-        type: '',
-        config: {},
-        description: '',
-      }),
-    },
   },
 
   data() {
@@ -127,6 +119,12 @@ export default {
       objectPlaceholder: `JSON, e.g: \n${ JSON.stringify({
         Authorization: 'Basic YWRtaW46cHVibGlj',
       }, null, 2) }`,
+      record: {
+        name: '',
+        type: '',
+        config: {},
+        description: '',
+      },
     }
   },
 
@@ -167,20 +165,15 @@ export default {
       } else if (!this.record.config) {
         this.$set(this.record, 'config', {})
       }
-      if (this.record.disabled === true) {
-        this.paramsList.forEach((item) => {
-          this.$set(this.record.config, item.key, this.record.config[item.key])
-        })
-      } else {
-        this.paramsList.forEach((item) => {
-          this.$set(this.record.config, item.key, item.defaultValue)
-        })
-      }
-    },
-    loadResourceTypes() {
+      // 设置默认值
+      this.paramsList.forEach((item) => {
+        this.$set(this.record.config, item.key, item.defaultValue)
+      })
       if (this.$refs.record) {
         this.$refs.record.clearValidate()
       }
+    },
+    loadResourceTypes() {
       this.$httpGet('/resource_types').then((response) => {
         this.resourceTypes = response.data
         this.handleTypeChange(this.record.type)

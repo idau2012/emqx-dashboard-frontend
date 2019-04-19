@@ -67,7 +67,7 @@
 
 
     <el-dialog :title="$t('rule.rule_details')" :visible.sync="dialogVisible">
-      <div class="rule-preview">
+      <div class="dialog-preview">
         <div class="option-item">
           <div class="option-title">{{ $t('rule.rule_name') }}</div>
           <div class="option-value">{{ rule.name }}</div>
@@ -133,7 +133,7 @@ export default {
         cancelButtonText: this.$t('oper.cancel'),
         type: 'warning',
       }).then(() => {
-        this.$httpDelete(`/rules/${row.id}`).then(() => {
+        this.$httpDelete(`/rules/${ row.id }`).then(() => {
           this.$message.success(this.$t('rule.delete_success'))
           this.loadData()
         })
@@ -166,31 +166,6 @@ export default {
 .rules-view {
   .el-table {
     margin-top: 24px;
-  }
-  .rule-preview {
-    .option-item {
-      margin: 0 auto;
-      padding: 6px;
-      min-height: 32px;
-      line-height: 32px;
-      /*&:nth-child(odd) {*/
-      /*background-color: #f1f1f1;*/
-      /*}*/
-      .option-title {
-        width: 48%;
-        float: left;
-      }
-      .option-value {
-        width: 48%;
-        float: left;
-      }
-      .option-all {
-        clear: both;
-        width: 100%;
-        /*background-color: #f1f1f1;*/
-        /*padding: 6px;*/
-      }
-    }
   }
 }
 </style>

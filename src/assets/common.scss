@@ -39,10 +39,12 @@ body {
   -webkit-font-smoothing: subpixel-antialiased;
   font-size: 14px;
   font-weight: 400;
+
   #nprogress {
     .bar {
       background: $themes-color-native;
     }
+
     .peg {
       box-shadow: 0 0 10px $themes-color-native, 0 0 5px $themes-color-native;
     }
@@ -67,16 +69,20 @@ a {
   font-size: 24px;
   text-transform: capitalize;
   padding: 30px 0 10px 0 !important;
+
   .el-select {
     input {
       height: 40px !important;
     }
+
     float: right;
   }
+
   .el-breadcrumb {
     margin-top: 2px;
     font-size: 24px;
     text-transform: lowercase;
+
     .uppercase {
       text-transform: Capitalize;
     }
@@ -85,6 +91,7 @@ a {
 
 .operation-area {
   margin-top: 20px;
+
   .el-button {
     &.el-button--text {
       padding-right: 20px;
@@ -168,6 +175,7 @@ input {
   margin: 100px auto;
   text-align: center;
   height: 200px;
+
   .icon {
     width: 80px;
     height: 80px;
@@ -187,4 +195,32 @@ input {
 .emq-link {
   cursor: pointer;
   color: #42d885;
+}
+
+.dialog-preview {
+  .option-item {
+    margin: 0 auto;
+    padding: 6px;
+    min-height: 32px;
+    line-height: 32px;
+    /*&:nth-child(odd) {*/
+    /*background-color: #f1f1f1;*/
+    /*}*/
+    .option-title {
+      width: 48%;
+      float: left;
+    }
+
+    .option-value {
+      width: 48%;
+      float: left;
+    }
+
+    .option-all {
+      clear: both;
+      width: 100%;
+      /*background-color: #f1f1f1;*/
+      /*padding: 6px;*/
+    }
+  }
 }

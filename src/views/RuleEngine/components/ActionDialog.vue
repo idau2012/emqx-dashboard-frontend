@@ -200,7 +200,7 @@ export default {
     },
 
     loadActions() {
-      return this.$httpGet('/actions').then((response) => {
+      return this.$httpGet('/actions?for=$messages').then((response) => {
         this.actionsList = response.data
       })
     },
