@@ -5,7 +5,7 @@
       <el-table-column prop="params" :label="$t('rule.value')">
         <template slot-scope="{ row }">
           <div v-for="(item, i) in Object.entries(row.params)" class="action-item" :key="i">
-            {{ item[0] }}: {{ item[1] }}
+            {{ item[0] === '$resource' ? $t('rule.rely_resource') : item[0] }}: {{ item[1] }}
           </div>
         </template>
       </el-table-column>

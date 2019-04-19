@@ -1,4 +1,5 @@
 export const en = {
+  rely_resource: 'Resource',
   actions_tips: 'Processing messages for hit rules',
   conditional_tips: 'Defining rule conditions and data processing ways through SQL',
   conditional: 'Rule condition',
@@ -59,6 +60,7 @@ export const en = {
 }
 
 export const zh = {
+  rely_resource: '关联资源',
   actions_tips: '处理命中规则的消息',
   conditional_tips: '使用 SQL 定义规则条件与数据处理方式',
   conditional: '条件',

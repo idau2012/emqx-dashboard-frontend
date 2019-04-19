@@ -36,10 +36,11 @@
           </el-form-item>
         </el-col>
 
+        <!-- 选择 resource -->
         <el-col v-if="action.params && action.params.$resource" :span="12">
-          <el-form-item prop="resource" :label="$t('rule.resource')">
+          <el-form-item prop="params.$resource" :label="$t('rule.resource')">
             <el-select
-              v-model="record.resource"
+              v-model="record.params.$resource"
               class="el-select--public"
               popper-class="el-select--public"
               style="width: 100%">
@@ -47,7 +48,7 @@
                 v-for="(item, index) in options"
                 :key="index"
                 :label="item.name"
-                :value="item.name">
+                :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -113,8 +114,10 @@ export default {
         action: {
           required: true,
         },
-        resource: {
-          required: true,
+        params: {
+          $resource: {
+            required: true,
+          },
         },
       },
       options: [],
