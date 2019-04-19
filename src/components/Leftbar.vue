@@ -41,20 +41,19 @@
 
       <!-- 规则引擎 -->
       <el-menu-item-group :title="$t('rule.rule_engine')">
+        <el-menu-item index="/resources">
+          <i class="fa fa-server"></i>
+          资源
+        </el-menu-item>
         <!-- 消息规则 -->
         <el-menu-item index="/rules">
           <i class="fa fa-random"></i>
           {{ $t('rule.message_rule') }}
         </el-menu-item>
-        <!--<el-menu-item index="/trigger">-->
-        <!--<i class="fa fa-level-down"></i>-->
-        <!--触发器-->
-        <!--</el-menu-item>-->
-        <!-- 资源 -->
-        <!--<el-menu-item index="/resources">-->
-          <!--<i class="fa fa-server"></i>-->
-          <!--资源-->
-        <!--</el-menu-item>-->
+        <el-menu-item index="/events_rule">
+          <i class="fa fa-arrows-h"></i>
+          事件规则
+        </el-menu-item>
       </el-menu-item-group>
 
       <!-- MANAGEMENT -->

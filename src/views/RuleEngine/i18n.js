@@ -66,7 +66,7 @@ export const zh = {
   message_rule: '消息规则',
   create: '新建',
   rule_name: '规则名称',
-  actions: '触发事件',
+  actions: '响应动作',
   action: '动作',
   resource: '关联资源',
   oper: '操作',
@@ -75,7 +75,7 @@ export const zh = {
   delete: '删除',
   rule_details: '规则详情',
   rule_desc: '规则描述',
-  confirm_stop_delete: '确认停用并删除该规则？',
+  confirm_stop_delete: '确认停用并删除？',
   delete_success: '删除成功',
   action_exists: '动作已存在',
   cancel: '取消',
@@ -107,10 +107,10 @@ export const zh = {
   condition_screening: '条件筛选',
   topic_condition: '主题条件',
   message_publish_topic: '消息发布主题',
-  set_action: '触发事件',
+  set_action: '响应动作',
   sql_required: '请输入 SQL',
   actions_required: '动作不能为空',
-  rule_action_tips_title: '定义触发事件',
+  rule_action_tips_title: '定义动作',
   action_tips_html: `
 <p>1. 重新发布消息至消息服务器</p>
 <span>将消息重新发布到 broker 中，需要指定目标主题</span>

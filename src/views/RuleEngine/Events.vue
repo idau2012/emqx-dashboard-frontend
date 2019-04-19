@@ -1,7 +1,7 @@
 <template>
   <div class="resources-view">
     <div class="page-title">
-      资源
+      事件规则
       <el-button
         class="confirm-btn"
         round
@@ -27,18 +27,16 @@
       <el-table-column prop="description" label="描述"></el-table-column>
 
       <el-table-column label="操作">
-        <template slot-scope="{ row }">
+        <template slor-scope="{ row }">
           <el-button
             type="success"
             size="mini"
-            plain
-            @click="viewResource(row)">
+            :plain="true">
             查看
           </el-button>
           <el-button
             size="mini"
-            type="warning"
-            @click="handleDelete(row)">
+            type="warning">
             删除
           </el-button>
         </template>
@@ -46,12 +44,7 @@
 
     </el-table>
 
-    <resource-dialog
-      ref="resourceDialog"
-      :visible.sync="dialogVisible"
-      :record="resourceRecord"
-      @confirm="loadData">
-    </resource-dialog>
+    <resource-dialog :visible.sync="dialogVisible"></resource-dialog>
   </div>
 </template>
 
@@ -70,38 +63,13 @@ export default {
     return {
       dialogVisible: false,
       tableData: [],
-      resourceRecord: {
-        config: {},
-        description: '',
-      },
     }
   },
 
   methods: {
-    handleDelete(row) {
-      this.$confirm(this.$t('rule.confirm_stop_delete'), 'Notice', {
-        confirmButtonClass: 'confirm-btn',
-        confirmButtonText: this.$t('oper.confirm'),
-        cancelButtonClass: 'cache-btn el-button--text',
-        cancelButtonText: this.$t('oper.cancel'),
-        type: 'warning',
-      }).then(() => {
-        this.$httpDelete(`/resources/${ row.id }`).then(() => {
-          this.$message.success(this.$t('rule.delete_success'))
-          this.loadData()
-        })
-      }).catch()
-    },
     viewResource(row) {
-      this.resourceRecord = { config: {}, ...row, disabled: true }
-      this.dialogVisible = true
     },
     handleOperation() {
-      this.resourceRecord = {
-        disabled: false,
-        config: {},
-        description: '',
-      }
       this.dialogVisible = true
     },
     loadData() {

@@ -1,3 +1,6 @@
+import EmqSelect from '~/components/EmqSelect'
+import JSONInput from '~/components/JSONInput'
+
 import API from './api'
 
 export default (Vue) => {
@@ -6,6 +9,8 @@ export default (Vue) => {
     params._ = Date.now()
     return API.get(url, { params })
   }
+  Vue.component(EmqSelect.name, EmqSelect)
+  Vue.component(JSONInput.name, JSONInput)
   Vue.prototype.$httpPost = API.post
   Vue.prototype.$httpPut = API.put
   Vue.prototype.$httpDelete = API.delete

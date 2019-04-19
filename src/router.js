@@ -43,10 +43,10 @@ const routes = [
         path: '/rules/:id',
         component: () => import('~/views/RuleEngine/RuleView'),
       },
-      // {
-      //   path: '/resources',
-      //   component: () => import('~/views/RuleEngine/Resources'),
-      // },
+      {
+        path: '/resources',
+        component: () => import('~/views/RuleEngine/Resources'),
+      },
       {
         path: '/subscriptions',
         component: () => import('~/views/DataView'),
