@@ -129,7 +129,7 @@
           </div>
 
           <div class="form-block__body">
-            <el-row>
+            <el-row style="max-width: 1366px;">
               <el-col :span="12">
                 <rule-actions
                   :operations="['create', 'delete']"

@@ -33,6 +33,7 @@
     <action-dialog
       :visible.sync="dialogVisible"
       :currentActions="record.actions"
+      :params="params"
       @confirm="handleActionAdd"></action-dialog>
   </div>
 </template>
@@ -58,6 +59,10 @@ export default {
     operations: {
       type: Array,
       default: () => ['create', 'edit', 'delete'],
+    },
+    params: {
+      type: Object,
+      default: () => ({ for: '$messages' }),
     },
   },
 

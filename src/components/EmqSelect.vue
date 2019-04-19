@@ -42,7 +42,6 @@ export default {
       default: () => ({}),
     },
     sync: {
-      type: [Number, String, Array],
       default: 0,
     },
     afterLoad: {
@@ -69,11 +68,14 @@ export default {
   },
 
   watch: {
-    sync() {
+    sync(val) {
+      if (!val) {
+        return
+      }
       this.initData()
     },
     // 搜索条件变了
-    'field.params': function () {
+    'field.params': function() {
       this.initData()
     },
   },

@@ -43,7 +43,7 @@
       <el-menu-item-group :title="$t('rule.rule_engine')">
         <el-menu-item index="/resources">
           <i class="fa fa-server"></i>
-          资源
+          {{ $t('rule.resource_title') }}
         </el-menu-item>
         <!-- 消息规则 -->
         <el-menu-item index="/rules">
@@ -52,7 +52,7 @@
         </el-menu-item>
         <el-menu-item index="/events_rule">
           <i class="fa fa-arrows-h"></i>
-          事件规则
+          {{ $t('rule.events_rule') }}
         </el-menu-item>
       </el-menu-item-group>
 
@@ -86,10 +86,10 @@
 
       <!-- APPLICATIONS -->
       <!--<el-menu-item-group :title="$t('leftbar.applications')">-->
-        <!--<el-menu-item index="/applications">-->
-          <!--<i class="fa fa-archive"></i>-->
-          <!--{{ $t('leftbar.applications') }}-->
-        <!--</el-menu-item>-->
+      <!--<el-menu-item index="/applications">-->
+      <!--<i class="fa fa-archive"></i>-->
+      <!--{{ $t('leftbar.applications') }}-->
+      <!--</el-menu-item>-->
       <!--</el-menu-item-group>-->
 
       <!-- ADMIN -->
@@ -148,11 +148,13 @@ export default {
   overflow-x: hidden;
   padding-top: 56px;
   background-color: #242327;
+
   .el-menu {
     width: 200px;
     min-height: 100%;
     border-right: none !important;
   }
+
   .bar-title {
     position: fixed;
     top: 0;
@@ -164,10 +166,12 @@ export default {
     border-bottom: 1px solid #161616;
     color: #fff !important;
     background-color: #242327;
+
     span {
       font-size: 16px;
       margin-left: 8px;
     }
+
     img {
       margin-top: 6px;
       width: 48px;
@@ -175,6 +179,7 @@ export default {
       float: left;
     }
   }
+
   .bar-footer {
     position: absolute;
     bottom: 0;
@@ -185,14 +190,17 @@ export default {
     line-height: 47px;
     border-top: 1px solid #161616;
     color: #fff !important;
+
     span {
       font-size: 16px;
       font-weight: bolder;
       margin-right: 12px;
       vertical-align: middle;
     }
+
     a {
       font-weight: bold;
+
       img {
         width: 20px;
         height: 20px;
@@ -201,52 +209,65 @@ export default {
       }
     }
   }
+
   .el-menu-item {
     height: 40px;
     line-height: 40px;
+
     i {
       color: #6e6e75 !important;
     }
+
     &:hover, &.is-active {
       color: #227d51 !important;
       background-color: #37363b !important;
+
       i {
         color: #227d51 !important;
       }
     }
   }
+
   .last-item {
     margin-bottom: 72px;
   }
+
   .el-menu-item-group__title {
     font-weight: bolder;
     margin-bottom: 10px;
     margin-top: 15px;
     font-size: 14px;
   }
+
   i {
     width: 20px;
   }
+
   .dash-topic img {
     position: absolute;
     top: 12px;
     width: 14px;
     height: 15px;
+
     &.green {
       display: none;
     }
+
     .black {
       display: block;
     }
   }
+
   .el-menu-item-group__title {
     color: #fff !important;
   }
+
   .is-active, .el-menu-item:hover {
     & > .dash-topic {
       .black {
         display: none;
       }
+
       .green {
         display: block;
       }

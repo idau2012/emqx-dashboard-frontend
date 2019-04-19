@@ -1,4 +1,7 @@
 export const en = {
+  events_rule: 'Events Rule',
+  create_rule: 'Events Type',
+  events_type: 'Events Type',
   rely_resource: 'Resource',
   actions_tips: 'Processing messages for hit rules',
   conditional_tips: 'Defining rule conditions and data processing ways through SQL',
@@ -57,6 +60,11 @@ export const en = {
 <p> 2. Forwarding messages to Webhook</p>
 
 <span> Forwarding messages to HTTP Webhook</span>`,
+
+  resource_title: 'Resource',
+  resource_name: 'Name',
+  resource_details: 'Details',
+  config_info: 'Configuration',
 }
 
 export const zh = {
@@ -118,4 +126,13 @@ export const zh = {
 <span>将消息重新发布到 broker 中，需要指定目标主题</span>
 <p>2. 将消息转发至 Webhook</p>
 <span>将消息转发至 HTTP Webhook</span>`,
+
+  resource_title: '资源',
+  resource_name: '资源名称',
+  resource_details: '资源详情',
+  config_info: '配置信息',
+
+  events_rule: '事件规则',
+  create_rule: '事件规则',
+  events_type: '事件类型',
 }

@@ -169,14 +169,17 @@ export default {
       this.paramsList.forEach((item) => {
         this.$set(this.record.config, item.key, item.defaultValue)
       })
-      if (this.$refs.record) {
+      setTimeout(() => {
         this.$refs.record.clearValidate()
-      }
+      }, 30)
     },
     loadResourceTypes() {
       this.$httpGet('/resource_types').then((response) => {
         this.resourceTypes = response.data
         this.handleTypeChange(this.record.type)
+        setTimeout(() => {
+          this.$refs.record.clearValidate()
+        }, 30)
       })
     },
   },

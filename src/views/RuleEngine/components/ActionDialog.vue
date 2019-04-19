@@ -7,6 +7,7 @@
     class="action-dialog"
     :visible.sync="dialogVisible"
     :title="$t('rule.actions')"
+    @open="open"
     @close="close">
     <el-form
       class="el-form--public"
@@ -102,6 +103,10 @@ export default {
     currentActions: {
       type: Array,
       default: () => [],
+    },
+    params: {
+      type: Object,
+      default: () => ({ for: '$messages' }),
     },
   },
 
@@ -200,7 +205,7 @@ export default {
     },
 
     loadActions() {
-      return this.$httpGet('/actions?for=$messages').then((response) => {
+      return this.$httpGet('/actions', this.params).then((response) => {
         this.actionsList = response.data
       })
     },
@@ -223,8 +228,9 @@ export default {
       })
     },
     open(formData) {
-      this.dialogVisible = true
-      this.renderForm(formData)
+      // this.dialogVisible = true
+      // this.renderForm(formData)
+      this.record.params = {}
     },
   },
 

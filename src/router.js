@@ -44,6 +44,10 @@ const routes = [
         component: () => import('~/views/RuleEngine/RuleView'),
       },
       {
+        path: '/events_rule',
+        component: () => import('~/views/RuleEngine/EventsRule'),
+      },
+      {
         path: '/resources',
         component: () => import('~/views/RuleEngine/Resources'),
       },

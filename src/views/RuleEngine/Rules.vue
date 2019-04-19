@@ -144,7 +144,7 @@ export default {
     },
     loadData() {
       this.$httpGet('/rules').then((response) => {
-        this.tableData = response.data
+        this.tableData = response.data.filter($ => $.for === 'message.publish')
       })
     },
   },
