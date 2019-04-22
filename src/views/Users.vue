@@ -214,21 +214,21 @@ export default {
     handleOperation(create = true, row) {
       this.changePassword = false
       this.dialogVisible = true
-      setTimeout(() => {
-        if (create) {
-          this.oper = 'new'
-          this.record = {
-            username: '',
-            password: '',
-            newPassword: '',
-            repeatPassword: '',
-            tags: 'viewer',
-          }
-        } else {
-          this.oper = 'edit'
-          this.record = { ...row }
-          this.record.password = ''
+      if (create) {
+        this.oper = 'new'
+        this.record = {
+          username: '',
+          password: '',
+          newPassword: '',
+          repeatPassword: '',
+          tags: 'viewer',
         }
+      } else {
+        this.oper = 'edit'
+        this.record = { ...row }
+        this.$set(this.record, 'password', '')
+      }
+      setTimeout(() => {
         this.$refs.record.resetFields()
       }, 10)
     },
@@ -249,7 +249,7 @@ export default {
           return
         }
         this.$httpPost('/users', this.record).then(() => {
-          this.$message.success(`${this.$t('users.createUser')}`)
+          this.$message.success(`${ this.$t('users.createUser') }`)
           this.loadData()
           this.dialogVisible = false
         }).catch((error) => {
@@ -268,9 +268,9 @@ export default {
             old_pwd: this.record.password,
             new_pwd: this.record.newPassword,
           }
-          this.$httpPut(`/users/${this.record.username}`, this.record).then(() => {
+          this.$httpPut(`/users/${ this.record.username }`, this.record).then(() => {
             // change password
-            this.$httpPut(`/change_pwd/${this.record.username}`, user).then(() => {
+            this.$httpPut(`/change_pwd/${ this.record.username }`, user).then(() => {
               // re login
               if (this.$store.state.user.username === this.record.username &&
                 this.record.password !== this.record.newPassword) {
@@ -278,7 +278,7 @@ export default {
                 this.USER_LOGIN({ isLogOut: true })
                 this.$router.push('/login')
               } else {
-                this.$message.success(`${this.$t('oper.edit')}${this.$t('alert.success')}`)
+                this.$message.success(`${ this.$t('oper.edit') }${ this.$t('alert.success') }`)
                 this.dialogVisible = false
                 this.loadData()
               }
@@ -287,9 +287,9 @@ export default {
             })
           })
         } else {
-          this.$httpPut(`/users/${this.record.username}`, this.record).then(() => {
+          this.$httpPut(`/users/${ this.record.username }`, this.record).then(() => {
             // change password
-            this.$message.success(`${this.$t('oper.edit')}${this.$t('alert.success')}`)
+            this.$message.success(`${ this.$t('oper.edit') }${ this.$t('alert.success') }`)
             this.dialogVisible = false
             this.loadData()
           }).catch((error) => {
@@ -299,8 +299,8 @@ export default {
       })
     },
     deleteUser(row) {
-      this.$httpDelete(`/users/${row.username}`).then(() => {
-        this.$message.success(`${this.$t('oper.delete')}${this.$t('alert.success')}`)
+      this.$httpDelete(`/users/${ row.username }`).then(() => {
+        this.$message.success(`${ this.$t('oper.delete') }${ this.$t('alert.success') }`)
         this.loadData()
         this.hidePopover()
       }).catch((error) => {
@@ -320,6 +320,7 @@ export default {
   .el-table {
     margin-top: 24px;
   }
+
   .change-password {
     text-align: left;
   }

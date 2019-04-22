@@ -1,6 +1,6 @@
 export const en = {
   events_rule: 'Events Rule',
-  create_rule: 'Events Type',
+  create_rule: 'Events Rule',
   events_type: 'Events Type',
   rely_resource: 'Resource',
   actions_tips: 'Processing messages for hit rules',

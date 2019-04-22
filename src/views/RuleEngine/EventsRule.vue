@@ -264,9 +264,9 @@ export default {
   .el-form--public {
     .el-button {
       &.is-plain {
-        color: #42d885;
-        background: #ecfbf3;
-        border-color: #b3efce;
+        color: #42d885 !important;
+        background: #ecfbf3 !important;;
+        border-color: #b3efce !important;;
       }
     }
   }
