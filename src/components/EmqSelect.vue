@@ -75,7 +75,7 @@ export default {
       this.initData()
     },
     // 搜索条件变了
-    'field.params': function() {
+    'field.params': function () {
       this.initData()
     },
   },

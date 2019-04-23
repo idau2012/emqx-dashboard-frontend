@@ -184,7 +184,7 @@ export default {
       // fillData
       model.forEach((item) => {
         const { key } = item
-        this.$set(this.record, `params.${ key }`, undefined)
+        this.$set(this.record, `params.${key}`, undefined)
       })
 
       return this.loadResource()

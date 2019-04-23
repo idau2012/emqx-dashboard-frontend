@@ -28,9 +28,9 @@ export default {
 
   data() {
     return {
-      objectPlaceholder: `JSON, e.g: \n${ JSON.stringify({
+      objectPlaceholder: `JSON, e.g: \n${JSON.stringify({
         Authorization: 'Basic YWRtaW46cHVibGlj',
-      }, null, 2) }`,
+      }, null, 2)}`,
       sourceValue: '',
     }
   },

@@ -133,7 +133,7 @@ export default {
         cancelButtonText: this.$t('oper.cancel'),
         type: 'warning',
       }).then(() => {
-        this.$httpDelete(`/rules/${ row.id }`).then(() => {
+        this.$httpDelete(`/rules/${row.id}`).then(() => {
           this.$message.success(this.$t('rule.delete_success'))
           this.loadData()
         })

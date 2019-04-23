@@ -81,10 +81,10 @@ export function params2Form(params = {}) {
       key,
       label: key,
       prop: key,
-      rules: { type: getRule(value), required: true, message: `${ key } is to required` },
+      rules: { type: getRule(value), required: true, message: `${key} is to required` },
       placeholder: value,
     })
-    rules[`params.${ key }`] = { required: true, message: `${ key } is required` }
+    rules[`params.${key}`] = { required: true, message: `${key} is required` }
   })
 
   return { model, rules, resource }
