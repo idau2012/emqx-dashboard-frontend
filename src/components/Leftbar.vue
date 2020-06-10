@@ -2,7 +2,7 @@
   <div class="left-bar">
     <div class="bar-title">
       <div>
-        <img class="logo" src="../assets/emqlogo.svg">
+        <img class="logo" src="../assets/detalogo.svg">
       </div>
       <h3>Dashboard</h3>
     </div>
