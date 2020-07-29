@@ -2,11 +2,11 @@
   <div class="help-view">
     <div class="page-title">{{ $t('leftbar.help') }}</div>
 
-    <div class="help-item">
+    <!-- <div class="help-item">
       <h3>{{ $t('help.quickStart') }}</h3>
       <p>{{ $t('help.emqxDesc') }}</p>
       <a target="_blank" href="https://github.com/emqx/emqx">Github</a>
-    </div>
+    </div> -->
 
     <el-divider></el-divider>
 
@@ -51,7 +51,7 @@
 
     <el-divider></el-divider>
 
-    <div class="help-item">
+    <!-- <div class="help-item">
       <h3>{{ $t('help.followUs') }}</h3>
       <a target="_blank" class="follow-link" href="https://github.com/emqx/emqx">
         <i class="iconfont icon-git"></i>
@@ -71,7 +71,7 @@
       <a target="_blank" class="follow-link" href="https://www.youtube.com/channel/UCDU9GWFk8NTGiTvPx_2XskA">
         <i class="iconfont icon-youtube"></i>
       </a>
-    </div>
+    </div> -->
 
   </div>
 </template>

@@ -29,7 +29,7 @@ export default {
     min-height: 100%;
     .home-content {
       margin: 0 32px 0 212px;
-      padding: 60px 0 20px 0;
+      padding: 0px 0 20px 0;
     }
   }
 </style>
